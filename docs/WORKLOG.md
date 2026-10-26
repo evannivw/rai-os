@@ -111,3 +111,12 @@ Added a proposed review-pack experiment with competitive baselines, equal inputs
 independent correctness checks, model overhead, held-out scenarios, and explicitly
 simulated budgets. No experiment has run and no efficiency gain is claimed.
 The next gate is a small policy pilot, not a complete new kernel or dashboard.
+
+## Required demo result contract — October 26
+
+Defined mandatory records, byte integrity, exact indexing, consistent manifests,
+version-aware publication, and execution limits in DEMO_ACCEPTANCE.md. Optional
+previews cannot compensate for missing required output. Events and constraints
+apply equally to all policies. This increment defines acceptance only: no new
+execution engine, model integration, resource measurements, or benchmark results.
+Validation: specification consistency, local Markdown links, and git diff --check.

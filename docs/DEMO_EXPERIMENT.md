@@ -16,6 +16,9 @@ and revising a cross-task plan under varied goals and incomplete cost estimates.
 Any gain must exceed inference/coordination latency. If the policy does not win,
 report that outcome rather than weaken the baseline or hide model overhead.
 
+Required artifacts and validation rules are defined in
+[DEMO_ACCEPTANCE.md](DEMO_ACCEPTANCE.md).
+
 ## User-visible task
 
 Prepare a project review pack before a deadline, under an explicit resource budget.
@@ -133,6 +136,6 @@ If the model loses, report it and reconsider the role of AI: goal interpretation
 or cross-service planning may be useful even when a deterministic scheduler should
 retain low-level execution control. Those are different claims and experiments.
 
-Next deliverable: review the required/optional outputs and validators with the
-user, then freeze the first small scenario and the baseline rules. Do not build
-an elaborate dashboard around an assumed result.
+Required/optional outputs now have a design contract in DEMO_ACCEPTANCE.md.
+Next: freeze a small fixture and trace, then implement an independent verifier
+and baseline rules. Do not build an elaborate dashboard around an assumed result.
