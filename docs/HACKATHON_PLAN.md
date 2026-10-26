@@ -39,6 +39,7 @@ The earlier status/self-test demo was exploratory. The agreed direction is a
 side-by-side comparison of two policies using the same RAI-OS execution engine,
 workloads, inputs, and limits: a reasonable deterministic baseline and a Meta
 coordinator. Define a concrete task and success conditions before implementing it.
+The candidate comparison is specified in [DEMO_EXPERIMENT.md](DEMO_EXPERIMENT.md).
 A graphical host UI should make actual decisions and results visible. The existing
 [terminal console](CONSOLE.md) is the transport foundation, not that graphical UI.
 

@@ -104,3 +104,10 @@ English migration checks: host protocol unit tests (2), host Clippy, real-QEMU
 console integration, and both kernel verification profiles (28 cases each) passed.
 Historical UART captures were retained unchanged. No scheduling or AI logic was
 introduced by this language change.
+
+## Comparison design — October 26
+
+Added a proposed review-pack experiment with competitive baselines, equal inputs,
+independent correctness checks, model overhead, held-out scenarios, and explicitly
+simulated budgets. No experiment has run and no efficiency gain is claimed.
+The next gate is a small policy pilot, not a complete new kernel or dashboard.
