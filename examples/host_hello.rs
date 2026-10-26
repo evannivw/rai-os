@@ -1,3 +1,3 @@
 fn main() {
-    println!("RAI OS: primer paso en Rust");
+    println!("RAI OS: first step in Rust");
 }

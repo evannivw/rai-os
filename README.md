@@ -1,84 +1,71 @@
-> **Estado actual — 26 de octubre de 2026:** ya hay un kernel AArch64 que arranca
-> en QEMU, consola UART, shell y protocolo estructurado. Empieza por
-> [la guía del hito 1](docs/GETTING_STARTED.md),
-> [arquitectura](docs/ARCHITECTURE.md), [protocolo](docs/PROTOCOL.md) y
-> [estado/evidencias](docs/WORKLOG.md). También puedes abrir la
-> [consola del host](docs/CONSOLE.md) con `sh scripts/console.sh`.
-> El contenido original que sigue se conserva como registro del primer paso
-> en macOS; sus instrucciones y limitaciones son históricas.
+# RAI-OS
 
-# RAI OS
+An educational AArch64 operating-system prototype in Rust, exploring how an
+AI coordinator could adapt work to goals, events, and resource limits.
 
-Proyecto de código abierto para explorar la construcción de un sistema operativo
-con Rust, mediante entregas pequeñas y educativas.
+**Working today:** bare-metal boot in QEMU, PL011 UART input/output, help/info/echo,
+a bounded structured protocol, and a Rust host terminal console.
+**Not implemented:** Meta integration, autonomous agents, graphical UI, task
+scheduling, memory isolation, persistent storage, or measured efficiency gains.
 
-## Paso 1: compilar y ejecutar Rust
+## Run
 
-Por ahora tenemos un programa de consola que se ejecuta en macOS.
-Todavía no arranca como un sistema operativo ni incluye un kernel o Android.
-El objetivo de esta entrega es comprobar las herramientas y entender el ciclo
-editar → compilar → ejecutar.
-
-### Herramientas
-
-- **Rust** es el lenguaje; `rustc` es su compilador.
-- **Cargo** organiza el proyecto y permite compilar, ejecutar y probarlo.
-
-Comprueba la instalación:
+Install Rustup and QEMU (9.2 or newer with virt-9.2), then:
 
 ```sh
-rustc --version
-cargo --version
+. "$HOME/.cargo/env"
+cargo run --locked             # Direct kernel UART console
+sh scripts/console.sh          # Rust host terminal controlling QEMU
 ```
 
-Si faltan, instala Rust con las instrucciones oficiales:
-https://rust-lang.org/tools/install/
-En un Mac con Homebrew también puedes usar `brew install rust`.
+The repository pins Rust 1.90.0 and aarch64-unknown-none-softfloat.
+Only macOS ARM64 has been tested. The host console is not a kernel GUI.
 
-### Archivos
-
-- `Cargo.toml`: nombre, versión y edición del lenguaje del paquete. La edición
-  2024 selecciona las reglas del lenguaje; no es el número de versión de Rust.
-  `[dependencies]` está vacío porque no necesitamos bibliotecas externas.
-- `src/main.rs`: código del ejecutable. `fn main()` define la función donde
-  empieza el programa. Las llaves delimitan su cuerpo y `println!` es una macro
-  que imprime una línea; el punto y coma termina la instrucción.
-- `Cargo.lock` (se generará al usar Cargo): registra las versiones de las
-  dependencias para repetir la compilación. Se guardará en Git para este ejecutable.
-- `.gitignore`: excluye `target/`, donde Cargo guarda los archivos generados.
-- `README.md`: guía de esta primera entrega.
-- `LICENSE`: licencia Apache 2.0 del repositorio.
-
-### Ejecutar y verificar
-
-Desde la carpeta `rai-os`:
+## Verify
 
 ```sh
-cargo run
-cargo check
 cargo fmt --check
-cargo test
+cargo clippy --bin rai-os --locked -- -D warnings
+python3 scripts/verify.py
+python3 scripts/verify.py --release
+python3 scripts/verify_console.py
 ```
 
-La salida de `cargo run` debe ser:
+Python 3 is required for integration checks. Each kernel run verifies real boot
+and 28 console/protocol cases. See the guides for host unit tests.
 
-```text
-RAI OS: primer paso en Rust
+## Documentation
+
+- [Getting started](docs/GETTING_STARTED.md)
+- [Architecture and unsafe contracts](docs/ARCHITECTURE.md)
+- [UART protocol](docs/PROTOCOL.md)
+- [Host console](docs/CONSOLE.md)
+- [Hackathon plan](docs/HACKATHON_PLAN.md)
+- [Work log and evidence](docs/WORKLOG.md)
+- [Contribution rules](AGENTS.md)
+
+## Historical first step
+
+The project began on October 13, 2026 as a normal macOS Rust program, without a
+kernel. The original README and source remain available in commit 3e6d9c9.
+At that time Xcode and GitHub SSH worked, but Rust downloads failed; build/check,
+formatting, and test commands could not run until Rust was installed on Oct 26.
+The original host example remains at examples/host_hello.rs; its output is now
+English. Run it on an ARM64 Mac with:
+
+```sh
+cargo run --example host_hello --target aarch64-apple-darwin
 ```
 
-`cargo check` comprueba el código, `cargo fmt --check` revisa el formato y
-`cargo test` ejecuta las pruebas disponibles. Esta entrega no tiene pruebas
-unitarias: solo imprime una línea, por lo que su salida se comprueba al ejecutarla.
+Cargo.toml describes the package; edition 2024 selects language rules, not a
+compiler version. Cargo.lock records dependencies (none external currently),
+.gitignore excludes generated target/ and credential files, and LICENSE is
+Apache-2.0. rustc compiles Rust; Cargo manages building and dependencies.
 
-Para practicar, cambia el mensaje en `src/main.rs` y vuelve a ejecutar
-`cargo run`. Cargo recompila el código modificado.
+## Event status
 
-Cada entrega se revisa, verifica y sube a GitHub con un commit pequeño.
-
-### Estado de la verificación inicial
-
-La máquina tiene Xcode y acceso SSH a GitHub. Rust y Cargo aún no están
-instalados: las descargas desde los servidores oficiales y Homebrew fallaron
-por interrupciones de conexión. Los comandos anteriores se intentaron, pero
-no pudieron ejecutarse por falta de Cargo. Queda pendiente instalar las
-herramientas, ejecutar las verificaciones y guardar el `Cargo.lock` generado.
+Prepared for the Meta Global AI Developer Hackathon 2026. Keep Oct 13 and Oct 26
+work identifiable; eligibility needs clarification because the supplied guide
+separates the Oct 26 kickoff from the Oct 27-Nov 4 build period. No dates have
+been altered. New project text and commits are in English; historical evidence
+and already-published commit messages retain their original form.

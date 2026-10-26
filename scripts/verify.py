@@ -60,10 +60,10 @@ def main():
         info = b"RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected"
         exchange(b"help\n", b"help\r\nhelp | info | echo <text>\r\n")
         exchange(b"info\r\n", b"info\r\n" + info + b"\r\n")
-        exchange(b"echo hola Rust\r", b"echo hola Rust\r\nhola Rust\r\n")
+        exchange(b"echo hello Rust\r", b"echo hello Rust\r\nhello Rust\r\n")
         exchange(b"echo\n", b"echo\r\n\r\n")
         exchange(b"oops\n", b"oops\r\nerror: unknown_command\r\n")
-        exchange(b"echx\x7fo editado\n", b"echx\x08 \x08o editado\r\neditado\r\n")
+        exchange(b"echx\x7fo edited\n", b"echx\x08 \x08o edited\r\nedited\r\n")
         exchange(b"@rai1\t1\thelp\n", b"@rai1\t1\tok\thelp | info | echo <text>\r\n")
         exchange(b"@rai1\t2\tinfo\r\n", b"@rai1\t2\tok\t" + info + b"\r\n")
         exchange(b"@rai1\t3\techo\tbridge ready\n", b"@rai1\t3\tok\tbridge ready\r\n")

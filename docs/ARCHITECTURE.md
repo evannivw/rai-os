@@ -1,57 +1,55 @@
-# Arquitectura del hito 1
+# Milestone 1 architecture
 
-Objetivo: kernel educativo AArch64 en QEMU, orientado a evolucionar hacia un
-microkernel. Los módulos actuales comparten privilegios y memoria: NO son
-procesos aislados. No hay scheduler, IPC entre procesos, MMU, heap ni userspace.
+An educational AArch64 kernel for QEMU, with a long-term microkernel direction.
+Current modules share privilege and memory. There is no scheduler, process IPC,
+MMU, heap, userspace, or isolated agent execution.
 
-## Arranque mínimo
+## Boot
 
-QEMU carga el ELF con `-kernel`. El linker coloca `_start` en `0x40080000`,
-dentro de los 128 MiB de RAM de virt (RAM desde `0x40000000`), dejando espacio
-al inicio para el DTB. El contrato soportado es `virt-9.2`, TCG, Cortex-A53,
-una CPU, EL1, secure y virtualization desactivados. No se usa firmware.
+QEMU loads the ELF through -kernel. The linker places _start at 0x40080000,
+inside virt RAM starting at 0x40000000, leaving room at the start for the DTB.
+Supported configuration: virt-9.2, TCG, Cortex-A53, one CPU, 128 MiB, EL1,
+secure=off, virtualization=off, no firmware, MMU/caches off.
 
-`boot.S` enmascara interrupciones, verifica EL1, selecciona SP_EL1, prepara una
-pila de 64 KiB alineada a 16 bytes, pone BSS a cero y llama `kernel_main`.
-La pila está fuera del rango borrado de BSS. Un nivel de excepción inesperado
-se detiene sin entrar a Rust (la prueba de arranque detectará timeout).
+boot.S masks interrupts, checks EL1, selects SP_EL1, creates a 16-byte-aligned
+64 KiB stack, clears BSS, then calls kernel_main. The stack is outside the
+cleared BSS range. An unexpected exception level halts before Rust; the boot
+check will time out rather than claim success.
 
-Rust usa `no_std` (sin servicios de un SO anfitrión), `no_main` (entrada propia)
-y `core`. El destino `aarch64-unknown-none-softfloat` evita necesitar habilitar
-SIMD/FPU para código generado por el compilador. No hay dependencias externas.
-`rust-lld`, incluido en Rust, enlaza el ELF; Apple ld no es un linker ELF.
-`build.rs` hace que cambiar el linker script fuerce un nuevo enlace.
+Rust uses no_std, no_main, and core. aarch64-unknown-none-softfloat avoids
+requiring SIMD/FPU setup for compiler-generated code. There are no external
+crate dependencies. Rust's bundled rust-lld links the ELF; Apple ld is not an
+ELF linker. build.rs triggers relinking when linker.ld changes.
 
-## UART y seguridad
+## UART and unsafe contracts
 
-PL011 está en `0x09000000` para esta configuración de QEMU. Los registros se
-leen/escriben con accesos volatile de 32 bits; volatile evita que el compilador
-elimine MMIO, pero no provee sincronización. Se configura 115200, 8N1,
-sin FIFO ni interrupciones. El driver espera los flags de disponibilidad.
-La implementación es deliberadamente por sondeo: consume CPU mientras espera.
-No es una demostración de eficiencia energética ni de rendimiento superior.
+PL011 is fixed at 0x09000000 for this QEMU machine. Aligned 32-bit volatile
+accesses preserve MMIO operations, but do not provide synchronization.
+Configuration: 115200, 8N1, no FIFO or interrupts; the driver polls readiness.
+Polling consumes CPU while waiting and is not evidence of energy efficiency.
 
-Cada bloque unsafe documenta sus condiciones. Los punteros MMIO solo son válidos
-para esta máquina, con MMU apagada y acceso exclusivo desde una CPU. No debe
-reutilizarse este driver directamente con concurrencia, otra placa o paginación.
-Los símbolos del linker y el punto de entrada constituyen el contrato unsafe
-con Assembly. No hay vectores de excepción: un fallo de CPU puede bloquear el
-sistema; el panic de Rust imprime y se detiene, sin recuperación.
+Unsafe blocks document the mapping, alignment, and exclusive ownership:
+one CPU, interrupts disabled, MMU off, and no other UART owner. These assumptions
+must be revisited for another board, paging, or concurrency. Linker symbols and
+Assembly entry form the boot contract. CPU exception vectors are not installed;
+a CPU fault can hang the guest. Rust panic prints and halts without recovery.
 
-## Separación actual y dirección siguiente
+## Responsibilities
 
-`uart.rs` transporta bytes; `console.rs` delimita y valida líneas, maneja edición
-y renderiza respuestas; `protocol.rs` interpreta mensajes estructurados;
-`command.rs` interpreta comandos humanos y ejecuta un enum de operaciones
-permitidas. Ambos intérpretes convergen en ese enum; no ejecutan texto como código.
-Son módulos del mismo binario, sin dependencias genéricas de transporte.
-Ver [protocolo](PROTOCOL.md). La [consola del host](CONSOLE.md) ya transporta
-mensajes por UART. La conexión con Meta Model API desde el host sigue pendiente. El modelo propondrá operaciones; RAI-OS deberá
-validarlas antes de ejecutarlas. No habrá credenciales ni HTTPS dentro del kernel.
-El aislamiento real requerirá después memoria virtual, ejecución en EL0,
-syscalls, planificación e IPC. Los nombres de módulos no sustituyen esas garantías.
+- uart.rs: bytes and MMIO.
+- console.rs: framing, input validation/editing, and response rendering.
+- protocol.rs: structured request parsing without execution.
+- command.rs: human-command parsing and execution of allowed operations.
+- main.rs: composition and panic handling.
 
-## Referencias técnicas
+Both parsers converge on an operation enum; neither executes arbitrary text.
+See [PROTOCOL.md](PROTOCOL.md). The [host console](CONSOLE.md) already transports
+requests over UART. Meta API calls and the coordinator are not implemented.
+Credentials and HTTPS will remain on the host. The guest must independently
+validate operations. Real service isolation will require virtual memory, EL0,
+syscalls, scheduling, and IPC; module names do not supply those guarantees.
+
+## References
 
 - https://doc.rust-lang.org/stable/rustc/platform-support/aarch64-unknown-none.html
 - https://www.qemu.org/docs/master/system/arm/virt.html

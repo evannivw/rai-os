@@ -1,59 +1,61 @@
-# RAI-OS: instrucciones permanentes de colaboración
+# RAI-OS collaboration rules
 
-## Contexto
+## Language and context
 
-Kernel educativo Rust AArch64 en QEMU, orientado a microkernel a largo plazo.
-Proyecto para Meta Global AI Developer Hackathon 2026. Leer docs/WORKLOG.md,
-docs/HACKATHON_PLAN.md y docs/ARCHITECTURE.md antes de cambiar el alcance.
-El usuario aprende Rust y sistemas: avanzar en incrementos pequeños.
+- All project documentation, code comments, UI text, and new commit titles AND
+  bodies must be in English. Continue teaching the user in Spanish in chat.
+- Preserve historical evidence and existing Git history verbatim; do not translate
+  captured bytes or rewrite old commits to conceal their original content/date.
+- Educational Rust AArch64 kernel for QEMU, with a long-term microkernel direction.
+  Read docs/WORKLOG.md, docs/HACKATHON_PLAN.md, and docs/ARCHITECTURE.md before
+  changing scope. The user is learning Rust and systems programming.
 
-## Explicación y alcance
+## Teaching and scope
 
-- Antes de cada paso, explicar en español qué se ejecutará y para qué.
-- Enseñar una idea por incremento, con ejemplos breves y precisos; evitar muros
-  de texto y no adelantar varias fases sin acompañar el aprendizaje.
-- Al terminar, indicar qué cambió, cómo se verificó y qué sigue pendiente.
-- La interfaz inicial será una consola del host que refleje datos reales de
-  QEMU. No presentarla como GUI nativa del kernel ni fabricar telemetría o IA.
+- Explain what each step will execute and why, in concise Spanish, before acting.
+- Teach one idea per increment. Avoid advancing several phases without explanation.
+- Report changes, actual verification results, limitations, and the next step.
+- The current terminal console is a host tool. The user wants a graphical host
+  interface next; do not confuse it with a native kernel desktop.
+- Show real QEMU results. Clearly label simulated budgets and unimplemented AI
+  or telemetry. Do not fabricate battery, GPU, memory usage, or benchmark wins.
 
-## Git: regla solicitada por el usuario
+## Git: standing user authorization
 
-- Cada incremento terminado y verificado debe quedar en un commit coherente.
-- Publicar con push al remoto autorizado origin de manera frecuente, al cerrar
-  cada incremento. El usuario ya autorizó estos commits y pushes; no pedir
-  confirmación de nuevo para cambios propios de RAI-OS dentro de ese alcance.
-- Revisar diff, archivos incluidos y pruebas antes de commit. Nunca añadir
-  credenciales, target/ ni cambios ajenos. Usar rutas explícitas al añadir archivos.
-- Mensajes con un título claro y cuerpo cuando corresponda: problema/cambio,
-  motivo y verificaciones ejecutadas. No afirmar pruebas que no se hicieron.
-- Comprobar el resultado del push y la coincidencia de HEAD con la rama remota.
-  Si falla, informar el estado exacto y resolver sin force-push ni borrar historia.
-- Conservar fechas reales. No dividir trabajo ya hecho para aparentar una
-  cronología de desarrollo inexistente; identificar snapshots acumulados.
+- Commit each completed, verified increment with a coherent scope, and push it
+  to the authorized origin remote. No repeated permission question is needed
+  for authorized RAI-OS work; still honor tool sandbox requirements.
+- Review diffs, included files, and relevant checks before committing. Stage
+  explicit paths. Never commit credentials, target/, or unrelated user changes.
+- Use clear English titles and bodies describing what changed, why, and the
+  checks actually run. Do not invent test results or earlier development steps.
+- Verify push completion and local/remote HEAD agreement. Report failures and
+  resolve without force-pushing or deleting history.
+- Preserve real dates. Label accumulated snapshots honestly.
 
-## Clean Architecture, proporcional al proyecto
+## Proportional Clean Architecture
 
-- Reglas y operaciones de dominio independientes de UART, QEMU, terminal y API Meta.
-- Separar interpretación/validación, coordinación de casos de uso y adaptadores
-  de entrada/salida. Las dependencias van hacia las reglas de dominio.
-- El kernel no depende de la interfaz del host ni de un proveedor de IA.
-- La interfaz muestra resultados; no concentra reglas ni accede a MMIO.
-- Un módulo tiene una responsabilidad clara. Introducir interfaces/traits solo
-  cuando una frontera real lo necesite; evitar frameworks y capas vacías.
-- Mantener unsafe pequeño y documentar sus precondiciones concretas.
-- Los módulos actuales comparten memoria y privilegios: no son procesos aislados.
+- Keep domain operations independent of UART, QEMU, terminal UI, and Meta APIs.
+- Separate parsing/validation, use-case coordination, and I/O adapters.
+  Dependencies point toward domain rules.
+- The kernel must not depend on the host UI or an AI provider. Presentation
+  renders results; it does not own domain policy or access MMIO.
+- Keep responsibilities explicit. Add traits only for real boundaries; avoid
+  empty abstraction layers and premature frameworks.
+- Keep unsafe small and document concrete preconditions.
+- Current kernel modules share memory and privilege; they are not isolated processes.
 
-## Verificación y hackathon
+## Verification and hackathon provenance
 
-- Para cambios del kernel/protocolo: formato, Clippy y prueba real QEMU relevante;
-  verificar release cuando cambie código ejecutado o configuración de compilación.
-- Para documentación: revisar coherencia, enlaces locales y git diff --check.
-  No repetir pruebas sin cambios o motivos que lo justifiquen.
-- Registrar versiones, resultados y limitaciones. Distinguir datos reales,
-  simulación controlada, configuración y funciones todavía no implementadas.
-- Repositorio público; identificar trabajo previo y nuevo; integración Meta real
-  y video de tres minutos según Participant Guide proporcionada por el usuario.
-- Kickoff 26-oct; la guía fija construcción 27-oct a 4-nov. La elegibilidad del
-  trabajo del 26 y de la base previa para Indie sigue pendiente de aclaración.
-- Entrega: 4-nov-2026, 20:00 Guatemala; meta interna 18:00. No prometer superioridad
-  de rendimiento/seguridad ni elegibilidad sin evidencia.
+- Kernel/protocol changes: formatting, Clippy, and relevant real-QEMU tests;
+  check release when executable code or build configuration changes.
+- Documentation: consistency, local links, and git diff --check. Do not repeat
+  tests without relevant changes or unresolved concerns.
+- Record versions and limits; distinguish measured results, configuration,
+  simulation, and planned features.
+- The supplied Participant Guide requires a public repository, identifiable new
+  work, real Meta model integration, and a three-minute demo video.
+- Kickoff: Oct 26; guide build period: Oct 27-Nov 4. Eligibility of Oct 26 and
+  pre-existing work in the Indie track still needs organizer clarification.
+- Deadline: Nov 4, 2026, 20:00 Guatemala; internal target: 18:00.
+- Do not claim performance/security superiority or eligibility without evidence.

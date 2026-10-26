@@ -3,7 +3,7 @@ name = "rai-os"
 version = "0.1.0"
 edition = "2024"
 license = "Apache-2.0"
-description = "Primer paso educativo de RAI OS en Rust"
+description = "Educational AArch64 kernel for QEMU virt"
 
 [dependencies]
 

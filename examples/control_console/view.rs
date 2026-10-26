@@ -2,22 +2,22 @@
 use super::model::Reply;
 
 pub fn header() {
-    println!("\n=== RAI-OS | Consola del host ===");
-    println!("Interfaz del Mac/Linux; kernel dentro de QEMU.");
-    println!("IA: no conectada | Telemetria de recursos: no implementada");
-    println!("Esperando arranque real del kernel...");
+    println!("\n=== RAI-OS | Host console ===");
+    println!("Mac/Linux host interface; kernel runs inside QEMU.");
+    println!("AI: not connected | Resource telemetry: not implemented");
+    println!("Waiting for the actual kernel boot...");
 }
 
 pub fn connected() {
-    println!("Conexion: arranque y consola UART confirmados.");
-    println!("Comandos: help | info | echo <texto ASCII> | exit\n");
+    println!("Connection: kernel boot and UART console confirmed.");
+    println!("Commands: help | info | echo <ASCII text> | exit\n");
 }
 
 pub fn reply(reply: &Reply) {
-    let state = if reply.success { "OK" } else { "RECHAZADO" };
+    let state = if reply.success { "OK" } else { "REJECTED" };
     println!("[kernel / {state}] {}", reply.payload);
 }
 
 pub fn input_error(error: &str) {
-    println!("[entrada rechazada; no enviada] {error}");
+    println!("[input rejected; not sent] {error}");
 }

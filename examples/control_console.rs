@@ -9,9 +9,7 @@ mod view;
 use std::io::{self, BufRead, Write};
 
 fn run() -> Result<(), String> {
-    let kernel = std::env::args()
-        .nth(1)
-        .ok_or("Falta la ruta del kernel ELF")?;
+    let kernel = std::env::args().nth(1).ok_or("Missing kernel ELF path")?;
     view::header();
     let mut connection = qemu::Connection::start(&kernel)?;
     view::connected();
@@ -38,7 +36,7 @@ fn run() -> Result<(), String> {
                 continue;
             }
         };
-        let next_id = id.checked_add(1).ok_or("Se agotaron los identificadores")?;
+        let next_id = id.checked_add(1).ok_or("Request IDs exhausted")?;
         // Validate before transport. Invalid input never reaches the guest UART.
         if let Err(error) = model::encode(next_id, &operation) {
             view::input_error(error);
@@ -49,13 +47,13 @@ fn run() -> Result<(), String> {
         view::reply(&reply);
     }
     drop(connection); // Terminate and reap our QEMU child, including on EOF.
-    println!("Sesion cerrada; QEMU detenido.");
+    println!("Session closed; QEMU stopped.");
     Ok(())
 }
 
 fn main() {
     if let Err(error) = run() {
-        eprintln!("Conexion cerrada: {error}");
+        eprintln!("Connection closed: {error}");
         std::process::exit(1);
     }
 }

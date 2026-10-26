@@ -1,139 +1,104 @@
-# RAI-OS — plan del hackathon
+# RAI-OS hackathon plan
 
-Fecha: 2026-10-26. Horarios locales: America/Guatemala.
-Estado: plan inicial con actualización de visión e interfaz del 26 de octubre.
-La sección siguiente sustituye el alcance de la demo exploratoria original.
+Updated October 26, 2026. Local times: America/Guatemala. This is a proposed
+roadmap, not a claim that AI, scheduling, or a graphical UI already exists.
 
-## Visión acordada y paso inmediato
+## Sources and eligibility
 
-RAI-OS busca coordinar trabajos a partir de objetivos, eventos, capacidades y
-presupuestos de recursos. Un coordinador decide y delega; el código impone los
-permisos y límites. La IA no razonará por cada operación del procesador. Esta
-adaptación es una hipótesis por demostrar frente a políticas sencillas, incluyendo
-el costo del modelo. No implica superioridad automática ni menos capas.
+The user supplied the Participant Guide in chat on October 26. Its source link
+and version are still missing. Public pages consulted on the same date:
 
-El usuario pidió avanzar paso a paso, comenzar la interfaz antes de integrar IA
-y hacer commit/push documentados por incremento. AGENTS.md conserva estas reglas.
-La primera interfaz es una consola Rust del host conectada al kernel real:
-[CONSOLE.md](CONSOLE.md). No se construye una GUI dentro del kernel.
+- https://dev.meta.ai/events/global-hackathon
+- https://cerebralvalley.ai/e/meta-ai-developer-hackathon
 
-La demo de autoprueba descrita abajo fue la propuesta inicial. El alcance final
-se definirá sobre coordinación autónoma observable, sin dar por implementados
-agentes, almacenamiento ni aislamiento. Primero: consola → estado/eventos reales
-→ trabajos y límites verificables → coordinador Meta → presentación de la demo.
+The guide lists kickoff on Oct 26 and building on Oct 27-Nov 4. Public pages say
+the event starts on Oct 26, with workshops from Oct 27. Clarify eligibility of
+Oct 26 work before presenting it as eligible. Deadline: Nov 4 at 21:00 ET/EST,
+or 20:00 Guatemala. Internal submission target: 18:00 Guatemala. Recheck updates.
 
-## Fuentes y prioridad
+The guide explicitly permits startups to build on existing products while
+identifying new contributions. Permission for prior Indie work is not clear.
+Proposed organizer question (not sent): Can an Indie entrant use an explicitly
+declared Oct 13 repository and Oct 26 kernel, and showcase only the agent
+features built Oct 27-Nov 4? Is kickoff-day work eligible? Save the answer.
+Never backdate commits or recreate work to disguise its origin.
 
-- Participant Guide compartida íntegramente por el usuario en el chat el 26.
-  Es la fuente de requisitos detallados de este plan; falta su enlace/versionado.
-- Página oficial consultada el 26:
-  https://dev.meta.ai/events/global-hackathon
-- Página del organizador consultada el 26:
-  https://cerebralvalley.ai/e/meta-ai-developer-hackathon
+## Current direction
 
-La guía señala kickoff el 26 y Building period del 27 de octubre al 4 de
-noviembre. La página pública anuncia inicio el 26 y talleres desde el 27.
-No asumir que la elegibilidad del trabajo del 26 está resuelta. Confirmar
-con organizadores antes de presentar esa base como contribución elegible.
-Entrega: 4 de noviembre, 21:00 ET/EST = 20:00 Guatemala. Meta interna propuesta:
-entregar antes de las 18:00 Guatemala. Las fechas oficiales pueden cambiar.
+Proposed theme: Push the Frontier. Proposed track: Indie Developer for a solo
+entrant; confirm the actual registration, acceptance, and team composition.
+Requesting Meta API access is not proof of hackathon acceptance.
 
-## Propuesta y usuario
+RAI-OS explores coordinating jobs around goals, events, capabilities, and resource
+budgets. A coordinator proposes plans; deterministic code enforces operations,
+permissions, and limits. Expensive model reasoning is not on every CPU operation.
+Adaptation and commercial usefulness are hypotheses to test, including AI overhead.
+There is no automatic claim of fewer layers, better security, or higher efficiency.
 
-Tema propuesto: Push the Frontier. Categoría propuesta: Indie Developer si
-participas individualmente; confirmar la categoría de tu registro.
+The earlier status/self-test demo was exploratory. The agreed direction is a
+side-by-side comparison of two policies using the same RAI-OS execution engine,
+workloads, inputs, and limits: a reasonable deterministic baseline and a Meta
+coordinator. Define a concrete task and success conditions before implementing it.
+A graphical host UI should make actual decisions and results visible. The existing
+[terminal console](CONSOLE.md) is the transport foundation, not that graphical UI.
 
-RAI-OS será un prototipo de sistema operativo en Rust con una interfaz de agente
-para inspeccionar su estado y ejecutar operaciones acotadas, con resultados
-comprobables. Usuario inicial: desarrolladores que experimentan con kernels o
-sistemas embebidos y necesitan diagnosticar y controlar un entorno limitado.
-Esta utilidad y el potencial comercial son hipótesis a validar, no resultados.
+Implementation order: review the working foundation; freeze the demo contract;
+design the host UI; add observable guest state/events; implement bounded jobs;
+enforce limits; establish the baseline; integrate Meta; test and present results.
+Storage, alternative-plan previews, and reversible operations were candidate
+examples, not additional promised features.
 
-Demo propuesta: el usuario pide comprobar el estado del sistema; un modelo Meta
-consulta datos reales, selecciona una autoprueba permitida, recibe su resultado
-y explica lo observado. Una solicitud no permitida se rechaza con un motivo
-visible. Mostrar solicitud, operación propuesta, validación y resultado real.
-El kernel no recibe código arbitrario del modelo.
+## Architecture
 
-## Requisitos de la guía y evidencia que prepararemos
+User goal/events -> host coordinator -> Meta proposal -> host validation -> UART
+-> guest validation/execution -> observed results -> coordinator/UI.
 
-| Requisito | Evidencia / acción |
-| --- | --- |
-| Incorporar modelos Meta | Llamada real desde el puente, modelo/proveedor identificados y resultado conectado a QEMU. Un mock no cuenta como integración final. |
-| Repo público | Ya verificado público; publicar los cambios elegibles, comprobar acceso sin sesión. |
-| Trabajo nuevo identificable | Commits con fechas reales, lista de archivos/funciones por periodo y sección de contribuciones. |
-| Demo solo de lo creado durante el evento | Guion y video centrados en incrementos elegibles; declarar las bases previas. |
-| Video de tres minutos | Grabar el 2–3 de noviembre, comprobar duración y enlace accesible. |
-| Una entrega por equipo; máximo cuatro integrantes | Confirmar integrantes, categoría, representante y aceptación al evento; listar a todos. |
-| Derechos sobre código/datos/assets | Mantener licencia y atribuciones; revisar las condiciones del modelo/proveedor elegido. |
-| Presentación por plataforma CV | Comprobar campos y accesos antes del último día y conservar confirmación de envío. |
+The host uses std and HTTPS; the bare-metal guest uses no_std. Secrets remain in
+the host environment. The UI renders observations rather than owning policy.
+Both sides validate requests. Timeouts and API errors are errors, never successful
+execution. Real service isolation remains future work.
 
-Preguntas de elegibilidad pendientes: la guía permite expresamente a startups
-construir sobre código previo, pero no aclara aquí ese permiso para Indie.
-Pregunta para #questions (no enviada): «Estoy inscrito en [categoría]. Tengo un
-repositorio del 13 de octubre y un kernel mínimo desarrollado durante el kickoff
-del 26. La guía fija Building period del 27 al 4. ¿Puedo usar esa base declarada
-y presentar exclusivamente las funciones de agente desarrolladas del 27 al 4?
-¿El trabajo del 26 es elegible?» Guardar la respuesta. No redatar ni borrar
-historial para aparentar trabajo nuevo. Rehacer lo mismo no resuelve por sí solo
-la elegibilidad del trabajo previo.
+## Submission checklist from the supplied guide
 
-## Arquitectura propuesta
+- Public repository and accessible demo video; all contributors listed.
+- One project per team, at most four participants, with a designated representative.
+- Clearly identify work created during the eligible event period. The video must
+  highlight those contributions, not present pre-existing work as new.
+- Real Meta model use, with provider/model identified. A development mock does
+  not satisfy final integration. API keys never go into chat or Git.
+- Three-minute video, working demonstration, and reproducible instructions.
+- Rights and attribution for code, data, assets, and model/provider usage.
+- Confirm CV submission fields and retain the actual submission confirmation.
 
-Usuario → puente Rust en el Mac → modelo Meta → propuesta estructurada →
-validación del puente → UART → validación y ejecución en RAI-OS → resultado
-→ explicación del modelo basada en ese resultado.
+The rubric weights supplied in the guide are impact 30%, Meta tooling 25%,
+technical depth/execution 20%, and demo 25%. Show a concrete user task, substantive
+Meta decisions, sound limits/tests, and a reproducible visible result. Do not
+expand scope merely to pursue every bonus award.
 
-El puente es un programa normal del Mac: ahí viven HTTPS y la credencial en
-variables de entorno. El kernel es el programa bare-metal dentro de QEMU.
-Ambos deben validar operaciones y argumentos. Toda decisión del modelo debe
-quedar limitada por código determinista. Errores de API y timeout se presentan
-como errores, nunca como operaciones ejecutadas.
+## Proposed schedule
 
-Operaciones propuestas para el incremento: consultar estado y contadores,
-ejecutar una autoprueba acotada y consultar su resultado. Definir exactamente
-qué comprueba la autoprueba antes de programarla; no inventar diagnósticos.
-El objetivo mínimo es completar ese flujo real, no solo hacer echo del modelo.
-
-Seguimos sin procesos aislados, scheduler, MMU, red del kernel, GUI, Android,
-inferencia local ni garantías de seguridad o rendimiento de un SO de producción.
-No ampliar a un framework de agentes ni intentar ganar todos los premios extra.
-
-## Calendario propuesto y criterio de cierre
-
-| Fecha | Trabajo | Se considera listo cuando… |
+| Date | Deliverable | Completion condition |
 | --- | --- | --- |
-| 26 oct | Reglas, alcance, procedencia; repaso guiado de Rust/Cargo y base existente | Sabes explicar compilador, Cargo, kernel, QEMU y UART; queda registrada la duda de elegibilidad. |
-| 27 oct | Aclarar elegibilidad y congelar alcance; diseñar dos operaciones útiles | Operaciones, argumentos, resultados y límites están escritos; base previa identificada. |
-| 28 oct | Puente Rust y operaciones del kernel | Un comando del host obtiene estado/autoprueba reales por UART con pruebas reproducibles. |
-| 29 oct | Modelo Meta real conectado | Una petición en lenguaje natural completa una operación y devuelve un resultado observado. |
-| 30–31 oct | Flujo de agente y validación | Rechaza operaciones inválidas; maneja timeout/desconexión; deja registro entendible del flujo. |
-| 1 nov | Congelar funciones y estabilizar | Demo completa repetible; instrucciones probadas desde un checkout limpio. |
-| 2 nov | Documentación, contribuciones y video de ensayo | Se entiende el problema, el papel de Meta y qué se construyó durante el evento. |
-| 3 nov | Video final de tres minutos y revisión de entrega | Repo/enlaces accesibles; campos CV completos; dudas resueltas en el último día de soporte completo. |
-| 4 nov | Verificación final y envío antes de las 18:00 Guatemala | Confirmación de entrega guardada, con dos horas de margen al límite oficial. |
+| Oct 26 | Rules, provenance, learning, demo design | Understand the foundation; record eligibility questions and experiment goals. |
+| Oct 27 | Eligibility and scope | Record organizer guidance; define task operations, constraints, and outputs. |
+| Oct 28 | Guest work and host observability | Manual requests produce verified real results over UART. |
+| Oct 29 | Meta integration | One actual model decision completes an allowed operation with observed output. |
+| Oct 30-31 | Autonomous loop and failures | Events trigger decisions; invalid actions/timeouts are handled visibly. |
+| Nov 1 | Feature freeze | Repeatable demo and clean-checkout instructions. |
+| Nov 2 | Documentation and rehearsal | Contributions, problem, and Meta's role are clear. |
+| Nov 3 | Final video and submission review | Three-minute video, accessible links, complete fields; last full troubleshooting day. |
+| Nov 4 | Final check and submission | Submit before 18:00 Guatemala and retain confirmation. |
 
-Dependencias: acceso al modelo y aceptación al evento por confirmar. Haber
-solicitado acceso a Meta no demuestra aceptación al hackathon. La API key no
-se comparte en el chat ni se añade al repo. Elegir el modelo disponible tras
-verificar acceso y documentación actuales. Si la API no está disponible, usar
-un mock solo para desarrollar el transporte y resolver un proveedor elegible
-antes de la demo; no etiquetar ese mock como integración Meta.
+Schedule is a target, not a claim of completion. Access and eligibility are external
+dependencies. If access is delayed, a mock may support transport development only;
+resolve an eligible real provider before calling the final demo integrated.
 
-## Cómo distribuimos el esfuerzo según la guía
+## Non-goals and teaching
 
-- Impacto, 30%: un usuario y una tarea concretos, con beneficio observable.
-- Herramientas Meta, 25%: decisiones basadas en estado real y resultados; no un
-  chatbot genérico ni una integración ornamental.
-- Profundidad técnica, 20%: arranque reproducible, protocolo limitado, validación
-  y pruebas de fallos. No promesas de aislamiento todavía inexistente.
-- Demo, 25%: flujo completo, visible y repetible, con una solicitud rechazada.
+No phone drivers, Android/Linux application compatibility, native desktop, kernel
+HTTPS, local inference, general agent framework, or production microkernel this
+milestone. QEMU host portability does not mean guest Linux app compatibility.
 
-## Aprendizaje y alcance inmediato
-
-No es necesario volver a instalar Rust/Cargo ni reconstruir a ciegas el hito 1.
-Ya está implementado y probado localmente; todavía falta revisarlo contigo.
-Cada sesión: explicar una pieza, ejecutar un ejemplo pequeño, comprobar su
-resultado y recién entonces pasar a la siguiente. El siguiente paso práctico
-es compilar el ejemplo original de macOS y entender Cargo.toml y main.rs;
-después veremos qué cambia al arrancar un kernel sin macOS debajo.
+The user wants short Spanish explanations, one small verified step at a time.
+Project artifacts and all new commit text are English. Follow AGENTS.md for
+architecture boundaries, honest testing, and commit/push per completed increment.

@@ -20,7 +20,7 @@ impl Connection {
             .stdout(Stdio::piped())
             .stderr(Stdio::inherit())
             .spawn()
-            .map_err(|e| format!("No se pudo iniciar QEMU: {e}"))?;
+            .map_err(|e| format!("Could not start QEMU: {e}"))?;
         // Pipes are guaranteed because Stdio::piped was requested above.
         let input = child.stdin.take().expect("piped stdin");
         let output = child.stdout.take().expect("piped stdout");
@@ -55,7 +55,7 @@ impl Connection {
         let timeout = deadline.saturating_duration_since(Instant::now());
         self.lines
             .recv_timeout(timeout)
-            .map_err(|e| format!("Sin respuesta del kernel (timeout o desconexion): {e}"))?
+            .map_err(|e| format!("No kernel response (timeout or disconnection): {e}"))?
     }
 
     pub fn request(&mut self, id: u32, operation: &Operation<'_>) -> Result<Reply, String> {

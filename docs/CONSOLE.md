@@ -1,47 +1,43 @@
-# Consola del host — primer incremento de interfaz
+# Host console
 
-Es una interfaz de terminal escrita en Rust que se ejecuta en el Mac. Arranca
-QEMU y comunica solicitudes estructuradas con el kernel mediante UART. No es
-una interfaz gráfica dentro de RAI-OS ni un agente de IA. La IA y la telemetría
-de recursos aparecen explícitamente como no implementadas.
+A Rust terminal application running on the host. It starts QEMU and exchanges
+structured UART requests with the kernel. It is not a graphical kernel desktop
+or an AI agent. AI and resource telemetry are explicitly marked unimplemented.
 
-## Ejecutar
+## Run
 
-Desde la raíz del repositorio:
+From the repository root:
 
 ```sh
 . "$HOME/.cargo/env"
 sh scripts/console.sh
 ```
 
-El script compila el kernel AArch64, detecta el destino del compilador anfitrión
-y compila/ejecuta el ejemplo control_console para ese destino. La aplicación del
-host usa std; el kernel continúa no_std/no_main. No se añadieron dependencias.
-Solo se ha probado macOS ARM64. El script selecciona automáticamente el destino
-Linux si se usa allí, pero Linux todavía no está verificado.
+The script builds the AArch64 kernel, detects the compiler host target, and builds
+and runs control_console for that target. Host code uses std; the kernel remains
+no_std/no_main. No dependencies were added. Only macOS ARM64 has been verified;
+Linux target detection is supported by the script but untested.
 
-Al conectar se consulta info al kernel real. Comandos: help, info, echo <texto
-ASCII>, exit. exit o fin de entrada cierran QEMU y recogen su proceso hijo.
-La consola original sigue disponible con cargo run --locked.
+Connection triggers a real info request. Commands: help, info, echo <ASCII text>,
+exit. Exit or input EOF terminates and reaps the QEMU child. The direct guest
+console remains available through cargo run --locked.
 
-## Separación de responsabilidades
+## Boundaries
 
-- examples/control_console/model.rs: operaciones y validación pura del protocolo;
-  sin acceso a procesos, terminal o hardware. Rechaza inyección de separadores,
-  exceso de longitud, IDs no correspondientes y controles en las respuestas.
-- examples/control_console/qemu.rs: adaptador de proceso/QEMU/UART. Espera el
-  banner y Console ready antes de declarar conexión. Timeout de 10 segundos;
-  solo una solicitud pendiente. Error de transporte cierra la sesión, sin
-  reintentos que pudieran duplicar operaciones.
-- examples/control_console/view.rs: presentación de resultados observados.
-- examples/control_console.rs: composición y coordinación del caso de uso.
-- El kernel no depende de ninguno de estos archivos.
+- examples/control_console/model.rs: pure operations and protocol validation;
+  no process, terminal, or hardware access. Rejects injected separators,
+  oversized requests, mismatched reply IDs, and terminal controls in responses.
+- examples/control_console/qemu.rs: process/UART adapter. Requires both boot
+  banner and Console ready, with a 10-second timeout and one pending request.
+  A transport failure closes the session rather than retrying side effects.
+- examples/control_console/view.rs: presentation of observed results.
+- examples/control_console.rs: composition and use-case coordination.
+- The kernel depends on none of these files.
 
-Clean Architecture se aplica a fronteras y dirección de dependencias. No se
-introducen traits o paquetes vacíos solo para imitar un diagrama. Cuando exista
-un segundo transporte o un caso de uso que lo requiera, se extraerá su interfaz.
+Clean Architecture concerns responsibility and dependency direction. Add a trait
+when a real second transport or use case requires it, not to fill an empty diagram.
 
-## Verificación
+## Verify
 
 ```sh
 cargo test --locked --example control_console --target aarch64-apple-darwin
@@ -49,21 +45,18 @@ cargo clippy --locked --example control_console --target aarch64-apple-darwin --
 python3 scripts/verify_console.py
 ```
 
-En otro host, sustituir aarch64-apple-darwin por el valor host de rustc -vV.
-La prueba de integración verifica arranque real, info/echo, rechazo y recuperación
-de una entrada con TAB, fallo por ELF inexistente y cierre por fin de entrada.
-El registro legible se genera en target/verification/host-console.log.
+On other hosts replace the target with the host value from rustc -vV. Integration
+checks cover real boot, info/echo, TAB input rejection and recovery, missing ELF,
+and EOF cleanup. Output: target/verification/host-console.log.
 
-## Límites y siguiente incremento
+## Limits and next step
 
-La pantalla es deliberadamente textual, sin redibujado ni controles gráficos.
-La conexión se comprueba al arrancar y en cada intercambio; no hay monitor de
-conexión continuo ni reconexión automática. El adaptador confía en el ejecutable
-QEMU local y el kernel del proyecto; no es un sandbox para procesos host hostiles.
-Los permisos verificables entre agentes, sus presupuestos y la integración Meta
-siguen pendientes. No se infiere uso de CPU, GPU, batería o RAM desde la
-configuración de QEMU. Los futuros presupuestos simulados deberán etiquetarse.
+This is plain terminal output, without graphical controls or redraw. Connection
+is checked at startup and on exchanges, not continuously; there is no automatic
+reconnection. The adapter trusts the local QEMU executable and project kernel;
+it is not a sandbox for hostile host programs.
 
-Siguiente paso propuesto: definir un evento y un estado pequeño del kernel,
-mostrarlos en esta consola y explicar su recorrido. Después se incorporarán
-trabajos acotados y sus límites; solo entonces decisiones del coordinador Meta.
+The user wants a graphical host interface. Design it around real events and
+state before adding constrained jobs and a Meta coordinator. Agent permissions,
+resource budgets, and AI are pending. QEMU configuration is not measured CPU,
+GPU, battery, or RAM usage. Future simulated budgets must be labeled explicitly.

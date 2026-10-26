@@ -18,27 +18,27 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Usa help, info, echo <texto> o exit"),
+            .ok_or("Use help, info, echo <text>, or exit"),
     }
 }
 
 pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str> {
     if id == 0 {
-        return Err("El ID cero esta reservado para errores de transporte");
+        return Err("ID zero is reserved for transport errors");
     }
     let body = match operation {
         Operation::Help => "help".to_owned(),
         Operation::Info => "info".to_owned(),
         Operation::Echo(text) => {
             if !text.bytes().all(|b| b.is_ascii_graphic() || b == b' ') {
-                return Err("echo admite ASCII imprimible, sin TAB ni saltos de linea");
+                return Err("echo accepts printable ASCII, without TAB or line breaks");
             }
             format!("echo\t{text}")
         }
     };
     let frame = format!("@rai1\t{id}\t{body}");
     if frame.len() > 256 {
-        return Err("La solicitud supera el limite UART de 256 bytes");
+        return Err("Request exceeds the 256-byte UART limit");
     }
     Ok(frame + "\n")
 }
@@ -46,18 +46,18 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
 pub fn decode(id: u32, line: &str) -> Result<Reply, &'static str> {
     let fields: Vec<_> = line.split('\t').collect();
     if fields.len() != 4 || fields[0] != "@rai1" {
-        return Err("Respuesta con formato inesperado");
+        return Err("Unexpected response format");
     }
     if fields[1] != id.to_string() {
-        return Err("Respuesta con ID inesperado; no se atribuye a esta solicitud");
+        return Err("Unexpected response ID; cannot match this request");
     }
     if !fields[3].bytes().all(|b| b.is_ascii_graphic() || b == b' ') {
-        return Err("Respuesta con caracteres de control o no ASCII");
+        return Err("Response contains control characters or non-ASCII bytes");
     }
     let success = match fields[2] {
         "ok" => true,
         "err" => false,
-        _ => return Err("Estado de respuesta desconocido"),
+        _ => return Err("Unknown response status"),
     };
     Ok(Reply {
         success,

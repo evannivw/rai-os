@@ -1,139 +1,106 @@
-# Estado y procedencia del trabajo
+# Work log and provenance
 
-Fechas expresadas en America/Guatemala (UTC−06:00). No se deben alterar fechas
-ni atribuir trabajo anterior al periodo oficial del evento.
+Dates use America/Guatemala (UTC-06:00). Preserve real dates and distinguish
+pre-existing work from eligible event contributions. Historical captured bytes
+and already-published commit messages remain unchanged.
 
-## Antes de esta sesión
+## Before October 26
 
-- `46e681e`: 2026-10-13, commit inicial.
-- `3e6d9c9`: 2026-10-13, programa de consola Rust, README y licencia.
-- Inicio de esta sesión: árbol Git limpio, remoto SSH
-  `git@github.com:evannivw/rai-os.git`. Acceso local confirmado en Mac ARM64,
-  Darwin 25.3.0. No se encontró AGENTS.md en el repo ni sus ancestros.
-- El contenido del README original y la licencia se conservan; se añadió una
-  nota inicial que enlaza las instrucciones actuales. El programa original se conserva
-  en `examples/host_hello.rs`.
+- 46e681e: Oct 13, initial commit.
+- 3e6d9c9: Oct 13, normal macOS Rust example, README, and Apache-2.0 license.
+- The initial local inspection found a clean tree at
+  /Users/jv/Development/Rust/rai-os on an ARM64 Mac, Darwin 25.3.0, with origin
+  git@github.com:evannivw/rai-os.git. No AGENTS.md existed in the repo or ancestors.
+- Original README/source are preserved in Git history. The host example remains
+  in examples/host_hello.rs; current text/output were later translated to English.
+  LICENSE was not changed.
 
-## 2026-10-26 — kickoff / preparación
+## October 26: minimal boot, then milestone 1
 
-Se comenzó la base bare-metal AArch64: entrada Assembly, linker, Rust sin std,
-UART y verificación automatizada de arranque real. Los cambios de esta sesión
-están fechados el 26. Su elegibilidad sigue pendiente: la guía compartida después
-fija Building period del 27 al 4, aunque el kickoff es el 26.
+Implemented Assembly entry, linker layout, no_std/no_main Rust, and UART output.
+Verified the real boot banner before expanding to input, help/info/echo, bounded
+structured requests, validation, and recovery. No external crate dependencies,
+API keys, Meta integration, heap, userspace, or agent isolation.
 
-## Evento: contexto inicial (actualizado tras recibir la guía)
+Verification actually performed on this Mac:
 
-- Kickoff: 26 de octubre de 2026.
-- Construcción: 27 de octubre al 4 de noviembre de 2026.
-- Entrega indicada: 4 de noviembre de 2026, 20:00 Guatemala
-  (5 de noviembre, 02:00 UTC).
-- Hay una discrepancia entre comenzar hoy durante el kickoff y el inicio del
-  periodo de construcción mañana. Mantener fechas reales y confirmar con la
-  organización qué trabajo preparatorio es elegible.
-- Repositorio público, identificar contribuciones del evento, integrar un
-  modelo de Meta y presentar un video de 3 minutos.
-- El usuario ya solicitó acceso a Meta. Este hito no necesita una API key.
-- Visibilidad pública verificada el 26 mediante GitHub REST sin autenticación:
-  `GET /repos/evannivw/rai-os` devolvió `private: false`. No se ha publicado código
-  de esta sesión.
-- Inicialmente no se había recibido la guía. Más tarde el 26, el usuario pegó
-  la Participant Guide: confirma repo público, integración Meta, video de tres
-  minutos y Building period 27-oct → 4-nov. Falta enlace/versionado y resolver
-  la elegibilidad del trabajo del kickoff y del código previo en categoría Indie.
+- Rust/Cargo 1.90.0; target aarch64-unknown-none-softfloat; bundled rust-lld.
+- file identified a statically linked AArch64 ELF.
+- QEMU 11.1.2, virt-9.2, Cortex-A53, TCG, one CPU, 128 MiB.
+- Real initial boot, followed by 28 console/protocol checks in debug AND release,
+  plus boot in each profile. Includes editing, valid requests, bad versions/IDs,
+  argument errors, unknown operations, NUL/escape/non-ASCII, exact 256-byte limit,
+  overflow, recovery, CRLF, consecutive requests, and fragmented delivery.
+- Formatting and Clippy with warnings denied passed.
+- Interactive cargo run: echo and Ctrl-C exit verified.
+- Original macOS example compiled and ran with its original Spanish output.
 
-## Pendiente de fases posteriores
+Historical evidence: [first boot](evidence/2026-10-26-first-boot.txt),
+[debug UART](evidence/2026-10-26-debug-uart.txt),
+[release UART](evidence/2026-10-26-release-uart.txt).
+These are earlier actual captures, not regenerated translations. CR, TAB, and
+Backspace are rendered as literal \r, \t, and \b; LF separates lines. Raw bytes
+from subsequent runs are stored under target/verification. Echo fixture text
+in historical evidence may be Spanish and must not be silently rewritten.
 
-Puente host y Meta Model API, demo con una operación validada, aislamiento real
-de servicios, video y revisión de requisitos de entrega. No hay IA integrada,
-red, GUI, Android ni inferencia local en este hito.
+Historical checked ELF SHA-256 values (not promises about future rebuilds):
 
-## Resultado del hito 1 — 26 de octubre de 2026
+- debug: a483404dfd1f6b4f341efc369c8fcbce34e7ffc82f68c8b785b55b85ccea4a7c
+- release: ab4cc476869087391f2a87e52cc39b4d4b228f2fd2f3d7cc22268e9a825b76fd
 
-Implementado localmente después de comprobar primero el arranque mínimo:
-UART de entrada/salida, shell help/info/echo, separación de transporte,
-interpretación y ejecución, mensajes estructurados v1 y rechazo de entradas
-inválidas. Sin dependencias de crates, sin API keys, sin integración Meta todavía.
+Not tested: physical hardware, Linux/Windows hosts, electrical UART errors,
+CPU exception recovery, process isolation, or performance superiority.
 
-### Verificación ejecutada en este Mac
+## Tool installation
 
-- Rust 1.90.0, Cargo 1.90.0; destino aarch64-unknown-none-softfloat.
-- Enlace con rust-lld incluido; ELF estático AArch64 comprobado con `file`.
-- QEMU 11.1.2, virt-9.2, Cortex-A53, TCG, 1 CPU, 128 MiB.
-- Primer incremento: compilación y recepción del banner real antes de ampliar.
-- Incremento completo: 28 comprobaciones de consola/protocolo pasaron tanto en
-  debug como en release (56 intercambios/comprobaciones en total, más arranque).
-- Incluyen comandos humanos, edición, mensajes válidos, versión e ID inválidos,
-  argumentos incorrectos, operación no autorizada, NUL/escape/no ASCII, límite
-  exacto de 256 bytes, exceso, recuperación, CRLF, mensajes consecutivos y fragmentados.
-- `cargo fmt --check` y Clippy con warnings como errores pasaron.
-- `cargo run --locked` probado en terminal: echo interactivo y salida con Ctrl-C.
-- Ejemplo original de macOS compilado y ejecutado: `RAI OS: primer paso en Rust`.
-- `git diff --check` sin errores.
+Homebrew installed QEMU/Rustup and dependencies. Homebrew Rustup 1.29.2 crashed
+with SIGSEGV during component installation; official Rustup 1.28.2 successfully
+installed the pinned compiler/components. A later self-update attempt failed
+without preventing the verified builds. Shell startup files were not modified;
+load `. "$HOME/.cargo/env"` in a new terminal.
 
-Evidencias: [primer arranque](evidence/2026-10-26-first-boot.txt),
-[consola debug](evidence/2026-10-26-debug-uart.txt),
-[consola release](evidence/2026-10-26-release-uart.txt).
-Las copias para revisión representan CR, TAB y Backspace como \r, \t y \b
-literales; LF separa las líneas. Los registros de target/verification conservan
-los bytes UART originales. No se han alterado los resultados.
+## Event rules and publication
 
-No se probaron hardware físico, Linux/Windows como host, errores eléctricos de
-UART (paridad/overrun), excepciones de CPU ni aislamiento de procesos.
-No hay pruebas de rendimiento ni afirmaciones de superioridad sobre otros SO.
+The user first supplied the event requirements, then pasted the Participant Guide
+on Oct 26. It requires a public repo, identifiable new work, real Meta integration,
+and a three-minute video. The guide lists Oct 27-Nov 4 as the build period, while
+public event pages announce Oct 26 kickoff and workshops starting Oct 27.
+Eligibility of Oct 26 work and the earlier base for Indie remains unresolved.
+Keep the discrepancy visible; do not change dates. API access was requested by
+the user; event acceptance and model access are separate unverified dependencies.
 
-### Herramientas y continuidad
+Deadline: Nov 4, 2026, 20:00 Guatemala (Nov 5, 02:00 UTC). See
+[HACKATHON_PLAN.md](HACKATHON_PLAN.md) for sources, open questions, and checklist.
+No Discord messages were sent and no terms were accepted for the user.
+Public visibility was verified with unauthenticated GitHub REST on Oct 26:
+GET /repos/evannivw/rai-os returned private: false.
 
-Se instalaron QEMU y Rustup con Homebrew y sus dependencias. El Rustup de Homebrew
-1.29.2 falló con SIGSEGV al instalar componentes; se usó el instalador oficial
-1.28.2. El compilador y los componentes quedaron instalados y verificados; el
-intento posterior de autoactualización de Rustup falló, sin impedir las pruebas.
-No se modificaron archivos de configuración de la shell. Cargar
-`. "$HOME/.cargo/env"` al abrir otra terminal.
+Initially changes were local only. The user subsequently authorized regular
+commits and pushes. Published increments:
 
-Al terminar la implementación inicial, los cambios estaban solo en el árbol
-local, sin commit ni push. Véase la actualización de publicación más abajo.
-Para continuar desde otra computadora, primero hay que guardar estos archivos
-en Git y publicarlos, manteniendo su fecha real del 26 y el historial del 13.
-No incluir target/, .env ni credenciales. No atribuir estas contribuciones al
-periodo de construcción del 27 sin confirmar la regla con la organización.
+- 75b69a5: standing collaboration rules in AGENTS.md.
+- 3b846d7: honest snapshot of accumulated Oct 26 kernel work, not a fabricated
+  sequence of earlier commits. Formatting, Clippy, and both QEMU profiles passed
+  before publication. Common credential-pattern checks found no matches; this
+  is not a security audit.
+- 0dd0788: Rust host terminal console, validation/process/presentation boundaries,
+  and instructions. Two validation unit tests, Clippy, and real-QEMU integration
+  passed: info/echo, invalid input/recovery, missing ELF, and EOF cleanup.
+  The console also passed from a clean Git export before publication.
 
-### SHA-256 de los ELF comprobados
+Local and remote HEAD matched after these pushes. No graphical UI, telemetry,
+Meta calls, agent processes, or battery measurements existed at that point.
 
-- debug: `a483404dfd1f6b4f341efc369c8fcbce34e7ffc82f68c8b785b55b85ccea4a7c`
-- release: `ab4cc476869087391f2a87e52cc39b4d4b228f2fd2f3d7cc22268e9a825b76fd`
+## English-language policy — October 26
 
-## Plan y revisión de reglas — 26 de octubre
+The user requested English for project artifacts and commit titles AND bodies.
+Earlier titles were English but bodies and documentation were Spanish. Preserve
+those published commits; do not rewrite or backdate history. Translate current
+documentation, UI, and examples, retaining historical evidence verbatim.
+Chat teaching remains Spanish. The current graphical UI and controlled comparison
+are still proposals, not implemented benchmarks or performance results.
 
-Se creó [HACKATHON_PLAN.md](HACKATHON_PLAN.md) a partir de la Participant Guide
-compartida por el usuario y las páginas públicas oficiales. Estas anuncian
-inicio el 26 y talleres desde el 27; la guía sí distingue Building period del
-27 al 4. Conservar esta discrepancia hasta obtener aclaración de los organizadores.
-No se enviaron mensajes a Discord ni se aceptaron términos en nombre del usuario.
-Este paso modifica documentación, no implementa la fase de agentes.
-
-## Primera publicación autorizada — 26 de octubre
-
-El usuario solicitó reglas permanentes en AGENTS.md, commits por incremento y
-push frecuente. Las reglas quedaron publicadas en `75b69a5`. Se prepara ahora
-un único snapshot del hito 1 acumulado en esta conversación, sin simular una
-secuencia de commits anteriores. La fecha sigue siendo la real del 26.
-
-Antes de guardar este snapshot se repitieron cargo fmt --check, Clippy con
--D warnings y verificación QEMU debug/release: 28 comprobaciones en cada perfil,
-más arranque. Todas pasaron. Se revisaron los archivos incluidos y patrones
-comunes de credenciales; no se encontraron coincidencias. Esto no reemplaza
-una auditoría de seguridad. La elegibilidad del trabajo sigue pendiente.
-
-## Consola del host — 26 de octubre
-
-El snapshot del kernel `3b846d7` fue publicado en origin/main, después del commit
-de reglas `75b69a5`. El usuario autorizó commits y pushes por incremento.
-Se añadió control_console como ejecutable Rust del host, sin cambiar el kernel:
-coordinación, validación pura, adaptador QEMU y presentación separados.
-
-Verificaciones ejecutadas: dos pruebas unitarias de validación; Clippy sin
-warnings; integración con QEMU real para info/echo, entrada inválida y posterior
-recuperación, ELF inexistente y fin de entrada. Solo macOS ARM64 verificado.
-La pantalla informa que la IA y la telemetría aún no están implementadas.
-No hay procesos de agentes aislados, medidas de batería ni interfaz gráfica.
-La documentación de consola explica uso, arquitectura y límites.
+English migration checks: host protocol unit tests (2), host Clippy, real-QEMU
+console integration, and both kernel verification profiles (28 cases each) passed.
+Historical UART captures were retained unchanged. No scheduling or AI logic was
+introduced by this language change.
