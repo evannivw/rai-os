@@ -1,3 +1,11 @@
+> **Estado actual — 26 de octubre de 2026:** ya hay un kernel AArch64 que arranca
+> en QEMU, consola UART, shell y protocolo estructurado. Empieza por
+> [la guía del hito 1](docs/GETTING_STARTED.md),
+> [arquitectura](docs/ARCHITECTURE.md), [protocolo](docs/PROTOCOL.md) y
+> [estado/evidencias](docs/WORKLOG.md).
+> El contenido original que sigue se conserva como registro del primer paso
+> en macOS; sus instrucciones y limitaciones son históricas.
+
 # RAI OS
 
 Proyecto de código abierto para explorar la construcción de un sistema operativo

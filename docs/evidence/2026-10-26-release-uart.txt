@@ -1,0 +1,37 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r
+Console ready: help | info | echo <text>\r
+help\r
+help | info | echo <text>\r
+info\r
+RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected\r
+echo hola Rust\r
+hola Rust\r
+echo\r
+\r
+oops\r
+error: unknown_command\r
+echx\b \bo editado\r
+editado\r
+@rai1\t1\tok\thelp | info | echo <text>\r
+@rai1\t2\tok\tRAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected\r
+@rai1\t3\tok\tbridge ready\r
+@rai1\t4\tok\t\r
+@rai1\t5\terr\tbad_version\r
+@rai1\t0\terr\tbad_id\r
+@rai1\t0\terr\tbad_id\r
+@rai1\t0\terr\tbad_id\r
+@rai1\t0\terr\tbad_id\r
+@rai1\t6\terr\tbad_frame\r
+@rai1\t7\terr\tbad_args\r
+@rai1\t8\terr\tbad_args\r
+@rai1\t9\terr\tbad_args\r
+@rai1\t10\terr\tunknown_operation\r
+@rai1\t0\terr\tinvalid_byte\r
+@rai1\t0\terr\tinvalid_byte\r
+@rai1\t0\terr\tinvalid_byte\r
+@rai1\t14\tok\txxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r
+@rai1\t0\terr\tline_too_long\r
+@rai1\t15\tok\trecovered\r
+@rai1\t16\tok\ta\r
+@rai1\t17\tok\tb\r
+@rai1\t18\tok\tfragmented\r

@@ -1,0 +1,1 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r

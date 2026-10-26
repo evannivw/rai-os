@@ -6,3 +6,15 @@ license = "Apache-2.0"
 description = "Primer paso educativo de RAI OS en Rust"
 
 [dependencies]
+
+[[bin]]
+name = "rai-os"
+path = "src/main.rs"
+test = false
+bench = false
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
