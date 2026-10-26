@@ -2,7 +2,8 @@
 > en QEMU, consola UART, shell y protocolo estructurado. Empieza por
 > [la guía del hito 1](docs/GETTING_STARTED.md),
 > [arquitectura](docs/ARCHITECTURE.md), [protocolo](docs/PROTOCOL.md) y
-> [estado/evidencias](docs/WORKLOG.md).
+> [estado/evidencias](docs/WORKLOG.md). También puedes abrir la
+> [consola del host](docs/CONSOLE.md) con `sh scripts/console.sh`.
 > El contenido original que sigue se conserva como registro del primer paso
 > en macOS; sus instrucciones y limitaciones son históricas.
 

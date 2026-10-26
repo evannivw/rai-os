@@ -1,7 +1,26 @@
 # RAI-OS — plan del hackathon
 
 Fecha: 2026-10-26. Horarios locales: America/Guatemala.
-Estado: plan propuesto; no se implementaron nuevas funciones al escribirlo.
+Estado: plan inicial con actualización de visión e interfaz del 26 de octubre.
+La sección siguiente sustituye el alcance de la demo exploratoria original.
+
+## Visión acordada y paso inmediato
+
+RAI-OS busca coordinar trabajos a partir de objetivos, eventos, capacidades y
+presupuestos de recursos. Un coordinador decide y delega; el código impone los
+permisos y límites. La IA no razonará por cada operación del procesador. Esta
+adaptación es una hipótesis por demostrar frente a políticas sencillas, incluyendo
+el costo del modelo. No implica superioridad automática ni menos capas.
+
+El usuario pidió avanzar paso a paso, comenzar la interfaz antes de integrar IA
+y hacer commit/push documentados por incremento. AGENTS.md conserva estas reglas.
+La primera interfaz es una consola Rust del host conectada al kernel real:
+[CONSOLE.md](CONSOLE.md). No se construye una GUI dentro del kernel.
+
+La demo de autoprueba descrita abajo fue la propuesta inicial. El alcance final
+se definirá sobre coordinación autónoma observable, sin dar por implementados
+agentes, almacenamiento ni aislamiento. Primero: consola → estado/eventos reales
+→ trabajos y límites verificables → coordinador Meta → presentación de la demo.
 
 ## Fuentes y prioridad
 

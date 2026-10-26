@@ -123,3 +123,17 @@ Antes de guardar este snapshot se repitieron cargo fmt --check, Clippy con
 más arranque. Todas pasaron. Se revisaron los archivos incluidos y patrones
 comunes de credenciales; no se encontraron coincidencias. Esto no reemplaza
 una auditoría de seguridad. La elegibilidad del trabajo sigue pendiente.
+
+## Consola del host — 26 de octubre
+
+El snapshot del kernel `3b846d7` fue publicado en origin/main, después del commit
+de reglas `75b69a5`. El usuario autorizó commits y pushes por incremento.
+Se añadió control_console como ejecutable Rust del host, sin cambiar el kernel:
+coordinación, validación pura, adaptador QEMU y presentación separados.
+
+Verificaciones ejecutadas: dos pruebas unitarias de validación; Clippy sin
+warnings; integración con QEMU real para info/echo, entrada inválida y posterior
+recuperación, ELF inexistente y fin de entrada. Solo macOS ARM64 verificado.
+La pantalla informa que la IA y la telemetría aún no están implementadas.
+No hay procesos de agentes aislados, medidas de batería ni interfaz gráfica.
+La documentación de consola explica uso, arquitectura y límites.

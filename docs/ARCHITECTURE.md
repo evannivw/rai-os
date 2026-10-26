@@ -45,8 +45,8 @@ y renderiza respuestas; `protocol.rs` interpreta mensajes estructurados;
 `command.rs` interpreta comandos humanos y ejecuta un enum de operaciones
 permitidas. Ambos intérpretes convergen en ese enum; no ejecutan texto como código.
 Son módulos del mismo binario, sin dependencias genéricas de transporte.
-Ver [protocolo](PROTOCOL.md). Un puente del Mac podrá transportar mensajes por la UART y llamar
-a Meta Model API desde el host. El modelo propondrá operaciones; RAI-OS deberá
+Ver [protocolo](PROTOCOL.md). La [consola del host](CONSOLE.md) ya transporta
+mensajes por UART. La conexión con Meta Model API desde el host sigue pendiente. El modelo propondrá operaciones; RAI-OS deberá
 validarlas antes de ejecutarlas. No habrá credenciales ni HTTPS dentro del kernel.
 El aislamiento real requerirá después memoria virtual, ejecución en EL0,
 syscalls, planificación e IPC. Los nombres de módulos no sustituyen esas garantías.

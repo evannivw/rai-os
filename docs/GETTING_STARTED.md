@@ -50,6 +50,16 @@ No se usa `-nographic`, para evitar que el monitor se mezcle con los mensajes.
 solo macOS ARM64 está verificado inicialmente. No cambiar a HVF sin revisar
 el contrato de arranque. No montar discos ni añadir dispositivos de red.
 
+## Primera interfaz del host
+
+```sh
+sh scripts/console.sh
+```
+
+Abre una consola Rust del Mac que arranca QEMU y muestra respuestas reales.
+Usa help, info, echo <texto> y exit. Ver [CONSOLE.md](CONSOLE.md) para arquitectura
+y pruebas. No requiere IA ni modifica el kernel.
+
 ## Shell y mensajes
 
 Escribe `help`, `info` o `echo hola Rust` y pulsa Enter. El shell tiene eco local
