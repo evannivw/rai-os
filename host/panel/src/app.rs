@@ -1,4 +1,5 @@
 //! Native host presentation. Values change only when the session worker reports them.
+use crate::task_status::{State as TaskState, TaskStatus};
 use crate::worker::{Command, Event, Worker};
 use eframe::egui::{self, Color32, FontId, RichText, Stroke};
 use std::collections::VecDeque;
@@ -26,6 +27,9 @@ pub struct Panel {
     uptime: Option<u64>,
     sampled: Option<Instant>,
     input: String,
+    task: Option<TaskStatus>,
+    task_text: String,
+    task_view: bool,
     echo: Option<String>,
     error: Option<String>,
     pending: bool,
@@ -53,6 +57,9 @@ impl Panel {
             uptime: None,
             sampled: None,
             input: "Hello from Device Lab".into(),
+            task: None,
+            task_text: "RAI-OS processes this text in small steps. The kernel keeps answering commands while it counts words. You can cancel the task or wait for the result.".into(),
+            task_view: true,
             echo: None,
             error: None,
             pending: false,
@@ -98,6 +105,24 @@ impl Panel {
                     self.record("SYSTEM", &info);
                     self.record("CONNECTED", "Kernel boot and UART response confirmed.");
                 }
+                Ok(Event::Task(task)) => {
+                    if self
+                        .task
+                        .is_none_or(|old| old.id != task.id || old.state != task.state)
+                    {
+                        self.record(
+                            "TASK",
+                            &format!(
+                                "Task {}: {} ({}/{} bytes).",
+                                task.id,
+                                task.state.label(),
+                                task.processed,
+                                task.total
+                            ),
+                        );
+                    }
+                    self.task = Some(task);
+                }
                 Ok(Event::Uptime {
                     milliseconds,
                     frequency,
@@ -113,7 +138,7 @@ impl Panel {
                 }
                 Ok(Event::Reply { command, payload }) => {
                     self.pending = false;
-                    if command != "info" {
+                    if command.starts_with("echo") {
                         self.echo = Some(payload.clone());
                     }
                     self.record("RESPONSE", &payload);
@@ -126,6 +151,7 @@ impl Panel {
                 Ok(Event::Stopped) => {
                     self.phase = Phase::Stopped;
                     self.pending = false;
+                    self.task = None;
                     self.uptime = None;
                     self.sampled = None;
                     self.echo = None;
@@ -134,6 +160,7 @@ impl Panel {
                 Ok(Event::Failed(error)) => {
                     self.phase = Phase::Failed;
                     self.pending = false;
+                    self.task = None;
                     self.uptime = None;
                     self.sampled = None;
                     self.echo = None;
@@ -144,6 +171,7 @@ impl Panel {
                 Err(TryRecvError::Disconnected) => {
                     if self.phase != Phase::Failed {
                         self.phase = Phase::Failed;
+                        self.task = None;
                         self.uptime = None;
                         self.sampled = None;
                         self.echo = None;
@@ -166,6 +194,95 @@ impl Panel {
         }
     }
 
+    fn task_controls(&mut self, ui: &mut egui::Ui) {
+        let connected = self.phase == Phase::Running && !self.pending;
+        let running = self
+            .task
+            .is_some_and(|task| task.state == TaskState::Running);
+        ui.label(RichText::new("WORD COUNT").size(11.0).color(ACCENT));
+        ui.label("A real job, processed inside the kernel.");
+        ui.add_enabled(
+            connected && !running,
+            egui::TextEdit::multiline(&mut self.task_text)
+                .desired_rows(3)
+                .char_limit(192)
+                .desired_width(308.0),
+        );
+        ui.horizontal(|ui| {
+            if ui
+                .add_enabled(
+                    connected && !running && self.task.is_some(),
+                    egui::Button::new("Start task"),
+                )
+                .clicked()
+            {
+                self.error = None;
+                if self.send(Command::Request(format!("task.start {}", self.task_text))) {
+                    self.pending = true;
+                    self.record("REQUEST", "Word count queued for kernel validation.");
+                }
+            }
+            if ui
+                .add_enabled(connected && running, egui::Button::new("Cancel task"))
+                .clicked()
+                && let Some(task) = self.task
+            {
+                self.error = None;
+                if self.send(Command::Request(format!("task.cancel {}", task.id))) {
+                    self.pending = true;
+                    self.record(
+                        "REQUEST",
+                        "Cancellation requested for the observed task ID.",
+                    );
+                }
+            }
+        });
+        if let Some(task) = self.task {
+            let progress = if task.total == 0 {
+                if task.state == TaskState::Completed {
+                    1.0
+                } else {
+                    0.0
+                }
+            } else {
+                task.processed as f32 / task.total as f32
+            };
+            ui.add(
+                egui::ProgressBar::new(progress)
+                    .text(format!(
+                        "{} · {} / {} bytes",
+                        task.state.label(),
+                        task.processed,
+                        task.total
+                    ))
+                    .animate(false),
+            );
+            match task.state {
+                TaskState::Completed => {
+                    ui.label(RichText::new(format!("Result: {} words", task.words)).color(ACCENT));
+                }
+                TaskState::Running | TaskState::Cancelled => {
+                    ui.label(format!("Partial count: {} words", task.words));
+                }
+                TaskState::Idle => {
+                    ui.label("No task started in this session.");
+                }
+            }
+        } else {
+            ui.label("Waiting for kernel task state.");
+        }
+        ui.label(
+            RichText::new("Learning pace: 8 bytes / 100 ms")
+                .size(10.0)
+                .color(MUTED),
+        );
+        ui.label(
+            RichText::new("ASCII letters and digits form words. Max 192 bytes.")
+                .size(10.0)
+                .color(MUTED),
+        );
+    }
+
     fn device(&mut self, ui: &mut egui::Ui) {
         egui::Frame::new()
             .fill(CARD)
@@ -186,9 +303,13 @@ impl Panel {
                     ui.label(RichText::new(self.status()).size(11.0).color(color));
                     ui.add_space(10.0);
                     ui.label(
-                        RichText::new("Your system.\nTaking shape.")
-                            .size(26.0)
-                            .strong(),
+                        RichText::new(if self.task_view {
+                            "Work, one step at a time."
+                        } else {
+                            "Your system.\nTaking shape."
+                        })
+                        .size(26.0)
+                        .strong(),
                     );
                     ui.add_space(16.0);
                     ui.label(RichText::new("KERNEL UPTIME").size(10.0).color(MUTED));
@@ -203,7 +324,13 @@ impl Panel {
                             )
                         })
                         .unwrap_or_else(|| "--:--:--".into());
-                    ui.label(RichText::new(time).font(FontId::monospace(38.0)));
+                    ui.label(
+                        RichText::new(time).font(FontId::monospace(if self.task_view {
+                            25.0
+                        } else {
+                            38.0
+                        })),
+                    );
                     let caption = match self.sampled {
                         Some(at) if at.elapsed() > Duration::from_secs(3) => {
                             "Last reading · awaiting kernel"
@@ -214,34 +341,42 @@ impl Panel {
                     ui.label(RichText::new(caption).size(11.0).color(MUTED));
                     ui.add_space(16.0);
                 });
-                ui.separator();
-                ui.label(RichText::new("CONNECTION CHECK").size(10.0).color(MUTED));
-                ui.label("Send a message. Get it back from RAI-OS.");
-                let enabled = self.phase == Phase::Running && !self.pending;
-                ui.add_enabled(
-                    enabled,
-                    egui::TextEdit::singleline(&mut self.input)
-                        .desired_width(f32::INFINITY)
-                        .char_limit(220),
-                );
-                if ui
-                    .add_enabled(
+                ui.horizontal(|ui| {
+                    ui.selectable_value(&mut self.task_view, true, "Kernel task");
+                    ui.selectable_value(&mut self.task_view, false, "Connection check");
+                });
+                if self.task_view {
+                    self.task_controls(ui);
+                } else {
+                    ui.separator();
+                    ui.label(RichText::new("CONNECTION CHECK").size(10.0).color(MUTED));
+                    ui.label("Send a message. Get it back from RAI-OS.");
+                    let enabled = self.phase == Phase::Running && !self.pending;
+                    ui.add_enabled(
                         enabled,
-                        egui::Button::new("Send message").min_size(egui::vec2(308.0, 40.0)),
-                    )
-                    .clicked()
-                {
-                    self.error = None;
-                    let command = format!("echo {}", self.input);
-                    if self.send(Command::Request(command)) {
-                        self.pending = true;
-                        self.echo = None;
-                        self.record("REQUEST", "Echo queued for validation.");
+                        egui::TextEdit::singleline(&mut self.input)
+                            .desired_width(f32::INFINITY)
+                            .char_limit(220),
+                    );
+                    if ui
+                        .add_enabled(
+                            enabled,
+                            egui::Button::new("Send message").min_size(egui::vec2(308.0, 40.0)),
+                        )
+                        .clicked()
+                    {
+                        self.error = None;
+                        let command = format!("echo {}", self.input);
+                        if self.send(Command::Request(command)) {
+                            self.pending = true;
+                            self.echo = None;
+                            self.record("REQUEST", "Echo queued for validation.");
+                        }
                     }
-                }
-                if let Some(echo) = &self.echo {
-                    ui.label(RichText::new("KERNEL REPLY").size(10.0).color(ACCENT));
-                    ui.add(egui::Label::new(echo).wrap());
+                    if let Some(echo) = &self.echo {
+                        ui.label(RichText::new("KERNEL REPLY").size(10.0).color(ACCENT));
+                        ui.add(egui::Label::new(echo).wrap());
+                    }
                 }
                 ui.add_space(12.0);
                 ui.label(

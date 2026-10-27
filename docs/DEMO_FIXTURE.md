@@ -3,8 +3,9 @@
 Created October 26, 2026. These are original synthetic English records under the
 repository license, with no personal data or credentials. This is a tiny public
 correctness fixture, not a performance benchmark or held-out evaluation set.
-No policy, job engine, Meta integration, or independent candidate-result verifier
-is implemented by this increment. The existing kernel remains help/info/uptime/echo.
+No policy, review-pack job engine, Meta integration, or independent candidate-result
+verifier is implemented by this increment. The kernel now has basic commands and
+a separate cooperative word-count task.
 
 ## Files and reference results
 

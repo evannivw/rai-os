@@ -4,6 +4,9 @@ pub enum Operation<'a> {
     Info,
     Uptime,
     Echo(&'a str),
+    TaskStart(&'a str),
+    TaskStatus,
+    TaskCancel(u32),
 }
 
 pub struct Reply {
@@ -16,11 +19,25 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         "help" => Ok(Operation::Help),
         "info" => Ok(Operation::Info),
         "uptime" => Ok(Operation::Uptime),
+        "task.status" => Ok(Operation::TaskStatus),
+        "task.start" => Ok(Operation::TaskStart("")),
+        _ if line.starts_with("task.start ") => Ok(Operation::TaskStart(&line[11..])),
+        _ if line.starts_with("task.cancel ") => {
+            let text = &line[12..];
+            if text.is_empty() || !text.bytes().all(|b| b.is_ascii_digit()) {
+                return Err("Invalid task ID");
+            }
+            text.parse::<u32>()
+                .ok()
+                .filter(|id| *id != 0)
+                .map(Operation::TaskCancel)
+                .ok_or("Invalid task ID")
+        }
         "echo" => Ok(Operation::Echo("")),
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, uptime, echo <text>, or exit"),
+            .ok_or("Use help, info, uptime, echo, task.start, task.status, task.cancel, or exit"),
     }
 }
 
@@ -32,6 +49,22 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
         Operation::Help => "help".to_owned(),
         Operation::Info => "info".to_owned(),
         Operation::Uptime => "uptime".to_owned(),
+        Operation::TaskStatus => "task.status".to_owned(),
+        Operation::TaskCancel(id) => {
+            if *id == 0 {
+                return Err("Invalid task ID");
+            }
+            format!("task.cancel\t{id}")
+        }
+        Operation::TaskStart(text) => {
+            if text.len() > 192 {
+                return Err("Task text exceeds 192 bytes");
+            }
+            if !text.bytes().all(|b| b.is_ascii_graphic() || b == b' ') {
+                return Err("Task text requires printable ASCII");
+            }
+            format!("task.start\t{text}")
+        }
         Operation::Echo(text) => {
             if !text.bytes().all(|b| b.is_ascii_graphic() || b == b' ') {
                 return Err("echo accepts printable ASCII, without TAB or line breaks");

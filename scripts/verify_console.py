@@ -9,12 +9,14 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     result = subprocess.run(
         ["sh", "scripts/console.sh"], cwd=ROOT,
-        input="info\nuptime\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
+        input="info\nuptime\ntask.start\ntask.status\ntask.cancel 1\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
         text=True, capture_output=True, timeout=60,
     )
     assert result.returncode == 0, result.stdout + result.stderr
     assert "Connection: kernel boot and UART console confirmed." in result.stdout
     assert re.search(r"\[kernel / OK\] uptime_ms=\d+; counter_hz=[1-9]\d*", result.stdout)
+    assert result.stdout.count("[kernel / OK] task_id=1; state=completed; processed=0; total=0; words=0") == 2
+    assert "[kernel / REJECTED] task_not_running" in result.stdout
     assert "[kernel / OK] bridge alive" in result.stdout
     assert "[input rejected; not sent]" in result.stdout
     assert result.stdout.count("[kernel / OK] RAI-OS 0.1.0;") == 3
@@ -39,7 +41,7 @@ def main():
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(result.stdout)
     print(result.stdout)
-    print("PASS: real QEMU, info/uptime/echo, rejected input, recovery, missing ELF and EOF")
+    print("PASS: real QEMU, info/uptime/echo/tasks, rejected input, recovery, missing ELF and EOF")
 
 if __name__ == "__main__":
     main()

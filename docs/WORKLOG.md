@@ -189,3 +189,28 @@ Retained [native panel capture](evidence/2026-10-26-panel.png) and
 also confirmed Stop returns to OFFLINE and clears live readings. The panel was
 left open with QEMU stopped. Local documentation links and whitespace checks
 passed before publication.
+
+## First cooperative task — October 26
+
+Added a single owned, 192-byte ASCII word-count job with bounded 8-byte steps,
+progress snapshots, exact-ID cancellation, and retained completion/cancel state.
+The UART receive path no longer waits for input, so tasks advance even during an
+unfinished line. Deliberate 100 ms educational pacing is labeled in the panel;
+this is not a throughput or energy benchmark. No new unsafe task code, allocator,
+interrupts, process isolation, multi-task scheduler, or AI was introduced.
+
+Extended shell/protocol and both host interfaces. The graphical panel has a
+Kernel task tab, Start/Cancel controls, validated observed progress, and final
+versus partial counts. Guest rejections no longer disconnect a healthy panel
+session. The small coordinator remains the next increment.
+
+Verification: three pure task unit tests; 28 real-QEMU task exchanges (25 structured and three direct-shell) and the
+existing 37 console/protocol exchanges, each in debug and release; six panel
+tests including real task progress/cancel/result; terminal integration; kernel,
+console, and panel Clippy; formatting; optimized host build. The partial-frame
+test waited three seconds without a complete command and observed task completion.
+Native UI verified cancellation at 32/149 bytes and a subsequent completed result
+of 27 words. Stop cleared task readings. Captures and contract: [TASKS.md](TASKS.md).
+
+The GUI remained host-rendered. No physical phone or comparative performance
+claim was tested. QEMU was stopped after the UI check and the panel left open.

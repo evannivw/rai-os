@@ -10,6 +10,7 @@ pub fn header() {
 
 pub fn connected() {
     println!("Connection: kernel boot and UART console confirmed.");
+    println!("Tasks: task.start <text> | task.status | task.cancel <id>");
     println!("Commands: help | info | uptime | echo <ASCII text> | exit\n");
 }
 

@@ -3,6 +3,7 @@ mod app;
 mod model;
 #[path = "../../shared/qemu.rs"]
 mod qemu;
+mod task_status;
 mod worker;
 
 fn main() -> eframe::Result {

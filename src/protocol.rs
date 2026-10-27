@@ -31,6 +31,12 @@ pub fn parse(line: &str) -> Result<Request<'_>, Error<'_>> {
         Some("help") => Operation::Help,
         Some("info") => Operation::Info,
         Some("uptime") => Operation::Uptime,
+        Some("task.status") => Operation::TaskStatus,
+        Some("task.start") => Operation::TaskStart(fields.next().ok_or(error("bad_args"))?),
+        Some("task.cancel") => Operation::TaskCancel(
+            crate::command::parse_task_id(fields.next().ok_or(error("bad_args"))?)
+                .map_err(error)?,
+        ),
         Some("echo") => Operation::Echo(fields.next().ok_or(error("bad_args"))?),
         Some(_) => return Err(error("unknown_operation")),
         None => return Err(error("bad_frame")),

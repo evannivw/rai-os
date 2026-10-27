@@ -1,0 +1,33 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r
+Console ready: type help for commands\r
+@rai1\t1\tok\ttask_id=0; state=idle; processed=0; total=0; words=0\r
+@rai1\t2\tok\ttask_id=1; state=completed; processed=0; total=0; words=0\r
+@rai1\t3\tok\ttask_id=2; state=running; processed=0; total=192; words=0\r
+@rai1\t4\terr\ttask_busy\r
+@rai1\t5\terr\tstale_task\r
+@rai1\t6\tok\tresponsive\r
+@rai1\t7\tok\tuptime_ms=10; counter_hz=62500000\r
+@rai1\t8\tok\ttask_id=2; state=running; processed=16; total=192; words=8\r
+@rai1\t9\tok\ttask_id=2; state=cancelled; processed=16; total=192; words=8\r
+@rai1\t10\tok\ttask_id=2; state=cancelled; processed=16; total=192; words=8\r
+@rai1\t11\terr\ttask_not_running\r
+@rai1\t12\terr\ttask_too_large\r
+@rai1\t13\terr\tbad_args\r
+@rai1\t14\terr\tbad_args\r
+@rai1\t15\terr\tbad_args\r
+@rai1\t16\terr\tbad_args\r
+@rai1\t17\terr\tbad_args\r
+@rai1\t18\terr\tbad_args\r
+@rai1\t19\terr\tbad_args\r
+@rai1\t20\tok\ttask_id=2; state=cancelled; processed=16; total=192; words=8\r
+@rai1\t21\tok\ttask_id=3; state=running; processed=0; total=175; words=0\r
+@rai1\t22\tok\ttask_id=3; state=completed; processed=175; total=175; words=28\r
+@rai1\t23\terr\ttask_not_running\r
+@rai1\t24\tok\ttask_id=4; state=completed; processed=0; total=0; words=0\r
+@rai1\t25\terr\tstale_task\r
+task.start ab-c\r
+task_id=5; state=running; processed=0; total=4; words=0\r
+task.status\r
+task_id=5; state=completed; processed=4; total=4; words=2\r
+task.cancel 5\r
+error: task_not_running\r

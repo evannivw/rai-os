@@ -1,7 +1,7 @@
 # Milestone 1 architecture
 
 An educational AArch64 kernel for QEMU, with a long-term microkernel direction.
-Current modules share privilege and memory. There is no scheduler, process IPC,
+Current modules share privilege and memory. There is no multi-task scheduler, process IPC,
 MMU, heap, userspace, or isolated agent execution.
 
 ## Boot
@@ -38,7 +38,10 @@ a CPU fault can hang the guest. Rust panic prints and halts without recovery.
 
 - clock.rs: read-only generic counter adapter and boot-relative time.
 - uart.rs: bytes and MMIO, including allocation-free formatted output.
-- console.rs: framing, input validation/editing, and response rendering.
+- console.rs: framing, response rendering, and interleaving a bounded task step
+  with nonblocking UART receive. Transmit still polls.
+- task.rs: one owned word-count job, pure state transitions, progress/cancellation.
+  See [TASKS.md](TASKS.md); no process isolation or preemption is introduced.
 - protocol.rs: structured request parsing without execution.
 - command.rs: human-command parsing and execution of allowed operations. It
   receives a typed uptime snapshot and never reads hardware itself.

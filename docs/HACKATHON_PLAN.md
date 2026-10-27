@@ -49,7 +49,7 @@ decisions remain future work. It shares the transport used by the
 Current priority, revised at the user's request on October 26: advance the kernel
 foundation and visible controls before continuing the demo verifier. The kernel
 now exposes measured uptime. A [graphical host control panel](PANEL.md) now exposes real
-QEMU boot, info, uptime, and echo. This is a host UI, not a guest desktop. The
+QEMU boot, info, uptime, echo, and a [cooperative word-count task](TASKS.md). This is a host UI, not a guest desktop. The
 correctness fixture is retained; verifier implementation resumes with demo jobs.
 
 Implementation order: review the working foundation; freeze the demo contract;

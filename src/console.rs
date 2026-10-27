@@ -1,5 +1,5 @@
 //! UART line transport and response rendering; no allocation or global buffers.
-use crate::{clock::Clock, command, protocol, uart};
+use crate::{clock::Clock, command, protocol, task::Task, uart};
 use core::fmt::Display;
 
 const CAPACITY: usize = 256;
@@ -14,19 +14,19 @@ fn response(id: &str, status: &str, payload: impl Display) {
     uart::write("\n");
 }
 
-fn dispatch(line: &str, clock: &Clock) {
+fn dispatch(line: &str, clock: &Clock, task: &mut Task) {
     if line.starts_with('@') {
         match protocol::parse(line) {
-            Ok(request) => response(
-                request.id,
-                "ok",
-                command::execute(request.operation, clock.snapshot()),
-            ),
+            Ok(request) => match command::execute(request.operation, clock.snapshot(), task) {
+                Ok(reply) => response(request.id, "ok", reply),
+                Err(code) => response(request.id, "err", code),
+            },
             Err(error) => response(error.id, "err", error.code),
         }
     } else if !line.is_empty() {
-        match command::parse_shell(line) {
-            Ok(operation) => uart::write_display(command::execute(operation, clock.snapshot())),
+        match command::parse_shell(line).and_then(|op| command::execute(op, clock.snapshot(), task))
+        {
+            Ok(reply) => uart::write_display(reply),
             Err(code) => {
                 uart::write("error: ");
                 uart::write(code);
@@ -37,15 +37,22 @@ fn dispatch(line: &str, clock: &Clock) {
 }
 
 pub fn run(clock: &Clock) -> ! {
+    let mut task = Task::new();
     let mut buffer = [0u8; CAPACITY];
     let mut length = 0;
     let mut rejected = None;
     let mut machine = false;
     let mut after_cr = false;
-    uart::write("Console ready: help | info | uptime | echo <text>\n");
+    uart::write("Console ready: type help for commands\n");
     loop {
-        let byte = match uart::get() {
-            Ok(byte) => byte,
+        // Every loop gets a bounded task step, even during a partial/invalid frame.
+        task.step(clock.snapshot().milliseconds);
+        let byte = match uart::try_get() {
+            Ok(Some(byte)) => byte,
+            Ok(None) => {
+                core::hint::spin_loop();
+                continue;
+            }
             Err(()) => {
                 rejected = Some("uart_error");
                 continue;
@@ -66,7 +73,7 @@ pub fn run(clock: &Clock) -> ! {
             } else {
                 // Input was restricted to ASCII; keep a checked conversion anyway.
                 match core::str::from_utf8(&buffer[..length]) {
-                    Ok(line) => dispatch(line, clock),
+                    Ok(line) => dispatch(line, clock, &mut task),
                     Err(_) => response("0", "err", "invalid_byte"),
                 }
             }

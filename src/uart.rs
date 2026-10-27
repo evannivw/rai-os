@@ -41,17 +41,17 @@ pub fn write(text: &str) {
     }
 }
 
-/// Wait for one byte; report and clear PL011 framing/parity/break/overrun errors.
-pub fn get() -> Result<u8, ()> {
-    while read_register(FR) & (1 << 4) != 0 {
-        core::hint::spin_loop();
+/// Read at most one byte without waiting; clear and report receive errors.
+pub fn try_get() -> Result<Option<u8>, ()> {
+    if read_register(FR) & (1 << 4) != 0 {
+        return Ok(None);
     }
     let data = read_register(DR);
     if data & 0xf00 != 0 {
         write_register(0x04, 0xff);
         Err(())
     } else {
-        Ok(data as u8)
+        Ok(Some(data as u8))
     }
 }
 

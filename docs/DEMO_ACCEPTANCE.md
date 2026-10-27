@@ -1,8 +1,9 @@
 # Required result contract: project review pack v1
 
 Status: design contract, October 26, 2026. This specifies what the forthcoming
-pilot must produce; none of the jobs, artifacts, permissions, or validators below
-are implemented by the current help/info/uptime/echo kernel. No benchmark results exist.
+pilot must produce; none of the review-pack jobs, artifacts, permissions, or
+validators below are implemented by the current kernel. Its introductory
+word-count task is separate. No benchmark results exist.
 See [DEMO_EXPERIMENT.md](DEMO_EXPERIMENT.md) for the comparison protocol.
 
 ## Mission

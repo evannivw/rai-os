@@ -30,7 +30,7 @@ def main():
     print(result.stdout)
     if result.returncode:
         raise RuntimeError(result.stderr)
-    print('PASS: panel validation, live guest clock, echo/rejection, stop/restart, close and missing ELF.')
+    print('PASS: panel validation, live guest clock, echo/rejection, task progress/cancel/result, stop/restart, close and missing ELF.')
     print('This checks the worker; verify graphical controls separately in the native window.')
 
 

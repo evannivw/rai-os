@@ -21,7 +21,8 @@ no_std/no_main. No dependencies were added. Only macOS ARM64 has been verified;
 Linux target detection is supported by the script but untested.
 
 Connection triggers a real info request. Commands: help, info, uptime, echo <ASCII text>,
-exit. Exit or input EOF terminates and reaps the QEMU child. The direct guest
+exit. Task commands are `task.start <text>`, `task.status`, and `task.cancel <id>`;
+see [TASKS.md](TASKS.md). Exit or input EOF terminates and reaps the QEMU child. The direct guest
 console remains available through cargo run --locked.
 
 ## Boundaries

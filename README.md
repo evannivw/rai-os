@@ -4,8 +4,9 @@ An educational AArch64 operating-system prototype in Rust, exploring how an
 AI coordinator could adapt work to goals, events, and resource limits.
 
 **Working today:** bare-metal boot in QEMU, PL011 UART input/output, help/info/uptime/echo,
-a bounded structured protocol, a Rust host terminal console, and a graphical host control panel.
-**Not implemented:** Meta integration, autonomous agents, a native guest desktop, task
+a bounded structured protocol, a cooperative word-count task, a Rust host terminal
+console, and a graphical host control panel.
+**Not implemented:** Meta integration, autonomous agents, a native guest desktop, multi-task
 scheduling, memory isolation, persistent storage, or measured efficiency gains.
 
 ## Run
@@ -31,6 +32,8 @@ python3 scripts/verify.py
 python3 scripts/verify.py --release
 python3 scripts/verify_console.py
 python3 scripts/verify_panel.py
+python3 scripts/verify_tasks.py
+python3 scripts/verify_tasks.py --release
 ```
 
 Python 3 is required for integration checks. Each kernel run verifies real boot
@@ -42,6 +45,7 @@ and 37 console/protocol cases, including the guest counter. See the guides for h
 - [Architecture and unsafe contracts](docs/ARCHITECTURE.md)
 - [UART protocol](docs/PROTOCOL.md)
 - [Kernel clock and uptime](docs/CLOCK.md)
+- [Cooperative task and cancellation](docs/TASKS.md)
 - [Host console](docs/CONSOLE.md)
 - [Graphical Device Lab panel](docs/PANEL.md)
 - [Hackathon plan](docs/HACKATHON_PLAN.md)

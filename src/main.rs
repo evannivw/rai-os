@@ -5,6 +5,7 @@ mod clock;
 mod command;
 mod console;
 mod protocol;
+mod task;
 mod uart;
 
 use core::arch::global_asm;

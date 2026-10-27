@@ -1,5 +1,5 @@
 //! Session coordinator. Only this thread owns QEMU and performs blocking UART I/O.
-use crate::{model, qemu};
+use crate::{model, qemu, task_status::TaskStatus};
 use std::sync::{
     Arc,
     atomic::{AtomicBool, Ordering},
@@ -17,6 +17,7 @@ pub enum Command {
 #[derive(Debug)]
 pub enum Event {
     Started(String),
+    Task(TaskStatus),
     Uptime { milliseconds: u64, frequency: u32 },
     Reply { command: String, payload: String },
     Rejected(String),
@@ -112,6 +113,7 @@ fn run(
     let mut id = 0;
     let mut last_sample = None;
     let mut next_poll = Instant::now();
+    let mut next_task_poll = Instant::now();
     while !shutdown.load(Ordering::Relaxed) {
         let command = match incoming.recv_timeout(Duration::from_millis(100)) {
             Ok(command) => Some(command),
@@ -133,6 +135,7 @@ fn run(
                     connection = Some(new_connection);
                     last_sample = None;
                     next_poll = Instant::now();
+                    next_task_poll = Instant::now();
                     outgoing
                         .send(Event::Started(info))
                         .map_err(|_| "View closed")?;
@@ -149,7 +152,20 @@ fn run(
                     });
                     match (operation, connection.as_mut()) {
                         (Ok(op), Some(current)) => {
-                            let payload = request(current, &mut id, &op)?;
+                            id = id.checked_add(1).ok_or("Request IDs exhausted")?;
+                            let reply = current.request(id, &op)?;
+                            if !reply.success {
+                                outgoing
+                                    .send(Event::Rejected(reply.payload))
+                                    .map_err(|_| "View closed")?;
+                                return Ok(());
+                            }
+                            let payload = reply.payload;
+                            if text.starts_with("task.") {
+                                outgoing
+                                    .send(Event::Task(TaskStatus::parse(&payload)?))
+                                    .map_err(|_| "View closed")?;
+                            }
                             outgoing
                                 .send(Event::Reply {
                                     command: text,
@@ -190,6 +206,16 @@ fn run(
                     })
                     .map_err(|_| "View closed")?;
                 next_poll = Instant::now() + Duration::from_secs(1);
+            }
+            if let Some(current) = connection.as_mut()
+                && Instant::now() >= next_task_poll
+                && !shutdown.load(Ordering::Relaxed)
+            {
+                let payload = request(current, &mut id, &model::Operation::TaskStatus)?;
+                outgoing
+                    .send(Event::Task(TaskStatus::parse(&payload)?))
+                    .map_err(|_| "View closed")?;
+                next_task_poll = Instant::now() + Duration::from_millis(250);
             }
             Ok(())
         })();
@@ -268,6 +294,37 @@ mod tests {
         wait(
             &worker,
             |e| matches!(e, Event::Reply { payload, .. } if payload == "panel connected"),
+        );
+        worker
+            .send(Command::Request(format!(
+                "task.start {}",
+                "word ".repeat(30)
+            )))
+            .unwrap();
+        wait(
+            &worker,
+            |e| matches!(e, Event::Task(t) if t.state == crate::task_status::State::Running),
+        );
+        worker
+            .send(Command::Request("task.start another".into()))
+            .unwrap();
+        wait(
+            &worker,
+            |e| matches!(e, Event::Rejected(error) if error == "task_busy"),
+        );
+        worker
+            .send(Command::Request("task.cancel 1".into()))
+            .unwrap();
+        wait(
+            &worker,
+            |e| matches!(e, Event::Task(t) if t.state == crate::task_status::State::Cancelled),
+        );
+        worker
+            .send(Command::Request("task.start one two three".into()))
+            .unwrap();
+        wait(
+            &worker,
+            |e| matches!(e, Event::Task(t) if t.state == crate::task_status::State::Completed && t.words == 3),
         );
         worker.send(Command::Stop).unwrap();
         wait(&worker, |e| matches!(e, Event::Stopped));
