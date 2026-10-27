@@ -40,6 +40,8 @@ side-by-side comparison of two policies using the same RAI-OS execution engine,
 workloads, inputs, and limits: a reasonable deterministic baseline and a Meta
 coordinator. Define a concrete task and success conditions before implementing it.
 The candidate comparison is specified in [DEMO_EXPERIMENT.md](DEMO_EXPERIMENT.md).
+The first correctness dataset and verifier implementation sequence are in
+[DEMO_FIXTURE.md](DEMO_FIXTURE.md); candidate verification is still pending.
 A graphical host UI should make actual decisions and results visible. The existing
 [terminal console](CONSOLE.md) is the transport foundation, not that graphical UI.
 

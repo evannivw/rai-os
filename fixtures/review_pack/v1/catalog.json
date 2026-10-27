@@ -1,0 +1,76 @@
+{
+  "format_version": 1,
+  "fixture_id": "review-pack-v1",
+  "records": [
+    {
+      "key": "brief@1",
+      "record_id": "brief",
+      "revision": 1,
+      "project_id": "aurora",
+      "read_allowed": true,
+      "path": "records/brief@1.txt",
+      "byte_length": 56,
+      "sha256": "9bec034f989163056ecd4dffafb59c6f9dd5a053f1ff04793dbac42f73a6b1a7"
+    },
+    {
+      "key": "notes@1",
+      "record_id": "notes",
+      "revision": 1,
+      "project_id": "aurora",
+      "read_allowed": true,
+      "path": "records/notes@1.txt",
+      "byte_length": 30,
+      "sha256": "dc94091d3fad33aab165bad56ffd7bfb051d12a88719ae7505d84d17a6459e07"
+    },
+    {
+      "key": "notes@2",
+      "record_id": "notes",
+      "revision": 2,
+      "project_id": "aurora",
+      "read_allowed": true,
+      "path": "records/notes@2.txt",
+      "byte_length": 44,
+      "sha256": "748a60ba3734ac6db1e3598d2af98e2667ae163ac9a14a87d1dd572ca0b9d1ff"
+    },
+    {
+      "key": "checklist@1",
+      "record_id": "checklist",
+      "revision": 1,
+      "project_id": "aurora",
+      "read_allowed": true,
+      "path": "records/checklist@1.txt",
+      "byte_length": 41,
+      "sha256": "f238d0fa0e8ab7ae205e2f4e9684e3fad5ad68ac85b78c568162168396477b94"
+    },
+    {
+      "key": "empty@1",
+      "record_id": "empty",
+      "revision": 1,
+      "project_id": "aurora",
+      "read_allowed": true,
+      "path": "records/empty@1.txt",
+      "byte_length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "key": "appendix@1",
+      "record_id": "appendix",
+      "revision": 1,
+      "project_id": "aurora",
+      "read_allowed": true,
+      "path": "records/appendix@1.txt",
+      "byte_length": 108,
+      "sha256": "b92f10ffd1ad1822391ecea2ee2712792aa2e601c498fe16eef4226cc66470f0"
+    },
+    {
+      "key": "restricted@1",
+      "record_id": "restricted",
+      "revision": 1,
+      "project_id": "aurora",
+      "read_allowed": false,
+      "path": "records/restricted@1.txt",
+      "byte_length": 88,
+      "sha256": "cf515b10ad39d86b2170f5b41f1ec211decece88a9dec32d4c284abd4a057e92"
+    }
+  ]
+}

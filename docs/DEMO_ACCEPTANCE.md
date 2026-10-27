@@ -13,9 +13,10 @@ exact index and manifest. Preserve the sources and obey declared resource limits
 The policy may change execution order and batch sizes, not the required result.
 
 Start with a small in-memory dataset, not real PDF files, a filesystem, downloads,
-or isolated application processes. Dataset bytes, sizes, event times, budgets,
-and scoring weights will be fixed in the next scenario-definition step. Do not
-choose them after seeing which policy wins.
+or isolated application processes. The first correctness fixture fixes dataset
+bytes, sizes, event times, budgets,
+and scoring weights in [DEMO_FIXTURE.md](DEMO_FIXTURE.md). Benchmark-scale
+scenarios remain future work; do not tune them after seeing which policy wins.
 
 ## Input contract
 
@@ -118,10 +119,10 @@ same trace and execution rules to every policy. Ordinary no-interruption cases
 must also be retained. An event may invalidate previous work but must not
 specifically disable a baseline capability that remains available to Meta.
 
-Budget-transition semantics are still a scenario-design prerequisite: specify
-when a lower limit becomes effective, what can finish/release before then, and
-how an impossible target is recorded. Simulated energy is not measured battery
-life. A lower job-buffer cap is not hot-removing QEMU physical RAM.
+The first fixture specifies budget-transition semantics in
+[DEMO_FIXTURE.md](DEMO_FIXTURE.md): effective boundaries, buffer release,
+cumulative accounting, and exhausted-cap handling. Enforcement is not implemented.
+Simulated energy is not measured battery life. A lower job-buffer cap is not hot-removing QEMU physical RAM.
 
 ## Graphical acceptance view
 
@@ -133,7 +134,9 @@ whether the view is live or a replay and whether resource values are simulated.
 
 ## Next step
 
-Create a small versioned fixture and event trace, then implement the independent
+The small versioned fixture and event traces now exist; see
+[DEMO_FIXTURE.md](DEMO_FIXTURE.md) for checks and the sequence of implementation
+commits. Next define candidate artifact formats, then implement the independent
 host reference verifier. Test rejection of a missing record, wrong revision,
 changed byte, incorrect index, dangling reference, and incomplete publication.
 That establishes an objective definition of success before either policy runs.

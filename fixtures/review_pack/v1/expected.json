@@ -1,0 +1,320 @@
+{
+  "format_version": 1,
+  "goals": [
+    {
+      "goal_version": 1,
+      "required": [
+        "brief@1",
+        "empty@1",
+        "notes@1"
+      ],
+      "index": {
+        "10": {
+          "notes@1": 1
+        },
+        "7": {
+          "notes@1": 1
+        },
+        "a": {
+          "brief@1": 1,
+          "notes@1": 1
+        },
+        "at": {
+          "notes@1": 1
+        },
+        "aurora": {
+          "brief@1": 1
+        },
+        "build": {
+          "brief@1": 1
+        },
+        "bytes": {
+          "brief@1": 1
+        },
+        "keep": {
+          "brief@1": 1
+        },
+        "pack": {
+          "brief@1": 1
+        },
+        "project": {
+          "brief@1": 1
+        },
+        "pump": {
+          "notes@1": 2
+        },
+        "review": {
+          "brief@1": 1,
+          "notes@1": 1
+        },
+        "source": {
+          "brief@1": 1
+        }
+      },
+      "optional_previews": [
+        {
+          "key": "appendix@1",
+          "text": "Optional field notes: inspect the east gate after rain. Keep thi",
+          "byte_length": 64,
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "goal_version": 2,
+      "required": [
+        "brief@1",
+        "checklist@1",
+        "empty@1",
+        "notes@1"
+      ],
+      "index": {
+        "10": {
+          "notes@1": 1
+        },
+        "7": {
+          "notes@1": 1
+        },
+        "a": {
+          "brief@1": 1,
+          "notes@1": 1
+        },
+        "at": {
+          "notes@1": 1
+        },
+        "aurora": {
+          "brief@1": 1
+        },
+        "build": {
+          "brief@1": 1
+        },
+        "bytes": {
+          "brief@1": 1
+        },
+        "cables": {
+          "checklist@1": 1
+        },
+        "check": {
+          "checklist@1": 2
+        },
+        "first": {
+          "checklist@1": 1
+        },
+        "keep": {
+          "brief@1": 1
+        },
+        "pack": {
+          "brief@1": 1
+        },
+        "project": {
+          "brief@1": 1
+        },
+        "pump": {
+          "notes@1": 2
+        },
+        "review": {
+          "brief@1": 1,
+          "notes@1": 1
+        },
+        "safety": {
+          "checklist@1": 1
+        },
+        "seals": {
+          "checklist@1": 1
+        },
+        "source": {
+          "brief@1": 1
+        }
+      },
+      "optional_previews": [
+        {
+          "key": "appendix@1",
+          "text": "Optional field notes: inspect the east gate after rain. Keep thi",
+          "byte_length": 64,
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "goal_version": 3,
+      "required": [
+        "brief@1",
+        "checklist@1",
+        "empty@1",
+        "notes@2"
+      ],
+      "index": {
+        "11": {
+          "notes@2": 1
+        },
+        "8": {
+          "notes@2": 1
+        },
+        "a": {
+          "brief@1": 1
+        },
+        "at": {
+          "notes@2": 1
+        },
+        "aurora": {
+          "brief@1": 1
+        },
+        "b": {
+          "notes@2": 1
+        },
+        "build": {
+          "brief@1": 1
+        },
+        "bytes": {
+          "brief@1": 1
+        },
+        "cables": {
+          "checklist@1": 1
+        },
+        "check": {
+          "checklist@1": 2
+        },
+        "first": {
+          "checklist@1": 1,
+          "notes@2": 1
+        },
+        "keep": {
+          "brief@1": 1
+        },
+        "pack": {
+          "brief@1": 1
+        },
+        "project": {
+          "brief@1": 1
+        },
+        "pump": {
+          "notes@2": 2
+        },
+        "review": {
+          "brief@1": 1,
+          "notes@2": 1
+        },
+        "safety": {
+          "checklist@1": 1,
+          "notes@2": 1
+        },
+        "seals": {
+          "checklist@1": 1
+        },
+        "source": {
+          "brief@1": 1
+        }
+      },
+      "optional_previews": [
+        {
+          "key": "appendix@1",
+          "text": "Optional field notes: inspect the east gate after rain. Keep thi",
+          "byte_length": 64,
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "checkpoints": {
+    "ordinary": [
+      {
+        "at_ms": 0,
+        "goal_version": 1,
+        "required_unavailable": [],
+        "scratch_bytes": 64,
+        "total_work_units": 16384
+      }
+    ],
+    "changing": [
+      {
+        "at_ms": 0,
+        "goal_version": 1,
+        "required_unavailable": [],
+        "scratch_bytes": 64,
+        "total_work_units": 16384
+      },
+      {
+        "at_ms": 10000,
+        "goal_version": 2,
+        "required_unavailable": [],
+        "scratch_bytes": 64,
+        "total_work_units": 16384
+      },
+      {
+        "at_ms": 20000,
+        "goal_version": 3,
+        "required_unavailable": [
+          "notes@2"
+        ],
+        "scratch_bytes": 64,
+        "total_work_units": 16384
+      },
+      {
+        "at_ms": 25000,
+        "goal_version": 3,
+        "required_unavailable": [
+          "notes@2"
+        ],
+        "scratch_bytes": 16,
+        "total_work_units": 16384
+      },
+      {
+        "at_ms": 30000,
+        "goal_version": 3,
+        "required_unavailable": [],
+        "scratch_bytes": 16,
+        "total_work_units": 16384
+      },
+      {
+        "at_ms": 40000,
+        "goal_version": 3,
+        "required_unavailable": [],
+        "scratch_bytes": 16,
+        "total_work_units": 8192
+      }
+    ],
+    "blocked": [
+      {
+        "at_ms": 0,
+        "goal_version": 1,
+        "required_unavailable": [],
+        "scratch_bytes": 64,
+        "total_work_units": 16384
+      },
+      {
+        "at_ms": 10000,
+        "goal_version": 2,
+        "required_unavailable": [],
+        "scratch_bytes": 64,
+        "total_work_units": 16384
+      },
+      {
+        "at_ms": 20000,
+        "goal_version": 3,
+        "required_unavailable": [
+          "notes@2"
+        ],
+        "scratch_bytes": 64,
+        "total_work_units": 16384
+      },
+      {
+        "at_ms": 25000,
+        "goal_version": 3,
+        "required_unavailable": [
+          "notes@2"
+        ],
+        "scratch_bytes": 16,
+        "total_work_units": 16384
+      },
+      {
+        "at_ms": 40000,
+        "goal_version": 3,
+        "required_unavailable": [
+          "notes@2"
+        ],
+        "scratch_bytes": 16,
+        "total_work_units": 8192
+      }
+    ]
+  }
+}

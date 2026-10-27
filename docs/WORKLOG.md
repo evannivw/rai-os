@@ -120,3 +120,18 @@ previews cannot compensate for missing required output. Events and constraints
 apply equally to all policies. This increment defines acceptance only: no new
 execution engine, model integration, resource measurements, or benchmark results.
 Validation: specification consistency, local Markdown links, and git diff --check.
+
+## Correctness fixture and verifier sequence — October 26
+
+Added seven immutable synthetic source revisions, three goal references, and
+ordinary/changing/blocked traces with twelve total event checkpoints. Expected
+indexes, preview bytes, permissions, and resource-transition rules are explicit.
+The data is deliberately small and public: it is neither a benchmark nor a
+held-out set. Added the step-by-step implementation sequence for the independent
+verifier, which will audit candidate output and engine evidence separately.
+
+Validation performed: fixture consistency checker passed; six host Python tests
+passed, including five deliberately corrupted disposable fixture copies. Checked
+local Markdown links and git diff --check. No kernel code changed or QEMU tests
+were rerun. No candidate pack, independent result verifier, job engine, Meta
+integration, resource enforcement, or performance result was produced.

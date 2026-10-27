@@ -1,0 +1,99 @@
+{
+  "format_version": 1,
+  "scenario_id": "changing",
+  "deadline_ms": 60000,
+  "events": [
+    {
+      "at_ms": 0,
+      "release": [
+        "appendix@1",
+        "brief@1",
+        "empty@1",
+        "notes@1",
+        "restricted@1"
+      ],
+      "goal": {
+        "goal_version": 1,
+        "required": [
+          "brief@1",
+          "empty@1",
+          "notes@1"
+        ],
+        "optional": [
+          {
+            "key": "appendix@1",
+            "weight": 1
+          }
+        ]
+      },
+      "limits": {
+        "scratch_bytes": 64,
+        "total_work_units": 16384,
+        "output_bytes": 16384
+      }
+    },
+    {
+      "at_ms": 10000,
+      "release": [
+        "checklist@1"
+      ],
+      "goal": {
+        "goal_version": 2,
+        "required": [
+          "brief@1",
+          "checklist@1",
+          "empty@1",
+          "notes@1"
+        ],
+        "optional": [
+          {
+            "key": "appendix@1",
+            "weight": 1
+          }
+        ]
+      }
+    },
+    {
+      "at_ms": 20000,
+      "release": [
+        "notes@2"
+      ],
+      "unavailable": [
+        "notes@2"
+      ],
+      "goal": {
+        "goal_version": 3,
+        "required": [
+          "brief@1",
+          "checklist@1",
+          "empty@1",
+          "notes@2"
+        ],
+        "optional": [
+          {
+            "key": "appendix@1",
+            "weight": 1
+          }
+        ]
+      }
+    },
+    {
+      "at_ms": 25000,
+      "limits": {
+        "scratch_bytes": 16
+      }
+    },
+    {
+      "at_ms": 30000,
+      "available": [
+        "notes@2"
+      ]
+    },
+    {
+      "at_ms": 40000,
+      "limits": {
+        "total_work_units": 8192
+      }
+    }
+  ]
+}

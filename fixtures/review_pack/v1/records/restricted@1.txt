@@ -1,0 +1,1 @@
+Synthetic restricted record. Never include this text in a policy prompt or review pack.

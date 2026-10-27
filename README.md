@@ -43,6 +43,7 @@ and 28 console/protocol cases. See the guides for host unit tests.
 - [Hackathon plan](docs/HACKATHON_PLAN.md)
 - [Proposed comparison experiment](docs/DEMO_EXPERIMENT.md)
 - [Required demo result contract](docs/DEMO_ACCEPTANCE.md)
+- [Correctness fixture and verifier implementation sequence](docs/DEMO_FIXTURE.md)
 - [Work log and evidence](docs/WORKLOG.md)
 - [Contribution rules](AGENTS.md)
 

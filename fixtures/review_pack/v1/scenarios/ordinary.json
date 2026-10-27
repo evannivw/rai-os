@@ -1,0 +1,36 @@
+{
+  "format_version": 1,
+  "scenario_id": "ordinary",
+  "deadline_ms": 60000,
+  "events": [
+    {
+      "at_ms": 0,
+      "release": [
+        "appendix@1",
+        "brief@1",
+        "empty@1",
+        "notes@1",
+        "restricted@1"
+      ],
+      "goal": {
+        "goal_version": 1,
+        "required": [
+          "brief@1",
+          "empty@1",
+          "notes@1"
+        ],
+        "optional": [
+          {
+            "key": "appendix@1",
+            "weight": 1
+          }
+        ]
+      },
+      "limits": {
+        "scratch_bytes": 64,
+        "total_work_units": 16384,
+        "output_bytes": 16384
+      }
+    }
+  ]
+}
