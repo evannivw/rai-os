@@ -54,3 +54,18 @@ pub fn get() -> Result<u8, ()> {
         Ok(data as u8)
     }
 }
+
+/// Stream formatted output directly to UART without a heap or temporary string.
+pub fn write_display(value: impl core::fmt::Display) {
+    use core::fmt::Write;
+    struct Output;
+    impl Write for Output {
+        fn write_str(&mut self, text: &str) -> core::fmt::Result {
+            write(text);
+            Ok(())
+        }
+    }
+    // Our Reply formatter and UART sink are infallible; UART still polls and
+    // can block if the emulated device stops accepting bytes.
+    write!(Output, "{value}").expect("UART formatting failed");
+}

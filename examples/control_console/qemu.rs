@@ -45,7 +45,7 @@ impl Connection {
             if line == "RAI-OS: boot OK | AArch64 EL1 | UART PL011" {
                 boot_seen = true;
             }
-            if boot_seen && line == "Console ready: help | info | echo <text>" {
+            if boot_seen && line == "Console ready: help | info | uptime | echo <text>" {
                 return Ok(connection);
             }
         }

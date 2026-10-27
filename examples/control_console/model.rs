@@ -2,6 +2,7 @@
 pub enum Operation<'a> {
     Help,
     Info,
+    Uptime,
     Echo(&'a str),
 }
 
@@ -14,11 +15,12 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
     match line {
         "help" => Ok(Operation::Help),
         "info" => Ok(Operation::Info),
+        "uptime" => Ok(Operation::Uptime),
         "echo" => Ok(Operation::Echo("")),
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, echo <text>, or exit"),
+            .ok_or("Use help, info, uptime, echo <text>, or exit"),
     }
 }
 
@@ -29,6 +31,7 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
     let body = match operation {
         Operation::Help => "help".to_owned(),
         Operation::Info => "info".to_owned(),
+        Operation::Uptime => "uptime".to_owned(),
         Operation::Echo(text) => {
             if !text.bytes().all(|b| b.is_ascii_graphic() || b == b' ') {
                 return Err("echo accepts printable ASCII, without TAB or line breaks");

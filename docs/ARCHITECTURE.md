@@ -36,10 +36,12 @@ a CPU fault can hang the guest. Rust panic prints and halts without recovery.
 
 ## Responsibilities
 
-- uart.rs: bytes and MMIO.
+- clock.rs: read-only generic counter adapter and boot-relative time.
+- uart.rs: bytes and MMIO, including allocation-free formatted output.
 - console.rs: framing, input validation/editing, and response rendering.
 - protocol.rs: structured request parsing without execution.
-- command.rs: human-command parsing and execution of allowed operations.
+- command.rs: human-command parsing and execution of allowed operations. It
+  receives a typed uptime snapshot and never reads hardware itself.
 - main.rs: composition and panic handling.
 
 Both parsers converge on an operation enum; neither executes arbitrary text.
@@ -48,6 +50,14 @@ requests over UART. Meta API calls and the coordinator are not implemented.
 Credentials and HTTPS will remain on the host. The guest must independently
 validate operations. Real service isolation will require virtual memory, EL0,
 syscalls, scheduling, and IPC; module names do not supply those guarantees.
+
+## Clock
+
+The kernel samples the Arm generic physical counter before UART initialization
+and supplies measured uptime to commands. The adapter is owned by kernel_main;
+there is no mutable global clock. See [CLOCK.md](CLOCK.md) for access assumptions,
+frequency conversion, real-QEMU checks, and the distinction from timer interrupts.
+The host console transports uptime like other commands. The GUI remains pending.
 
 ## References
 

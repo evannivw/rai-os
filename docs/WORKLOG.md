@@ -135,3 +135,23 @@ passed, including five deliberately corrupted disposable fixture copies. Checked
 local Markdown links and git diff --check. No kernel code changed or QEMU tests
 were rerun. No candidate pack, independent result verifier, job engine, Meta
 integration, resource enforcement, or performance result was produced.
+
+## Kernel clock foundation — October 26
+
+At the user's request, prioritized kernel progress and visible controls before
+continuing the demo verifier. Added the Arm generic counter adapter and uptime
+command through the guest shell, structured protocol, and Rust host console.
+Clock readings are supplied to command execution; commands do not read registers.
+Formatted UART replies require no heap. No external dependencies were added.
+
+Actual verification: debug and release each passed real QEMU boot and 37
+console/protocol checks. Uptime advanced from 11 ms to 267 ms across the test wait
+in both captured runs, with a 62,500,000 Hz counter. Host console integration,
+two existing host validation unit tests, formatting, and kernel/host Clippy all
+passed. Documentation links and git diff --check passed.
+
+See [CLOCK.md](CLOCK.md) and [capture](evidence/2026-10-26-uptime.txt). These results
+do not establish timing precision, energy efficiency, or performance superiority.
+No scheduler, interrupts, graphical UI, process isolation, or Meta integration was
+added. The next visible increment is a graphical host panel connected to QEMU;
+it will not be described as a native guest desktop.

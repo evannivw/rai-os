@@ -3,6 +3,8 @@
 A Rust terminal application running on the host. It starts QEMU and exchanges
 structured UART requests with the kernel. It is not a graphical kernel desktop
 or an AI agent. AI and resource telemetry are explicitly marked unimplemented.
+The uptime command reads the actual guest counter; it is elapsed guest time,
+not CPU utilization or energy telemetry. See [CLOCK.md](CLOCK.md).
 
 ## Run
 
@@ -18,7 +20,7 @@ and runs control_console for that target. Host code uses std; the kernel remains
 no_std/no_main. No dependencies were added. Only macOS ARM64 has been verified;
 Linux target detection is supported by the script but untested.
 
-Connection triggers a real info request. Commands: help, info, echo <ASCII text>,
+Connection triggers a real info request. Commands: help, info, uptime, echo <ASCII text>,
 exit. Exit or input EOF terminates and reaps the QEMU child. The direct guest
 console remains available through cargo run --locked.
 
@@ -46,7 +48,7 @@ python3 scripts/verify_console.py
 ```
 
 On other hosts replace the target with the host value from rustc -vV. Integration
-checks cover real boot, info/echo, TAB input rejection and recovery, missing ELF,
+checks cover real boot, info/uptime/echo, TAB input rejection and recovery, missing ELF,
 and EOF cleanup. Output: target/verification/host-console.log.
 
 ## Limits and next step

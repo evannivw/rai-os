@@ -41,7 +41,7 @@ Expected real boot banner:
 RAI-OS: boot OK | AArch64 EL1 | UART PL011
 ```
 
-Type help, info, or echo hello Rust, then Enter. The direct shell echoes input
+Type help, info, uptime, or echo hello Rust, then Enter. The direct shell echoes input
 and supports Backspace/Delete. Input is ASCII, without accented text or emoji.
 Ctrl-C terminates QEMU. UART uses stdio without a multiplexed monitor; we do not
 use -nographic. TCG emulates the same CPU on ARM64 or x86_64 hosts, but only macOS
@@ -55,7 +55,7 @@ sh scripts/console.sh
 ```
 
 A normal Rust host program starts QEMU and displays actual kernel replies.
-Commands: help, info, echo <ASCII text>, exit. See [CONSOLE.md](CONSOLE.md).
+Commands: help, info, uptime, echo <ASCII text>, exit. See [CONSOLE.md](CONSOLE.md).
 This is a terminal tool, not the planned graphical host interface.
 The programmatic wire format is documented in [PROTOCOL.md](PROTOCOL.md).
 

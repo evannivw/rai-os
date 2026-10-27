@@ -2,7 +2,7 @@
 
 Status: design contract, October 26, 2026. This specifies what the forthcoming
 pilot must produce; none of the jobs, artifacts, permissions, or validators below
-are implemented by the current help/info/echo kernel. No benchmark results exist.
+are implemented by the current help/info/uptime/echo kernel. No benchmark results exist.
 See [DEMO_EXPERIMENT.md](DEMO_EXPERIMENT.md) for the comparison protocol.
 
 ## Mission

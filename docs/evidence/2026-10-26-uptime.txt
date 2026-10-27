@@ -1,0 +1,22 @@
+Actual QEMU UART excerpts, captured October 26, 2026.
+CR and TAB are escaped; LF remains a line break. No values are synthesized.
+
+uart.log
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r
+@rai1\t20\tok\tuptime_ms=11; counter_hz=62500000\r
+uptime_ms=267; counter_hz=62500000\r
+@rai1\t21\tok\tuptime_ms=268; counter_hz=62500000\r
+@rai1\t22\tok\tuptime_ms=269; counter_hz=62500000\r
+@rai1\t23\tok\tuptime_ms=270; counter_hz=62500000\r
+@rai1\t24\tok\tuptime_ms=271; counter_hz=62500000\r
+@rai1\t25\tok\tuptime_ms=272; counter_hz=62500000\r
+
+uart-release.log
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r
+@rai1\t20\tok\tuptime_ms=11; counter_hz=62500000\r
+uptime_ms=267; counter_hz=62500000\r
+@rai1\t21\tok\tuptime_ms=268; counter_hz=62500000\r
+@rai1\t22\tok\tuptime_ms=269; counter_hz=62500000\r
+@rai1\t23\tok\tuptime_ms=270; counter_hz=62500000\r
+@rai1\t24\tok\tuptime_ms=270; counter_hz=62500000\r
+@rai1\t25\tok\tuptime_ms=271; counter_hz=62500000\r

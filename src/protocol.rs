@@ -30,6 +30,7 @@ pub fn parse(line: &str) -> Result<Request<'_>, Error<'_>> {
     let operation = match fields.next() {
         Some("help") => Operation::Help,
         Some("info") => Operation::Info,
+        Some("uptime") => Operation::Uptime,
         Some("echo") => Operation::Echo(fields.next().ok_or(error("bad_args"))?),
         Some(_) => return Err(error("unknown_operation")),
         None => return Err(error("bad_frame")),

@@ -45,6 +45,12 @@ The first correctness dataset and verifier implementation sequence are in
 A graphical host UI should make actual decisions and results visible. The existing
 [terminal console](CONSOLE.md) is the transport foundation, not that graphical UI.
 
+Current priority, revised at the user's request on October 26: advance the kernel
+foundation and visible controls before continuing the demo verifier. The kernel
+now exposes measured uptime. Next build a graphical host control panel for real
+QEMU boot, info, uptime, and echo. This is a host UI, not a guest desktop. The
+correctness fixture is retained; verifier implementation resumes with demo jobs.
+
 Implementation order: review the working foundation; freeze the demo contract;
 design the host UI; add observable guest state/events; implement bounded jobs;
 enforce limits; establish the baseline; integrate Meta; test and present results.

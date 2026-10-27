@@ -10,7 +10,7 @@ pub fn header() {
 
 pub fn connected() {
     println!("Connection: kernel boot and UART console confirmed.");
-    println!("Commands: help | info | echo <ASCII text> | exit\n");
+    println!("Commands: help | info | uptime | echo <ASCII text> | exit\n");
 }
 
 pub fn reply(reply: &Reply) {
