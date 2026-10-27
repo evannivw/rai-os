@@ -1,5 +1,5 @@
-//! UART line transport and response rendering; no allocation or global buffers.
-use crate::{clock::Clock, command, protocol, task::Task, uart};
+//! UART line transport and response rendering; no heap allocation or global buffers.
+use crate::{clock::Clock, command, memory::Memory, protocol, task::Task, uart};
 use core::fmt::Display;
 
 const CAPACITY: usize = 256;
@@ -14,17 +14,20 @@ fn response(id: &str, status: &str, payload: impl Display) {
     uart::write("\n");
 }
 
-fn dispatch(line: &str, clock: &Clock, task: &mut Task) {
+fn dispatch(line: &str, clock: &Clock, task: &mut Task, memory: &mut Memory) {
     if line.starts_with('@') {
         match protocol::parse(line) {
-            Ok(request) => match command::execute(request.operation, clock.snapshot(), task) {
-                Ok(reply) => response(request.id, "ok", reply),
-                Err(code) => response(request.id, "err", code),
-            },
+            Ok(request) => {
+                match command::execute(request.operation, clock.snapshot(), task, memory) {
+                    Ok(reply) => response(request.id, "ok", reply),
+                    Err(code) => response(request.id, "err", code),
+                }
+            }
             Err(error) => response(error.id, "err", error.code),
         }
     } else if !line.is_empty() {
-        match command::parse_shell(line).and_then(|op| command::execute(op, clock.snapshot(), task))
+        match command::parse_shell(line)
+            .and_then(|op| command::execute(op, clock.snapshot(), task, memory))
         {
             Ok(reply) => uart::write_display(reply),
             Err(code) => {
@@ -36,7 +39,7 @@ fn dispatch(line: &str, clock: &Clock, task: &mut Task) {
     }
 }
 
-pub fn run(clock: &Clock) -> ! {
+pub fn run(clock: &Clock, memory: &mut Memory) -> ! {
     let mut task = Task::new();
     let mut buffer = [0u8; CAPACITY];
     let mut length = 0;
@@ -73,7 +76,7 @@ pub fn run(clock: &Clock) -> ! {
             } else {
                 // Input was restricted to ASCII; keep a checked conversion anyway.
                 match core::str::from_utf8(&buffer[..length]) {
-                    Ok(line) => dispatch(line, clock, &mut task),
+                    Ok(line) => dispatch(line, clock, &mut task, memory),
                     Err(_) => response("0", "err", "invalid_byte"),
                 }
             }

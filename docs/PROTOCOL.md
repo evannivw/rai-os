@@ -1,6 +1,6 @@
 # UART protocol v1
 
-A small bounded line format, without JSON or dynamic guest allocation. This is
+A small bounded line format, without JSON or heap-allocated framing buffers. This is
 request transport, not IPC between isolated processes. UART0 has one host
 reader/writer. There is no authentication, negotiation, concurrency, or ID deduplication.
 
@@ -17,7 +17,7 @@ Examples use literal escape notation for actual TAB, LF, and CR bytes:
 ```
 
 Grammar: @rai1 TAB id TAB operation [TAB argument] line-ending.
-help/info/uptime require exactly three fields; echo requires four, with a possibly
+help/info/uptime/memory.info/memory.check require exactly three fields; echo requires four, with a possibly
 empty argument. Names are case-sensitive. ID: 1-10 ASCII digits with value
 1..4294967295; leading zeros are allowed and preserved. IDs are not remembered.
 
@@ -50,6 +50,23 @@ operation; older kernels respond with unknown_operation.
 `task.start`, `task.status`, and `task.cancel` provide one bounded word-count
 job. See [TASKS.md](TASKS.md) for exact arguments, lifecycle, payload, errors,
 and educational pacing. Task IDs are distinct from request IDs.
+
+## Physical memory diagnostics
+
+`memory.info` and `memory.check` each accept exactly three fields (no argument).
+Both are also available as argument-free shell commands. `memory.info` returns:
+
+```text
+page_size=4096; total_pages=256; free_pages=256; used_pages=0; pool_start=0x<16 lowercase hex digits>; pool_end=0x<16 lowercase hex digits>
+```
+
+Counts describe only the reserved pool. Addresses come from the linked image,
+not request arguments. `memory.check` reserves/tests/releases that pool and on
+success returns `checked_pages=256; exhausted=true; zeroed=true; reused=true; free_pages=256`.
+If pages are already owned, it returns `memory_busy` before starting; failed
+internal invariants halt rather than fabricate success. See [MEMORY.md](MEMORY.md)
+for blocking behavior and unsafe contracts. There is no arbitrary memory API.
+These additive v1 operations return unknown_operation on older kernels.
 
 ## Errors
 

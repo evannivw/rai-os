@@ -103,9 +103,9 @@ python3 scripts/verify_console.py
 ```
 
 The panel verification script discovers the compiler host triple, builds the test
-binary, and runs it from the repository root. Fourteen tests include four live-QEMU
+binary, and runs it from the repository root. Fifteen tests include four live-QEMU
 checks: priority order, FIFO execution/pause/restart, lifecycle/clock/manual task interactions,
-and missing kernel failure. Ten pure tests cover protocol, clock, task snapshots,
+and missing kernel failure. Eleven pure tests cover protocol, clock, task snapshots,
 and coordinator rules. Output is retained in target/verification/panel-worker.log.
 The four QEMU tests are ignored by direct cargo test unless explicitly enabled.
 

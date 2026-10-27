@@ -1,0 +1,25 @@
+Actual QEMU UART capture, October 27, 2026. CR/LF/TAB escaped for readability.
+
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+Console ready: type help for commands\r\n
+@rai1\t1\tok\tpage_size=4096; total_pages=256; free_pages=256; used_pages=0; pool_start=0x00000000400a5000; pool_end=0x00000000401a5000\r\n
+@rai1\t2\tok\tchecked_pages=256; exhausted=true; zeroed=true; reused=true; free_pages=256\r\n
+@rai1\t3\tok\tpage_size=4096; total_pages=256; free_pages=256; used_pages=0; pool_start=0x00000000400a5000; pool_end=0x00000000401a5000\r\n
+@rai1\t4\tok\tchecked_pages=256; exhausted=true; zeroed=true; reused=true; free_pages=256\r\n
+@rai1\t5\tok\tpage_size=4096; total_pages=256; free_pages=256; used_pages=0; pool_start=0x00000000400a5000; pool_end=0x00000000401a5000\r\n
+@rai1\t6\terr\tbad_args\r\n
+@rai1\t7\terr\tbad_args\r\n
+@rai1\t8\terr\tbad_args\r\n
+@rai1\t9\terr\tbad_args\r\n
+@rai1\t10\terr\tunknown_operation\r\n
+@rai1\t11\tok\tpage_size=4096; total_pages=256; free_pages=256; used_pages=0; pool_start=0x00000000400a5000; pool_end=0x00000000401a5000\r\n
+memory.info\r\n
+page_size=4096; total_pages=256; free_pages=256; used_pages=0; pool_start=0x00000000400a5000; pool_end=0x00000000401a5000\r\n
+memory.check\r\n
+checked_pages=256; exhausted=true; zeroed=true; reused=true; free_pages=256\r\n
+memory.check extra\r\n
+error: unknown_command\r\n
+@rai1\t12\tok\ttask_id=1; state=running; processed=0; total=7; words=0\r\n
+@rai1\t13\tok\ttask_id=1; state=completed; processed=7; total=7; words=2\r\n
+@rai1\t14\tok\tmemory remains usable\r\n
+@rai1\t15\tok\tpage_size=4096; total_pages=256; free_pages=256; used_pages=0; pool_start=0x00000000400a5000; pool_end=0x00000000401a5000\r\n

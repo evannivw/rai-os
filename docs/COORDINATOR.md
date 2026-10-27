@@ -93,12 +93,15 @@ it requires adapting storage/runtime and transport, not merely moving a file.
 A guest-native bounded queue could be a smaller explicit milestone if autonomous
 execution without the host becomes the next priority. No such migration happened
 in this increment. [Fatal EL1 diagnostics](EXCEPTIONS.md), added October 27, are
-a first kernel prerequisite; they do not yet support returning to a service. The model API bridge remains on the host for the initial demo.
+a first kernel prerequisite; they do not yet support returning to a service.
+The subsequent [physical-page pool](MEMORY.md) provides bounded allocation, while
+virtual memory and protected address spaces are still pending. The model API bridge remains on the host for the initial demo.
 
 ## Verification
 
-`python3 scripts/verify_panel.py` passes fourteen tests: ten pure host tests and
-four real-QEMU tests. Six coordinator tests cover priority/FIFO selection, an urgent
+`python3 scripts/verify_panel.py` passes fifteen tests: eleven pure host tests and
+four real-QEMU tests. The memory increment adds argument-free host operation
+validation. Six coordinator tests cover priority/FIFO selection, an urgent
 arrival during active work, pause/resume, FIFO waiting, mismatched
 IDs, unknown submission outcomes, bounded/invalid text, manual ownership, and empty
 completion. The FIFO live test checks ordered guest IDs and counts (2, 3, 0), manual

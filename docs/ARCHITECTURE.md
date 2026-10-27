@@ -38,6 +38,9 @@ assumptions and limits. Rust panic still prints and halts without recovery.
 
 ## Responsibilities
 
+- memory/frames.rs: pure page-address bookkeeping; memory/mod.rs: exclusive
+  linker-reserved physical pool, ownership tokens, zeroing, and diagnostics.
+  See [MEMORY.md](MEMORY.md). This is not a heap or memory protection.
 - exceptions.S / exceptions.rs: fatal EL1 entry, register capture, dedicated
   diagnostic stack, UART reporting, and halt. No resumable handler yet.
 - clock.rs: read-only generic counter adapter and boot-relative time.

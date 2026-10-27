@@ -30,6 +30,8 @@ pub fn parse(line: &str) -> Result<Request<'_>, Error<'_>> {
     let operation = match fields.next() {
         Some("help") => Operation::Help,
         Some("info") => Operation::Info,
+        Some("memory.info") => Operation::MemoryInfo,
+        Some("memory.check") => Operation::MemoryCheck,
         Some("uptime") => Operation::Uptime,
         Some("task.status") => Operation::TaskStatus,
         Some("task.start") => Operation::TaskStart(fields.next().ok_or(error("bad_args"))?),

@@ -5,6 +5,7 @@ mod clock;
 mod command;
 mod console;
 mod exceptions;
+mod memory;
 mod protocol;
 mod task;
 mod uart;
@@ -25,7 +26,10 @@ pub extern "C" fn kernel_main() -> ! {
     uart::write("RAI-OS: boot OK | AArch64 EL1 | UART PL011\n");
     #[cfg(feature = "exception-self-test")]
     exceptions::self_test();
-    console::run(&clock)
+    // SAFETY: sole pool construction; linker reserves it after code/data/stacks.
+    // Our fixed QEMU machine maps this RAM exclusively, with one CPU and MMU off.
+    let mut memory = unsafe { memory::Memory::from_linker() };
+    console::run(&clock, &mut memory)
 }
 
 #[panic_handler]

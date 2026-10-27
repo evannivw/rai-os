@@ -1,9 +1,9 @@
 //! Allowed operations, independent of UART and wire framing.
+use crate::memory::{Check as MemoryCheck, Memory, Snapshot as MemorySnapshot};
 use crate::task::{Snapshot, Task};
 use core::fmt;
 
-pub const HELP: &str =
-    "help | info | uptime | echo <text> | task.start <text> | task.status | task.cancel <id>";
+pub const HELP: &str = "help | info | uptime | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
 pub const INFO: &str =
     "RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected";
 
@@ -11,6 +11,8 @@ pub enum Operation<'a> {
     Help,
     Info,
     Uptime,
+    MemoryInfo,
+    MemoryCheck,
     Echo(&'a str),
     TaskStart(&'a str),
     TaskStatus,
@@ -21,6 +23,8 @@ pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
     match line {
         "help" => Ok(Operation::Help),
         "info" => Ok(Operation::Info),
+        "memory.info" => Ok(Operation::MemoryInfo),
+        "memory.check" => Ok(Operation::MemoryCheck),
         "uptime" => Ok(Operation::Uptime),
         "task.status" => Ok(Operation::TaskStatus),
         "task.start" => Ok(Operation::TaskStart("")),
@@ -57,11 +61,15 @@ pub enum Reply<'a> {
     Text(&'a str),
     Uptime(Uptime),
     Task(Snapshot),
+    Memory(MemorySnapshot),
+    MemoryCheck(MemoryCheck),
 }
 
 impl fmt::Display for Reply<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::Memory(snapshot) => write!(f, "{snapshot}"),
+            Self::MemoryCheck(check) => write!(f, "{check}"),
             Self::Task(snapshot) => write!(f, "{snapshot}"),
             Self::Text(text) => f.write_str(text),
             Self::Uptime(value) => write!(
@@ -77,8 +85,11 @@ pub fn execute<'a>(
     operation: Operation<'a>,
     uptime: Uptime,
     task: &mut Task,
+    memory: &mut Memory,
 ) -> Result<Reply<'a>, &'static str> {
     Ok(match operation {
+        Operation::MemoryInfo => Reply::Memory(memory.snapshot()),
+        Operation::MemoryCheck => Reply::MemoryCheck(memory.check()?),
         Operation::Help => Reply::Text(HELP),
         Operation::Info => Reply::Text(INFO),
         Operation::Uptime => Reply::Uptime(uptime),

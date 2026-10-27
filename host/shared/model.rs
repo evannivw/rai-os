@@ -3,6 +3,8 @@ pub enum Operation<'a> {
     Help,
     Info,
     Uptime,
+    MemoryInfo,
+    MemoryCheck,
     Echo(&'a str),
     TaskStart(&'a str),
     TaskStatus,
@@ -18,6 +20,8 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
     match line {
         "help" => Ok(Operation::Help),
         "info" => Ok(Operation::Info),
+        "memory.info" => Ok(Operation::MemoryInfo),
+        "memory.check" => Ok(Operation::MemoryCheck),
         "uptime" => Ok(Operation::Uptime),
         "task.status" => Ok(Operation::TaskStatus),
         "task.start" => Ok(Operation::TaskStart("")),
@@ -37,7 +41,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, uptime, echo, task.start, task.status, task.cancel, or exit"),
+            .ok_or("Use help, info, uptime, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
     }
 }
 
@@ -48,6 +52,8 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
     let body = match operation {
         Operation::Help => "help".to_owned(),
         Operation::Info => "info".to_owned(),
+        Operation::MemoryInfo => "memory.info".to_owned(),
+        Operation::MemoryCheck => "memory.check".to_owned(),
         Operation::Uptime => "uptime".to_owned(),
         Operation::TaskStatus => "task.status".to_owned(),
         Operation::TaskCancel(id) => {
@@ -104,6 +110,23 @@ pub fn decode(id: u32, line: &str) -> Result<Reply, &'static str> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn memory_operations_are_bounded_and_argument_free() {
+        for (name, operation) in [
+            ("memory.info", Operation::MemoryInfo),
+            ("memory.check", Operation::MemoryCheck),
+        ] {
+            assert_eq!(
+                encode(7, &operation).unwrap(),
+                format!("@rai1\t7\t{name}\n")
+            );
+            assert!(parse_input(name).is_ok());
+            assert!(parse_input(&format!("{name} extra")).is_err());
+            assert!(parse_input(&format!("{name}\t")).is_err());
+        }
+        assert!(parse_input("memory.free 0x40080000").is_err());
+    }
 
     #[test]
     fn rejects_injection_and_oversized_requests() {

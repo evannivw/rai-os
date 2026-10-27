@@ -306,3 +306,36 @@ normal images contain the vector table but no test-trigger symbol. Local
 Markdown links and git diff --check passed. No GUI code changed, so native-window
 review was not repeated. No physical phone, fault recovery, or efficiency claim
 was tested. Captures retain the actual October 27 date separately from prior work.
+
+## First physical-page pool — October 27
+
+Reserved a linker-aligned, NOLOAD 1 MiB pool after kernel code/data and both
+stacks. Added pure bitmap bookkeeping for 256 pages of 4096 bytes and an exclusive
+physical adapter that clears pages before handing out non-copy ownership tokens.
+Release consumes a token; raw-address frees are not exposed. Unmanaged RAM is
+not counted as free. No heap, MMU, memory protection, page-backed word-count
+storage, new dependencies, or service isolation was introduced.
+
+Added argument-free memory.info and memory.check to shell, protocol, and host
+terminal. The diagnostic allocates the entire pool, observes zeroed bytes using
+volatile reads, writes/verifies distinct end markers, checks exhaustion, releases
+all pages, and verifies zeroed reuse. It is synchronous and can delay cooperative
+task steps; this is not a performance test. The current diagnostic leaves the
+pool fully free. A memory_busy guard exists for future owners but is not exercised
+by current UART operations. See [MEMORY.md](MEMORY.md) for complete contracts.
+
+Verification: three pure frame tests cover full/partial bitmap capacities,
+unique allocation, exhaustion/reuse, invalid ranges/frees and double free without
+mutation. Debug/release each passed 18 real-QEMU memory exchanges (15 structured,
+three shell), including repeated physical checks, invalid arguments and task/echo
+recovery; ELF symbols independently confirm pool boundaries and stack exclusion.
+The mutable linker-region declaration was clarified during review and both
+memory runs were repeated successfully. Captures retain real results and dates.
+
+Regression checks passed: 37 console/protocol and 28 task exchanges per profile,
+three task-domain tests, exception injection in both profiles, host terminal
+integration including memory commands, and fifteen panel tests (four real QEMU).
+Formatting, default/self-test kernel Clippy, terminal/panel Clippy, and optimized
+host-panel compilation passed. Local documentation links and whitespace checks
+passed. No GUI code changed, so no native-window review was repeated. QEMU test
+children were cleaned up; the existing native panel was not modified or restarted.
