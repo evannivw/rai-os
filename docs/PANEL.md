@@ -44,9 +44,11 @@ platform graphics dependencies, and setup instructions remain unverified.
   never advances it with a local animation. If a sample is late, the caption
   indicates that it is awaiting the kernel; transport errors clear live readings.
 - **System info**: sends a fresh info request and reveals its response in Activity.
-- **Kernel task**: starts/cancels the real guest word-count job and renders its
+- **Queue**: bounded FIFO submission, pause/resume, and observed results.
+  See [COORDINATOR.md](COORDINATOR.md) for ownership and interruption rules.
+- **Task**: starts/cancels the real guest word-count job and renders its
   observed byte progress and result. See [TASKS.md](TASKS.md).
-- **Send message**, under Connection check: performs an actual echo round trip. Printable ASCII only;
+- **Send message**, under Connection: performs an actual echo round trip. Printable ASCII only;
   invalid input is rejected before UART transmission. No model generates replies.
 - **Activity**: toggles the recent event log. It retains at most 80 entries in
   memory and uses elapsed host time since the panel opened. These log timestamps
@@ -65,7 +67,8 @@ not current connection state. There is no network listener or web server.
 ## Architecture and dependencies
 
 - `host/panel/src/app.rs`: presentation, user actions, and rendering observed events.
-- `host/panel/src/worker.rs`: session coordinator on a background thread. Owns the
+- `host/panel/src/coordinator.rs`: pure bounded FIFO policy and job lifecycle.
+- `host/panel/src/worker.rs`: session adapter on a background thread. Owns the
   QEMU connection, serializes requests, validates clock payloads, and sends events.
   Command/event queues are bounded; there is one outstanding UART request.
 - `host/shared/model.rs`: command parsing, encoding, and response validation.
@@ -100,13 +103,11 @@ python3 scripts/verify_console.py
 ```
 
 The panel verification script discovers the compiler host triple, builds the test
-binary, and runs it from the repository root. Six tests include two live-QEMU
-checks: boot/clock progress, rejected input, echo recovery, Stop, restart, window
-worker cleanup, and a missing kernel image that must never report connected.
-Four tests check protocol/clock/task-snapshot validation without QEMU. Their combined output
-is retained in target/verification/panel-worker.log. Running cargo test directly
-runs only the four ordinary unit tests; the two environment-dependent tests are
-ignored unless enabled by the verification script.
+binary, and runs it from the repository root. Eleven tests include three live-QEMU
+checks: FIFO execution/pause/restart, lifecycle/clock/manual task interactions,
+and missing kernel failure. Eight pure tests cover protocol, clock, task snapshots,
+and coordinator rules. Output is retained in target/verification/panel-worker.log.
+The three QEMU tests are ignored by direct cargo test unless explicitly enabled.
 
 Also build an optimized host panel when changing executable code:
 
@@ -124,6 +125,7 @@ Stop/restart, and closing a running session. No physical phone has been tested.
 ## Next increment
 
 The first [bounded guest task](TASKS.md) now exposes progress and cancellation.
-Next add a small deterministic coordinator before introducing Meta decisions. A native guest display/input driver is a
+The [small deterministic coordinator](COORDINATOR.md) now runs a bounded FIFO queue.
+Meta decisions remain a later increment. A native guest display/input driver is a
 separate future milestone. Preserve the mobile direction without presenting the
 host-rendered card as a completed phone operating system.

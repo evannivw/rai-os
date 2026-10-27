@@ -1,0 +1,17 @@
+
+running 11 tests
+test coordinator::tests::disconnect_does_not_retry_unacknowledged_job ... ok
+test coordinator::tests::fifo_requires_observed_completion ... ok
+test coordinator::tests::limits_manual_ownership_and_empty_completion ... ok
+test coordinator::tests::pause_drains_active_and_mismatch_never_advances ... ok
+test model::tests::rejects_injection_and_oversized_requests ... ok
+test model::tests::rejects_wrong_request_and_malformed_responses ... ok
+test task_status::tests::rejects_inconsistent_task_snapshots ... ok
+test worker::tests::missing_kernel_never_reports_connected ... ok
+test worker::tests::real_qemu_fifo_pause_and_disconnect ... ok
+test worker::tests::real_qemu_lifecycle ... ok
+test worker::tests::validates_measured_uptime ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.31s
+
+qemu-system-aarch64: could not load kernel '/nonexistent/rai-panel-kernel'

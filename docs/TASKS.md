@@ -128,8 +128,7 @@ Raw transcripts are in target/verification/tasks-debug.log and tasks-release.log
 Escaped [debug](evidence/2026-10-26-tasks-debug.txt) and
 [release](evidence/2026-10-26-tasks-release.txt) captures are retained in Git.
 
-Next: a small deterministic host coordinator that sequences a bounded queue of
-jobs using observed completion and cancellation. It must not assume submission
-means completion. That coordinator, multiple active guest tasks, and Meta model
-integration are not part of this increment. Review-pack fixtures/verifiers remain
+The subsequent [small host coordinator](COORDINATOR.md) now sequences a bounded
+queue using observed completion. Multiple active guest tasks and Meta model
+integration remain pending. Review-pack fixtures/verifiers remain
 separate from this introductory word-count task.

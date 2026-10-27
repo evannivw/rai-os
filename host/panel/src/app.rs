@@ -1,4 +1,5 @@
 //! Native host presentation. Values change only when the session worker reports them.
+use crate::coordinator::{CAPACITY, Coordinator, JobState};
 use crate::task_status::{State as TaskState, TaskStatus};
 use crate::worker::{Command, Event, Worker};
 use eframe::egui::{self, Color32, FontId, RichText, Stroke};
@@ -30,6 +31,8 @@ pub struct Panel {
     task: Option<TaskStatus>,
     task_text: String,
     task_view: bool,
+    queue_view: bool,
+    queue: Coordinator,
     echo: Option<String>,
     error: Option<String>,
     pending: bool,
@@ -60,6 +63,8 @@ impl Panel {
             task: None,
             task_text: "RAI-OS processes this text in small steps. The kernel keeps answering commands while it counts words. You can cancel the task or wait for the result.".into(),
             task_view: true,
+            queue_view: true,
+            queue: Coordinator::default(),
             echo: None,
             error: None,
             pending: false,
@@ -104,6 +109,19 @@ impl Panel {
                     }
                     self.record("SYSTEM", &info);
                     self.record("CONNECTED", "Kernel boot and UART response confirmed.");
+                }
+                Ok(Event::Queue(queue)) => {
+                    for (index, job) in queue.jobs.iter().enumerate() {
+                        if self
+                            .queue
+                            .jobs
+                            .get(index)
+                            .is_none_or(|old| old.state != job.state)
+                        {
+                            self.record("QUEUE", &format!("Job {}: {:?}", index + 1, job.state));
+                        }
+                    }
+                    self.queue = queue;
                 }
                 Ok(Event::Task(task)) => {
                     if self
@@ -195,7 +213,7 @@ impl Panel {
     }
 
     fn task_controls(&mut self, ui: &mut egui::Ui) {
-        let connected = self.phase == Phase::Running && !self.pending;
+        let connected = self.phase == Phase::Running && !self.pending && !self.queue.busy();
         let running = self
             .task
             .is_some_and(|task| task.state == TaskState::Running);
@@ -283,6 +301,97 @@ impl Panel {
         );
     }
 
+    fn queue_controls(&mut self, ui: &mut egui::Ui) {
+        ui.label(
+            RichText::new("FIFO COORDINATOR · HOST")
+                .size(11.0)
+                .color(ACCENT),
+        );
+        ui.label("One guest job at a time. No AI yet.");
+        ui.add(
+            egui::TextEdit::multiline(&mut self.task_text)
+                .desired_rows(2)
+                .char_limit(192)
+                .desired_width(308.0),
+        );
+        ui.horizontal(|ui| {
+            if ui
+                .add_enabled(
+                    self.queue.jobs.len() < CAPACITY,
+                    egui::Button::new("Add job"),
+                )
+                .clicked()
+            {
+                self.error = None;
+                self.send(Command::Enqueue(self.task_text.clone()));
+            }
+            if ui
+                .add_enabled(!self.queue.busy(), egui::Button::new("Clear queue"))
+                .clicked()
+            {
+                self.send(Command::ClearQueue);
+            }
+        });
+        ui.horizontal(|ui| {
+            if ui
+                .add_enabled(
+                    self.phase == Phase::Running
+                        && !self.queue.enabled
+                        && self.queue.jobs.iter().any(|j| j.state == JobState::Pending),
+                    egui::Button::new("Run queue"),
+                )
+                .clicked()
+            {
+                self.error = None;
+                self.send(Command::RunQueue);
+            }
+            if ui
+                .add_enabled(self.queue.enabled, egui::Button::new("Pause queue"))
+                .clicked()
+            {
+                self.send(Command::PauseQueue);
+            }
+        });
+        ui.label(if self.queue.enabled {
+            "Automatic FIFO execution"
+        } else if self.queue.busy() {
+            "Paused · finishing current job"
+        } else if self.queue.jobs.iter().any(|j| j.state == JobState::Pending) {
+            "Paused · waiting for Run queue"
+        } else {
+            "Ready · add jobs to run"
+        });
+        egui::ScrollArea::vertical()
+            .id_salt("queue_jobs")
+            .max_height(140.0)
+            .show(ui, |ui| {
+                for (index, job) in self.queue.jobs.iter().enumerate() {
+                    ui.label(format!(
+                        "Job {} · {:?} · {} bytes",
+                        index + 1,
+                        job.state,
+                        job.text.len()
+                    ));
+                    if let Some(task) = job.observed {
+                        let count = if job.state == JobState::Completed {
+                            "result"
+                        } else {
+                            "last observed count"
+                        };
+                        ui.label(
+                            RichText::new(format!(
+                                "Guest #{} · {}/{} bytes · {count}: {}",
+                                task.id, task.processed, task.total, task.words
+                            ))
+                            .size(11.0)
+                            .color(MUTED),
+                        );
+                    }
+                }
+            });
+        ui.label(RichText::new("Max 8 jobs · 192 ASCII bytes each\nPause lets the current job finish.\nGuest learning pace: 8 bytes / 100 ms").size(10.0).color(MUTED));
+    }
+
     fn device(&mut self, ui: &mut egui::Ui) {
         egui::Frame::new()
             .fill(CARD)
@@ -294,58 +403,90 @@ impl Panel {
                 ui.set_min_height(455.0);
                 ui.vertical_centered(|ui| {
                     ui.label(RichText::new("RAI-OS").size(16.0).strong());
-                    ui.add_space(10.0);
-                    let color = if self.phase == Phase::Running {
-                        ACCENT
-                    } else {
-                        MUTED
-                    };
-                    ui.label(RichText::new(self.status()).size(11.0).color(color));
-                    ui.add_space(10.0);
-                    ui.label(
-                        RichText::new(if self.task_view {
-                            "Work, one step at a time."
-                        } else {
-                            "Your system.\nTaking shape."
-                        })
-                        .size(26.0)
-                        .strong(),
-                    );
-                    ui.add_space(16.0);
-                    ui.label(RichText::new("KERNEL UPTIME").size(10.0).color(MUTED));
-                    let time = self
-                        .uptime
-                        .map(|ms| {
-                            format!(
-                                "{:02}:{:02}:{:02}",
-                                ms / 3_600_000,
-                                ms / 60_000 % 60,
-                                ms / 1000 % 60
-                            )
-                        })
-                        .unwrap_or_else(|| "--:--:--".into());
-                    ui.label(
-                        RichText::new(time).font(FontId::monospace(if self.task_view {
-                            25.0
-                        } else {
-                            38.0
-                        })),
-                    );
-                    let caption = match self.sampled {
-                        Some(at) if at.elapsed() > Duration::from_secs(3) => {
-                            "Last reading · awaiting kernel"
+                    if self.queue_view {
+                        ui.label(RichText::new(self.status()).size(11.0).color(ACCENT));
+                        let time = self
+                            .uptime
+                            .map(|ms| format!("Kernel uptime · {} s", ms / 1000))
+                            .unwrap_or_else(|| "Waiting for a real kernel reading".into());
+                        ui.label(RichText::new(time).size(12.0).color(MUTED));
+                        if self
+                            .sampled
+                            .is_some_and(|at| at.elapsed() > Duration::from_secs(3))
+                        {
+                            ui.label("Last reading · awaiting kernel");
                         }
-                        Some(_) => "Read from the running kernel",
-                        None => "Waiting for a real kernel reading",
-                    };
-                    ui.label(RichText::new(caption).size(11.0).color(MUTED));
-                    ui.add_space(16.0);
+                    } else {
+                        ui.add_space(10.0);
+                        let color = if self.phase == Phase::Running {
+                            ACCENT
+                        } else {
+                            MUTED
+                        };
+                        ui.label(RichText::new(self.status()).size(11.0).color(color));
+                        ui.add_space(10.0);
+                        ui.label(
+                            RichText::new(if self.task_view {
+                                "Work, one step at a time."
+                            } else {
+                                "Your system.\nTaking shape."
+                            })
+                            .size(26.0)
+                            .strong(),
+                        );
+                        ui.add_space(16.0);
+                        ui.label(RichText::new("KERNEL UPTIME").size(10.0).color(MUTED));
+                        let time = self
+                            .uptime
+                            .map(|ms| {
+                                format!(
+                                    "{:02}:{:02}:{:02}",
+                                    ms / 3_600_000,
+                                    ms / 60_000 % 60,
+                                    ms / 1000 % 60
+                                )
+                            })
+                            .unwrap_or_else(|| "--:--:--".into());
+                        ui.label(
+                            RichText::new(time).font(FontId::monospace(if self.task_view {
+                                25.0
+                            } else {
+                                38.0
+                            })),
+                        );
+                        let caption = match self.sampled {
+                            Some(at) if at.elapsed() > Duration::from_secs(3) => {
+                                "Last reading · awaiting kernel"
+                            }
+                            Some(_) => "Read from the running kernel",
+                            None => "Waiting for a real kernel reading",
+                        };
+                        ui.label(RichText::new(caption).size(11.0).color(MUTED));
+                        ui.add_space(16.0);
+                    }
                 });
                 ui.horizontal(|ui| {
-                    ui.selectable_value(&mut self.task_view, true, "Kernel task");
-                    ui.selectable_value(&mut self.task_view, false, "Connection check");
+                    if ui.selectable_label(self.queue_view, "Queue").clicked() {
+                        self.queue_view = true;
+                    }
+                    if ui
+                        .selectable_label(!self.queue_view && self.task_view, "Task")
+                        .clicked()
+                    {
+                        self.queue_view = false;
+                        self.task_view = true;
+                    }
+                    if ui
+                        .selectable_label(!self.queue_view && !self.task_view, "Connection")
+                        .clicked()
+                    {
+                        self.queue_view = false;
+                        self.task_view = false;
+                    }
                 });
-                if self.task_view {
+                if self.queue_view {
+                    self.queue_controls(ui);
+                } else if self.task_view {
                     self.task_controls(ui);
                 } else {
                     ui.separator();

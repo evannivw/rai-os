@@ -1,5 +1,5 @@
 //! Session coordinator. Only this thread owns QEMU and performs blocking UART I/O.
-use crate::{model, qemu, task_status::TaskStatus};
+use crate::{coordinator::Coordinator, model, qemu, task_status::TaskStatus};
 use std::sync::{
     Arc,
     atomic::{AtomicBool, Ordering},
@@ -12,12 +12,17 @@ pub enum Command {
     Start,
     Stop,
     Request(String),
+    Enqueue(String),
+    RunQueue,
+    PauseQueue,
+    ClearQueue,
 }
 
 #[derive(Debug)]
 pub enum Event {
     Started(String),
     Task(TaskStatus),
+    Queue(Coordinator),
     Uptime { milliseconds: u64, frequency: u32 },
     Reply { command: String, payload: String },
     Rejected(String),
@@ -109,6 +114,7 @@ fn run(
     outgoing: mpsc::SyncSender<Event>,
     shutdown: Arc<AtomicBool>,
 ) {
+    let mut queue = Coordinator::default();
     let mut connection = None;
     let mut id = 0;
     let mut last_sample = None;
@@ -141,9 +147,59 @@ fn run(
                         .map_err(|_| "View closed")?;
                 }
                 Some(Command::Stop) => {
+                    queue.interrupt();
+                    outgoing
+                        .send(Event::Queue(queue.clone()))
+                        .map_err(|_| "View closed")?;
                     connection.take(); // Drop terminates and reaps QEMU before reporting stopped.
                     last_sample = None;
                     outgoing.send(Event::Stopped).map_err(|_| "View closed")?;
+                }
+                Some(Command::Enqueue(text)) => {
+                    if let Err(error) = queue.add(text) {
+                        outgoing
+                            .send(Event::Rejected(error))
+                            .map_err(|_| "View closed")?;
+                    }
+                    outgoing
+                        .send(Event::Queue(queue.clone()))
+                        .map_err(|_| "View closed")?;
+                }
+                Some(Command::PauseQueue) => {
+                    queue.pause();
+                    outgoing
+                        .send(Event::Queue(queue.clone()))
+                        .map_err(|_| "View closed")?;
+                }
+                Some(Command::ClearQueue) => {
+                    if let Err(error) = queue.clear() {
+                        outgoing
+                            .send(Event::Rejected(error))
+                            .map_err(|_| "View closed")?;
+                    }
+                    outgoing
+                        .send(Event::Queue(queue.clone()))
+                        .map_err(|_| "View closed")?;
+                }
+                Some(Command::RunQueue) => {
+                    let result = if let Some(current) = connection.as_mut() {
+                        let status = TaskStatus::parse(&request(
+                            current,
+                            &mut id,
+                            &model::Operation::TaskStatus,
+                        )?)?;
+                        queue.resume(status)
+                    } else {
+                        Err("Start the kernel first".into())
+                    };
+                    if let Err(error) = result {
+                        outgoing
+                            .send(Event::Rejected(error))
+                            .map_err(|_| "View closed")?;
+                    }
+                    outgoing
+                        .send(Event::Queue(queue.clone()))
+                        .map_err(|_| "View closed")?;
                 }
                 Some(Command::Request(text)) => {
                     let operation = model::parse_input(&text).and_then(|op| {
@@ -151,6 +207,21 @@ fn run(
                         Ok(op)
                     });
                     match (operation, connection.as_mut()) {
+                        (Ok(op), Some(_))
+                            if queue.busy()
+                                && matches!(
+                                    op,
+                                    model::Operation::TaskStart(_)
+                                        | model::Operation::TaskCancel(_)
+                                ) =>
+                        {
+                            outgoing
+                                .send(Event::Rejected(
+                                    "Queue owns the task; pause and wait before manual changes"
+                                        .into(),
+                                ))
+                                .map_err(|_| "View closed")?;
+                        }
                         (Ok(op), Some(current)) => {
                             id = id.checked_add(1).ok_or("Request IDs exhausted")?;
                             let reply = current.request(id, &op)?;
@@ -212,14 +283,45 @@ fn run(
                 && !shutdown.load(Ordering::Relaxed)
             {
                 let payload = request(current, &mut id, &model::Operation::TaskStatus)?;
+                let task = TaskStatus::parse(&payload)?;
+                let prior = queue.clone();
+                queue.observe(task)?;
                 outgoing
-                    .send(Event::Task(TaskStatus::parse(&payload)?))
+                    .send(Event::Task(task))
                     .map_err(|_| "View closed")?;
+                if prior != queue {
+                    outgoing
+                        .send(Event::Queue(queue.clone()))
+                        .map_err(|_| "View closed")?;
+                }
                 next_task_poll = Instant::now() + Duration::from_millis(250);
+            }
+            if let Some(current) = connection.as_mut()
+                && !shutdown.load(Ordering::Relaxed)
+            {
+                let prior = queue.clone();
+                if let Some(text) = queue.take_next() {
+                    let task = TaskStatus::parse(&request(
+                        current,
+                        &mut id,
+                        &model::Operation::TaskStart(&text),
+                    )?)?;
+                    queue.observe(task)?;
+                    outgoing
+                        .send(Event::Task(task))
+                        .map_err(|_| "View closed")?;
+                }
+                if prior != queue {
+                    outgoing
+                        .send(Event::Queue(queue.clone()))
+                        .map_err(|_| "View closed")?;
+                }
             }
             Ok(())
         })();
         if let Err(error) = result {
+            queue.interrupt();
+            let _ = outgoing.send(Event::Queue(queue.clone()));
             connection.take();
             if outgoing.send(Event::Failed(error)).is_err() {
                 break;
@@ -260,6 +362,96 @@ mod tests {
             }
         }
         panic!("Timed out waiting for worker event");
+    }
+
+    #[test]
+    #[ignore = "Requires real QEMU, built kernel, and repository-root working directory"]
+    fn real_qemu_fifo_pause_and_disconnect() {
+        use crate::coordinator::JobState;
+        let worker = Worker::new("target/aarch64-unknown-none-softfloat/debug/rai-os".into());
+        worker.send(Command::Start).unwrap();
+        wait(&worker, |e| matches!(e, Event::Started(_)));
+        for text in ["one two", "three four five", ""] {
+            worker.send(Command::Enqueue(text.into())).unwrap();
+            wait(&worker, |e| matches!(e, Event::Queue(_)));
+        }
+        worker.send(Command::RunQueue).unwrap();
+        let done = wait(
+            &worker,
+            |e| matches!(e, Event::Queue(q) if q.jobs.len() == 3 && q.jobs.iter().all(|j| j.state == JobState::Completed)),
+        );
+        if let Event::Queue(q) = done {
+            assert_eq!(
+                q.jobs
+                    .iter()
+                    .map(|j| (j.observed.unwrap().id, j.observed.unwrap().words))
+                    .collect::<Vec<_>>(),
+                [(1, 2), (2, 3), (3, 0)]
+            );
+        }
+        wait(&worker, |e| matches!(e, Event::Queue(q) if !q.busy()));
+        worker.send(Command::ClearQueue).unwrap();
+        wait(
+            &worker,
+            |e| matches!(e, Event::Queue(q) if q.jobs.is_empty()),
+        );
+        for text in ["word ".repeat(38), "pending".into()] {
+            worker.send(Command::Enqueue(text)).unwrap();
+            wait(&worker, |e| matches!(e, Event::Queue(_)));
+        }
+        worker.send(Command::RunQueue).unwrap();
+        wait(
+            &worker,
+            |e| matches!(e, Event::Queue(q) if q.jobs[0].state == JobState::Running),
+        );
+        worker
+            .send(Command::Request("task.cancel 4".into()))
+            .unwrap();
+        wait(
+            &worker,
+            |e| matches!(e, Event::Rejected(message) if message.contains("Queue owns")),
+        );
+        worker.send(Command::PauseQueue).unwrap();
+        wait(
+            &worker,
+            |e| matches!(e, Event::Queue(q) if !q.enabled && q.jobs[0].state == JobState::Completed && q.jobs[1].state == JobState::Pending),
+        );
+        // Wait beyond the polling interval: paused work must not start later.
+        thread::sleep(Duration::from_millis(400));
+        worker.send(Command::Request("task.status".into())).unwrap();
+        wait(
+            &worker,
+            |e| matches!(e, Event::Reply { payload, .. } if payload.contains("task_id=4; state=completed")),
+        );
+        worker
+            .send(Command::Enqueue("still pending".into()))
+            .unwrap();
+        wait(
+            &worker,
+            |e| matches!(e, Event::Queue(q) if q.jobs.len() == 3),
+        );
+        worker.send(Command::RunQueue).unwrap();
+        wait(
+            &worker,
+            |e| matches!(e, Event::Queue(q) if q.jobs[1].state == JobState::Running),
+        );
+        worker.send(Command::Stop).unwrap();
+        wait(
+            &worker,
+            |e| matches!(e, Event::Queue(q) if q.jobs[1].state == JobState::Interrupted && q.jobs[2].state == JobState::Pending && !q.enabled),
+        );
+        wait(&worker, |e| matches!(e, Event::Stopped));
+        worker.send(Command::Start).unwrap();
+        wait(&worker, |e| matches!(e, Event::Started(_)));
+        wait(
+            &worker,
+            |e| matches!(e, Event::Task(t) if t.state == crate::task_status::State::Idle),
+        );
+        worker.send(Command::RunQueue).unwrap();
+        wait(
+            &worker,
+            |e| matches!(e, Event::Queue(q) if q.jobs[1].state == JobState::Interrupted && q.jobs[2].state == JobState::Completed && q.jobs[2].observed.unwrap().id == 1),
+        );
     }
 
     #[test]
@@ -345,6 +537,7 @@ mod tests {
             assert!(Instant::now() < deadline);
             match worker.poll() {
                 Ok(Event::Failed(_)) => break,
+                Ok(Event::Queue(q)) if q.jobs.is_empty() && !q.enabled => {}
                 Ok(event) => panic!("Unexpected event before failure: {event:?}"),
                 Err(mpsc::TryRecvError::Empty) => thread::sleep(Duration::from_millis(20)),
                 Err(error) => panic!("{error}"),

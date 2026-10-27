@@ -5,7 +5,7 @@ AI coordinator could adapt work to goals, events, and resource limits.
 
 **Working today:** bare-metal boot in QEMU, PL011 UART input/output, help/info/uptime/echo,
 a bounded structured protocol, a cooperative word-count task, a Rust host terminal
-console, and a graphical host control panel.
+console, a graphical host control panel, and a bounded FIFO host coordinator.
 **Not implemented:** Meta integration, autonomous agents, a native guest desktop, multi-task
 scheduling, memory isolation, persistent storage, or measured efficiency gains.
 
@@ -46,6 +46,7 @@ and 37 console/protocol cases, including the guest counter. See the guides for h
 - [UART protocol](docs/PROTOCOL.md)
 - [Kernel clock and uptime](docs/CLOCK.md)
 - [Cooperative task and cancellation](docs/TASKS.md)
+- [Small host coordinator](docs/COORDINATOR.md)
 - [Host console](docs/CONSOLE.md)
 - [Graphical Device Lab panel](docs/PANEL.md)
 - [Hackathon plan](docs/HACKATHON_PLAN.md)

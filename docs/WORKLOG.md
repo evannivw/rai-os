@@ -214,3 +214,35 @@ of 27 words. Stop cleared task readings. Captures and contract: [TASKS.md](TASKS
 
 The GUI remained host-rendered. No physical phone or comparative performance
 claim was tested. QEMU was stopped after the UI check and the panel left open.
+
+## Small FIFO host coordinator — October 26
+
+Added a pure bounded FIFO policy and wired it into the existing QEMU worker and
+native panel. Eight total entries, printable ASCII up to 192 bytes each, one
+active guest job. Submission is reserved before I/O; only matching observed
+completion permits the next submission. Pause lets the current job finish.
+Manual mutation cannot interfere with queue ownership. Stop/failure interrupts
+uncertain work and requires explicit continuation of pending jobs after restart;
+interrupted submissions are not replayed. Queue state is memory-only.
+
+The UI exposes Add, Run, Pause, and Clear, with observed guest IDs, byte progress,
+and counts. Compact queue headers keep two completed results visible at the
+normal window size. Existing manual Task and Connection views remain available.
+No kernel/protocol/shared-adapter changes, dependencies, unsafe code, AI, isolated
+processes, or performance claims were added. See [COORDINATOR.md](COORDINATOR.md).
+
+Verification: eleven panel tests passed (eight pure host tests, three real-QEMU
+checks), including ordered results 2/3/0, pause, ownership rejection, interruption,
+reboot without replay, and the existing lifecycle/clock/manual cancellation and
+missing-kernel checks. The missing-kernel assertion was updated to allow the new
+empty paused-queue notification before failure; it still rejects a connection
+success event. Debug and optimized host builds, formatting, all-target Clippy,
+local documentation links, and git diff --check passed.
+
+Native UI review confirmed adding two jobs, Run, Pause (first completes while
+second stays pending), Resume, and automatic completion of two 149-byte jobs at
+27 words each. Window close cleaned up a running session; final Stop cleared live
+readings and retained historical results. QEMU was stopped and the panel left
+open. Retained the [window capture](evidence/2026-10-26-coordinator.png) and
+[test output](evidence/2026-10-26-coordinator-tests.txt). The unchanged kernel
+verification suites were not rerun for this host-only increment.

@@ -1,4 +1,5 @@
 mod app;
+mod coordinator;
 #[path = "../../shared/model.rs"]
 mod model;
 #[path = "../../shared/qemu.rs"]

@@ -1,7 +1,7 @@
 # RAI-OS hackathon plan
 
 Updated October 26, 2026. Local times: America/Guatemala. This is a proposed
-roadmap, not a claim that AI, scheduling, or a graphical UI already exists.
+roadmap; completed foundations are identified below. AI and kernel scheduling remain pending.
 
 ## Sources and eligibility
 
@@ -43,7 +43,8 @@ The candidate comparison is specified in [DEMO_EXPERIMENT.md](DEMO_EXPERIMENT.md
 The first correctness dataset and verifier implementation sequence are in
 [DEMO_FIXTURE.md](DEMO_FIXTURE.md); candidate verification is still pending.
 The [graphical host panel](PANEL.md) displays actual kernel results; agent
-decisions remain future work. It shares the transport used by the
+decisions remain future work. A [deterministic host coordinator](COORDINATOR.md)
+now sequences word-count jobs using observed completion. It shares the transport used by the
 [terminal console](CONSOLE.md).
 
 Current priority, revised at the user's request on October 26: advance the kernel
