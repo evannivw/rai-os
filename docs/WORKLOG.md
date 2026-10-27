@@ -275,3 +275,34 @@ Low as guest #2, both completing 149 bytes with 27 words. Saved the
 [window](evidence/2026-10-26-priority.png) and
 [test output](evidence/2026-10-26-priority-tests.txt). Stop cleared live readings;
 the panel remains open with historical results and QEMU stopped.
+
+## Fatal EL1 exception foundation — October 27
+
+Returned to kernel infrastructure after the host priority increment. Installed a
+2 KiB-aligned sixteen-slot EL1 vector table after stack/BSS setup and before Rust.
+Fatal entry captures architectural registers, guards nested reporting, switches
+to a dedicated aligned 16 KiB stack, takes over UART, prints diagnostics, and
+halts without returning. Unsafe/assembly preconditions are documented. No new
+external dependencies, enabled IRQs, process isolation, scheduling, or recovery.
+
+Added an opt-in BRK self-test feature and verifier that builds into a separate
+target directory, so fault injection does not replace the panel's normal kernel.
+Normal banners/protocol and graphical controls are unchanged. The feature is
+disabled by default. Clarified that the kernel evolves while the coordinator's
+policy remains separate; guest service execution is still a future milestone.
+
+Actual verification: debug and release each trapped BRK #0x5241 into vector 4,
+reported ESR 0xf2005241 / class 0x3c, and matched ELR to the linked test-instruction
+symbol. Both stack ranges/alignment and saved EL1h state were checked. An info
+request after the halt received no output during a 250 ms observation; QEMU
+remained alive and was then reaped. The nested-fault guard and other exception
+classes were not injected. See [EXCEPTIONS.md](EXCEPTIONS.md) and its captures.
+
+Regression verification passed: 37 normal console/protocol checks and 28 task
+exchanges in both debug/release, the three task-domain tests, fourteen panel
+tests (four real-QEMU checks), and terminal integration. Formatting and Clippy
+passed for default/self-test kernel configurations. ELF inspection confirmed
+normal images contain the vector table but no test-trigger symbol. Local
+Markdown links and git diff --check passed. No GUI code changed, so native-window
+review was not repeated. No physical phone, fault recovery, or efficiency claim
+was tested. Captures retain the actual October 27 date separately from prior work.

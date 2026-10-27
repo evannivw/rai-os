@@ -10,7 +10,9 @@ fn read_register(offset: usize) -> u32 {
 }
 
 fn write_register(offset: usize, value: u32) {
-    // SAFETY: same mapping as above; one CPU, no interrupts, no other UART owner.
+    // SAFETY: same mapping as above; one CPU, interrupts masked. A fatal exception
+    // may take over UART, but never resumes the interrupted owner. No Rust
+    // references or locks span MMIO operations.
     // Register accesses are 32-bit aligned and volatile; no Rust references alias MMIO.
     unsafe { core::ptr::write_volatile((BASE + offset) as *mut u32, value) }
 }

@@ -12,8 +12,8 @@ Supported configuration: virt-9.2, TCG, Cortex-A53, one CPU, 128 MiB, EL1,
 secure=off, virtualization=off, no firmware, MMU/caches off.
 
 boot.S masks interrupts, checks EL1, selects SP_EL1, creates a 16-byte-aligned
-64 KiB stack, clears BSS, then calls kernel_main. The stack is outside the
-cleared BSS range. An unexpected exception level halts before Rust; the boot
+64 KiB stack, clears BSS, installs VBAR_EL1 and synchronizes instruction execution,
+then calls kernel_main. The stack is outside the cleared BSS range. An unexpected exception level halts before Rust; the boot
 check will time out rather than claim success.
 
 Rust uses no_std, no_main, and core. aarch64-unknown-none-softfloat avoids
@@ -29,13 +29,17 @@ Configuration: 115200, 8N1, no FIFO or interrupts; the driver polls readiness.
 Polling consumes CPU while waiting and is not evidence of energy efficiency.
 
 Unsafe blocks document the mapping, alignment, and exclusive ownership:
-one CPU, interrupts disabled, MMU off, and no other UART owner. These assumptions
+one CPU, interrupts disabled, MMU off, and exclusive UART access. A fatal handler
+may take over UART permanently without resuming the interrupted writer. These assumptions
 must be revisited for another board, paging, or concurrency. Linker symbols and
-Assembly entry form the boot contract. CPU exception vectors are not installed;
-a CPU fault can hang the guest. Rust panic prints and halts without recovery.
+Assembly entry form the boot contract. EL1 exception vectors now enter a fatal
+UART diagnostic on a dedicated stack; see [EXCEPTIONS.md](EXCEPTIONS.md) for
+assumptions and limits. Rust panic still prints and halts without recovery.
 
 ## Responsibilities
 
+- exceptions.S / exceptions.rs: fatal EL1 entry, register capture, dedicated
+  diagnostic stack, UART reporting, and halt. No resumable handler yet.
 - clock.rs: read-only generic counter adapter and boot-relative time.
 - uart.rs: bytes and MMIO, including allocation-free formatted output.
 - console.rs: framing, response rendering, and interleaving a bounded task step

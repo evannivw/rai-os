@@ -4,6 +4,7 @@
 mod clock;
 mod command;
 mod console;
+mod exceptions;
 mod protocol;
 mod task;
 mod uart;
@@ -22,6 +23,8 @@ pub extern "C" fn kernel_main() -> ! {
         panic!("invalid counter frequency");
     };
     uart::write("RAI-OS: boot OK | AArch64 EL1 | UART PL011\n");
+    #[cfg(feature = "exception-self-test")]
+    exceptions::self_test();
     console::run(&clock)
 }
 

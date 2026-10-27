@@ -1,0 +1,106 @@
+# EL1 fatal exception diagnostics
+
+Implemented October 27, 2026. The kernel now installs an AArch64 exception vector
+table before entering Rust. A fatal exception reports its architectural registers
+through UART and halts. This is a diagnostic foundation for later service runtime
+work, not recovery, process isolation, preemption, or a complete interrupt system.
+
+## What happens
+
+1. `boot.S` masks interrupts, selects SP_EL1, sets the boot stack, and clears BSS.
+2. It writes the 2 KiB-aligned table address to VBAR_EL1 and executes ISB.
+3. Each of sixteen 128-byte vector slots records its slot number and branches to
+   one fatal entry. The supported normal path is slot 4: synchronous exception
+   from the current EL using SP_EL1 (table offset 0x200).
+4. Assembly masks interrupts, sets a single-CPU nested-report guard, captures
+   ESR_EL1, ELR_EL1, SPSR_EL1, FAR_EL1, and the entry SP, then selects a dedicated
+   16 KiB, 16-byte-aligned diagnostic stack before calling Rust.
+5. Rust initializes/takes over PL011, prints the captured values and handler SP,
+   and waits forever. There is no ERET, general-register restoration, unwinding,
+   automatic retry, or return to the interrupted UART writer.
+
+`EXCEPTION` and `HALTED` lines are fatal console diagnostics, not successful
+`@rai1` responses or task results. The normal boot banners and protocol are
+unchanged. A host request encountering a fault cannot count the text as success;
+normal transport validation/timeouts still apply. No graphical fault view was
+added in this increment.
+
+## Reading the output
+
+- `vector`: which entry the processor selected, not a task ID.
+- `esr`: raw syndrome; `ec` extracts the architectural exception class.
+- `elr`: exception return address. In the BRK test this is the faulting instruction.
+- `spsr`: saved processor status, including prior mode and interrupt masks.
+- `far_raw`: raw address register. Its meaning/validity depends on the exception;
+  BRK does not supply a valid fault address. Zero does not mean address zero failed.
+- `entry_sp`: SP seen at the assembly entry, not a saved lower-EL user stack.
+- `handler_sp`: SP sampled in Rust on the dedicated diagnostic stack.
+
+ESR/ELR interpretation also depends on exception type; do not treat all sixteen
+slots as synchronous faults with a valid memory address. IRQ/FIQ/SError remain
+masked during ordinary execution and have no controller/device service routine.
+
+## Verify a deliberate exception
+
+From the repository root with Rust and QEMU available:
+
+```sh
+python3 scripts/verify_exceptions.py
+python3 scripts/verify_exceptions.py --release
+```
+
+The optional `exception-self-test` Cargo feature executes BRK #0x5241 immediately
+after the boot banner. It is off by default and is not a console/panel command.
+The script builds into `target/exception-self-test/`, leaving the normal image
+used by the panel intact. Do not enable this feature (or all features) for normal
+use: that image intentionally halts rather than entering the console.
+
+Both debug and release were executed in QEMU. The verifier checks the linked ELF
+vector alignment/size and stack placement, actual vector 4, ESR 0xf2005241, class
+0x3c, saved EL1h mode/masks, and ELR equal to the named BRK instruction's ELF symbol.
+It checks both stack ranges and 16-byte alignment. After HALTED, an info request
+produces no further bytes during a 250 ms observation and QEMU remains alive.
+The script always terminates/reaps its child, including on failure.
+
+[Debug capture](evidence/2026-10-27-exceptions-debug.txt) and
+[release capture](evidence/2026-10-27-exceptions-release.txt) preserve actual UART
+output with CR/LF made explicit. Addresses differ between build profiles.
+
+Regression checks passed in each profile: 37 normal boot/console/protocol cases,
+28 task exchanges, and three task-domain tests. Fourteen panel tests (including
+four real-QEMU tests) and terminal-console integration also passed. Formatting
+and kernel Clippy passed for both the default and self-test configurations.
+
+## Safety conditions and limitations
+
+- One CPU, EL1, MMU/caches off, expected RAM/UART mappings, no service isolation.
+- The guard is zeroed before vector installation; no atomics are needed under
+  this single-CPU, masked-interrupt, non-returning contract. A nested exception
+  halts in assembly without reusing the diagnostic stack or attempting more UART.
+- The Rust entry follows AAPCS64 on a reserved aligned stack. It never returns,
+  so clobbered general registers cannot corrupt resumed execution. A future
+  resumable handler must save/restore the full required context first.
+- UART ownership is permanently transferred on a fatal exception. No Rust MMIO
+  references or locks are held across accesses. This needs redesign for SMP,
+  resumable interrupts, or concurrent drivers.
+- Diagnostic output still depends on working RAM and PL011; a fault in the
+  reporting path can halt silently. UART polling can block on broken hardware.
+  Faults before VBAR installation are not covered. The nested guard is implemented
+  but not fault-injected in these tests.
+- Only a synchronous EL1 BRK was injected. Data/instruction aborts, corrupted
+  stacks, IRQ/FIQ/SError, and lower-EL entry were not individually exercised.
+  No claim of universal fault recovery or memory protection is made.
+
+## Relation to the coordinator and future services
+
+The kernel is evolving infrastructure, not permanently fixed code. The host
+coordinator continues choosing jobs by priority; this increment changes the
+kernel's failure path only. To host isolated services inside RAI-OS, subsequent
+work still needs memory management/protection, user-mode entry, system calls,
+scheduling, IPC, and recovery rules. Exception entry is one prerequisite; the
+current fatal-only implementation cannot yet handle a syscall and resume a service.
+
+Architectural references:
+
+- [Arm AArch64 exception model](https://documentation-service.arm.com/static/67ac57fb091bfc3e0a9479cc): vector layout, exception state, VBAR and return context.
+- [Arm architecture reference manual](https://documentation-service.arm.com/static/685eb35c3cb5b729562ba389): BRK syndrome class and immediate value.

@@ -3,7 +3,7 @@
 .global _start
 .type _start, %function
 _start:
-    msr daifset, #0xf           // No interrupts until vectors exist.
+    msr daifset, #0xf           // Keep interrupts masked; IRQ handling is not implemented.
     mrs x0, CurrentEL
     cmp x0, #4
     b.ne .Lhalt                // Unsupported boot level: do not enter Rust.
@@ -18,6 +18,10 @@ _start:
     str xzr, [x0], #8
     b .Lzero
 .Lrust:
+    // VBAR requires 2 KiB alignment. Install after stack/BSS setup, before Rust.
+    ldr x0, =exception_vectors
+    msr vbar_el1, x0
+    isb
     bl kernel_main
 .Lhalt:
     wfe

@@ -1,0 +1,6 @@
+Actual QEMU UART capture, October 27, 2026. CR/LF escaped for readability.
+
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+SELF-TEST: deliberate BRK #0x5241\r\n
+EXCEPTION: vector=4; esr=0x00000000f2005241; ec=0x3c; elr=0x00000000400819c0; spsr=0x00000000600003c5; far_raw=0x0000000000000000; entry_sp=0x00000000400972c0; handler_sp=0x000000004009b1b0\r\n
+HALTED: exception is fatal; restart QEMU\r\n
