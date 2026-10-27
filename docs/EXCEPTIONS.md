@@ -73,7 +73,8 @@ and kernel Clippy passed for both the default and self-test configurations.
 
 ## Safety conditions and limitations
 
-- One CPU, EL1, MMU/caches off, expected RAM/UART mappings, no service isolation.
+- One CPU, EL1, caches off, expected RAM/UART mappings, no service isolation.
+  The later MMU increment enables identity translation before the boot banner.
 - The guard is zeroed before vector installation; no atomics are needed under
   this single-CPU, masked-interrupt, non-returning contract. A nested exception
   halts in assembly without reusing the diagnostic stack or attempting more UART.
@@ -87,16 +88,16 @@ and kernel Clippy passed for both the default and self-test configurations.
   reporting path can halt silently. UART polling can block on broken hardware.
   Faults before VBAR installation are not covered. The nested guard is implemented
   but not fault-injected in these tests.
-- Only a synchronous EL1 BRK was injected. Data/instruction aborts, corrupted
-  stacks, IRQ/FIQ/SError, and lower-EL entry were not individually exercised.
-  No claim of universal fault recovery or memory protection is made.
+- This original increment injected only synchronous EL1 BRK. The later
+  [MMU tests](MMU.md) also inject data/instruction aborts. Corrupted stacks,
+  IRQ/FIQ/SError and lower-EL entry remain untested. No universal recovery claim.
 
 ## Relation to the coordinator and future services
 
 The kernel is evolving infrastructure, not permanently fixed code. The host
 coordinator continues choosing jobs by priority; this increment changes the
 kernel's failure path only. To host isolated services inside RAI-OS, subsequent
-work still needs memory management/protection, user-mode entry, system calls,
+work still needs separate protected service mappings, user-mode entry, system calls,
 scheduling, IPC, and recovery rules. Exception entry is one prerequisite; the
 current fatal-only implementation cannot yet handle a syscall and resume a service.
 

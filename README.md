@@ -4,7 +4,7 @@ An educational AArch64 operating-system prototype in Rust, exploring how an
 AI coordinator could adapt work to goals, events, and resource limits.
 
 **Working today:** bare-metal boot in QEMU, fatal EL1 exception diagnostics, PL011 UART input/output, help/info/uptime/echo,
-a bounded structured protocol, a physical-page pool with diagnostics, a cooperative word-count task, a Rust host terminal
+a bounded structured protocol, a physical-page pool with diagnostics, active EL1 memory permissions, a cooperative word-count task, a Rust host terminal
 console, a graphical host control panel, and a bounded priority host coordinator.
 **Not implemented:** Meta integration, autonomous agents, a native guest desktop, multi-task
 scheduling, memory isolation, persistent storage, or measured efficiency gains.
@@ -34,6 +34,8 @@ python3 scripts/verify_exceptions.py
 python3 scripts/verify_exceptions.py --release
 python3 scripts/verify_memory.py
 python3 scripts/verify_memory.py --release
+python3 scripts/verify_mmu.py
+python3 scripts/verify_mmu.py --release
 python3 scripts/verify_console.py
 python3 scripts/verify_panel.py
 python3 scripts/verify_tasks.py
@@ -48,6 +50,8 @@ and 37 console/protocol cases, including the guest counter. See the guides for h
 - [Getting started](docs/GETTING_STARTED.md)
 - [Architecture and unsafe contracts](docs/ARCHITECTURE.md)
 - [UART protocol](docs/PROTOCOL.md)
+- [Kernel-to-service roadmap](docs/ROADMAP.md)
+- [MMU tables and permissions](docs/MMU.md)
 - [Physical pages and memory diagnostics](docs/MEMORY.md)
 - [Kernel exception diagnostics](docs/EXCEPTIONS.md)
 - [Kernel clock and uptime](docs/CLOCK.md)

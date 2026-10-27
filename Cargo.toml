@@ -8,6 +8,11 @@ description = "Educational AArch64 kernel for QEMU virt"
 [features]
 # Deliberately halts at boot; verification uses a separate target directory.
 exception-self-test = []
+mmu-test-write-text = []
+mmu-test-write-rodata = []
+mmu-test-write-table = []
+mmu-test-execute-data = []
+mmu-test-unmapped = []
 
 [dependencies]
 

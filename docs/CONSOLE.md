@@ -67,6 +67,7 @@ GPU, battery, or RAM usage. Future simulated budgets must be labeled explicitly.
 
 ## Memory foundation
 
-The host terminal now accepts `memory.info` and `memory.check` with no arguments.
-These query/test the guest's reserved page pool; see [MEMORY.md](MEMORY.md).
+The host terminal accepts `memory.info`, `memory.check`, and `mmu.info` with no arguments.
+These query/test the guest's reserved page pool and read active translation
+registers; see [MEMORY.md](MEMORY.md) and [MMU.md](MMU.md).
 No arbitrary addresses can be read, written, or freed through this interface.

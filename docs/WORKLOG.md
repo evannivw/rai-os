@@ -339,3 +339,45 @@ Formatting, default/self-test kernel Clippy, terminal/panel Clippy, and optimize
 host-panel compilation passed. Local documentation links and whitespace checks
 passed. No GUI code changed, so no native-window review was repeated. QEMU test
 children were cleaned up; the existing native panel was not modified or restarted.
+
+## Active EL1 page tables and permissions — October 27
+
+Used five pages from the existing physical pool to enable stage-1 translation
+before the normal boot banner. Added a pure fixed-board table builder, explicit
+linker permission boundaries, a one-time EL1 activation adapter and read-only
+mmu.info status. Code is read-only/executable; constants/tables are read-only and
+non-executable; writable data/stacks/pool and UART are non-executable. All leaves
+deny EL0 access. Tables remain owned for the lifetime of the kernel. The sparse
+identity map covers only live kernel/pool RAM and the PL011 page. Caches stay off.
+
+The pool still totals 256 pages, with five used and 251 free. memory.check now
+exercises only free pages and preserves table ownership/mappings. A zero-free
+pool returns memory_busy; current UART operations cannot create that state.
+Command execution receives the MMU snapshot from the adapter, like uptime,
+rather than reading architectural registers in command handling. No GUI change,
+new dependency, service isolation, fault recovery, AI or efficiency claim.
+
+Verification passed on the final code: two pure mapping tests; debug/release each
+ran a normal MMU boot (seven structured exchanges and one shell query) and five
+fault images. Hardware emulation rejected writes to text, constants and tables,
+execution from data, and an unmapped read. Reports matched architectural class,
+level-3 status, exact ELF fault PC/address, saved EL1h state, stack ranges and fatal
+halt. Normal ELF images contain no fault triggers. Separate build directories
+preserve normal images; combining fault features was rejected at compile time.
+[MMU.md](MMU.md) links the new captures. Earlier memory/exception evidence remains
+unchanged and describes its actual pre-MMU increment.
+
+Regression checks passed in debug/release: 37 console/protocol checks, 18 memory
+exchanges with three pure frame tests, 28 task exchanges with three pure task
+tests, and the original BRK diagnostic. Terminal integration and all fifteen
+panel tests (eleven pure, four real QEMU) passed. Formatting, default plus each
+individual fault-feature Clippy, host console/panel Clippy and the optimized host
+panel build passed. Local documentation links and git diff --check passed.
+QEMU test processes were reaped; the existing native panel was not restarted or
+visually re-reviewed because its UI did not change.
+
+Added [ROADMAP.md](ROADMAP.md) to explain the direction: resumable context,
+lower-privilege execution/syscalls, scheduling, bounded IPC, then guest services.
+This is a sequence of future increments, not a promise to complete all kernel
+infrastructure before the hackathon. The demo can integrate Meta through the host
+bridge earlier. Eligibility questions and actual contribution dates are preserved.

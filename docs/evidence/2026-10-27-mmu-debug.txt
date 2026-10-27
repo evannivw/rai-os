@@ -1,0 +1,45 @@
+MMU verification capture — October 27, 2026 — debug
+Actual QEMU UART bytes; TAB/CR/LF are rendered as escapes.
+
+[normal]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+Console ready: type help for commands\r\n
+@rai1\t1\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400ab000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t2\tok\tpage_size=4096; total_pages=256; free_pages=251; used_pages=5; pool_start=0x00000000400ab000; pool_end=0x00000000401ab000\r\n
+@rai1\t3\tok\tchecked_pages=251; exhausted=true; zeroed=true; reused=true; free_pages=251\r\n
+@rai1\t4\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400ab000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t5\terr\tbad_args\r\n
+@rai1\t6\terr\tbad_args\r\n
+@rai1\t7\tok\tprotected kernel alive\r\n
+mmu.info\r\n
+enabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400ab000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+
+[write-text]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+SELF-TEST: MMU write-text\r\n
+EXCEPTION: vector=4; esr=0x000000009600004f; ec=0x25; elr=0x000000004008441c; spsr=0x00000000600003c5; far_raw=0x0000000040080000; entry_sp=0x00000000400a5e80; handler_sp=0x00000000400a9e40\r\n
+HALTED: exception is fatal; restart QEMU\r\n
+
+[write-rodata]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+SELF-TEST: MMU write-rodata\r\n
+EXCEPTION: vector=4; esr=0x000000009600004f; ec=0x25; elr=0x000000004008674c; spsr=0x00000000600003c5; far_raw=0x0000000040091000; entry_sp=0x00000000400a5e80; handler_sp=0x00000000400a9e40\r\n
+HALTED: exception is fatal; restart QEMU\r\n
+
+[write-table]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+SELF-TEST: MMU write-table\r\n
+EXCEPTION: vector=4; esr=0x000000009600004f; ec=0x25; elr=0x00000000400885f4; spsr=0x00000000600003c5; far_raw=0x00000000400ab000; entry_sp=0x00000000400a5e80; handler_sp=0x00000000400a9e40\r\n
+HALTED: exception is fatal; restart QEMU\r\n
+
+[execute-data]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+SELF-TEST: MMU execute-data\r\n
+EXCEPTION: vector=4; esr=0x000000008600000f; ec=0x21; elr=0x0000000040096000; spsr=0x00000000600003c5; far_raw=0x0000000040096000; entry_sp=0x00000000400a5e90; handler_sp=0x00000000400a9e50\r\n
+HALTED: exception is fatal; restart QEMU\r\n
+
+[unmapped]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+SELF-TEST: MMU unmapped\r\n
+EXCEPTION: vector=4; esr=0x0000000096000007; ec=0x25; elr=0x0000000040085758; spsr=0x00000000600003c5; far_raw=0x0000000040000000; entry_sp=0x00000000400a5e80; handler_sp=0x00000000400a9e40\r\n
+HALTED: exception is fatal; restart QEMU\r\n

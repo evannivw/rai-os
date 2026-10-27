@@ -1,9 +1,10 @@
 //! Allowed operations, independent of UART and wire framing.
 use crate::memory::{Check as MemoryCheck, Memory, Snapshot as MemorySnapshot};
+use crate::mmu::Snapshot as MmuSnapshot;
 use crate::task::{Snapshot, Task};
 use core::fmt;
 
-pub const HELP: &str = "help | info | uptime | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
+pub const HELP: &str = "help | info | uptime | mmu.info | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
 pub const INFO: &str =
     "RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected";
 
@@ -11,6 +12,7 @@ pub enum Operation<'a> {
     Help,
     Info,
     Uptime,
+    MmuInfo,
     MemoryInfo,
     MemoryCheck,
     Echo(&'a str),
@@ -23,6 +25,7 @@ pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
     match line {
         "help" => Ok(Operation::Help),
         "info" => Ok(Operation::Info),
+        "mmu.info" => Ok(Operation::MmuInfo),
         "memory.info" => Ok(Operation::MemoryInfo),
         "memory.check" => Ok(Operation::MemoryCheck),
         "uptime" => Ok(Operation::Uptime),
@@ -61,6 +64,7 @@ pub enum Reply<'a> {
     Text(&'a str),
     Uptime(Uptime),
     Task(Snapshot),
+    Mmu(MmuSnapshot),
     Memory(MemorySnapshot),
     MemoryCheck(MemoryCheck),
 }
@@ -68,6 +72,7 @@ pub enum Reply<'a> {
 impl fmt::Display for Reply<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::Mmu(snapshot) => write!(f, "{snapshot}"),
             Self::Memory(snapshot) => write!(f, "{snapshot}"),
             Self::MemoryCheck(check) => write!(f, "{check}"),
             Self::Task(snapshot) => write!(f, "{snapshot}"),
@@ -86,8 +91,10 @@ pub fn execute<'a>(
     uptime: Uptime,
     task: &mut Task,
     memory: &mut Memory,
+    mmu: MmuSnapshot,
 ) -> Result<Reply<'a>, &'static str> {
     Ok(match operation {
+        Operation::MmuInfo => Reply::Mmu(mmu),
         Operation::MemoryInfo => Reply::Memory(memory.snapshot()),
         Operation::MemoryCheck => Reply::MemoryCheck(memory.check()?),
         Operation::Help => Reply::Text(HELP),

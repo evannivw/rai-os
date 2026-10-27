@@ -5,7 +5,9 @@ const FR: usize = 0x18;
 
 fn read_register(offset: usize) -> u32 {
     // SAFETY: all callers use aligned PL011 registers on the supported machine.
-    // MMU is off; the device is mapped at BASE. Volatile preserves MMIO reads.
+    // Before MMU activation the device is physical at BASE; afterward its
+    // identity mapping is Device-nGnRnE, privileged RW/NX. Accesses stay aligned.
+    // Volatile preserves MMIO reads.
     unsafe { core::ptr::read_volatile((BASE + offset) as *const u32) }
 }
 

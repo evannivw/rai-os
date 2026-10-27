@@ -95,7 +95,8 @@ execution without the host becomes the next priority. No such migration happened
 in this increment. [Fatal EL1 diagnostics](EXCEPTIONS.md), added October 27, are
 a first kernel prerequisite; they do not yet support returning to a service.
 The subsequent [physical-page pool](MEMORY.md) provides bounded allocation, while
-virtual memory and protected address spaces are still pending. The model API bridge remains on the host for the initial demo.
+[EL1 translation and permissions](MMU.md) now protect kernel regions. Separate
+service address spaces and user-mode execution are still pending. The model API bridge remains on the host for the initial demo.
 
 ## Verification
 

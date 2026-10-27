@@ -2,14 +2,16 @@
 
 An educational AArch64 kernel for QEMU, with a long-term microkernel direction.
 Current modules share privilege and memory. There is no multi-task scheduler, process IPC,
-MMU, heap, userspace, or isolated agent execution.
+heap, userspace, or isolated agent execution. EL1 stage-1 translation is active
+with one identity-mapped address space; see [MMU.md](MMU.md).
 
 ## Boot
 
 QEMU loads the ELF through -kernel. The linker places _start at 0x40080000,
 inside virt RAM starting at 0x40000000, leaving room at the start for the DTB.
 Supported configuration: virt-9.2, TCG, Cortex-A53, one CPU, 128 MiB, EL1,
-secure=off, virtualization=off, no firmware, MMU/caches off.
+secure=off, virtualization=off, no firmware. Entry requires MMU/caches off. Rust constructs page tables and
+enables the MMU before the boot banner; caches remain off.
 
 boot.S masks interrupts, checks EL1, selects SP_EL1, creates a 16-byte-aligned
 64 KiB stack, clears BSS, installs VBAR_EL1 and synchronizes instruction execution,
@@ -29,9 +31,10 @@ Configuration: 115200, 8N1, no FIFO or interrupts; the driver polls readiness.
 Polling consumes CPU while waiting and is not evidence of energy efficiency.
 
 Unsafe blocks document the mapping, alignment, and exclusive ownership:
-one CPU, interrupts disabled, MMU off, and exclusive UART access. A fatal handler
+one CPU, interrupts disabled, exclusive UART access, and either pre-MMU access
+or the active Device-nGnRnE identity mapping. A fatal handler
 may take over UART permanently without resuming the interrupted writer. These assumptions
-must be revisited for another board, paging, or concurrency. Linker symbols and
+must be revisited for another board, remapping, or concurrency. Linker symbols and
 Assembly entry form the boot contract. EL1 exception vectors now enter a fatal
 UART diagnostic on a dedicated stack; see [EXCEPTIONS.md](EXCEPTIONS.md) for
 assumptions and limits. Rust panic still prints and halts without recovery.
@@ -40,7 +43,10 @@ assumptions and limits. Rust panic still prints and halts without recovery.
 
 - memory/frames.rs: pure page-address bookkeeping; memory/mod.rs: exclusive
   linker-reserved physical pool, ownership tokens, zeroing, and diagnostics.
-  See [MEMORY.md](MEMORY.md). This is not a heap or memory protection.
+  See [MEMORY.md](MEMORY.md). This allocator is not a heap.
+- mmu/tables.rs: pure fixed-board mapping construction; mmu/mod.rs: owned
+  table pages and EL1 register activation/readback. Code is read-only/executable,
+  data is non-executable, and tables/constants are read-only/non-executable.
 - exceptions.S / exceptions.rs: fatal EL1 entry, register capture, dedicated
   diagnostic stack, UART reporting, and halt. No resumable handler yet.
 - clock.rs: read-only generic counter adapter and boot-relative time.
@@ -51,7 +57,7 @@ assumptions and limits. Rust panic still prints and halts without recovery.
   See [TASKS.md](TASKS.md); no process isolation or preemption is introduced.
 - protocol.rs: structured request parsing without execution.
 - command.rs: human-command parsing and execution of allowed operations. It
-  receives a typed uptime snapshot and never reads hardware itself.
+  receives typed uptime/MMU snapshots and delegates memory use to its owned adapter.
 - main.rs: composition and panic handling.
 
 Both parsers converge on an operation enum; neither executes arbitrary text.
@@ -61,7 +67,7 @@ observed completion. Its host placement is provisional; the target is a guest
 service above the kernel once service execution/isolation exists. See the
 [placement and migration rationale](COORDINATOR.md#why-the-coordinator-is-currently-on-the-host). Meta API calls are not implemented.
 Credentials and HTTPS will remain on the host. The guest must independently
-validate operations. Real service isolation will require virtual memory, EL0,
+validate operations. Real service isolation will require separate protected service mappings, EL0,
 syscalls, scheduling, and IPC; module names do not supply those guarantees.
 
 ## Clock
@@ -80,3 +86,5 @@ its GUI dependencies do not enter the kernel. A guest desktop remains pending.
 - https://www.qemu.org/docs/master/system/arm/virt.html
 - https://github.com/qemu/qemu/blob/master/hw/arm/virt.c
 - https://github.com/qemu/qemu/blob/master/hw/char/pl011.c
+
+See [ROADMAP.md](ROADMAP.md) for completed foundations and the next service prerequisites.

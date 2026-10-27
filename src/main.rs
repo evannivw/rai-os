@@ -6,6 +6,7 @@ mod command;
 mod console;
 mod exceptions;
 mod memory;
+mod mmu;
 mod protocol;
 mod task;
 mod uart;
@@ -23,13 +24,24 @@ pub extern "C" fn kernel_main() -> ! {
     let Some(clock) = clock else {
         panic!("invalid counter frequency");
     };
-    uart::write("RAI-OS: boot OK | AArch64 EL1 | UART PL011\n");
-    #[cfg(feature = "exception-self-test")]
-    exceptions::self_test();
     // SAFETY: sole pool construction; linker reserves it after code/data/stacks.
     // Our fixed QEMU machine maps this RAM exclusively, with one CPU and MMU off.
     let mut memory = unsafe { memory::Memory::from_linker() };
-    console::run(&clock, &mut memory)
+    // SAFETY: single EL1 CPU, masked interrupts, cold MMU/caches; linker bounds
+    // and the fixed-board mapper cover all live kernel memory plus UART.
+    let mmu = unsafe { mmu::Mmu::enable(&mut memory) };
+    uart::write("RAI-OS: boot OK | AArch64 EL1 | UART PL011\n");
+    #[cfg(feature = "exception-self-test")]
+    exceptions::self_test();
+    #[cfg(any(
+        feature = "mmu-test-write-text",
+        feature = "mmu-test-write-rodata",
+        feature = "mmu-test-write-table",
+        feature = "mmu-test-execute-data",
+        feature = "mmu-test-unmapped"
+    ))]
+    mmu::run_fault();
+    console::run(&clock, &mut memory, &mmu)
 }
 
 #[panic_handler]
@@ -39,3 +51,15 @@ fn panic(_info: &PanicInfo) -> ! {
         core::hint::spin_loop();
     }
 }
+
+// Fault-injection builds run one intentional exception at a time.
+const _: () = assert!(
+    cfg!(feature = "exception-self-test") as usize
+        + cfg!(feature = "mmu-test-write-text") as usize
+        + cfg!(feature = "mmu-test-write-rodata") as usize
+        + cfg!(feature = "mmu-test-write-table") as usize
+        + cfg!(feature = "mmu-test-execute-data") as usize
+        + cfg!(feature = "mmu-test-unmapped") as usize
+        <= 1,
+    "Select at most one fault-injection feature"
+);

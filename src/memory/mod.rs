@@ -49,7 +49,8 @@ impl fmt::Display for Check {
 impl Memory {
     /// # Safety
     /// Call exactly once per boot. The linker pool must be exclusively owned,
-    /// mapped writable ordinary RAM, with MMU off on our single-CPU QEMU board.
+    /// mapped writable ordinary RAM, on our single-CPU QEMU board. Create before
+    /// MMU activation; later mappings must preserve identity for owned pages.
     /// No firmware, DMA, stacks, or other allocator may use these addresses.
     pub unsafe fn from_linker() -> Self {
         unsafe extern "C" {
@@ -91,13 +92,15 @@ impl Memory {
     /// Bounded diagnostic: uses only owned pages, then returns all of them.
     /// An invariant failure panics and halts; it is never reported as success.
     pub fn check(&mut self) -> Result<Check, &'static str> {
-        if self.frames.free() != self.frames.total() {
+        if self.frames.free() == 0 {
             return Err("memory_busy");
         }
-        let total = self.frames.total();
+        let total = self.frames.free();
+        let mut first_address = None;
         let mut pages: [Option<Page>; MAX_PAGES] = [const { None }; MAX_PAGES];
         for (index, slot) in pages[..total].iter_mut().enumerate() {
             let mut page = self.allocate().expect("page allocation failed");
+            first_address.get_or_insert(page.address);
             assert!(page.is_zeroed(), "new page is not zeroed");
             page.write_marker(index as u64 + 1);
             *slot = Some(page);
@@ -115,7 +118,7 @@ impl Memory {
             self.release(slot.take().unwrap());
         }
         let reused = self.allocate().expect("released page unavailable");
-        assert_eq!(reused.address, self.start);
+        assert_eq!(Some(reused.address), first_address);
         assert!(reused.is_zeroed(), "reused page exposes old bytes");
         self.release(reused);
         assert_eq!(self.frames.free(), total);
@@ -123,6 +126,17 @@ impl Memory {
     }
 }
 impl Page {
+    pub(crate) fn physical_address(&self) -> usize {
+        self.address
+    }
+    /// # Safety
+    /// Page must be writable and identity mapped (or MMU off), exclusively owned,
+    /// and not yet installed in live tables. End this borrow before enabling RO.
+    pub(crate) unsafe fn table_mut(&mut self) -> &mut [u64; 512] {
+        // SAFETY: caller guarantees the mapping; allocation initializes the full
+        // aligned 4 KiB page, and &mut self prevents simultaneous safe borrows.
+        unsafe { &mut *(self.address as *mut [u64; 512]) }
+    }
     fn is_zeroed(&self) -> bool {
         // SAFETY: a live token exclusively owns this initialized 4 KiB page.
         // Volatile reads make the guest diagnostic observe actual RAM bytes.
