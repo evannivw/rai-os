@@ -1,5 +1,5 @@
 //! Native host presentation. Values change only when the session worker reports them.
-use crate::coordinator::{CAPACITY, Coordinator, JobState};
+use crate::coordinator::{CAPACITY, Coordinator, JobState, Priority};
 use crate::task_status::{State as TaskState, TaskStatus};
 use crate::worker::{Command, Event, Worker};
 use eframe::egui::{self, Color32, FontId, RichText, Stroke};
@@ -33,6 +33,7 @@ pub struct Panel {
     task_view: bool,
     queue_view: bool,
     queue: Coordinator,
+    priority: Priority,
     echo: Option<String>,
     error: Option<String>,
     pending: bool,
@@ -65,6 +66,7 @@ impl Panel {
             task_view: true,
             queue_view: true,
             queue: Coordinator::default(),
+            priority: Priority::Normal,
             echo: None,
             error: None,
             pending: false,
@@ -303,7 +305,7 @@ impl Panel {
 
     fn queue_controls(&mut self, ui: &mut egui::Ui) {
         ui.label(
-            RichText::new("FIFO COORDINATOR · HOST")
+            RichText::new("PRIORITY COORDINATOR · HOST")
                 .size(11.0)
                 .color(ACCENT),
         );
@@ -315,6 +317,12 @@ impl Panel {
                 .desired_width(308.0),
         );
         ui.horizontal(|ui| {
+            ui.label("Priority");
+            for priority in [Priority::Low, Priority::Normal, Priority::High] {
+                ui.selectable_value(&mut self.priority, priority, priority.label());
+            }
+        });
+        ui.horizontal(|ui| {
             if ui
                 .add_enabled(
                     self.queue.jobs.len() < CAPACITY,
@@ -323,7 +331,7 @@ impl Panel {
                 .clicked()
             {
                 self.error = None;
-                self.send(Command::Enqueue(self.task_text.clone()));
+                self.send(Command::Enqueue(self.task_text.clone(), self.priority));
             }
             if ui
                 .add_enabled(!self.queue.busy(), egui::Button::new("Clear queue"))
@@ -353,7 +361,7 @@ impl Panel {
             }
         });
         ui.label(if self.queue.enabled {
-            "Automatic FIFO execution"
+            "High first · FIFO for equal priorities"
         } else if self.queue.busy() {
             "Paused · finishing current job"
         } else if self.queue.jobs.iter().any(|j| j.state == JobState::Pending) {
@@ -367,10 +375,10 @@ impl Panel {
             .show(ui, |ui| {
                 for (index, job) in self.queue.jobs.iter().enumerate() {
                     ui.label(format!(
-                        "Job {} · {:?} · {} bytes",
+                        "Job {} · {} · {:?}",
                         index + 1,
-                        job.state,
-                        job.text.len()
+                        job.priority.label(),
+                        job.state
                     ));
                     if let Some(task) = job.observed {
                         let count = if job.state == JobState::Completed {
@@ -389,7 +397,7 @@ impl Panel {
                     }
                 }
             });
-        ui.label(RichText::new("Max 8 jobs · 192 ASCII bytes each\nPause lets the current job finish.\nGuest learning pace: 8 bytes / 100 ms").size(10.0).color(MUTED));
+        ui.label(RichText::new("Max 8 jobs · 192 ASCII bytes each\nNo interruption of the current job.\nGuest learning pace: 8 bytes / 100 ms").size(10.0).color(MUTED));
     }
 
     fn device(&mut self, ui: &mut egui::Ui) {

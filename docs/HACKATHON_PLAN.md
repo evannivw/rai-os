@@ -44,7 +44,7 @@ The first correctness dataset and verifier implementation sequence are in
 [DEMO_FIXTURE.md](DEMO_FIXTURE.md); candidate verification is still pending.
 The [graphical host panel](PANEL.md) displays actual kernel results; agent
 decisions remain future work. A [deterministic host coordinator](COORDINATOR.md)
-now sequences word-count jobs using observed completion. It shares the transport used by the
+now sequences word-count jobs by priority, using observed completion. It shares the transport used by the
 [terminal console](CONSOLE.md).
 
 Current priority, revised at the user's request on October 26: advance the kernel

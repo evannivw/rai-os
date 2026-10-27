@@ -1,7 +1,24 @@
-//! Bounded FIFO policy. No threads, UART, UI, or model provider dependencies.
+//! Bounded priority policy with FIFO ties. No threads, UART, UI, or model provider dependencies.
 use crate::task_status::{State, TaskStatus};
 
 pub const CAPACITY: usize = 8;
+/// Declaration order defines increasing urgency; this is a host dispatch hint.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, PartialOrd, Ord)]
+pub enum Priority {
+    Low,
+    #[default]
+    Normal,
+    High,
+}
+impl Priority {
+    pub fn label(self) -> &'static str {
+        match self {
+            Self::Low => "Low",
+            Self::Normal => "Normal",
+            Self::High => "High",
+        }
+    }
+}
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum JobState {
     Pending,
@@ -14,6 +31,7 @@ pub enum JobState {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Job {
     pub text: String,
+    pub priority: Priority,
     pub state: JobState,
     pub observed: Option<TaskStatus>,
 }
@@ -31,7 +49,7 @@ impl Coordinator {
             .iter()
             .position(|job| matches!(job.state, JobState::Starting | JobState::Running))
     }
-    pub fn add(&mut self, text: String) -> Result<(), String> {
+    pub fn add(&mut self, text: String, priority: Priority) -> Result<(), String> {
         if self.jobs.len() == CAPACITY {
             return Err("Queue full: clear finished jobs first".into());
         }
@@ -40,6 +58,7 @@ impl Coordinator {
         }
         self.jobs.push(Job {
             text,
+            priority,
             state: JobState::Pending,
             observed: None,
         });
@@ -70,7 +89,17 @@ impl Coordinator {
         if !self.enabled || self.active().is_some() {
             return None;
         }
-        if let Some(job) = self.jobs.iter_mut().find(|j| j.state == JobState::Pending) {
+        // Keep insertion order in storage. Highest priority wins; earliest index
+        // breaks ties. Active work is never displaced by a new arrival.
+        let next = self
+            .jobs
+            .iter()
+            .enumerate()
+            .filter(|(_, job)| job.state == JobState::Pending)
+            .min_by_key(|(index, job)| (std::cmp::Reverse(job.priority), *index))
+            .map(|(index, _)| index);
+        if let Some(index) = next {
+            let job = &mut self.jobs[index];
             job.state = JobState::Starting;
             Some(job.text.clone())
         } else {
@@ -125,10 +154,52 @@ mod tests {
     }
     fn queue() -> Coordinator {
         let mut q = Coordinator::default();
-        q.add("first".into()).unwrap();
-        q.add("second".into()).unwrap();
+        q.add("first".into(), Priority::Normal).unwrap();
+        q.add("second".into(), Priority::Normal).unwrap();
         q.resume(task(0, State::Idle, 0, 0)).unwrap();
         q
+    }
+    #[test]
+    fn priority_orders_pending_jobs_with_fifo_ties() {
+        let mut q = Coordinator::default();
+        for (text, priority) in [
+            ("low", Priority::Low),
+            ("high1", Priority::High),
+            ("normal", Priority::Normal),
+            ("high2", Priority::High),
+        ] {
+            q.add(text.into(), priority).unwrap();
+        }
+        q.resume(task(0, State::Idle, 0, 0)).unwrap();
+        for (index, text) in ["high1", "high2", "normal", "low"].iter().enumerate() {
+            assert_eq!(q.take_next().as_deref(), Some(*text));
+            q.observe(task(
+                index as u32 + 1,
+                State::Completed,
+                text.len(),
+                text.len(),
+            ))
+            .unwrap();
+        }
+        assert!(q.take_next().is_none());
+        assert_eq!(q.jobs[0].text, "low"); // Display identity remains stable.
+    }
+    #[test]
+    fn urgent_arrival_waits_for_active_job_and_respects_pause() {
+        let mut q = Coordinator::default();
+        q.add("active".into(), Priority::Low).unwrap();
+        q.resume(task(0, State::Idle, 0, 0)).unwrap();
+        assert_eq!(q.take_next().as_deref(), Some("active"));
+        q.observe(task(1, State::Running, 0, 6)).unwrap();
+        q.add("waiting".into(), Priority::Normal).unwrap();
+        q.add("urgent".into(), Priority::High).unwrap();
+        assert!(q.take_next().is_none());
+        q.pause();
+        q.observe(task(1, State::Completed, 6, 6)).unwrap();
+        assert!(q.take_next().is_none());
+        q.resume(task(1, State::Completed, 6, 6)).unwrap();
+        assert_eq!(q.take_next().as_deref(), Some("urgent"));
+        assert_eq!(q.jobs[1].state, JobState::Pending);
     }
     #[test]
     fn fifo_requires_observed_completion() {
@@ -169,12 +240,12 @@ mod tests {
     #[test]
     fn limits_manual_ownership_and_empty_completion() {
         let mut q = Coordinator::default();
-        assert!(q.add("x".repeat(193)).is_err());
-        assert!(q.add("tab\t".into()).is_err());
+        assert!(q.add("x".repeat(193), Priority::Normal).is_err());
+        assert!(q.add("tab\t".into(), Priority::Normal).is_err());
         for _ in 0..CAPACITY {
-            q.add(String::new()).unwrap();
+            q.add(String::new(), Priority::Normal).unwrap();
         }
-        assert!(q.add(String::new()).is_err());
+        assert!(q.add(String::new(), Priority::Normal).is_err());
         assert!(q.resume(task(1, State::Running, 0, 5)).is_err());
         q.resume(task(1, State::Completed, 5, 5)).unwrap();
         for id in 2..10 {

@@ -1,5 +1,9 @@
 //! Session coordinator. Only this thread owns QEMU and performs blocking UART I/O.
-use crate::{coordinator::Coordinator, model, qemu, task_status::TaskStatus};
+use crate::{
+    coordinator::{Coordinator, Priority},
+    model, qemu,
+    task_status::TaskStatus,
+};
 use std::sync::{
     Arc,
     atomic::{AtomicBool, Ordering},
@@ -12,7 +16,7 @@ pub enum Command {
     Start,
     Stop,
     Request(String),
-    Enqueue(String),
+    Enqueue(String, Priority),
     RunQueue,
     PauseQueue,
     ClearQueue,
@@ -155,8 +159,8 @@ fn run(
                     last_sample = None;
                     outgoing.send(Event::Stopped).map_err(|_| "View closed")?;
                 }
-                Some(Command::Enqueue(text)) => {
-                    if let Err(error) = queue.add(text) {
+                Some(Command::Enqueue(text, priority)) => {
+                    if let Err(error) = queue.add(text, priority) {
                         outgoing
                             .send(Event::Rejected(error))
                             .map_err(|_| "View closed")?;
@@ -366,13 +370,50 @@ mod tests {
 
     #[test]
     #[ignore = "Requires real QEMU, built kernel, and repository-root working directory"]
+    fn real_qemu_priority_order() {
+        use crate::coordinator::JobState;
+        let worker = Worker::new("target/aarch64-unknown-none-softfloat/debug/rai-os".into());
+        worker.send(Command::Start).unwrap();
+        wait(&worker, |e| matches!(e, Event::Started(_)));
+        for (text, priority) in [
+            ("one", Priority::Low),
+            ("two words", Priority::High),
+            ("three short words", Priority::Normal),
+            ("four very short words", Priority::High),
+        ] {
+            worker
+                .send(Command::Enqueue(text.into(), priority))
+                .unwrap();
+            wait(&worker, |e| matches!(e, Event::Queue(_)));
+        }
+        worker.send(Command::RunQueue).unwrap();
+        let done = wait(
+            &worker,
+            |e| matches!(e, Event::Queue(q) if q.jobs.len() == 4 && q.jobs.iter().all(|j| j.state == JobState::Completed)),
+        );
+        if let Event::Queue(q) = done {
+            // Guest IDs reveal actual execution order, independent of row order.
+            assert_eq!(
+                q.jobs
+                    .iter()
+                    .map(|j| (j.observed.unwrap().id, j.observed.unwrap().words))
+                    .collect::<Vec<_>>(),
+                [(4, 1), (1, 2), (3, 3), (2, 4)]
+            );
+        }
+    }
+
+    #[test]
+    #[ignore = "Requires real QEMU, built kernel, and repository-root working directory"]
     fn real_qemu_fifo_pause_and_disconnect() {
         use crate::coordinator::JobState;
         let worker = Worker::new("target/aarch64-unknown-none-softfloat/debug/rai-os".into());
         worker.send(Command::Start).unwrap();
         wait(&worker, |e| matches!(e, Event::Started(_)));
         for text in ["one two", "three four five", ""] {
-            worker.send(Command::Enqueue(text.into())).unwrap();
+            worker
+                .send(Command::Enqueue(text.into(), Priority::Normal))
+                .unwrap();
             wait(&worker, |e| matches!(e, Event::Queue(_)));
         }
         worker.send(Command::RunQueue).unwrap();
@@ -396,7 +437,9 @@ mod tests {
             |e| matches!(e, Event::Queue(q) if q.jobs.is_empty()),
         );
         for text in ["word ".repeat(38), "pending".into()] {
-            worker.send(Command::Enqueue(text)).unwrap();
+            worker
+                .send(Command::Enqueue(text, Priority::Normal))
+                .unwrap();
             wait(&worker, |e| matches!(e, Event::Queue(_)));
         }
         worker.send(Command::RunQueue).unwrap();
@@ -424,7 +467,7 @@ mod tests {
             |e| matches!(e, Event::Reply { payload, .. } if payload.contains("task_id=4; state=completed")),
         );
         worker
-            .send(Command::Enqueue("still pending".into()))
+            .send(Command::Enqueue("still pending".into(), Priority::Normal))
             .unwrap();
         wait(
             &worker,

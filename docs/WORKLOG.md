@@ -246,3 +246,32 @@ readings and retained historical results. QEMU was stopped and the panel left
 open. Retained the [window capture](evidence/2026-10-26-coordinator.png) and
 [test output](evidence/2026-10-26-coordinator-tests.txt). The unchanged kernel
 verification suites were not rerun for this host-only increment.
+
+## Host dispatch priorities — October 26
+
+Added typed Low/Normal/High priority (Normal default), captured per enqueue.
+The coordinator chooses the highest pending priority with stable FIFO ties.
+Existing active work is never preempted; later urgent arrivals and pause/resume
+retain the same ownership and observed-completion rules. Storage and displayed
+row numbers remain in insertion order; actual guest IDs show dispatch order.
+The panel exposes the priority selector and each job's priority.
+
+Documented why host placement is provisional and how agents, coordination,
+executors, and kernel mechanisms differ. Guest-native service execution and
+isolation require additional kernel facilities; moving a module alone would not
+supply them. No kernel/protocol changes, model calls, CPU scheduler priority,
+new dependencies, or efficiency claims were introduced.
+
+Verification: fourteen tests passed (ten pure host tests and four real-QEMU
+checks). New pure tests cover descending priority, FIFO ties, stable row identity,
+and an urgent arrival during active work across pause/resume. A live test enqueues
+Low/High/Normal/High and observes guest IDs 4/1/3/2 in those rows, with expected
+counts 1/2/3/4. Earlier queue, interruption, cancellation, clock, and transport
+checks still pass. Debug/release builds, formatting, all-target Clippy, local
+Markdown links, and git diff --check passed. Unchanged kernel suites were not rerun.
+
+Native review added Low before High, then observed High execute as guest #1 and
+Low as guest #2, both completing 149 bytes with 27 words. Saved the
+[window](evidence/2026-10-26-priority.png) and
+[test output](evidence/2026-10-26-priority-tests.txt). Stop cleared live readings;
+the panel remains open with historical results and QEMU stopped.

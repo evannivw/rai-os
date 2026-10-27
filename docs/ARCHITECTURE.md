@@ -49,8 +49,10 @@ a CPU fault can hang the guest. Rust panic prints and halts without recovery.
 
 Both parsers converge on an operation enum; neither executes arbitrary text.
 See [PROTOCOL.md](PROTOCOL.md). The [host console](CONSOLE.md) already transports
-requests over UART. The [small host coordinator](COORDINATOR.md) sequences a bounded FIFO queue using
-observed completion. Meta API calls are not implemented.
+requests over UART. The [small host coordinator](COORDINATOR.md) sequences a bounded priority queue (FIFO ties) using
+observed completion. Its host placement is provisional; the target is a guest
+service above the kernel once service execution/isolation exists. See the
+[placement and migration rationale](COORDINATOR.md#why-the-coordinator-is-currently-on-the-host). Meta API calls are not implemented.
 Credentials and HTTPS will remain on the host. The guest must independently
 validate operations. Real service isolation will require virtual memory, EL0,
 syscalls, scheduling, and IPC; module names do not supply those guarantees.
