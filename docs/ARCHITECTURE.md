@@ -57,7 +57,9 @@ The kernel samples the Arm generic physical counter before UART initialization
 and supplies measured uptime to commands. The adapter is owned by kernel_main;
 there is no mutable global clock. See [CLOCK.md](CLOCK.md) for access assumptions,
 frequency conversion, real-QEMU checks, and the distinction from timer interrupts.
-The host console transports uptime like other commands. The GUI remains pending.
+The host console and [graphical panel](PANEL.md) transport uptime like other
+commands through shared host adapters. The panel is a separate native application;
+its GUI dependencies do not enter the kernel. A guest desktop remains pending.
 
 ## References
 

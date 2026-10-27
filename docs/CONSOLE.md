@@ -26,10 +26,10 @@ console remains available through cargo run --locked.
 
 ## Boundaries
 
-- examples/control_console/model.rs: pure operations and protocol validation;
+- host/shared/model.rs: pure operations and protocol validation;
   no process, terminal, or hardware access. Rejects injected separators,
   oversized requests, mismatched reply IDs, and terminal controls in responses.
-- examples/control_console/qemu.rs: process/UART adapter. Requires both boot
+- host/shared/qemu.rs: process/UART adapter. Requires both boot
   banner and Console ready, with a 10-second timeout and one pending request.
   A transport failure closes the session rather than retrying side effects.
 - examples/control_console/view.rs: presentation of observed results.
@@ -58,7 +58,8 @@ is checked at startup and on exchanges, not continuously; there is no automatic
 reconnection. The adapter trusts the local QEMU executable and project kernel;
 it is not a sandbox for hostile host programs.
 
-The user wants a graphical host interface. Design it around real events and
-state before adding constrained jobs and a Meta coordinator. Agent permissions,
+The [graphical host panel](PANEL.md) now shares these model/transport modules.
+It renders actual boot, clock, and command results before constrained jobs or
+a Meta coordinator are introduced. Agent permissions,
 resource budgets, and AI are pending. QEMU configuration is not measured CPU,
 GPU, battery, or RAM usage. Future simulated budgets must be labeled explicitly.

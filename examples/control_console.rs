@@ -1,7 +1,7 @@
 //! Host application: composition root, separate from the bare-metal kernel.
-#[path = "control_console/model.rs"]
+#[path = "../host/shared/model.rs"]
 mod model;
-#[path = "control_console/qemu.rs"]
+#[path = "../host/shared/qemu.rs"]
 mod qemu;
 #[path = "control_console/view.rs"]
 mod view;

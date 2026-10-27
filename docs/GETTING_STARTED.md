@@ -78,3 +78,10 @@ bare-metal integration test; use the real-QEMU checks above.
   target/verification/uart.log (or uart-release.log). Empty output can mean
   execution never reached Rust.
 - Boot requires EL1. Rust panic prints a message and halts; restart QEMU.
+
+## Graphical host panel
+
+Run `sh scripts/panel.sh` from the repository root. Select Start kernel to boot
+the real guest, Send message for an echo round trip, and Stop kernel to finish.
+The mobile-shaped view is rendered by the host, not the guest kernel.
+See [PANEL.md](PANEL.md) for dependencies, architecture, and verification.

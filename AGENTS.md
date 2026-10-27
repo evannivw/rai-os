@@ -15,8 +15,9 @@
 - Explain what each step will execute and why, in concise Spanish, before acting.
 - Teach one idea per increment. Avoid advancing several phases without explanation.
 - Report changes, actual verification results, limitations, and the next step.
-- The current terminal console is a host tool. The user wants a graphical host
-  interface next; do not confuse it with a native kernel desktop.
+- The terminal console and graphical Device Lab panel are host tools. The
+  project targets a future mobile OS; do not describe the host-rendered portrait
+  view as a native kernel desktop or support for a physical phone.
 - Show real QEMU results. Clearly label simulated budgets and unimplemented AI
   or telemetry. Do not fabricate battery, GPU, memory usage, or benchmark wins.
 

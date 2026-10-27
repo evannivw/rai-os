@@ -155,3 +155,37 @@ do not establish timing precision, energy efficiency, or performance superiority
 No scheduler, interrupts, graphical UI, process isolation, or Meta integration was
 added. The next visible increment is a graphical host panel connected to QEMU;
 it will not be described as a native guest desktop.
+
+## Graphical Device Lab panel — October 26
+
+Added a native Rust host panel with a portrait mobile preview, Start/Stop, live
+guest uptime, System info, echo, and a hideable activity log. The panel is a
+separate Cargo package using pinned eframe/egui; no GUI dependency enters the
+no_std kernel. Shared command/transport adapters moved into host/shared and
+remain in use by the terminal console. A background worker owns QEMU and
+serializes requests. All displayed guest values come from observed responses.
+
+The user clarified a long-term mobile OS goal. The panel is explicitly labeled
+host-rendered; QEMU virt is not a Samsung emulator. The project contains our
+small custom kernel, not an Android/Linux kernel. Phone drivers, a native guest
+display, AI services, and efficiency comparisons remain future work.
+
+Verification: debug and release host builds, formatting, panel Clippy, and five
+panel tests passed. Tests include real QEMU lifecycle/clock/echo/rejection/restart
+and a missing-ELF failure. The existing terminal integration also passed after
+the shared-file move. Native window review verified Start, advancing guest time,
+System info, hiding/restoring Activity, editable echo, invalid Unicode rejection
+and recovery, and closing a running session. A subsequent process check found
+no remaining panel or QEMU process. The launcher script and local macOS app bundle
+were also opened successfully. No kernel source/build settings were changed.
+
+The first visual review exposed clipped lower controls; the card was compacted
+and System info moved to the top bar. macOS package replacement uses a new file
+and a local ad-hoc signature to avoid stale executable-signature caching; this
+is not a notarized standalone distribution. See [PANEL.md](PANEL.md).
+
+Retained [native panel capture](evidence/2026-10-26-panel.png) and
+[panel test output](evidence/2026-10-26-panel-tests.txt). The final native review
+also confirmed Stop returns to OFFLINE and clears live readings. The panel was
+left open with QEMU stopped. Local documentation links and whitespace checks
+passed before publication.

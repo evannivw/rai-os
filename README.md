@@ -4,8 +4,8 @@ An educational AArch64 operating-system prototype in Rust, exploring how an
 AI coordinator could adapt work to goals, events, and resource limits.
 
 **Working today:** bare-metal boot in QEMU, PL011 UART input/output, help/info/uptime/echo,
-a bounded structured protocol, and a Rust host terminal console.
-**Not implemented:** Meta integration, autonomous agents, graphical UI, task
+a bounded structured protocol, a Rust host terminal console, and a graphical host control panel.
+**Not implemented:** Meta integration, autonomous agents, a native guest desktop, task
 scheduling, memory isolation, persistent storage, or measured efficiency gains.
 
 ## Run
@@ -16,6 +16,7 @@ Install Rustup and QEMU (9.2 or newer with virt-9.2), then:
 . "$HOME/.cargo/env"
 cargo run --locked             # Direct kernel UART console
 sh scripts/console.sh          # Rust host terminal controlling QEMU
+sh scripts/panel.sh            # Native graphical host panel
 ```
 
 The repository pins Rust 1.90.0 and aarch64-unknown-none-softfloat.
@@ -29,6 +30,7 @@ cargo clippy --bin rai-os --locked -- -D warnings
 python3 scripts/verify.py
 python3 scripts/verify.py --release
 python3 scripts/verify_console.py
+python3 scripts/verify_panel.py
 ```
 
 Python 3 is required for integration checks. Each kernel run verifies real boot
@@ -41,6 +43,7 @@ and 37 console/protocol cases, including the guest counter. See the guides for h
 - [UART protocol](docs/PROTOCOL.md)
 - [Kernel clock and uptime](docs/CLOCK.md)
 - [Host console](docs/CONSOLE.md)
+- [Graphical Device Lab panel](docs/PANEL.md)
 - [Hackathon plan](docs/HACKATHON_PLAN.md)
 - [Proposed comparison experiment](docs/DEMO_EXPERIMENT.md)
 - [Required demo result contract](docs/DEMO_ACCEPTANCE.md)

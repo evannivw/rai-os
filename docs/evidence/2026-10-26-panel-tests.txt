@@ -1,0 +1,11 @@
+
+running 5 tests
+test model::tests::rejects_injection_and_oversized_requests ... ok
+test model::tests::rejects_wrong_request_and_malformed_responses ... ok
+test worker::tests::missing_kernel_never_reports_connected ... ok
+test worker::tests::real_qemu_lifecycle ... ok
+test worker::tests::validates_measured_uptime ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.46s
+
+qemu-system-aarch64: could not load kernel '/nonexistent/rai-panel-kernel'

@@ -42,12 +42,13 @@ coordinator. Define a concrete task and success conditions before implementing i
 The candidate comparison is specified in [DEMO_EXPERIMENT.md](DEMO_EXPERIMENT.md).
 The first correctness dataset and verifier implementation sequence are in
 [DEMO_FIXTURE.md](DEMO_FIXTURE.md); candidate verification is still pending.
-A graphical host UI should make actual decisions and results visible. The existing
-[terminal console](CONSOLE.md) is the transport foundation, not that graphical UI.
+The [graphical host panel](PANEL.md) displays actual kernel results; agent
+decisions remain future work. It shares the transport used by the
+[terminal console](CONSOLE.md).
 
 Current priority, revised at the user's request on October 26: advance the kernel
 foundation and visible controls before continuing the demo verifier. The kernel
-now exposes measured uptime. Next build a graphical host control panel for real
+now exposes measured uptime. A [graphical host control panel](PANEL.md) now exposes real
 QEMU boot, info, uptime, and echo. This is a host UI, not a guest desktop. The
 correctness fixture is retained; verifier implementation resumes with demo jobs.
 

@@ -3,3 +3,6 @@
 # Host credentials must never be committed.
 .env
 .env.*
+
+# Standalone host manifest default build output.
+/host/panel/target/
