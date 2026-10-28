@@ -3,7 +3,8 @@
 Implemented October 28, 2026. The kernel can now handle one explicitly allowed
 synchronous SVC and resume the interrupted EL1h code. It preserves the integer
 execution state used by this runtime. Other exceptions remain fatal. This is a
-prerequisite for service calls, not an EL0 syscall ABI or a scheduler.
+prerequisite for service calls, not by itself an EL0 syscall ABI or a scheduler. The subsequent
+[EL0 program increment](USER_PROGRAM.md) reuses and extends this frame.
 
 ## Try it
 
@@ -39,8 +40,9 @@ This diagnostic is bounded, synchronous and does not use the physical-page pool.
    the frame. Assembly restores ELR/SPSR, clears the guard, restores x0-x30/SP,
    and executes ERET. For SVC, ELR already points after the instruction: adding
    four would incorrectly skip an instruction.
-6. Every other event uses the existing fatal report and halt. Slots other than
-   4 retain their fatal-only entry path; lower-EL runtime is still unsupported.
+6. Other EL1 events use the fatal report and halt. The later EL0 increment adds
+   a separate slot-8 path for user syscalls and contained user faults. Other slots
+   retain fatal-only entry.
 
 The register layout is explicit in `src/context/mod.rs` with compile-time size
 and offset assertions matching `src/exceptions.S`. The acceptance policy is
@@ -63,9 +65,9 @@ commands nor host requests supply arbitrary PCs, saved status or raw contexts.
   nested entry may write another frame before checking it; stack-save faults are
   not covered. The guard resets only for the approved return. Nested faults and
   stack corruption have not been injected in this increment.
-- No SIMD/FPU state, SP_EL0, process address-space state or thread-local registers
-  are saved. The target is `aarch64-unknown-none-softfloat`; the runtime and probe
-  do not use SIMD/FPU or EL0. This frame is not yet a complete process context.
+- The later EL0 increment stores SP_EL0 in the former reserved frame slot.
+  No SIMD/FPU, process address-space state or thread-local registers are saved. The target is `aarch64-unknown-none-softfloat`; the runtime and probe
+  do not use SIMD/FPU. This frame is not yet a complete process context.
 - IRQ/FIQ/SError servicing, preemption, recovery from memory faults and arbitrary
   exception returns remain unsupported. No isolation or performance gain is claimed.
 - The allowlist constrains this diagnostic, not malicious privileged kernel code.
@@ -99,8 +101,8 @@ and [release](evidence/2026-10-28-context-release.txt).
 
 The original BRK and all five MMU fault tests are regression checks for this
 entry change. Their earlier captures remain historical; current test results
-are recorded in [WORKLOG.md](WORKLOG.md). Next: one lower-privilege program with
-explicit memory ownership and a bounded kernel call; see [ROADMAP.md](ROADMAP.md).
+are recorded in [WORKLOG.md](WORKLOG.md). That lower-privilege increment is now implemented in [USER_PROGRAM.md](USER_PROGRAM.md);
+see [ROADMAP.md](ROADMAP.md) for subsequent scheduling/service work.
 
 Reference: [Arm AArch64 exception model](https://documentation-service.arm.com/static/63a065c41d698c4dc521cb1c)
 for saved return state, SVC return address and ERET semantics.

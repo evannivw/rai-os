@@ -59,11 +59,12 @@ without revisiting reservations.
 | Boot data below 0x40080000 | Excluded from the pool |
 | Kernel text, vectors, read-only data, data, BSS | Excluded |
 | 64 KiB normal stack and 16 KiB exception stack | Excluded |
+| User code/constants, 8 KiB user stack and two guard pages | Excluded; separately linker-reserved |
 | Alignment padding up to the next 4096-byte boundary | Excluded |
 | `.page_pool`, next 1 MiB | Managed as 256 pages |
 | Remaining QEMU RAM | Unmanaged; not reported as free |
 
-The linker places `.page_pool` as NOLOAD after both stacks and exports its start
+The linker places `.page_pool` as NOLOAD after the kernel stacks and user reservations and exports its start
 and exclusive end. Assertions check alignment, non-overlap with the preceding
 kernel regions, and the initial MMU window limit (0x40200000). The verifier independently reads
 ELF symbols and compares the live pool addresses against them. No page is handed

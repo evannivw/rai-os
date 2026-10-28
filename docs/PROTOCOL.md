@@ -17,7 +17,7 @@ Examples use literal escape notation for actual TAB, LF, and CR bytes:
 ```
 
 Grammar: @rai1 TAB id TAB operation [TAB argument] line-ending.
-help/info/uptime/memory.info/memory.check/mmu.info/context.check require exactly three fields; echo requires four, with a possibly
+help/info/uptime/memory.info/memory.check/mmu.info/context.check/user.run require exactly three fields; echo requires four, with a possibly
 empty argument. Names are case-sensitive. ID: 1-10 ASCII digits with value
 1..4294967295; leading zeros are allowed and preserved. IDs are not remembered.
 
@@ -97,6 +97,23 @@ status. A mismatch returns `context_corrupt`; a fatal fault halts with the usual
 diagnostic and no success reply. There are no user-supplied context addresses or
 register values. See [CONTEXT.md](CONTEXT.md) for safety and scope. Older kernels
 return unknown_operation for this additive v1 operation.
+
+## Built-in user program
+
+`user.run` has no argument (exactly three machine fields, or the shell command).
+It synchronously runs the linked EL0 program; it does not accept source, binary
+paths or raw addresses. Normal payload:
+
+```text
+mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+```
+
+A contained program fault returns a report with `mode=EL0; state=faulted`, followed
+by `esr`, `pc`, `far_raw`, `spsr`, `sp` (each 0x plus 16 lowercase hex digits) and
+`syscalls`. An outer `ok` means the run request was handled, not that the program
+succeeded. Check state and exit code. Reentrant invocation returns `user_busy`;
+normal single-request UART use cannot trigger it. No preemption exists; only the
+built-in bounded program is supported. See [USER_PROGRAM.md](USER_PROGRAM.md).
 
 ## Errors
 

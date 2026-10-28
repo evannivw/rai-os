@@ -61,8 +61,12 @@ addresses, and disabled TTBR1 walks. No address randomization or aliases.
 | Constants and five table pages | Read only, no execution | Normal non-cacheable |
 | Data, BSS, both stacks, remaining pool | Read / write, no execution | Normal non-cacheable |
 | One PL011 page at 0x09000000 | Read / write, no execution | Device-nGnRnE |
+| User code/constants | Read only, no execution at EL1 | Normal non-cacheable |
+| User stack | Read / write, no execution | Normal non-cacheable |
 
-All leaves deny EL0 access and set unprivileged execute-never. WXN additionally
+The original mapping denied EL0 on every leaf. The subsequent
+[EL0 increment](USER_PROGRAM.md) adds explicit user regions; kernel/device leaves
+still deny EL0 and set unprivileged execute-never. WXN additionally
 forbids execution of writable mappings. Instruction/data caches remain disabled;
 this increment makes no speed or battery claim.
 
@@ -70,7 +74,8 @@ Only RAM from 0x40080000 through the exclusive pool end is mapped. The linker
 requires the entire kernel/stacks/pool to fit below 0x40200000. Low RAM containing
 the DTB, the rest of the 128 MiB RAM, and other device ranges are unmapped. This is
 a deliberate small initial window, not general device discovery. All section
-permission boundaries are 4 KiB aligned; stack boundaries are not guard pages.
+permission boundaries are 4 KiB aligned. Kernel stacks still lack guard pages;
+the later user stack has an unmapped guard page on each side.
 
 Five allocator-owned pages (20 KiB) hold one L1 root and two L2/L3 branches: one
 for UART, one for RAM. Unused entries remain invalid. The MMU owner keeps these
@@ -98,9 +103,10 @@ normal RAM are non-cacheable. No runtime table mutation, remapping or cache
 maintenance API is provided. Those would need new ordering/ownership contracts.
 
 Permissions catch selected illegal accesses; privileged kernel code can still
-change MMU registers. Every module still shares EL1 privilege. There are no
-separate service mappings, guard pages, ASIDs, page-fault recovery, demand paging,
-EL0 programs or syscall returns. The fault handler still halts the whole guest.
+change MMU registers. Kernel modules still share EL1 privilege. The later built-in EL0 program has
+restricted mappings, write/exit syscalls and contained synchronous faults. There
+are no separate service address spaces, ASIDs, demand paging or resumption of
+faulting user instructions. Unexpected kernel faults still halt the whole guest.
 The next steps are in [ROADMAP.md](ROADMAP.md).
 
 Architectural references:

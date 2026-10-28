@@ -2,7 +2,7 @@
 mod tables;
 use crate::memory::{Memory, Page};
 use core::{arch::asm, fmt, ptr};
-use tables::{Layout, MAIR, TABLE_COUNT, TCR};
+use tables::{Layout, MAIR, TABLE_COUNT, TCR, UserLayout};
 
 pub struct Mmu {
     // Retain ownership forever; no release, mutation, or remapping API exists.
@@ -49,12 +49,24 @@ impl Mmu {
             static __text_start: u8;
             static __text_end: u8;
             static __rodata_end: u8;
+            static __user_text_start: u8;
+            static __user_text_end: u8;
+            static __user_rodata_end: u8;
+            static __user_stack_bottom: u8;
+            static __user_stack_top: u8;
         }
         let layout = Layout {
             text_start: ptr::addr_of!(__text_start) as usize,
             text_end: ptr::addr_of!(__text_end) as usize,
             rodata_end: ptr::addr_of!(__rodata_end) as usize,
             ram_end: memory.snapshot().end,
+            user: UserLayout {
+                text_start: ptr::addr_of!(__user_text_start) as usize,
+                text_end: ptr::addr_of!(__user_text_end) as usize,
+                rodata_end: ptr::addr_of!(__user_rodata_end) as usize,
+                stack_start: ptr::addr_of!(__user_stack_bottom) as usize,
+                stack_end: ptr::addr_of!(__user_stack_top) as usize,
+            },
         };
         let mut pages = core::array::from_fn::<_, TABLE_COUNT, _>(|_| {
             memory.allocate().expect("MMU table allocation failed")

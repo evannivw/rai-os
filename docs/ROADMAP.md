@@ -2,8 +2,8 @@
 
 Status: October 28, 2026. Each step should produce a small, independently
 observable result before the next. The kernel supplies mechanisms and enforces
-access; a future coordinator chooses policy above it. Current Rust modules are
-not isolated processes. The existing coordinator still runs on the host.
+access; a future coordinator chooses policy above it. Kernel Rust modules are
+not isolated processes. One built-in program now runs with lower privilege. The existing coordinator still runs on the host.
 
 | Step | Status | What it enables / how to observe it |
 | --- | --- | --- |
@@ -13,8 +13,8 @@ not isolated processes. The existing coordinator still runs on the host.
 | Physical-page ownership | Done | Allocate, zero, test and release a reserved pool without overlapping kernel regions. |
 | Translation tables and permissions | Done | MMU rejects forbidden writes, instruction fetches and unmapped reads. |
 | Resumable EL1 exception context | Done for one controlled SVC | Save/restore integer state and resume; other events remain fatal. See [CONTEXT.md](CONTEXT.md). |
-| One lower-privilege program and bounded syscall | Next proposed increment | An EL0 program requests a kernel operation and resumes; forbidden access is denied. Requires explicit service memory ownership/mappings. |
-| Timer interrupt and scheduling | Planned | Save/switch execution contexts; one service cannot monopolize the CPU. Requires interrupt-controller setup and synchronization review. |
+| One lower-privilege program and bounded syscall | Done for one built-in program | Rust at EL0 writes through a checked syscall and exits; its synchronous faults are contained. See [USER_PROGRAM.md](USER_PROGRAM.md). |
+| Timer interrupt and scheduling | Next area, split into small increments | Save/switch execution contexts; one service cannot monopolize the CPU. Requires interrupt-controller setup and synchronization review. |
 | Bounded IPC and service lifecycle | Planned | Services exchange validated messages; ownership and fault policy are explicit. |
 | Guest coordinator and executors | Planned | Move decision/execution services into RAI-OS with enforced permissions. Adapt host std/storage assumptions. |
 | Meta-driven policy | Planned | Real model proposals go through validated operations and produce observed outcomes. |

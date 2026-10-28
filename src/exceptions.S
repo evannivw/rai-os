@@ -1,4 +1,4 @@
-// EL1 vectors: one explicit EL1h SVC probe may resume; other events are fatal.
+// EL1 vectors: one EL1h probe plus bounded EL0 calls/faults; other events fatal.
 .section .text.vectors, "ax"
 .balign 2048
 .global exception_vectors
@@ -20,7 +20,8 @@ vector 3
 vector 5
 vector 6
 vector 7
-vector 8   // Lower EL, AArch64 (not yet supported as a runtime)
+    b user_synchronous_entry
+    .space 124 // Slot 8: lower EL, AArch64 synchronous.
 vector 9
 vector 10
 vector 11
@@ -66,7 +67,7 @@ exception_reporting:
 // stacks. Stack corruption/overflow before that save is not recoverable here.
 .section .text.synchronous_entry, "ax"
 .type synchronous_entry, %function
-synchronous_entry:
+.macro save_integer_frame
     sub sp, sp, #288
     stp x0, x1, [sp, #0]
     stp x2, x3, [sp, #16]
@@ -84,6 +85,15 @@ synchronous_entry:
     stp x26, x27, [sp, #208]
     stp x28, x29, [sp, #224]
     str x30, [sp, #240]
+.endm
+synchronous_entry:
+    save_integer_frame
+    mov x20, #4
+    b .Ldispatch_sync
+user_synchronous_entry:
+    save_integer_frame
+    mov x20, #8
+.Ldispatch_sync:
     msr daifset, #0xf
     ldr x0, =exception_reporting
     ldr x1, [x0]
@@ -96,13 +106,18 @@ synchronous_entry:
     mrs x0, esr_el1
     mrs x1, far_el1
     stp x0, x1, [sp, #264]
-    str xzr, [sp, #280]         // Initialize padding in the Rust frame.
+    mrs x0, sp_el0
+    str x0, [sp, #280]
     mov x19, sp                // AAPCS64 preserves x19 across the Rust call.
     mov x0, sp
     ldr x1, =__exception_stack_top
     mov sp, x1
-    bl exception_dispatch     // Rejects unknown events by never returning.
+    mov x1, x20
+    bl exception_dispatch     // 0: resume frame; 1: terminate user; fatal never returns.
     mov sp, x19
+    cbnz x0, .Lfinish_user
+    ldr x0, [sp, #280]
+    msr sp_el0, x0
     ldp x0, x1, [sp, #248]
     msr elr_el1, x0            // SVC already saved the NEXT instruction address.
     msr spsr_el1, x1
@@ -126,3 +141,10 @@ synchronous_entry:
     ldr x30, [sp, #240]
     add sp, sp, #288
     eret                      // Restore PC and PSTATE, including NZCV/DAIF.
+
+.Lfinish_user:
+    // Dispatch requested exit/termination, never a user-controlled return PC.
+    ldr x0, =exception_reporting
+    str xzr, [x0]
+    add sp, sp, #288           // Back to the saved kernel caller's trampoline.
+    b user_return

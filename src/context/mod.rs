@@ -1,4 +1,4 @@
-//! Bounded EL1 context diagnostic. No userspace, interrupts or task switching.
+//! Bounded EL1 diagnostic and shared integer frame; no interrupts/task switching.
 pub mod policy;
 use core::{
     arch::global_asm,
@@ -9,12 +9,12 @@ global_asm!(include_str!("probe.S"));
 // Layout is shared with synchronous_entry in exceptions.S. All bytes initialized.
 #[repr(C, align(16))]
 pub struct Frame {
-    registers: [u64; 31],
+    pub registers: [u64; 31],
     pub elr: u64,
     pub spsr: u64,
     pub esr: u64,
     pub far: u64,
-    reserved: u64,
+    pub user_sp: u64,
 }
 const _: () = {
     assert!(size_of::<Frame>() == 288);
@@ -22,6 +22,7 @@ const _: () = {
     assert!(offset_of!(Frame, spsr) == 256);
     assert!(offset_of!(Frame, esr) == 264);
     assert!(offset_of!(Frame, far) == 272);
+    assert!(offset_of!(Frame, user_sp) == 280);
 };
 
 #[repr(C, align(16))]

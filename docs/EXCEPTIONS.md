@@ -5,21 +5,25 @@ table before entering Rust. A fatal exception reports its architectural register
 through UART and halts. This is a diagnostic foundation for later service runtime
 work, not recovery, process isolation, preemption, or a complete interrupt system.
 Updated October 28: slot 4 also supports one [controlled EL1 return](CONTEXT.md);
-the fatal path and historical captures below remain applicable to rejected events.
+the fatal path and historical captures below remain applicable to rejected EL1 events.
+The later [EL0 increment](USER_PROGRAM.md) adds bounded syscalls and contained
+user faults through slot 8. Unexpected kernel exceptions still halt the guest.
 
 ## What happens
 
 1. `boot.S` masks interrupts, selects SP_EL1, sets the boot stack, and clears BSS.
 2. It writes the 2 KiB-aligned table address to VBAR_EL1 and executes ISB.
 3. The table has sixteen 128-byte slots. Slot 4 (current EL, SP_EL1,
-   synchronous, offset 0x200) now saves an integer context before dispatch. All
-   other slots record their number and enter the fatal-only path.
+   synchronous, offset 0x200) now saves an integer context before dispatch.
+   Slot 8 now also saves a frame for the EL0 dispatcher. Other slots record their
+   number and enter the fatal-only path.
 4. Assembly masks interrupts, uses a single-CPU nested-entry guard and captures
    ESR_EL1, ELR_EL1, SPSR_EL1, FAR_EL1 and entry SP. Rust runs on a dedicated
    16 KiB, 16-byte-aligned stack. Slot 4 first needs space on the normal stack.
-5. Only the explicitly approved SVC site may restore registers and execute ERET.
-   A rejected event initializes/takes over PL011, reports registers and waits
-   forever. There is no automatic retry, unwinding or return from a fatal report.
+5. At EL1, only the explicitly approved SVC site may restore registers and execute
+   ERET. Rejected EL1 events initialize/take over PL011, report and wait forever.
+   Slot 8 separately resumes valid user syscalls or terminates a faulting user
+   invocation. There is no automatic retry, unwinding or return from a fatal report.
 
 `EXCEPTION` and `HALTED` lines are fatal console diagnostics, not successful
 `@rai1` responses or task results. The normal boot banners and protocol are
@@ -92,8 +96,8 @@ and kernel Clippy passed for both the default and self-test configurations.
   Faults before VBAR installation are not covered. The nested guard is implemented
   but not fault-injected in these tests.
 - This original increment injected only synchronous EL1 BRK. The later
-  [MMU tests](MMU.md) also inject data/instruction aborts. Corrupted stacks,
-  IRQ/FIQ/SError and lower-EL entry remain untested. No universal recovery claim.
+  [MMU tests](MMU.md) also inject data/instruction aborts. The later EL0 tests also exercise slot 8. Corrupted stacks and
+  IRQ/FIQ/SError remain untested. No universal recovery claim.
 
 ## Relation to the coordinator and future services
 
@@ -102,7 +106,8 @@ coordinator continues choosing jobs by priority; this increment changes the
 kernel's failure path only. To host isolated services inside RAI-OS, subsequent
 work still needs separate protected service mappings, user-mode entry, system calls,
 scheduling, IPC, and recovery rules. Exception entry is one prerequisite; the
-controlled EL1 return does not yet implement an EL0 syscall or service runtime.
+controlled EL1 return plus the later EL0 program are prerequisites, not a complete
+service runtime.
 
 Architectural references:
 

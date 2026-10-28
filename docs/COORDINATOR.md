@@ -85,8 +85,7 @@ Target responsibilities:
   from a future kernel CPU scheduler.
 
 To run the coordinator as an isolated service inside RAI-OS we still need
-lower-EL entry/return, service memory/address-space management, scheduling,
-system calls, and IPC. Copying it into a kernel module would be possible as an
+service-specific memory/address-space management, scheduling and IPC. Copying it into a kernel module would be possible as an
 intermediate experiment, but would share kernel memory/privileges, not supply
 service isolation. The current host implementation uses String/Vec and std; moving
 it requires adapting storage/runtime and transport, not merely moving a file.
@@ -94,10 +93,11 @@ A guest-native bounded queue could be a smaller explicit milestone if autonomous
 execution without the host becomes the next priority. No such migration happened
 in this increment. [Fatal EL1 diagnostics](EXCEPTIONS.md), added October 27, are
 a first kernel prerequisite. The October 28 [context increment](CONTEXT.md)
-returns from one controlled EL1 SVC, but does not yet run or resume an EL0 service.
+returns from one controlled EL1 SVC. The subsequent [EL0 increment](USER_PROGRAM.md)
+runs one linked program with bounded syscalls; it does not migrate the coordinator.
 The subsequent [physical-page pool](MEMORY.md) provides bounded allocation, while
 [EL1 translation and permissions](MMU.md) now protect kernel regions. Separate
-service address spaces and user-mode execution are still pending. The model API bridge remains on the host for the initial demo.
+service address spaces and multi-service execution are still pending. The model API bridge remains on the host for the initial demo.
 
 ## Verification
 

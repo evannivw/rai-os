@@ -22,6 +22,15 @@ pub struct Layout {
     pub text_end: usize,
     pub rodata_end: usize,
     pub ram_end: usize,
+    pub user: UserLayout,
+}
+#[derive(Clone, Copy)]
+pub struct UserLayout {
+    pub text_start: usize,
+    pub text_end: usize,
+    pub rodata_end: usize,
+    pub stack_start: usize,
+    pub stack_end: usize,
 }
 #[derive(Clone, Copy)]
 enum Kind {
@@ -29,10 +38,16 @@ enum Kind {
     ReadOnly,
     Data,
     Device,
+    UserCode,
+    UserReadOnly,
+    UserData,
 }
 fn leaf(address: usize, kind: Kind) -> u64 {
     let common = address as u64 | VALID_PAGE | AF | UXN;
     match kind {
+        Kind::UserCode => (common & !UXN) | NORMAL | INNER_SHAREABLE | READ_ONLY | (1 << 6) | PXN,
+        Kind::UserReadOnly => common | NORMAL | INNER_SHAREABLE | READ_ONLY | (1 << 6) | PXN,
+        Kind::UserData => common | NORMAL | INNER_SHAREABLE | (1 << 6) | PXN,
         Kind::Code => common | NORMAL | INNER_SHAREABLE | READ_ONLY,
         Kind::ReadOnly => common | NORMAL | INNER_SHAREABLE | READ_ONLY | PXN,
         Kind::Data => common | NORMAL | INNER_SHAREABLE | PXN,
@@ -41,7 +56,7 @@ fn leaf(address: usize, kind: Kind) -> u64 {
 }
 
 /// Five pages: L1 root, low L2, UART L3, RAM L2, RAM L3.
-/// All unmapped entries remain invalid. No blocks, user mappings, or aliases.
+/// All unmapped entries remain invalid. No blocks or aliases; only the explicit user regions permit EL0.
 pub fn build(
     tables: [&mut [u64; 512]; TABLE_COUNT],
     addresses: [usize; TABLE_COUNT],
@@ -62,9 +77,31 @@ pub fn build(
     {
         return Err("invalid_mmu_layout");
     }
+    let user = layout.user;
+    if [
+        user.text_start,
+        user.text_end,
+        user.rodata_end,
+        user.stack_start,
+        user.stack_end,
+    ]
+    .iter()
+    .any(|v| !v.is_multiple_of(PAGE_SIZE))
+        || user.text_start < layout.rodata_end
+        || user.text_start >= user.text_end
+        || user.text_end >= user.rodata_end
+        || user.rodata_end.checked_add(PAGE_SIZE) != Some(user.stack_start)
+        || user.stack_start >= user.stack_end
+        || user
+            .stack_end
+            .checked_add(PAGE_SIZE)
+            .is_none_or(|end| end > layout.ram_end)
+    {
+        return Err("invalid_user_layout");
+    }
     for (index, address) in addresses.iter().enumerate() {
         if !address.is_multiple_of(PAGE_SIZE)
-            || *address < layout.rodata_end
+            || *address < user.stack_end + PAGE_SIZE
             || *address >= layout.ram_end
             || addresses[..index].contains(address)
         {
@@ -87,7 +124,18 @@ pub fn build(
     uart_l3[(UART >> 12) & 511] = leaf(UART, Kind::Device);
     ram_l2[0] = addresses[4] as u64 | 3;
     for address in (layout.text_start..layout.ram_end).step_by(PAGE_SIZE) {
-        let kind = if address < layout.text_end {
+        if (user.rodata_end..user.stack_start).contains(&address)
+            || (user.stack_end..user.stack_end + PAGE_SIZE).contains(&address)
+        {
+            continue;
+        }
+        let kind = if (user.text_start..user.text_end).contains(&address) {
+            Kind::UserCode
+        } else if (user.text_end..user.rodata_end).contains(&address) {
+            Kind::UserReadOnly
+        } else if (user.stack_start..user.stack_end).contains(&address) {
+            Kind::UserData
+        } else if address < layout.text_end {
             Kind::Code
         } else if address < layout.rodata_end || addresses.contains(&address) {
             Kind::ReadOnly
@@ -108,6 +156,13 @@ mod tests {
             text_end: 0x40084000,
             rodata_end: 0x40086000,
             ram_end: 0x401a0000,
+            user: UserLayout {
+                text_start: 0x40087000,
+                text_end: 0x40088000,
+                rodata_end: 0x40089000,
+                stack_start: 0x4008a000,
+                stack_end: 0x4008c000,
+            },
         }
     }
     fn addresses() -> [usize; TABLE_COUNT] {
@@ -132,12 +187,48 @@ mod tests {
         assert_eq!(data & (READ_ONLY | PXN), PXN);
         assert_eq!(code & 0xffff_f000, 0x40080000);
         assert_eq!(tables[2][0] & (7 << 2), 0); // Device MAIR slot.
+        assert_eq!(tables[4][0x87] & ((3 << 6) | PXN | UXN), (3 << 6) | PXN);
+        assert_eq!(
+            tables[4][0x88] & ((3 << 6) | PXN | UXN),
+            (3 << 6) | PXN | UXN
+        );
+        assert_eq!(
+            tables[4][0x8a] & ((3 << 6) | PXN | UXN),
+            (1 << 6) | PXN | UXN
+        );
+        assert_eq!(tables[4][0x89], 0); // Lower stack guard.
+        assert_eq!(tables[4][0x8c], 0); // Upper stack guard.
         assert_eq!(tables[4][0], 0); // DTB/low RAM not mapped.
         assert_eq!(tables[4][0x1a0], 0); // Pool end is exclusive.
         assert_eq!(tables[0].iter().filter(|v| **v != 0).count(), 2);
         assert_eq!(tables[1].iter().filter(|v| **v != 0).count(), 1);
         assert_eq!(tables[2].iter().filter(|v| **v != 0).count(), 1);
         assert_eq!(tables[3].iter().filter(|v| **v != 0).count(), 1);
+    }
+    #[test]
+    fn rejects_invalid_user_regions_before_mutation() {
+        for user in [
+            UserLayout {
+                text_start: 0x40080000,
+                ..layout().user
+            },
+            UserLayout {
+                text_end: 0x40088001,
+                ..layout().user
+            },
+            UserLayout {
+                stack_start: 0x40089000,
+                ..layout().user
+            },
+            UserLayout {
+                stack_end: usize::MAX - 4095,
+                ..layout().user
+            },
+        ] {
+            let mut tables = [[42; 512]; TABLE_COUNT];
+            assert!(build(tables.each_mut(), addresses(), Layout { user, ..layout() }).is_err());
+            assert!(tables.iter().flatten().all(|v| *v == 42));
+        }
     }
     #[test]
     fn rejects_bad_boundaries_and_table_aliases_before_mutating() {
@@ -159,7 +250,14 @@ mod tests {
             assert!(build(tables.each_mut(), addresses(), bad).is_err());
             assert!(tables.iter().flatten().all(|v| *v == 42));
         }
-        for address in [addresses()[1], 0x40080000, 0x401a0000, 0x40090001] {
+        for address in [
+            addresses()[1],
+            0x40087000,
+            0x4008a000,
+            0x40080000,
+            0x401a0000,
+            0x40090001,
+        ] {
             let mut pages = addresses();
             pages[0] = address;
             let mut tables = [[42; 512]; TABLE_COUNT];

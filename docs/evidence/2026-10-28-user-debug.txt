@@ -1,0 +1,109 @@
+EL0 user program verification — October 28, 2026 — debug
+Actual QEMU UART bytes; TAB/CR/LF rendered as escapes.
+
+[normal]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+Console ready: type help for commands\r\n
+@rai1\t1\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t2\tok\tmode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0\r\n
+@rai1\t3\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t4\tok\tkernel survived\r\n
+@rai1\t5\tok\tmode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0\r\n
+@rai1\t6\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t7\tok\tkernel survived\r\n
+@rai1\t8\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t9\tok\tchecked_pages=251; exhausted=true; zeroed=true; reused=true; free_pages=251\r\n
+@rai1\t10\terr\tbad_args\r\n
+@rai1\t11\terr\tbad_args\r\n
+user.run\r\n
+mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0\r\n
+
+[invalid-calls]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+Console ready: type help for commands\r\n
+@rai1\t1\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t2\tok\tmode=EL0; state=exited; code=0; syscalls=10; rejected=8; output=Hello from EL0\r\n
+@rai1\t3\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t4\tok\tkernel survived\r\n
+@rai1\t5\tok\tmode=EL0; state=exited; code=0; syscalls=10; rejected=8; output=Hello from EL0\r\n
+@rai1\t6\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t7\tok\tkernel survived\r\n
+@rai1\t8\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t9\tok\tchecked_pages=251; exhausted=true; zeroed=true; reused=true; free_pages=251\r\n
+@rai1\t10\terr\tbad_args\r\n
+@rai1\t11\terr\tbad_args\r\n
+
+[read-kernel]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+Console ready: type help for commands\r\n
+@rai1\t1\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t2\tok\tmode=EL0; state=faulted; esr=0x000000009200000f; pc=0x00000000400af004; far_raw=0x0000000040080000; spsr=0x00000000000003c0; sp=0x00000000400b3f90; syscalls=0\r\n
+@rai1\t3\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t4\tok\tkernel survived\r\n
+@rai1\t5\tok\tmode=EL0; state=faulted; esr=0x000000009200000f; pc=0x00000000400af004; far_raw=0x0000000040080000; spsr=0x00000000000003c0; sp=0x00000000400b3f90; syscalls=0\r\n
+@rai1\t6\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t7\tok\tkernel survived\r\n
+@rai1\t8\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t9\tok\tchecked_pages=251; exhausted=true; zeroed=true; reused=true; free_pages=251\r\n
+@rai1\t10\terr\tbad_args\r\n
+@rai1\t11\terr\tbad_args\r\n
+
+[write-code]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+Console ready: type help for commands\r\n
+@rai1\t1\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t2\tok\tmode=EL0; state=faulted; esr=0x000000009200004f; pc=0x00000000400af004; far_raw=0x00000000400af018; spsr=0x00000000000003c0; sp=0x00000000400b3f90; syscalls=0\r\n
+@rai1\t3\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t4\tok\tkernel survived\r\n
+@rai1\t5\tok\tmode=EL0; state=faulted; esr=0x000000009200004f; pc=0x00000000400af004; far_raw=0x00000000400af018; spsr=0x00000000000003c0; sp=0x00000000400b3f90; syscalls=0\r\n
+@rai1\t6\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t7\tok\tkernel survived\r\n
+@rai1\t8\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t9\tok\tchecked_pages=251; exhausted=true; zeroed=true; reused=true; free_pages=251\r\n
+@rai1\t10\terr\tbad_args\r\n
+@rai1\t11\terr\tbad_args\r\n
+
+[uart]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+Console ready: type help for commands\r\n
+@rai1\t1\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t2\tok\tmode=EL0; state=faulted; esr=0x000000009200000f; pc=0x00000000400af0a8; far_raw=0x0000000009000000; spsr=0x00000000000003c0; sp=0x00000000400b3f90; syscalls=0\r\n
+@rai1\t3\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t4\tok\tkernel survived\r\n
+@rai1\t5\tok\tmode=EL0; state=faulted; esr=0x000000009200000f; pc=0x00000000400af0a8; far_raw=0x0000000009000000; spsr=0x00000000000003c0; sp=0x00000000400b3f90; syscalls=0\r\n
+@rai1\t6\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t7\tok\tkernel survived\r\n
+@rai1\t8\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t9\tok\tchecked_pages=251; exhausted=true; zeroed=true; reused=true; free_pages=251\r\n
+@rai1\t10\terr\tbad_args\r\n
+@rai1\t11\terr\tbad_args\r\n
+
+[execute-stack]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+Console ready: type help for commands\r\n
+@rai1\t1\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t2\tok\tmode=EL0; state=faulted; esr=0x000000008200000f; pc=0x00000000400b3f90; far_raw=0x00000000400b3f90; spsr=0x00000000000003c0; sp=0x00000000400b3f90; syscalls=0\r\n
+@rai1\t3\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t4\tok\tkernel survived\r\n
+@rai1\t5\tok\tmode=EL0; state=faulted; esr=0x000000008200000f; pc=0x00000000400b3f90; far_raw=0x00000000400b3f90; spsr=0x00000000000003c0; sp=0x00000000400b3f90; syscalls=0\r\n
+@rai1\t6\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t7\tok\tkernel survived\r\n
+@rai1\t8\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t9\tok\tchecked_pages=251; exhausted=true; zeroed=true; reused=true; free_pages=251\r\n
+@rai1\t10\terr\tbad_args\r\n
+@rai1\t11\terr\tbad_args\r\n
+
+[privileged]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+Console ready: type help for commands\r\n
+@rai1\t1\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t2\tok\tmode=EL0; state=faulted; esr=0x0000000002000000; pc=0x00000000400af004; far_raw=0x0000000000000000; spsr=0x00000000000003c0; sp=0x00000000400b3f90; syscalls=0\r\n
+@rai1\t3\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t4\tok\tkernel survived\r\n
+@rai1\t5\tok\tmode=EL0; state=faulted; esr=0x0000000002000000; pc=0x00000000400af004; far_raw=0x0000000000000000; spsr=0x00000000000003c0; sp=0x00000000400b3f90; syscalls=0\r\n
+@rai1\t6\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t7\tok\tkernel survived\r\n
+@rai1\t8\tok\tenabled=true; mode=identity; granule=4096; table_pages=5; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r\n
+@rai1\t9\tok\tchecked_pages=251; exhausted=true; zeroed=true; reused=true; free_pages=251\r\n
+@rai1\t10\terr\tbad_args\r\n
+@rai1\t11\terr\tbad_args\r\n

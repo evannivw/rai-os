@@ -11,6 +11,7 @@ mod mmu;
 mod protocol;
 mod task;
 mod uart;
+mod user;
 
 use core::arch::global_asm;
 use core::panic::PanicInfo;
@@ -61,6 +62,12 @@ fn panic(_info: &PanicInfo) -> ! {
 // Fault-injection builds run one intentional exception at a time.
 const _: () = assert!(
     cfg!(feature = "exception-self-test") as usize
+        + cfg!(feature = "user-test-invalid-calls") as usize
+        + cfg!(feature = "user-test-read-kernel") as usize
+        + cfg!(feature = "user-test-write-code") as usize
+        + cfg!(feature = "user-test-uart") as usize
+        + cfg!(feature = "user-test-execute-stack") as usize
+        + cfg!(feature = "user-test-privileged") as usize
         + cfg!(feature = "context-test-unknown-svc") as usize
         + cfg!(feature = "context-test-wrong-site") as usize
         + cfg!(feature = "mmu-test-write-text") as usize

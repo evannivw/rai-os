@@ -67,15 +67,18 @@ pub fn self_test() {
 // SAFETY: synchronous_entry saves a fully initialized, aligned Frame on the
 // live normal stack and passes its exclusive address while using the dedicated
 // exception stack. One CPU, DAIF masked, no unwinding and no recursive entry.
-// This immutable borrow ends before assembly restores the frame and executes ERET.
+// This exclusive borrow ends before assembly restores the frame and executes ERET.
 #[unsafe(no_mangle)]
-pub extern "C" fn exception_dispatch(frame: &crate::context::Frame) {
+pub extern "C" fn exception_dispatch(frame: &mut crate::context::Frame, vector: u64) -> u64 {
+    if vector == 8 {
+        return crate::user::dispatch(frame) as u64;
+    }
     unsafe extern "C" {
         static context_probe_resume: u8;
     }
     let expected_return = core::ptr::addr_of!(context_probe_resume) as u64;
     if crate::context::policy::may_resume(frame.esr, frame.elr, frame.spsr, expected_return) {
-        return;
+        return 0;
     }
     exception_report(
         4,

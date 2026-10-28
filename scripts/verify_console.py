@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     result = subprocess.run(
         ["sh", "scripts/console.sh"], cwd=ROOT,
-        input="context.check\ninfo\nuptime\nmmu.info\nmemory.info\nmemory.check\ntask.start\ntask.status\ntask.cancel 1\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
+        input="user.run\ncontext.check\ninfo\nuptime\nmmu.info\nmemory.info\nmemory.check\ntask.start\ntask.status\ntask.cancel 1\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
         text=True, capture_output=True, timeout=60,
     )
     assert result.returncode == 0, result.stdout + result.stderr
@@ -17,6 +17,7 @@ def main():
     assert re.search(r"\[kernel / OK\] uptime_ms=\d+; counter_hz=[1-9]\d*", result.stdout)
     assert result.stdout.count("[kernel / OK] task_id=1; state=completed; processed=0; total=0; words=0") == 2
     assert "[kernel / REJECTED] task_not_running" in result.stdout
+    assert "[kernel / OK] mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0" in result.stdout
     assert "[kernel / OK] round_trips=2; registers=31; flags=true; stack=true; resumed=true" in result.stdout
     assert "[kernel / OK] enabled=true; mode=identity; granule=4096; table_pages=5;" in result.stdout
     assert "[kernel / OK] page_size=4096; total_pages=256; free_pages=251; used_pages=5;" in result.stdout

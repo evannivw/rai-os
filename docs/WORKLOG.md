@@ -423,3 +423,52 @@ remain untested and may prevent diagnostics. SIMD/FPU, SP_EL0 and process addres
 spaces are not saved; this is the current soft-float EL1 runtime's integer context,
 not a complete process context. The roadmap now points to one lower-privilege
 program and a bounded kernel call. No claim of isolation or AI efficiency is made.
+
+## First built-in EL0 Rust program — October 28
+
+Added one linked no_std Rust program that requests a checked write of "Hello from
+EL0", validates the reply and exits. user.run starts it synchronously through
+ERET with cleared integer registers and a freshly zeroed 8 KiB user stack. The
+kernel retains its own stack/session and the program runs with EL0 permissions.
+Dedicated user text/constants/stack mappings and two unmapped guard pages are
+linker-reserved outside the existing page pool; five table pages and 251 free
+pool pages remain unchanged. All kernel/device mappings still deny EL0 access.
+
+Extended vector 8 and the shared frame to handle lower-EL synchronous entry,
+including SP_EL0. Write calls validate complete ranges, overflow, length and ASCII
+before committing to a private bounded output buffer. Exit uses a fixed kernel
+trampoline. A synchronous user fault returns a faulted report and terminates only
+that invocation; kernel faults retain the existing fatal policy. Normal UART
+requests cannot provide arbitrary binaries, PCs or context data. Output is
+published after completion so the structured transport stays intact.
+
+First normal debug boot and two user runs passed with context/echo continuity.
+The initial fault-test build rejected named inline assembly labels; moved those
+probes into explicit test-only global assembly in the user text region, then
+verified the corrected images. Debug and release each passed seven image cases:
+normal, eight invalid syscall requests followed by valid write/exit, and forbidden
+kernel read, user-code write, UART read, stack execution and privileged register
+read. Every case runs twice and checks continued kernel context/echo operation,
+unchanged MMU status, page diagnostics and malformed UART arguments. The normal
+image also passed direct shell execution. Fault syndromes, exact ELF PCs/FAR where
+valid, saved EL0 state and stack bounds were checked. Pure range validation and
+three table-builder tests passed, including user permissions and guard/layout
+rejection. New captures are in [USER_PROGRAM.md](USER_PROGRAM.md).
+
+Regressions passed in both profiles: 37 boot/protocol checks, 36 original EL1
+context returns plus both rejection images, BRK diagnostics, five MMU fault images
+and normal mapping checks, 18 memory exchanges with three pure allocator tests,
+and 28 task exchanges with three pure task tests. Terminal integration and all
+fifteen panel tests (four real QEMU) passed. Formatting, default kernel and all
+fourteen individual test-feature Clippy runs, console/panel Clippy and optimized
+panel compilation passed. A mixed user/kernel test-feature build was rejected.
+Local Markdown links and whitespace checks passed. QEMU test children were reaped.
+The GUI did not change, so native-window review was not repeated.
+
+This is a tested kernel/user privilege boundary for one built-in image, not
+independent process address spaces, arbitrary application loading, a scheduler,
+resource isolation or an agent migration. No timer/preemption exists: a looping
+program could block progress. Cumulative output exhaustion and corrupt/nested
+kernel stacks were not fault-injected. No phone, AI or efficiency claim was tested.
+The next area is timer/interrupt infrastructure, followed by scheduling, in small
+verified increments. Existing provenance and earlier evidence remain unchanged.

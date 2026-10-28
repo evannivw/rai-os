@@ -1,8 +1,10 @@
 # Milestone 1 architecture
 
 An educational AArch64 kernel for QEMU, with a long-term microkernel direction.
-Current modules share privilege and memory. There is no multi-task scheduler, process IPC,
-heap, userspace, or isolated agent execution. EL1 stage-1 translation is active
+Kernel modules share privilege and memory. One built-in Rust program now runs
+at EL0 with bounded write/exit syscalls; see [USER_PROGRAM.md](USER_PROGRAM.md).
+There is no multi-task scheduler, process IPC, heap, separate process address
+spaces or isolated agent execution. EL1 stage-1 translation is active
 with one identity-mapped address space; see [MMU.md](MMU.md).
 
 ## Boot
@@ -36,7 +38,7 @@ or the active Device-nGnRnE identity mapping. A fatal handler
 may take over UART permanently without resuming the interrupted writer. These assumptions
 must be revisited for another board, remapping, or concurrency. Linker symbols and
 Assembly entry form the boot contract. EL1 exception vectors support one
-allowlisted synchronous return; other events enter a fatal UART diagnostic on
+allowlisted EL1 return and bounded EL0 syscall/fault handling; other events enter a fatal UART diagnostic on
 a dedicated stack; see [EXCEPTIONS.md](EXCEPTIONS.md) for
 assumptions and limits. Rust panic still prints and halts without recovery.
 
@@ -48,10 +50,13 @@ assumptions and limits. Rust panic still prints and halts without recovery.
 - mmu/tables.rs: pure fixed-board mapping construction; mmu/mod.rs: owned
   table pages and EL1 register activation/readback. Code is read-only/executable,
   data is non-executable, and tables/constants are read-only/non-executable.
+  Explicit user code/constants/stack pages permit EL0; kernel/device pages do not.
 - exceptions.S / exceptions.rs: EL1 entry, full integer frame for slot 4,
-  dedicated handler stack, allowlisted return or fatal UART report/halt.
+  dedicated handler stack, allowlisted EL1 return, EL0 dispatch, or fatal report.
 - context/: pure return policy, fixed frame layout and bounded SVC/ERET diagnostic.
-  See [CONTEXT.md](CONTEXT.md); no EL0 runtime or task switching.
+  See [CONTEXT.md](CONTEXT.md); no task switching.
+- user/: one linked Rust program, privilege transition, bounded copy/exit policy
+  and synchronous invocation lifecycle. User faults terminate only that invocation.
 - clock.rs: read-only generic counter adapter and boot-relative time.
 - uart.rs: bytes and MMIO, including allocation-free formatted output.
 - console.rs: framing, response rendering, and interleaving a bounded task step
@@ -70,8 +75,8 @@ observed completion. Its host placement is provisional; the target is a guest
 service above the kernel once service execution/isolation exists. See the
 [placement and migration rationale](COORDINATOR.md#why-the-coordinator-is-currently-on-the-host). Meta API calls are not implemented.
 Credentials and HTTPS will remain on the host. The guest must independently
-validate operations. Real service isolation will require separate protected service mappings, EL0,
-syscalls, scheduling, and IPC; module names do not supply those guarantees.
+validate operations. Multi-service isolation still requires separate service mappings, scheduling
+and IPC; module names do not supply those guarantees.
 
 ## Clock
 

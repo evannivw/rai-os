@@ -78,3 +78,10 @@ Enter `context.check` to run two real, bounded EL1 context round trips. The gues
 checks integer registers, flags and stack restoration before replying. See
 [CONTEXT.md](CONTEXT.md). This does not create or switch processes; the graphical
 panel has no additional controls for it.
+
+## Built-in EL0 program
+
+Enter `user.run` to start the linked lower-privilege Rust program. Its write/exit
+calls are numeric SVCs inside QEMU, distinct from this host command. The terminal
+displays the returned state and output. A faulted state is not program success,
+even if the request itself was handled. See [USER_PROGRAM.md](USER_PROGRAM.md).
