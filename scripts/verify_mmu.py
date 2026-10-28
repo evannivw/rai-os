@@ -19,7 +19,7 @@ CASES = ['write-text', 'write-rodata', 'write-table', 'execute-data', 'unmapped'
 
 
 @contextmanager
-def guest(kernel, name):
+def guest(kernel, name, *, prefix="mmu"):
     child = subprocess.Popen(['sh', 'scripts/qemu.sh', str(kernel)], cwd=ROOT,
                              stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     poll = selectors.DefaultSelector()
@@ -51,7 +51,7 @@ def guest(kernel, name):
             child.kill()
             child.wait()
         poll.close()
-        (OUTPUT / f'mmu-{name}.log').write_bytes(transcript)
+        (OUTPUT / f'{prefix}-{name}.log').write_bytes(transcript)
 
 
 def build(profile, case=None):

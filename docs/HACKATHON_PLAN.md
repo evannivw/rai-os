@@ -1,6 +1,6 @@
 # RAI-OS hackathon plan
 
-Updated October 27, 2026. Local times: America/Guatemala. This is a proposed
+Updated October 28, 2026. Local times: America/Guatemala. This is a proposed
 roadmap; completed foundations are identified below. AI and kernel scheduling remain pending.
 
 ## Sources and eligibility
@@ -52,7 +52,8 @@ foundation and visible controls before continuing the demo verifier. The kernel
 now exposes measured uptime and [fatal EL1 diagnostics](EXCEPTIONS.md). Exception
 entry and a [bounded physical-page allocator](MEMORY.md) are implemented foundations
 for future guest services. [EL1 page tables and permissions](MMU.md) are now active;
-user-mode execution, separate service address spaces, scheduling, and IPC remain
+A [controlled EL1 context return](CONTEXT.md) is now verified.
+User-mode execution, separate service address spaces, scheduling, and IPC remain
 pending. See the [kernel-to-service roadmap](ROADMAP.md). A [graphical host control panel](PANEL.md) now exposes real
 QEMU boot, info, uptime, echo, and a [cooperative word-count task](TASKS.md). This is a host UI, not a guest desktop. The
 correctness fixture is retained; verifier implementation resumes with demo jobs.

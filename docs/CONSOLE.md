@@ -71,3 +71,10 @@ The host terminal accepts `memory.info`, `memory.check`, and `mmu.info` with no 
 These query/test the guest's reserved page pool and read active translation
 registers; see [MEMORY.md](MEMORY.md) and [MMU.md](MMU.md).
 No arbitrary addresses can be read, written, or freed through this interface.
+
+## Context return diagnostic
+
+Enter `context.check` to run two real, bounded EL1 context round trips. The guest
+checks integer registers, flags and stack restoration before replying. See
+[CONTEXT.md](CONTEXT.md). This does not create or switch processes; the graphical
+panel has no additional controls for it.

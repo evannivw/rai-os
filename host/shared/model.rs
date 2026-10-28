@@ -4,6 +4,7 @@ pub enum Operation<'a> {
     Info,
     Uptime,
     MmuInfo,
+    ContextCheck,
     MemoryInfo,
     MemoryCheck,
     Echo(&'a str),
@@ -21,6 +22,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
     match line {
         "help" => Ok(Operation::Help),
         "info" => Ok(Operation::Info),
+        "context.check" => Ok(Operation::ContextCheck),
         "mmu.info" => Ok(Operation::MmuInfo),
         "memory.info" => Ok(Operation::MemoryInfo),
         "memory.check" => Ok(Operation::MemoryCheck),
@@ -43,7 +45,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, uptime, mmu.info, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
+            .ok_or("Use help, info, uptime, mmu.info, context.check, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
     }
 }
 
@@ -54,6 +56,7 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
     let body = match operation {
         Operation::Help => "help".to_owned(),
         Operation::Info => "info".to_owned(),
+        Operation::ContextCheck => "context.check".to_owned(),
         Operation::MmuInfo => "mmu.info".to_owned(),
         Operation::MemoryInfo => "memory.info".to_owned(),
         Operation::MemoryCheck => "memory.check".to_owned(),
@@ -117,6 +120,7 @@ mod tests {
     #[test]
     fn memory_operations_are_bounded_and_argument_free() {
         for (name, operation) in [
+            ("context.check", Operation::ContextCheck),
             ("mmu.info", Operation::MmuInfo),
             ("memory.info", Operation::MemoryInfo),
             ("memory.check", Operation::MemoryCheck),

@@ -4,6 +4,7 @@
 mod clock;
 mod command;
 mod console;
+mod context;
 mod exceptions;
 mod memory;
 mod mmu;
@@ -41,6 +42,11 @@ pub extern "C" fn kernel_main() -> ! {
         feature = "mmu-test-unmapped"
     ))]
     mmu::run_fault();
+    #[cfg(any(
+        feature = "context-test-unknown-svc",
+        feature = "context-test-wrong-site"
+    ))]
+    context::self_test();
     console::run(&clock, &mut memory, &mmu)
 }
 
@@ -55,6 +61,8 @@ fn panic(_info: &PanicInfo) -> ! {
 // Fault-injection builds run one intentional exception at a time.
 const _: () = assert!(
     cfg!(feature = "exception-self-test") as usize
+        + cfg!(feature = "context-test-unknown-svc") as usize
+        + cfg!(feature = "context-test-wrong-site") as usize
         + cfg!(feature = "mmu-test-write-text") as usize
         + cfg!(feature = "mmu-test-write-rodata") as usize
         + cfg!(feature = "mmu-test-write-table") as usize

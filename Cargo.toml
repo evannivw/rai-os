@@ -8,6 +8,8 @@ description = "Educational AArch64 kernel for QEMU virt"
 [features]
 # Deliberately halts at boot; verification uses a separate target directory.
 exception-self-test = []
+context-test-unknown-svc = []
+context-test-wrong-site = []
 mmu-test-write-text = []
 mmu-test-write-rodata = []
 mmu-test-write-table = []

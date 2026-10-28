@@ -381,3 +381,45 @@ lower-privilege execution/syscalls, scheduling, bounded IPC, then guest services
 This is a sequence of future increments, not a promise to complete all kernel
 infrastructure before the hackathon. The demo can integrate Meta through the host
 bridge earlier. Eligibility questions and actual contribution dates are preserved.
+
+## Controlled EL1 context save and return — October 28
+
+Added one explicit resumable SVC site at EL1h. Slot 4 saves x0-x30 and architectural
+exception registers in an aligned frame on the current stack, switches to the
+existing handler stack, and delegates to a pure allowlist policy. Only the exact
+syndrome/return site and masked EL1h state may return. Assembly restores integer
+registers, SP and ELR/SPSR before ERET. Unknown events still use fatal diagnostics;
+no EL0 programs, preemption, task switching or general fault recovery were added.
+
+Added argument-free context.check to the shell, structured protocol and host
+terminal. Assembly seeds distinct 64-bit values in all 31 registers, tests two
+complementary NZCV patterns and captures post-return state before using scratch
+registers. Rust verifies those observations, DAIF and before/after SP; success is
+reported only after two actual returns. No allocator or UART work occurs inside
+the successful handler. Physical-page ownership and normal boot banners remain
+unchanged. No GUI code or external dependency changed.
+
+First checked normal boot, then four real SVC returns with console continuity.
+The repeatable verifier subsequently passed in debug/release: one pure policy
+test, 21 structured exchanges plus two shell commands (36 successful returns per
+normal run), invalid argument handling, and memory/echo continuity. Separate
+unknown-SVC and wrong-site images first perform valid returns, then are rejected
+with the expected syndrome, exact ELF return PC, saved state, stack ranges and
+fatal halt. Combining context and other fault-injection features was rejected at
+compile time. Captures and limits are in [CONTEXT.md](CONTEXT.md).
+
+Regression checks passed in both profiles: original BRK diagnostic; all five MMU
+faults plus normal MMU status/ownership checks; 37 console/protocol checks; 18
+memory exchanges and three pure frame tests; 28 task exchanges and three pure
+task tests. Terminal integration and fifteen panel tests (four real QEMU) passed.
+Formatting, Clippy for the default kernel and all eight individual negative-test
+features, console/panel Clippy, and optimized panel compilation passed. Local
+Markdown links and git diff --check passed. Test QEMU children were reaped; no
+native-window review was repeated because the GUI did not change.
+
+The new slot-4 path needs a valid stack with room for its 288-byte frame before
+switching to the handler stack. Corrupt/overflowing stacks and nested faults
+remain untested and may prevent diagnostics. SIMD/FPU, SP_EL0 and process address
+spaces are not saved; this is the current soft-float EL1 runtime's integer context,
+not a complete process context. The roadmap now points to one lower-privilege
+program and a bounded kernel call. No claim of isolation or AI efficiency is made.

@@ -30,6 +30,7 @@ pub fn parse(line: &str) -> Result<Request<'_>, Error<'_>> {
     let operation = match fields.next() {
         Some("help") => Operation::Help,
         Some("info") => Operation::Info,
+        Some("context.check") => Operation::ContextCheck,
         Some("mmu.info") => Operation::MmuInfo,
         Some("memory.info") => Operation::MemoryInfo,
         Some("memory.check") => Operation::MemoryCheck,

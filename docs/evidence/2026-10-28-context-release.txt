@@ -1,0 +1,43 @@
+EL1 context verification — October 28, 2026 — release
+Actual QEMU UART bytes; TAB/CR/LF rendered as escapes.
+
+[normal]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+Console ready: type help for commands\r\n
+@rai1\t1\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t2\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t3\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t4\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t5\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t6\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t7\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t8\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t9\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t10\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t11\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t12\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t13\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t14\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t15\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t16\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t17\terr\tbad_args\r\n
+@rai1\t18\terr\tbad_args\r\n
+@rai1\t19\tok\tchecked_pages=251; exhausted=true; zeroed=true; reused=true; free_pages=251\r\n
+@rai1\t20\tok\tround_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+@rai1\t21\tok\tcontext remains alive\r\n
+context.check extra\r\n
+error: unknown_command\r\n
+context.check\r\n
+round_trips=2; registers=31; flags=true; stack=true; resumed=true\r\n
+
+[unknown-svc]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+SELF-TEST: context unknown-svc after valid returns\r\n
+EXCEPTION: vector=4; esr=0x0000000056005243; ec=0x15; elr=0x0000000040081004; spsr=0x00000000600003c5; far_raw=0x0000000000000000; entry_sp=0x0000000040096f30; handler_sp=0x000000004009aeb0\r\n
+HALTED: exception is fatal; restart QEMU\r\n
+
+[wrong-site]
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\n
+SELF-TEST: context wrong-site after valid returns\r\n
+EXCEPTION: vector=4; esr=0x0000000056005242; ec=0x15; elr=0x0000000040081004; spsr=0x00000000600003c5; far_raw=0x0000000000000000; entry_sp=0x0000000040096f30; handler_sp=0x000000004009aeb0\r\n
+HALTED: exception is fatal; restart QEMU\r\n

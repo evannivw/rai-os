@@ -4,20 +4,22 @@ Implemented October 27, 2026. The kernel now installs an AArch64 exception vecto
 table before entering Rust. A fatal exception reports its architectural registers
 through UART and halts. This is a diagnostic foundation for later service runtime
 work, not recovery, process isolation, preemption, or a complete interrupt system.
+Updated October 28: slot 4 also supports one [controlled EL1 return](CONTEXT.md);
+the fatal path and historical captures below remain applicable to rejected events.
 
 ## What happens
 
 1. `boot.S` masks interrupts, selects SP_EL1, sets the boot stack, and clears BSS.
 2. It writes the 2 KiB-aligned table address to VBAR_EL1 and executes ISB.
-3. Each of sixteen 128-byte vector slots records its slot number and branches to
-   one fatal entry. The supported normal path is slot 4: synchronous exception
-   from the current EL using SP_EL1 (table offset 0x200).
-4. Assembly masks interrupts, sets a single-CPU nested-report guard, captures
-   ESR_EL1, ELR_EL1, SPSR_EL1, FAR_EL1, and the entry SP, then selects a dedicated
-   16 KiB, 16-byte-aligned diagnostic stack before calling Rust.
-5. Rust initializes/takes over PL011, prints the captured values and handler SP,
-   and waits forever. There is no ERET, general-register restoration, unwinding,
-   automatic retry, or return to the interrupted UART writer.
+3. The table has sixteen 128-byte slots. Slot 4 (current EL, SP_EL1,
+   synchronous, offset 0x200) now saves an integer context before dispatch. All
+   other slots record their number and enter the fatal-only path.
+4. Assembly masks interrupts, uses a single-CPU nested-entry guard and captures
+   ESR_EL1, ELR_EL1, SPSR_EL1, FAR_EL1 and entry SP. Rust runs on a dedicated
+   16 KiB, 16-byte-aligned stack. Slot 4 first needs space on the normal stack.
+5. Only the explicitly approved SVC site may restore registers and execute ERET.
+   A rejected event initializes/takes over PL011, reports registers and waits
+   forever. There is no automatic retry, unwinding or return from a fatal report.
 
 `EXCEPTION` and `HALTED` lines are fatal console diagnostics, not successful
 `@rai1` responses or task results. The normal boot banners and protocol are
@@ -76,11 +78,12 @@ and kernel Clippy passed for both the default and self-test configurations.
 - One CPU, EL1, caches off, expected RAM/UART mappings, no service isolation.
   The later MMU increment enables identity translation before the boot banner.
 - The guard is zeroed before vector installation; no atomics are needed under
-  this single-CPU, masked-interrupt, non-returning contract. A nested exception
-  halts in assembly without reusing the diagnostic stack or attempting more UART.
+  this single-CPU, masked-interrupt contract. The allowed return clears the guard.
+  A nested slot-4 entry saves a frame before checking it; nested dispatch/reporting
+  is blocked, but faults during that stack save are not recoverable.
 - The Rust entry follows AAPCS64 on a reserved aligned stack. It never returns,
-  so clobbered general registers cannot corrupt resumed execution. A future
-  resumable handler must save/restore the full required context first.
+  so clobbered general registers cannot corrupt resumed execution. The separate
+  approved-return path saves/restores its integer context; see [CONTEXT.md](CONTEXT.md).
 - UART ownership is permanently transferred on a fatal exception. No Rust MMIO
   references or locks are held across accesses. This needs redesign for SMP,
   resumable interrupts, or concurrent drivers.
@@ -99,7 +102,7 @@ coordinator continues choosing jobs by priority; this increment changes the
 kernel's failure path only. To host isolated services inside RAI-OS, subsequent
 work still needs separate protected service mappings, user-mode entry, system calls,
 scheduling, IPC, and recovery rules. Exception entry is one prerequisite; the
-current fatal-only implementation cannot yet handle a syscall and resume a service.
+controlled EL1 return does not yet implement an EL0 syscall or service runtime.
 
 Architectural references:
 

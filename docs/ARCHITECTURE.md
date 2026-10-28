@@ -35,8 +35,9 @@ one CPU, interrupts disabled, exclusive UART access, and either pre-MMU access
 or the active Device-nGnRnE identity mapping. A fatal handler
 may take over UART permanently without resuming the interrupted writer. These assumptions
 must be revisited for another board, remapping, or concurrency. Linker symbols and
-Assembly entry form the boot contract. EL1 exception vectors now enter a fatal
-UART diagnostic on a dedicated stack; see [EXCEPTIONS.md](EXCEPTIONS.md) for
+Assembly entry form the boot contract. EL1 exception vectors support one
+allowlisted synchronous return; other events enter a fatal UART diagnostic on
+a dedicated stack; see [EXCEPTIONS.md](EXCEPTIONS.md) for
 assumptions and limits. Rust panic still prints and halts without recovery.
 
 ## Responsibilities
@@ -47,8 +48,10 @@ assumptions and limits. Rust panic still prints and halts without recovery.
 - mmu/tables.rs: pure fixed-board mapping construction; mmu/mod.rs: owned
   table pages and EL1 register activation/readback. Code is read-only/executable,
   data is non-executable, and tables/constants are read-only/non-executable.
-- exceptions.S / exceptions.rs: fatal EL1 entry, register capture, dedicated
-  diagnostic stack, UART reporting, and halt. No resumable handler yet.
+- exceptions.S / exceptions.rs: EL1 entry, full integer frame for slot 4,
+  dedicated handler stack, allowlisted return or fatal UART report/halt.
+- context/: pure return policy, fixed frame layout and bounded SVC/ERET diagnostic.
+  See [CONTEXT.md](CONTEXT.md); no EL0 runtime or task switching.
 - clock.rs: read-only generic counter adapter and boot-relative time.
 - uart.rs: bytes and MMIO, including allocation-free formatted output.
 - console.rs: framing, response rendering, and interleaving a bounded task step

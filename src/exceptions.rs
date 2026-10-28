@@ -1,11 +1,11 @@
-//! Fatal EL1 diagnostics, not recovery, interrupt handling, or process isolation.
+//! EL1 diagnostics plus one allowlisted synchronous return; no general recovery.
 use core::arch::{asm, global_asm};
 
 global_asm!(include_str!("exceptions.S"));
 
-// SAFETY: unique assembly entry calls this only after capturing EL1 registers,
-// masking interrupts and selecting our dedicated aligned stack. It never resumes
-// interrupted code, so no general-register save/restore or Rust unwinding occurs.
+// SAFETY: assembly fatal entry or synchronous dispatch calls this after capturing
+// EL1 registers, masking interrupts and selecting our dedicated aligned stack.
+// This fatal reporter never resumes interrupted code or unwinds.
 // One CPU owns PL011; the nested-exception guard prevents recursive reporting.
 #[unsafe(no_mangle)]
 pub extern "C" fn exception_report(
@@ -62,4 +62,27 @@ pub fn self_test() {
     // returns. Test code keeps a RET so an erroneous return is observable as a
     // console banner and fails verification instead of falling into random code.
     unsafe { exception_test_trigger() };
+}
+
+// SAFETY: synchronous_entry saves a fully initialized, aligned Frame on the
+// live normal stack and passes its exclusive address while using the dedicated
+// exception stack. One CPU, DAIF masked, no unwinding and no recursive entry.
+// This immutable borrow ends before assembly restores the frame and executes ERET.
+#[unsafe(no_mangle)]
+pub extern "C" fn exception_dispatch(frame: &crate::context::Frame) {
+    unsafe extern "C" {
+        static context_probe_resume: u8;
+    }
+    let expected_return = core::ptr::addr_of!(context_probe_resume) as u64;
+    if crate::context::policy::may_resume(frame.esr, frame.elr, frame.spsr, expected_return) {
+        return;
+    }
+    exception_report(
+        4,
+        frame.esr,
+        frame.elr,
+        frame.spsr,
+        frame.far,
+        frame as *const _ as u64 + core::mem::size_of::<crate::context::Frame>() as u64,
+    )
 }

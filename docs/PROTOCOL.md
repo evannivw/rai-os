@@ -17,7 +17,7 @@ Examples use literal escape notation for actual TAB, LF, and CR bytes:
 ```
 
 Grammar: @rai1 TAB id TAB operation [TAB argument] line-ending.
-help/info/uptime/memory.info/memory.check/mmu.info require exactly three fields; echo requires four, with a possibly
+help/info/uptime/memory.info/memory.check/mmu.info/context.check require exactly three fields; echo requires four, with a possibly
 empty argument. Names are case-sensitive. ID: 1-10 ASCII digits with value
 1..4294967295; leading zeros are allowed and preserved. IDs are not remembered.
 
@@ -82,6 +82,21 @@ Enabled/WXN/cache flags, root, TCR and MAIR are read from EL1 registers. Mode,
 granule and table count describe the fixed mapping policy. This is read-only
 status, not a remapping API. See [MMU.md](MMU.md). Older kernels return
 unknown_operation for this additive v1 operation.
+
+## Context diagnostic
+
+`context.check` accepts exactly three fields and is also an argument-free shell
+command. It performs two bounded EL1 SVC/ERET probes, then returns:
+
+```text
+round_trips=2; registers=31; flags=true; stack=true; resumed=true
+```
+
+These flags reflect observed register/flag/stack comparisons, not a cached boot
+status. A mismatch returns `context_corrupt`; a fatal fault halts with the usual
+diagnostic and no success reply. There are no user-supplied context addresses or
+register values. See [CONTEXT.md](CONTEXT.md) for safety and scope. Older kernels
+return unknown_operation for this additive v1 operation.
 
 ## Errors
 
