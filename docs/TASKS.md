@@ -71,7 +71,8 @@ needed for the task; MMIO access retains its documented board assumptions.
 
 This remains a busy polling loop. Transmit still waits for UART readiness and
 can delay processing; no strict real-time latency or CPU/energy saving is claimed.
-Future interrupts and scheduling require separate design and tests.
+The later EL0 timer deadline does not preempt this cooperative kernel job.
+Scheduling it alongside guest services still requires separate design and tests.
 
 ## Wire contract
 

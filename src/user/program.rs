@@ -35,6 +35,8 @@ pub extern "C" fn user_program() -> ! {
         feature = "user-test-uart",
         feature = "user-test-gic",
         feature = "user-test-execute-stack",
+        feature = "user-test-mask-irq",
+        feature = "user-test-disable-timer",
         feature = "user-test-privileged"
     ))]
     {
@@ -60,6 +62,15 @@ pub extern "C" fn user_program() -> ! {
         expect_error(2, 256, 0, 3);
     }
 
+    #[cfg(feature = "user-test-syscall-loop")]
+    {
+        unsafe extern "C" {
+            fn user_syscall_loop();
+        }
+        // SAFETY: linked test-only EL0 assembly; C ABI scratch registers only.
+        // Timer/dispatch terminates it; a broken loop returning is test failure.
+        unsafe { user_syscall_loop() };
+    }
     let (count, error) = call(1, MESSAGE.as_ptr() as u64, 14);
     exit(if count == 14 && error == 0 { 0 } else { 1 })
 }
@@ -75,3 +86,25 @@ fn expect_error(number: u64, first: u64, second: u64, expected: u64) {
         exit(1);
     }
 }
+
+// Deliberately non-cooperative diagnostic. No SVC, counter read or voluntary exit.
+core::arch::global_asm!(
+    ".section .user.text, \"ax\"",
+    ".global user_spin",
+    ".type user_spin, %function",
+    "user_spin:",
+    "b user_spin",
+    ".size user_spin, . - user_spin",
+);
+
+#[cfg(feature = "user-test-syscall-loop")]
+core::arch::global_asm!(
+    ".section .user.text, \"ax\"",
+    ".global user_syscall_loop",
+    ".global user_syscall_loop_end",
+    "user_syscall_loop:",
+    "mov x8, #99",
+    "svc #0",
+    "b user_syscall_loop",
+    "user_syscall_loop_end:",
+);

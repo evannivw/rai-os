@@ -1,4 +1,6 @@
-//! Controlled EL1 timer IRQ diagnostic; normal kernel/EL0 execution stays masked.
+//! Sole timer owner: controlled EL1 diagnostic and an absolute EL0 deadline.
+mod budget;
+pub use budget::{Budget, USER_BUDGET_MS};
 mod hardware;
 use crate::{
     clock,
@@ -46,6 +48,25 @@ impl Timer {
             period: u64::from(frequency).div_ceil(100) as u32,
             frequency,
         }
+    }
+    pub fn start_user_budget(&mut self) -> Result<Budget, &'static str> {
+        if hardware::masks() != 0x3c0
+            || !ACTIVE.load(Ordering::Acquire).is_null()
+            || !hardware::quiescent()
+        {
+            return Err("timer_busy");
+        }
+        let budget = Budget::new(clock::counter(), self.frequency)?;
+        hardware::start();
+        hardware::arm_deadline(budget.deadline);
+        Ok(budget)
+    }
+    pub fn finish_user_budget(&mut self) -> Result<(), &'static str> {
+        hardware::stop();
+        if hardware::masks() != 0x3c0 || !hardware::quiescent() {
+            return Err("timer_cleanup_failed");
+        }
+        Ok(())
     }
     pub fn check(&mut self) -> Result<Report, &'static str> {
         if hardware::masks() != 0x3c0 {
@@ -140,4 +161,21 @@ pub fn interrupt(frame: &mut Frame) -> Result<(), u32> {
     }
     hardware::complete(acknowledgement);
     Ok(())
+}
+
+/// Called only from lower-EL IRQ entry with masks/guard set. True means CNTP;
+/// false is spurious. Deassert before EOI; caller validates the active session.
+pub fn user_interrupt() -> Result<bool, u32> {
+    let acknowledgement = hardware::acknowledge();
+    let id = acknowledgement & 1023;
+    if id >= 1020 {
+        return Ok(false);
+    }
+    hardware::disable_timer();
+    hardware::complete(acknowledgement);
+    if id == hardware::TIMER_IRQ {
+        Ok(true)
+    } else {
+        Err(id)
+    }
 }

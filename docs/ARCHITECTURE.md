@@ -2,7 +2,7 @@
 
 An educational AArch64 kernel for QEMU, with a long-term microkernel direction.
 Kernel modules share privilege and memory. One built-in Rust program now runs
-at EL0 with bounded write/exit syscalls; see [USER_PROGRAM.md](USER_PROGRAM.md).
+at EL0 with bounded write/exit syscalls and a timer-enforced invocation deadline; see [USER_PROGRAM.md](USER_PROGRAM.md).
 There is no multi-task scheduler, process IPC, heap, separate process address
 spaces or isolated agent execution. EL1 stage-1 translation is active
 with one identity-mapped address space; see [MMU.md](MMU.md).
@@ -51,21 +51,22 @@ assumptions and limits. Rust panic still prints and halts without recovery.
   table pages and EL1 register activation/readback. Code is read-only/executable,
   data is non-executable, and tables/constants are read-only/non-executable.
   Explicit user code/constants/stack pages permit EL0; kernel/device pages do not.
-- exceptions.S / exceptions.rs: EL1 entry, full integer frames for slots 4, 5 and 8,
+- exceptions.S / exceptions.rs: EL1 entry, full integer frames for slots 4, 5, 8 and 9,
   dedicated handler stack, allowlisted EL1 return, EL0 dispatch, or fatal report.
 - context/: pure return policy, fixed frame layout and bounded SVC/ERET diagnostic.
   See [CONTEXT.md](CONTEXT.md); no task switching.
 - user/: one linked Rust program, privilege transition, bounded copy/exit policy
-  and synchronous invocation lifecycle. User faults terminate only that invocation.
-- timer/: exclusive GICv2/CNTP adapter and a controlled EL1 IRQ diagnostic.
-  Only its assembly probe unmasks IRQs; successful handlers never use UART,
-  allocate or access other services. See [TIMER.md](TIMER.md).
+  and synchronous invocation lifecycle. User faults and elapsed deadlines terminate
+  only that invocation; [USER_TIMEOUT.md](USER_TIMEOUT.md) describes the boundary.
+- timer/: exclusive GICv2/CNTP adapter, controlled EL1 IRQ diagnostic and absolute
+  EL0 budget. IRQs are enabled in the diagnostic loop or EL0; successful handlers
+  never use UART or allocate. User timeout dispatch accesses only its paused session. See [TIMER.md](TIMER.md).
 - clock.rs: read-only generic counter adapter and boot-relative time.
 - uart.rs: bytes and MMIO, including allocation-free formatted output.
 - console.rs: framing, response rendering, and interleaving a bounded task step
   with nonblocking UART receive. Transmit still polls.
 - task.rs: one owned word-count job, pure state transitions, progress/cancellation.
-  See [TASKS.md](TASKS.md); no process isolation or preemption is introduced.
+  See [TASKS.md](TASKS.md); this kernel job remains cooperative and unisolated.
 - protocol.rs: structured request parsing without execution.
 - command.rs: human-command parsing and execution of allowed operations. It
   receives typed uptime/MMU snapshots and delegates memory use to its owned adapter.

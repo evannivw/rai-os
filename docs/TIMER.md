@@ -2,8 +2,9 @@
 
 Implemented October 28, 2026. `timer.check` receives real emulated Arm physical
 timer IRQs through GICv2, saves/restores integer state, then disables the timer.
-This is a kernel diagnostic, not scheduling or EL0 preemption. Ordinary kernel
-code and the built-in user program still run with asynchronous interrupts masked.
+This command is a kernel diagnostic, not scheduling. The same timer owner now
+also enforces an [EL0 invocation deadline](USER_TIMEOUT.md). Ordinary kernel Rust
+still runs masked; EL0 enables IRQs only while its deadline is armed.
 
 ## Try and verify
 
@@ -59,7 +60,7 @@ python3 scripts/verify_user.py --release
 - One privileged owner, one CPU, soft-float code, fixed mappings and no other IRQ
   drivers or DMA. Initialization resets GIC enables/pending/active state; it must
   not be reused alongside another interrupt owner. No SIMD/FPU context is saved.
-- IRQs are unmasked only in the assembly loop. Rust retains no live borrow of the
+- During this EL1 diagnostic, IRQs are unmasked only in the assembly loop. Rust retains no live borrow of the
   round across handler access: its raw pointer is published while IRQs are masked
   and cleared before the stack value dies. The suspended caller and non-nested
   handler cannot access the round concurrently. The AtomicPtr alone would not
@@ -75,11 +76,11 @@ python3 scripts/verify_user.py --release
 - If IRQ delivery fails, the assembly loop cannot time out by itself. The verifier
   has a host-side deadline and reaps QEMU; manual use requires restarting QEMU.
   A host timeout does not recover the guest. Nested/corrupt kernel stacks, alternate
-  boards, SMP, counter wrap/reset and timer delivery during EL0 are untested.
+  boards, SMP, counter wrap/reset and general interrupt-driven services are untested here; see the separate EL0 tests.
 - This busy loop and polling UART do not reduce CPU use. No energy, speed, phone
-  support, agent isolation or AI claim follows. `user.run` can still monopolize
-  execution if a future user image loops. The next step is controlled EL0 timeout,
-  followed by explicit scheduling/lifecycle work; see [ROADMAP.md](ROADMAP.md).
+  support, agent isolation or AI claim follows. `user.run` occupies
+  execution until it exits, faults or reaches its fixed deadline. [EL0 timeout](USER_TIMEOUT.md) is now
+  implemented; suspension/resumption and scheduling remain future work; see [ROADMAP.md](ROADMAP.md).
 
 ## Observed verification
 
@@ -94,7 +95,7 @@ Rust 1.90.0 and QEMU 11.1.2 on macOS ARM64, debug and release:
   and halts with the expected ID, exact loop PC, saved status and valid stack
   bounds. An info request receives no response during a 250 ms observation.
   The normal ELF excludes the injection marker; test features are mutually exclusive.
-- The EL0 suite now has eight image cases. Its additional `user-test-gic` case
+- At this increment the EL0 suite had eight image cases. Its additional `user-test-gic` case
   performs a forbidden GIC distributor read, verifies a level-3 permission fault
   at the exact instruction/address, then confirms the kernel remains usable.
 

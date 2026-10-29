@@ -1,0 +1,76 @@
+QEMU UART and verifier summaries, October 28, 2026 (release).
+CR bytes rendered as \r; LF preserved.
+
+PASS (release/normal): actual timeout, saved EL0 PC/state/SP, fixed deadline, repeated invocation, timer/context/memory/console continuity and invalid arguments.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r
+Console ready: type help for commands\r
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400a8000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	2	ok	mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=105; vector=9; pc=0x00000000400a2000; spsr=0x0000000000000340; sp=0x00000000400a7000; syscalls=0\r
+@rai1	3	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	4	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=72\r
+@rai1	5	ok	after timeout\r
+@rai1	6	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0\r
+@rai1	7	ok	mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=105; vector=9; pc=0x00000000400a2000; spsr=0x0000000000000340; sp=0x00000000400a7000; syscalls=0\r
+@rai1	8	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	9	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=72\r
+@rai1	10	ok	after timeout\r
+@rai1	11	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0\r
+@rai1	12	ok	mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=104; vector=9; pc=0x00000000400a2000; spsr=0x0000000000000340; sp=0x00000000400a7000; syscalls=0\r
+@rai1	13	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	14	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=71\r
+@rai1	15	ok	after timeout\r
+@rai1	16	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0\r
+@rai1	17	ok	after old deadline\r
+@rai1	18	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400a8000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	19	ok	checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250\r
+@rai1	20	err	bad_args\r
+@rai1	21	err	bad_args\r
+user.spin extra\r
+error: unknown_command\r
+user.spin\r
+mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=105; vector=9; pc=0x00000000400a2000; spsr=0x0000000000000340; sp=0x00000000400a7000; syscalls=0\r
+@rai1	22	ok	console remains usable\r
+PASS (release/syscall-loop): actual timeout, saved EL0 PC/state/SP, fixed deadline, repeated invocation, timer/context/memory/console continuity and invalid arguments.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r
+Console ready: type help for commands\r
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400a8000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	2	ok	mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=100; vector=8; pc=0x00000000400a200c; spsr=0x0000000000000340; sp=0x00000000400a6ff0; syscalls=78715\r
+@rai1	3	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	4	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=81\r
+@rai1	5	ok	after timeout\r
+@rai1	6	ok	mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=100; vector=8; pc=0x00000000400a200c; spsr=0x0000000000000340; sp=0x00000000400a6ff0; syscalls=76889\r
+@rai1	7	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	8	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=70\r
+@rai1	9	ok	after timeout\r
+@rai1	10	ok	after old deadline\r
+@rai1	11	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400a8000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	12	ok	checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250\r
+@rai1	13	err	bad_args\r
+@rai1	14	err	bad_args\r
+user.spin extra\r
+error: unknown_command\r
+user.spin\r
+mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=104; vector=9; pc=0x00000000400a2000; spsr=0x0000000000000340; sp=0x00000000400a7000; syscalls=0\r
+@rai1	15	ok	console remains usable\r
+PASS (release/expired-syscall): actual timeout, saved EL0 PC/state/SP, fixed deadline, repeated invocation, timer/context/memory/console continuity and invalid arguments.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r
+Console ready: type help for commands\r
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400a8000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	2	ok	mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=100; vector=8; pc=0x00000000400a2018; spsr=0x0000000000000340; sp=0x00000000400a7000; syscalls=0\r
+@rai1	3	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	4	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=73\r
+@rai1	5	ok	after timeout\r
+@rai1	6	ok	mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=100; vector=8; pc=0x00000000400a2018; spsr=0x0000000000000340; sp=0x00000000400a7000; syscalls=0\r
+@rai1	7	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	8	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=71\r
+@rai1	9	ok	after timeout\r
+@rai1	10	ok	after old deadline\r
+@rai1	11	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400a8000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	12	ok	checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250\r
+@rai1	13	err	bad_args\r
+@rai1	14	err	bad_args\r
+user.spin extra\r
+error: unknown_command\r
+user.spin\r
+mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=104; vector=9; pc=0x00000000400a2000; spsr=0x0000000000000340; sp=0x00000000400a7000; syscalls=0\r
+@rai1	15	ok	console remains usable\r

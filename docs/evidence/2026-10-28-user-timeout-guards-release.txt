@@ -1,0 +1,37 @@
+Actual QEMU UART, October 28, 2026 (release).
+CR bytes rendered as \r; LF preserved.
+
+Case: user-test-mask-irq
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r
+Console ready: type help for commands\r
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400a8000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	2	ok	mode=EL0; state=faulted; esr=0x00000000620793e4; pc=0x00000000400a2000; far_raw=0x0000000000000000; spsr=0x0000000000000340; sp=0x00000000400a6ff0; syscalls=0\r
+@rai1	3	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=73\r
+@rai1	4	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	5	ok	kernel survived\r
+@rai1	6	ok	mode=EL0; state=faulted; esr=0x00000000620793e4; pc=0x00000000400a2000; far_raw=0x0000000000000000; spsr=0x0000000000000340; sp=0x00000000400a6ff0; syscalls=0\r
+@rai1	7	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=69\r
+@rai1	8	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	9	ok	kernel survived\r
+@rai1	10	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400a8000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	11	ok	checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250\r
+@rai1	12	err	bad_args\r
+@rai1	13	err	bad_args\r
+
+Case: user-test-disable-timer
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r
+Console ready: type help for commands\r
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400a8000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	2	ok	mode=EL0; state=faulted; esr=0x000000006232fbe4; pc=0x00000000400a2000; far_raw=0x0000000000000000; spsr=0x0000000000000340; sp=0x00000000400a6ff0; syscalls=0\r
+@rai1	3	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=74\r
+@rai1	4	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	5	ok	kernel survived\r
+@rai1	6	ok	mode=EL0; state=faulted; esr=0x000000006232fbe4; pc=0x00000000400a2000; far_raw=0x0000000000000000; spsr=0x0000000000000340; sp=0x00000000400a6ff0; syscalls=0\r
+@rai1	7	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=68\r
+@rai1	8	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	9	ok	kernel survived\r
+@rai1	10	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400a8000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	11	ok	checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250\r
+@rai1	12	err	bad_args\r
+@rai1	13	err	bad_args\r
+

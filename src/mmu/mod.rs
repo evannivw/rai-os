@@ -78,8 +78,9 @@ impl Mmu {
         tables::build(buffers, addresses, layout).expect("invalid MMU layout");
         let root = addresses[0] as u64;
         // Preserve architectural reset/reserved bits; keep caches off and little
-        // endian. WXN adds a blanket execute-never rule for writable mappings.
-        let control = (prior & !((1 << 25) | (1 << 24) | (1 << 12) | (1 << 2))) | 1 | (1 << 19);
+        // endian. Clear UMA so EL0 cannot mask IRQs. WXN adds a blanket execute-never rule for writable mappings.
+        let control =
+            (prior & !((1 << 25) | (1 << 24) | (1 << 9) | (1 << 12) | (1 << 2))) | 1 | (1 << 19);
         // SAFETY: tables are complete, cover this PC/SP/vectors/UART by identity,
         // and cannot be released. DSB publishes writes; invalidation and ISBs
         // synchronize the translation context. No nomem: mappings/order change.

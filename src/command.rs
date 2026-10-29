@@ -4,7 +4,7 @@ use crate::mmu::Snapshot as MmuSnapshot;
 use crate::task::{Snapshot, Task};
 use core::fmt;
 
-pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | user.run | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
+pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
 pub const INFO: &str =
     "RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected";
 
@@ -16,6 +16,7 @@ pub enum Operation<'a> {
     ContextCheck,
     TimerCheck,
     UserRun,
+    UserSpin,
     MemoryInfo,
     MemoryCheck,
     Echo(&'a str),
@@ -30,6 +31,7 @@ pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
         "info" => Ok(Operation::Info),
         "timer.check" => Ok(Operation::TimerCheck),
         "user.run" => Ok(Operation::UserRun),
+        "user.spin" => Ok(Operation::UserSpin),
         "context.check" => Ok(Operation::ContextCheck),
         "mmu.info" => Ok(Operation::MmuInfo),
         "memory.info" => Ok(Operation::MemoryInfo),
@@ -106,7 +108,8 @@ pub fn execute<'a>(
 ) -> Result<Reply<'a>, &'static str> {
     Ok(match operation {
         Operation::TimerCheck => Reply::Timer(timer.check()?),
-        Operation::UserRun => Reply::User(crate::user::run()?),
+        Operation::UserRun => Reply::User(crate::user::run(timer, crate::user::Program::Hello)?),
+        Operation::UserSpin => Reply::User(crate::user::run(timer, crate::user::Program::Spin)?),
         Operation::ContextCheck => Reply::Text(crate::context::check()?),
         Operation::MmuInfo => Reply::Mmu(mmu),
         Operation::MemoryInfo => Reply::Memory(memory.snapshot()),

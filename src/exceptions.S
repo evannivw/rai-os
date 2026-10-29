@@ -23,7 +23,8 @@ vector 6
 vector 7
     b user_synchronous_entry
     .space 124 // Slot 8: lower EL, AArch64 synchronous.
-vector 9
+    b user_irq_entry
+    .space 124 // Slot 9: lower EL, AArch64 IRQ.
 vector 10
 vector 11
 vector 12  // Lower EL, AArch32 (not supported)
@@ -98,6 +99,10 @@ timer_irq_entry:
 user_synchronous_entry:
     save_integer_frame
     mov x20, #8
+    b .Ldispatch_sync
+user_irq_entry:
+    save_integer_frame
+    mov x20, #9
 .Ldispatch_sync:
     msr daifset, #0xf
     ldr x0, =exception_reporting

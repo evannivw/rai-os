@@ -7,7 +7,8 @@ work, not recovery, process isolation, preemption, or a complete interrupt syste
 Updated October 28: slot 4 also supports one [controlled EL1 return](CONTEXT.md);
 the fatal path and historical captures below remain applicable to rejected EL1 events.
 The later [EL0 increment](USER_PROGRAM.md) adds bounded syscalls and contained
-user faults through slot 8. Slot 5 now handles [controlled timer IRQs](TIMER.md). Unexpected kernel exceptions still halt the guest.
+user faults through slot 8. Slot 5 handles [controlled EL1 timer IRQs](TIMER.md), and slot 9 handles
+[EL0 timeout IRQs](USER_TIMEOUT.md). Unexpected kernel exceptions still halt the guest.
 
 ## What happens
 
@@ -15,15 +16,15 @@ user faults through slot 8. Slot 5 now handles [controlled timer IRQs](TIMER.md)
 2. It writes the 2 KiB-aligned table address to VBAR_EL1 and executes ISB.
 3. The table has sixteen 128-byte slots. Slot 4 (current EL, SP_EL1,
    synchronous, offset 0x200) now saves an integer context before dispatch.
-   Slots 5 and 8 also save frames for timer IRQ and EL0 dispatch. Other slots record their
+   Slots 5, 8 and 9 also save frames for timer IRQ and EL0 dispatch. Other slots record their
    number and enter the fatal-only path.
 4. Assembly masks interrupts, uses a single-CPU nested-entry guard and captures
    ESR_EL1, ELR_EL1, SPSR_EL1, FAR_EL1 and entry SP. Rust runs on a dedicated
    16 KiB, 16-byte-aligned stack. Slot 4 first needs space on the normal stack.
 5. At EL1, the approved SVC site and controlled timer probe may restore registers and execute
    ERET. Rejected EL1 events initialize/take over PL011, report and wait forever.
-   Slot 8 separately resumes valid user syscalls or terminates a faulting user
-   invocation. There is no automatic retry, unwinding or return from a fatal report.
+   Slot 8 separately resumes valid user syscalls or terminates faulted/expired
+   invocations. Slot 9 terminates a user invocation whose timer deadline expired. There is no automatic retry, unwinding or return from a fatal report.
 
 `EXCEPTION` and `HALTED` lines are fatal console diagnostics, not successful
 `@rai1` responses or task results. The normal boot banners and protocol are
@@ -44,8 +45,8 @@ added in this increment.
 
 ESR/ELR interpretation also depends on exception type; do not treat all sixteen
 slots as synchronous faults with a valid memory address. IRQ/FIQ/SError remain
-masked during ordinary execution. Only the controlled EL1 assembly timer probe
-unmasks IRQs and uses the GICv2/CNTP handler. IRQ ESR/FAR values are not decoded
+masked during ordinary kernel execution. The controlled EL1 assembly timer probe
+and a deadline-protected EL0 invocation enable IRQs and use GICv2/CNTP handlers. IRQ ESR/FAR values are not decoded
 as synchronous fault information.
 
 ## Verify a deliberate exception
@@ -81,7 +82,7 @@ and kernel Clippy passed for both the default and self-test configurations.
 
 ## Safety conditions and limitations
 
-- One CPU, EL1, caches off, expected RAM/UART mappings, no service isolation.
+- One CPU, EL1, caches off, expected RAM/UART mappings, one user privilege boundary, no separate service address spaces.
   The later MMU increment enables identity translation before the boot banner.
 - The guard is zeroed before vector installation; no atomics are needed under
   this single-CPU, masked-interrupt contract. The allowed return clears the guard.
@@ -107,8 +108,8 @@ and kernel Clippy passed for both the default and self-test configurations.
 The kernel is evolving infrastructure, not permanently fixed code. The host
 coordinator continues choosing jobs by priority; this increment changes the
 kernel's failure path only. To host isolated services inside RAI-OS, subsequent
-work still needs separate protected service mappings, user-mode entry, system calls,
-scheduling, IPC, and recovery rules. Exception entry is one prerequisite; the
+work still needs separate protected service mappings, scheduling, IPC, and broader recovery rules. Built-in user-mode entry and
+bounded system calls are already implemented. Exception entry is one prerequisite; the
 controlled EL1 return plus the later EL0 program are prerequisites, not a complete
 service runtime.
 

@@ -71,6 +71,10 @@ fn panic(_info: &PanicInfo) -> ! {
 const _: () = assert!(
     cfg!(feature = "exception-self-test") as usize
         + cfg!(feature = "timer-test-unexpected-irq") as usize
+        + cfg!(feature = "user-test-syscall-loop") as usize
+        + cfg!(feature = "user-test-mask-irq") as usize
+        + cfg!(feature = "user-test-disable-timer") as usize
+        + cfg!(feature = "user-test-expired-syscall") as usize
         + cfg!(feature = "user-test-invalid-calls") as usize
         + cfg!(feature = "user-test-read-kernel") as usize
         + cfg!(feature = "user-test-write-code") as usize

@@ -66,3 +66,25 @@ core::arch::global_asm!(
     "ldr w0, [x9]",
     "ret",
 );
+
+#[cfg(feature = "user-test-mask-irq")]
+core::arch::global_asm!(
+    ".section .user.text, \"ax\"",
+    ".global user_fault_probe",
+    ".global user_fault_instruction",
+    "user_fault_probe:",
+    "user_fault_instruction:",
+    "msr daifset, #2",
+    "ret",
+);
+
+#[cfg(feature = "user-test-disable-timer")]
+core::arch::global_asm!(
+    ".section .user.text, \"ax\"",
+    ".global user_fault_probe",
+    ".global user_fault_instruction",
+    "user_fault_probe:",
+    "user_fault_instruction:",
+    "msr cntp_ctl_el0, xzr",
+    "ret",
+);

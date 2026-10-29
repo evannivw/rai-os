@@ -3,7 +3,7 @@
 .global _start
 .type _start, %function
 _start:
-    msr daifset, #0xf           // Keep interrupts masked; IRQ handling is not implemented.
+    msr daifset, #0xf           // Keep boot masked; controlled IRQ windows are enabled later.
     mrs x0, CurrentEL
     cmp x0, #4
     b.ne .Lhalt                // Unsupported boot level: do not enter Rust.

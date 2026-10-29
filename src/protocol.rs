@@ -32,6 +32,7 @@ pub fn parse(line: &str) -> Result<Request<'_>, Error<'_>> {
         Some("info") => Operation::Info,
         Some("timer.check") => Operation::TimerCheck,
         Some("user.run") => Operation::UserRun,
+        Some("user.spin") => Operation::UserSpin,
         Some("context.check") => Operation::ContextCheck,
         Some("mmu.info") => Operation::MmuInfo,
         Some("memory.info") => Operation::MemoryInfo,

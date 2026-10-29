@@ -9,6 +9,10 @@ description = "Educational AArch64 kernel for QEMU virt"
 # Deliberately halts at boot; verification uses a separate target directory.
 exception-self-test = []
 timer-test-unexpected-irq = []
+user-test-syscall-loop = []
+user-test-mask-irq = []
+user-test-disable-timer = []
+user-test-expired-syscall = []
 user-test-invalid-calls = []
 user-test-read-kernel = []
 user-test-write-code = []

@@ -89,3 +89,8 @@ even if the request itself was handled. See [USER_PROGRAM.md](USER_PROGRAM.md).
 Enter `timer.check` to receive six actual timer IRQs in two controlled EL1
 rounds. A successful reply reports preserved integer state and disabled timer
 afterward. See [TIMER.md](TIMER.md); this does not schedule the EL0 program.
+
+Enter `user.spin` to run a deliberately infinite EL0 loop. The kernel terminates
+it after the fixed deadline and returns `state=timed_out`; this is not success
+for the user program. Then enter `user.run` to verify normal execution continues.
+The [EL0 timeout guide](USER_TIMEOUT.md) explains the measured result and limits.

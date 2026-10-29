@@ -2,7 +2,8 @@
 
 Implemented October 28, 2026. `user.run` enters a built-in Rust program at EL0,
 accepts two bounded syscalls and returns to the kernel after exit or a contained
-synchronous user fault. The MMU denies this program access to kernel memory and
+synchronous user fault. The later [deadline increment](USER_TIMEOUT.md) also
+terminates expired invocations. The MMU denies this program access to kernel memory and
 UART. This is one privilege boundary in one address space, not a multi-process
 runtime, application loader, scheduler or complete microkernel.
 
@@ -61,7 +62,7 @@ outside the physical-page pool; its counts remain 256 total, six table pages,
 
 | Region | EL0 | EL1 |
 | --- | --- | --- |
-| Kernel code/data/stacks/tables and UART | No access | Existing kernel permissions |
+| Kernel code/data/stacks/tables and UART/GIC | No access | Existing kernel permissions |
 | User instructions | Read / execute | Read only, no execution |
 | User constants | Read only, no execution | Read only, no execution |
 | User stack | Read / write, no execution | Read / write, no execution |
@@ -70,14 +71,14 @@ outside the physical-page pool; its counts remain 256 total, six table pages,
 The mappings are immutable and shared in a single translation context. Each run
 clears the user stack and creates a fresh result/session. The transition saves
 kernel callee-saved registers on SP_EL1, assigns SP_EL0, clears x0-x30, and uses
-ERET to enter EL0t with asynchronous interrupts masked. No kernel register values
+ERET to enter EL0t with IRQ enabled and D/A/F masked (0x340). No kernel register values
 are intentionally passed to the program.
 
 Vector 8 captures user registers on the private EL1 stack, including SP_EL0, then
 runs dispatch on the exception stack. A syscall is accepted only with the expected
-SVC syndrome, EL0t/masked saved state, return PC inside user code and an aligned
+SVC syndrome, EL0t/IRQ-enabled saved state, return PC inside user code and an aligned
 SP inside the user stack. Write returns restore the frame with new x0/x1 values.
-Exit/fault returns use a fixed kernel trampoline; user input cannot select its PC.
+Exit/fault/timeout returns use a fixed kernel trampoline; user input cannot select its PC.
 The original EL1 context probe and kernel fatal path are retained.
 
 One private AtomicPtr identifies the stack-owned active Session. `run` publishes
@@ -94,11 +95,13 @@ terminates this invocation and returns to the console. Its payload says
 `state=faulted`; this is not a successful program result. UART `ok` means the
 run request was handled and a report is available: callers must inspect state
 and exit code. Kernel exceptions still halt the guest unless they are the exact
-existing EL1 diagnostic SVC. FAR validity depends on the exception class.
+approved EL1 diagnostic SVC or timer IRQs. FAR validity depends on the exception class.
 
-The [timer diagnostic](TIMER.md) runs only at EL1; EL0 still has IRQs masked.
-There is no user preemption or CPU budget yet. A looping program would block
-console/task progress; fault containment does not imply resource isolation.
+The timer owner now gives each invocation a fixed 100 ms guest-counter deadline.
+`user.spin` demonstrates termination of a loop that never calls the kernel.
+See [USER_TIMEOUT.md](USER_TIMEOUT.md) for IRQ/syscall expiry and limits. This is
+termination, not suspension/resumption or multi-task scheduling; the console and
+cooperative task do not progress during the invocation.
 Only the built-in image and explicit test variants are accepted, not arbitrary
 binaries. There is no user heap, filesystem, dynamic linker, independent process
 address space, multitasking, phone support or agent migration in this increment.
@@ -111,10 +114,10 @@ python3 scripts/verify_user.py
 python3 scripts/verify_user.py --release
 ```
 
-Verified with Rust 1.90.0 and QEMU 11.1.2 on macOS ARM64. Each profile boots eight
-images: normal, invalid calls, and six hardware fault probes (including the
-GIC distributor read added with the timer increment). Every image runs
-the program twice and checks context/echo continuity, unchanged MMU status,
+Verified with Rust 1.90.0 and QEMU 11.1.2 on macOS ARM64. Each profile now boots ten
+images: normal, invalid calls, and eight hardware fault probes (including GIC
+access and attempts to mask IRQs or disable CNTP). Every image runs
+the program twice and checks timer/context/echo continuity, unchanged MMU status,
 physical-page diagnostics and malformed UART argument rejection. The normal image
 also runs through the direct shell. ELF checks independently validate sections,
 stack/guard placement and test PCs.
@@ -122,7 +125,8 @@ stack/guard placement and test PCs.
 The invalid-call program checks eight error replies (unknown number, kernel
 pointer, overflowing span, boundary crossing, oversized/empty text, control byte,
 invalid exit code), then writes/exits normally. Fault probes attempt kernel read,
-code write, UART/GIC reads, stack execution and a privileged register read. The verifier
+code write, UART/GIC reads, stack execution, a privileged register read, DAIFSet
+and a CNTP_CTL write. The verifier
 checks exact syndromes and fault PCs/addresses where valid, saved EL0 state, user
 SP bounds and successful subsequent kernel commands. Pure tests cover range
 validation and the updated mapping permissions/layout rejection.
@@ -133,7 +137,8 @@ Original seven-case captures: [debug](evidence/2026-10-28-user-debug.txt) and
 [release](evidence/2026-10-28-user-release.txt). Regression results are recorded in
 [WORKLOG.md](WORKLOG.md). Cumulative output exhaustion, corrupted/nested kernel
 stacks and SMP were not injected by these tests. Separate timer/GIC evidence is
-linked from [TIMER.md](TIMER.md).
+linked from [TIMER.md](TIMER.md); deadline and timer-access evidence is in
+[USER_TIMEOUT.md](USER_TIMEOUT.md).
 
 References: [Arm memory permissions](https://documentation-service.arm.com/static/63a43e333f28e5456434e18b)
 and [AArch64 exception model](https://documentation-service.arm.com/static/63a065c41d698c4dc521cb1c).

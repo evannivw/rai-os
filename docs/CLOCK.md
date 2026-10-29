@@ -49,8 +49,9 @@ also accept uptime. The host console's exit command stops its QEMU child.
 ## What this does not add
 
 The clock module itself only reads the counter. The later [timer diagnostic](TIMER.md)
-programs CNTP and handles controlled EL1 IRQs; exception vectors and a host panel
-also exist now. There are still no alarms, sleeping tasks or scheduler. UART still polls. A readable clock alone does
+programs CNTP and handles controlled EL1 IRQs; the [EL0 deadline](USER_TIMEOUT.md)
+also uses the same counter and timer owner; exception vectors and a host panel
+also exist now. There is still no general alarm API, sleeping tasks or scheduler. UART still polls. A readable clock alone does
 not make the kernel multitask or reduce its CPU use. This is elapsed time, not a
 calendar clock, CPU usage, RAM usage, battery measurement, or performance claim.
 

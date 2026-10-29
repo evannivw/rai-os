@@ -11,11 +11,10 @@ user_enter:
     stp x25, x26, [sp, #48]
     stp x27, x28, [sp, #64]
     stp x29, x30, [sp, #80]
+    msr elr_el1, x0           // Kernel-selected built-in entry, never UART data.
     ldr x0, =__user_stack_top
     msr sp_el0, x0
-    ldr x0, =user_program
-    msr elr_el1, x0
-    mov x0, #0x3c0             // EL0t, all asynchronous exceptions masked.
+    mov x0, #0x340             // EL0t, IRQ enabled; D/A/F remain masked.
     msr spsr_el1, x0
     // Do not expose kernel register contents/pointers to the program.
     mov x0, xzr

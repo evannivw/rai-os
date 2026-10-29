@@ -46,6 +46,16 @@ pub fn arm(period: u32) {
 }
 pub fn initialize() {
     assert_eq!(masks(), 0x3c0, "timer init needs masked interrupts");
+    // SAFETY: sole EL1 timer owner. Deny EL0 timer/counter access and event stream;
+    // do not rely on reset values. SCTLR.UMA must also deny user DAIF writes.
+    let (access, control): (u64, u64);
+    unsafe {
+        asm!("msr cntkctl_el1, xzr", "isb", "mrs {access}, cntkctl_el1",
+            "mrs {control}, sctlr_el1", access = out(reg) access, control = out(reg) control,
+            options(nostack, preserves_flags));
+    }
+    assert_eq!(access & 0x3ff, 0);
+    assert_eq!(control & (1 << 9), 0, "EL0 must not mask IRQs");
     disable_timer();
     write(CPU, 0, 0);
     write(DISTRIBUTOR, 0, 0);
@@ -104,4 +114,13 @@ pub fn complete(acknowledgement: u32) {
 pub fn inject_unexpected() {
     write(DISTRIBUTOR, 0xf00, (2 << 24) | 1); // SGI 1, target this CPU.
     synchronize();
+}
+
+pub fn arm_deadline(deadline: u64) {
+    // SAFETY: EL1 owns CNTP. Absolute compare value is fixed for one invocation;
+    // syscalls never reset it. Counter wrap/reset is excluded by the boot contract.
+    unsafe {
+        asm!("msr cntp_cval_el0, {deadline}", "mov x9, #1", "msr cntp_ctl_el0, x9", "isb",
+            deadline = in(reg) deadline, out("x9") _, options(nostack, preserves_flags));
+    }
 }

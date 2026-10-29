@@ -84,6 +84,23 @@ pub extern "C" fn exception_dispatch(frame: &mut crate::context::Frame, vector: 
         }
         return 0;
     }
+    if vector == 9 {
+        match crate::timer::user_interrupt() {
+            Ok(false) => return 0, // Spurious: no active IRQ to complete.
+            Ok(true) => return crate::user::interrupt(frame) as u64,
+            Err(id) => {
+                crate::uart::write_display(format_args!("IRQ: unexpected intid={id}; vector=9\n"));
+                exception_report(
+                    9,
+                    frame.esr,
+                    frame.elr,
+                    frame.spsr,
+                    frame.far,
+                    frame.user_sp,
+                );
+            }
+        }
+    }
     if vector == 8 {
         return crate::user::dispatch(frame) as u64;
     }

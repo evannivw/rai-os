@@ -8,7 +8,7 @@ sys.dont_write_bytecode = True
 from verify_exceptions import elf_symbols
 from verify_mmu import ROOT, OUTPUT, guest
 
-CASES = ['invalid-calls', 'read-kernel', 'write-code', 'uart', 'gic', 'execute-stack', 'privileged']
+CASES = ['invalid-calls', 'read-kernel', 'write-code', 'uart', 'gic', 'execute-stack', 'privileged', 'mask-irq', 'disable-timer']
 CONTEXT = 'round_trips=2; registers=31; flags=true; stack=true; resumed=true'
 
 
@@ -58,9 +58,11 @@ def verify(profile, case=None):
                 match = re.fullmatch(r'mode=EL0; state=faulted; esr=0x([0-9a-f]{16}); pc=0x([0-9a-f]{16}); far_raw=0x([0-9a-f]{16}); spsr=0x([0-9a-f]{16}); sp=0x([0-9a-f]{16}); syscalls=0', result)
                 assert match, result
                 esr, pc, far, spsr, sp = [int(v,16) for v in match.groups()]
-                assert spsr & ~0xf0000000 == 0x3c0, result
+                assert spsr & ~0xf0000000 == 0x340, result
                 assert symbols['__user_stack_bottom'][0] <= sp <= symbols['__user_stack_top'][0] and sp % 16 == 0
-                if case == 'privileged':
+                if case in ('mask-irq', 'disable-timer'):
+                    assert esr >> 26 == 0x18, result  # Trapped system-register access.
+                elif case == 'privileged':
                     assert esr == 0x02000000, result  # Undefined privileged access at EL0.
                 else:
                     expected = 0x8200000f if case == 'execute-stack' else 0x9200000f
@@ -71,6 +73,7 @@ def verify(profile, case=None):
                     assert far == expected_far, result
                 expected_pc = sp if case == 'execute-stack' else symbols['user_fault_instruction'][0]
                 assert pc == expected_pc, result
+            assert request('timer.check').startswith('irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=')
             assert request('context.check') == CONTEXT
             assert request('echo\tkernel survived') == 'kernel survived'
         assert request('mmu.info') == before

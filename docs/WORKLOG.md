@@ -516,3 +516,57 @@ but there is no guest recovery deadline yet. Spurious IDs have a non-EOI/non-tic
 path but were not injected. Corrupt/nested stacks, SIMD, SMP and alternate boards
 remain untested. Busy-loop execution is not an efficiency result. The next small
 step is timer-based control of a running EL0 invocation, before multiple services.
+
+## Timer-enforced EL0 invocation deadline — October 28
+
+Kept the single-CPU scope and added one fixed 100 ms guest-counter deadline per
+EL0 invocation. user.run retains the Rust hello program; new argument-free
+user.spin selects a linked one-instruction infinite loop. The timer owner programs
+an absolute CNTP compare value once. Syscalls cannot reset the deadline. Vector 9
+captures the user frame and terminates an expired invocation through the existing
+kernel-owned trampoline; vector 8 also checks expiry before dispatch. Expiry is
+reported as timed_out with observed elapsed time, vector, PC/status/SP and the
+number of calls executed before expiry. It is not a successful user result.
+
+Kernel Rust remains IRQ-masked; ERET enables IRQs only in EL0. The active Session
+is fully initialized before publication and is borrowed only by non-nested
+handlers while the caller is paused. Normal exit, fault and timeout all clear
+session ownership, stop the timer/GIC and check hardware/mask readback. Explicit
+SCTLR.UMA and CNTKCTL settings prevent user code from masking IRQs or changing the
+timer. No mappings or pool ownership changed. The graphical panel is unchanged.
+
+The first live debug run terminated the non-cooperative loop at 102 ms and then
+completed hello, the EL1 timer diagnostic and echo. Dedicated verification passed
+in debug/release: four normal-image spin timeouts with exact ELF loop/PC/state/SP
+checks, three interleaved hello runs, malformed arguments and repeated timer,
+context, memory and console continuity. Separate syscall-loop images expired
+after many calls without renewing the deadline. A test-only bounded handler delay
+forced vector-8 expiry deterministically; each test image ran twice plus a shell
+spin. A pure budget test checked exact boundaries, fractional tick rounding,
+invalid frequency and overflow. Captures are in [USER_TIMEOUT.md](USER_TIMEOUT.md).
+
+The user suite now passed ten images per profile, two invocations each plus the
+normal shell run: hello, invalid calls and eight hardware fault probes. New DAIFSet
+and CNTP_CTL write probes trapped with class 0x18 at their exact ELF instructions;
+subsequent timer/context/echo and memory checks passed. All earlier fault tests
+now verify saved EL0 IRQ-enabled status. Existing historical captures are unchanged.
+
+Regressions passed in both profiles: 37 boot/protocol checks; 24 controlled EL1
+timer IRQs plus unexpected-SGI fatal handling; 36 EL1 SVC returns plus both rejected
+SVC images; BRK diagnostics; five MMU fault images, normal ownership checks and
+three table tests; 18 memory exchanges and three allocator tests; 28 task exchanges
+and three task tests. Terminal integration including user.spin and fifteen panel
+tests (four real QEMU) passed. Formatting, default and all twenty individual
+feature Clippy runs, host console/panel Clippy and optimized panel compilation
+passed. Mixed user test features were rejected. Local Markdown links and whitespace
+checks passed. Verification QEMU children were reaped; no GUI visual review was
+repeated because presentation did not change.
+
+This terminates one invocation; it does not suspend/resume it, schedule two jobs,
+move the coordinator, add Meta integration or prove CPU/battery efficiency. The
+100 ms is elapsed guest-counter time including bounded kernel work, not a hard
+real-time bound or precise CPU accounting. IRQ/handler latency can add delay; a
+broken timer or stuck kernel handler can still hang. Spurious/unexpected lower-EL
+IRQs, cleanup readback failure, counter wrap/reset, nested/corrupt kernel stacks
+and SMP were not injected. The next area is saving/resuming two built-in contexts
+on one CPU, with explicit ownership and lifecycle tests before broader services.

@@ -7,6 +7,7 @@ pub enum Operation<'a> {
     ContextCheck,
     TimerCheck,
     UserRun,
+    UserSpin,
     MemoryInfo,
     MemoryCheck,
     Echo(&'a str),
@@ -26,6 +27,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         "info" => Ok(Operation::Info),
         "timer.check" => Ok(Operation::TimerCheck),
         "user.run" => Ok(Operation::UserRun),
+        "user.spin" => Ok(Operation::UserSpin),
         "context.check" => Ok(Operation::ContextCheck),
         "mmu.info" => Ok(Operation::MmuInfo),
         "memory.info" => Ok(Operation::MemoryInfo),
@@ -49,7 +51,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, user.run, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
+            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
     }
 }
 
@@ -62,6 +64,7 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
         Operation::Info => "info".to_owned(),
         Operation::TimerCheck => "timer.check".to_owned(),
         Operation::UserRun => "user.run".to_owned(),
+        Operation::UserSpin => "user.spin".to_owned(),
         Operation::ContextCheck => "context.check".to_owned(),
         Operation::MmuInfo => "mmu.info".to_owned(),
         Operation::MemoryInfo => "memory.info".to_owned(),
@@ -128,6 +131,7 @@ mod tests {
         for (name, operation) in [
             ("timer.check", Operation::TimerCheck),
             ("user.run", Operation::UserRun),
+            ("user.spin", Operation::UserSpin),
             ("context.check", Operation::ContextCheck),
             ("mmu.info", Operation::MmuInfo),
             ("memory.info", Operation::MemoryInfo),

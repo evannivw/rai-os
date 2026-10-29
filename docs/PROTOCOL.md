@@ -17,7 +17,7 @@ Examples use literal escape notation for actual TAB, LF, and CR bytes:
 ```
 
 Grammar: @rai1 TAB id TAB operation [TAB argument] line-ending.
-help/info/uptime/memory.info/memory.check/mmu.info/context.check/timer.check/user.run require exactly three fields; echo requires four, with a possibly
+help/info/uptime/memory.info/memory.check/mmu.info/context.check/timer.check/user.run/user.spin require exactly three fields; echo requires four, with a possibly
 empty argument. Names are case-sensitive. ID: 1-10 ASCII digits with value
 1..4294967295; leading zeros are allowed and preserved. IDs are not remembered.
 
@@ -112,8 +112,9 @@ A contained program fault returns a report with `mode=EL0; state=faulted`, follo
 by `esr`, `pc`, `far_raw`, `spsr`, `sp` (each 0x plus 16 lowercase hex digits) and
 `syscalls`. An outer `ok` means the run request was handled, not that the program
 succeeded. Check state and exit code. Reentrant invocation returns `user_busy`;
-normal single-request UART use cannot trigger it. No preemption exists; only the
-built-in bounded program is supported. See [USER_PROGRAM.md](USER_PROGRAM.md).
+normal single-request UART use cannot trigger it. All invocations now share a
+fixed 100 ms guest-counter deadline; expiry produces `state=timed_out`. Only
+linked programs are accepted, with no scheduler or arbitrary loader. See [USER_PROGRAM.md](USER_PROGRAM.md).
 
 ## Errors
 
@@ -154,3 +155,24 @@ Counts and true flags are emitted only after all observations pass. Errors are
 `timer_requires_masked_irqs`, `timer_busy`, or `timer_check_failed`; malformed
 arguments return `bad_args`. Failed IRQ delivery can hang the controlled probe;
 the host timeout is not guest recovery. See [TIMER.md](TIMER.md).
+
+## EL0 deadline diagnostic
+
+`user.spin` takes no argument (exactly three structured fields) and selects a
+linked one-instruction infinite loop. It never voluntarily returns. Both it and
+`user.run` have a fixed 100 ms deadline, including time spent handling syscalls.
+Timeout is an observed terminal state, not successful completion of user work:
+
+```text
+mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=<decimal>; vector=<8 or 9>; pc=0x<16 hex digits>; spsr=0x<16 hex digits>; sp=0x<16 hex digits>; syscalls=<decimal>
+```
+
+Vector 9 means a physical timer IRQ from EL0; 8 means expiry observed on synchronous
+entry. `syscalls` counts dispatched calls before expiry; the expired request is
+not executed or counted. A timeout report omits buffered output. An outer `ok`
+only means a report is available. Normal exit/fault payloads retain their format;
+saved user status now has IRQ enabled (0x340 excluding NZCV). Invalid arguments
+produce `bad_args`. Internal setup/cleanup errors may return `user_busy`,
+`timer_busy`, `invalid_timer_frequency`, `timer_deadline_overflow` or
+`timer_cleanup_failed`; those branches were not all fault-injected.
+See [USER_TIMEOUT.md](USER_TIMEOUT.md) for timing and cleanup guarantees/limits.
