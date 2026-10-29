@@ -123,5 +123,6 @@ The later [task lifecycle](TASK_LIFECYCLE.md) reuses the existing EL0 capture
 route for slots 8/9. The handler records state and returns to the fixed kernel
 continuation; the runtime then interprets exit, timer preemption or task fault.
 An EL0 task fault can terminate only that task while its ready peer continues.
-Unexpected EL1 exceptions retain the fatal policy. Shared user mappings still
-prevent any claim of isolation between these two tasks.
+Unexpected EL1 exceptions retain the fatal policy. The later
+[private-stack maps](TASK_MEMORY.md) deny cross-task reads/writes to the two
+stack pages; shared code and the wider service-isolation limitations remain.

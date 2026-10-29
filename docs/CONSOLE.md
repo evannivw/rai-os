@@ -107,3 +107,11 @@ Enter `schedule.fault`: A deliberately reads kernel memory, is stopped by the
 MMU, and B still finishes. The host displays the real guest report; `a_state`
 and `b_state` distinguish exited, faulted and limit_reached. No new graphical
 panel controls are included. See [TASK_LIFECYCLE.md](TASK_LIFECYCLE.md).
+
+## Private task stacks
+
+Enter `schedule.isolate` to run the hardware access diagnostic: four denied reads,
+four denied writes and twelve successful own-page accesses, across two rounds.
+The guest also checks the complete stack pages and restores the base MMU root.
+The command accepts no arguments and is available through the host terminal or
+direct UART. See [TASK_MEMORY.md](TASK_MEMORY.md). No graphical controls changed.

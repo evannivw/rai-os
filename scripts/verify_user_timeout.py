@@ -67,7 +67,7 @@ def verify(profile, case=None):
         assert not pending and not poll.select(0), 'Unexpected late output'
         assert request('echo\tafter old deadline') == 'after old deadline'
         assert request('mmu.info') == before
-        assert request('memory.check') == 'checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250'
+        assert request('memory.check') == 'checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244'
         for command in ['user.spin\t', 'user.spin\textra']:
             assert request(command, 'err') == 'bad_args'
         child.stdin.write(b'user.spin extra\n')

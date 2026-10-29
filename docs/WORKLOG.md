@@ -668,3 +668,54 @@ share writable mappings; this does not provide inter-task isolation, IPC, dynami
 loading, a guest coordinator, AI or efficiency gains. The next foundation is
 separate task memory before claiming isolated guest services. Historical captures
 and contribution dates remain unchanged.
+
+## October 28, 2026 — private writable stack maps
+
+Added immutable base/A/B translation roots. Each scheduled EL0 task can access
+only its own writable 4 KiB stack page; shared user code/constants stay read-only.
+The peer page remains readable/writable by EL1, with identical physical addresses
+and memory types across roots. Six additional page-table pages raise permanent
+ownership from six to twelve (48 KiB), leaving 244 free pages in the reserved pool.
+No old capture or contribution date was altered.
+
+The MMU adapter owns typed fixed-root selection. It changes TTBR0_EL1 with full
+local EL1 translation invalidation, ordering barriers, masked kernel interrupts
+and base-root restoration on both successful and error-return continuations.
+All table pages remain read-only/non-executable in every root; no live descriptor
+mutation, per-task ASID allocation or dynamic map API was added. schedule.check
+and the bounded lifecycle both reuse this entry path. The legacy single-program
+commands still own the entire user region exclusively under the base map.
+
+Added schedule.isolate to the shell, structured protocol and host console. It
+checks permitted own-page reads/writes, then forbidden peer reads/writes in both
+directions, repeated across two rounds with warmed translations. Exact saved
+syndrome, instruction address and target address must match. Both entire pages
+are checked before the victim's next marker write, preventing the positive control
+from repairing and hiding a changed byte. The victim's own access then succeeds.
+The compact report includes actual final-round fault registers; success flags
+are emitted only after both rounds pass.
+
+Actual verification passed in debug and release: four pure table tests, four
+normal diagnostic invocations per profile (32 denied accesses and 48 permitted
+own-page probes), and three expected rejections per profile of an intentionally
+open-peer image. The negative control returns isolation_expected_fault and
+continues serving later commands. The host independently verifies fault registers
+against ELF symbols, argument rejection, base-MMU snapshot restoration and later
+lifecycle/scheduling/user/memory/echo operations. The final isolation tests were
+rerun after moving full-page integrity checks before the positive-control write.
+
+Regression suites passed in both profiles: 37 boot/protocol checks, scheduling,
+lifecycle, timer, context, exceptions, MMU, memory, cooperative tasks, user and
+user-timeout. Host console integration and all 15 panel tests passed. Formatting,
+normal kernel and all 27 individual diagnostic-feature Clippy checks,
+console/panel Clippy and optimized panel compilation passed. Mixed isolation and
+lifecycle fault features were correctly rejected. No GUI controls changed.
+Local Markdown links, staged whitespace and final included files were reviewed.
+
+See [TASK_MEMORY.md](TASK_MEMORY.md) for contracts and actual debug/release
+captures. This protects the two fixed stack pages on the supported single-core
+QEMU board. It is not a complete process model, a proof against all malicious
+programs, a measured speedup, or agent/Meta integration. No SMP, cache/ASID
+optimization, private executable images, demand paging or dynamic memory lifetime
+was introduced. The next foundation is bounded message exchange with validated
+ownership, before moving a coordinator or executors into guest services.

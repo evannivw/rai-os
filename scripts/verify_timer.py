@@ -56,7 +56,7 @@ def normal(profile):
             assert actual[:3] == ['@rai1', str(sequence), status], actual
             return actual[3]
         before = request('mmu.info')
-        assert 'enabled=true;' in before and 'table_pages=6;' in before
+        assert 'enabled=true;' in before and 'table_pages=12;' in before
         for _ in range(3):
             reply = request('timer.check')
             match = re.fullmatch(RESULT, reply)
@@ -67,7 +67,7 @@ def normal(profile):
         assert request('timer.check\t', 'err') == 'bad_args'
         assert request('timer.check\textra', 'err') == 'bad_args'
         assert request('mmu.info') == before
-        assert request('memory.check') == 'checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250'
+        assert request('memory.check') == 'checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244'
         child.stdin.write(b'timer.check\n')
         child.stdin.flush()
         assert line() == 'timer.check'

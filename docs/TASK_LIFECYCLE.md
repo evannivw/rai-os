@@ -120,14 +120,15 @@ no executable bytes, user-supplied context, stack address or task entry point.
   The fault fixture uses assembly for an intentional forbidden access rather
   than constructing an invalid Rust reference.
 
-Both user tasks still share page tables and can access each other's stack halves.
-Checking a saved SP is not hardware memory isolation. This work contains the
-observed user exception relative to the kernel; it does not protect A's data from
-B. Separate writable task memory is the next foundation before isolated services.
+The later [private-stack increment](TASK_MEMORY.md) now selects a distinct task
+root per turn. Each task can access only its own writable stack page at EL0;
+code/constants remain shared read-only. Checking SP alone would not supply this
+protection: it is enforced by page permissions and translation-cache maintenance.
 No FPU/SIMD state, SMP, dynamic loader, persistent task creation, priorities, IPC,
 agent execution or Meta integration is added. The UART command blocks until its
-batch completes. Broken timer delivery, corrupted kernel stacks and malicious
-cross-task writes remain outside the demonstrated guarantees.
+batch completes. Broken timer delivery and corrupted kernel stacks remain outside
+the demonstrated guarantees. Direct cross-stack reads/writes are now tested by
+schedule.isolate; this is not a general malicious-program security proof.
 
 ## Verification
 

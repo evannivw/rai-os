@@ -34,7 +34,7 @@ def normal(profile):
         requests = [('context.check', 'ok', RESULT)] * 16
         requests += [('context.check\t', 'err', 'bad_args'),
                      ('context.check\textra', 'err', 'bad_args'),
-                     ('memory.check', 'ok', 'checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250'),
+                     ('memory.check', 'ok', 'checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244'),
                      ('context.check', 'ok', RESULT),
                      ('echo\tcontext remains alive', 'ok', 'context remains alive')]
         for index, (command, status, payload) in enumerate(requests, 1):

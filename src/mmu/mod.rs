@@ -1,13 +1,34 @@
-//! One immutable, identity-mapped EL1 address space for the fixed QEMU board.
+//! Immutable base/A/B identity maps with task-private writable user pages.
 mod tables;
 use crate::memory::{Memory, Page};
 use core::{arch::asm, fmt, ptr};
 use tables::{Layout, MAIR, TABLE_COUNT, TCR, UserLayout};
 
+#[derive(Clone, Copy)]
+pub(crate) enum TaskSpace {
+    A,
+    B,
+}
+impl TaskSpace {
+    pub(crate) fn index(self) -> usize {
+        match self {
+            Self::A => 0,
+            Self::B => 1,
+        }
+    }
+    pub(crate) fn from_index(index: usize) -> Result<Self, &'static str> {
+        match index {
+            0 => Ok(Self::A),
+            1 => Ok(Self::B),
+            _ => Err("invalid_task_space"),
+        }
+    }
+}
 pub struct Mmu {
-    // Retain ownership forever; no release, mutation, or remapping API exists.
+    // Retain ownership forever; complete tables are never mutated or released.
     _pages: [Page; TABLE_COUNT],
 }
+#[derive(PartialEq, Eq)]
 pub struct Snapshot {
     sctlr: u64,
     root: u64,
@@ -33,7 +54,7 @@ impl Mmu {
     /// Exactly once, EL1 on one CPU with interrupts masked and MMU/caches off.
     /// Linker ranges must cover every live instruction, stack, datum and UART;
     /// no firmware/DMA/other owner may modify the pool. The returned table owner
-    /// must live for the rest of execution. No mappings change after activation.
+    /// must live for the rest of execution. No table contents change after activation.
     pub unsafe fn enable(memory: &mut Memory) -> Self {
         let prior: u64;
         // SAFETY: privileged EL1 register read under the entry contract.
@@ -104,6 +125,32 @@ impl Mmu {
         }
         Self { _pages: pages }
     }
+    /// Execute a bounded kernel continuation with a fixed task map, then restore
+    /// the base map even if the continuation returns Err. Panic is fatal (abort).
+    /// # Safety
+    /// One EL1 CPU, all DAIF masked, no active user invocation or nested switch.
+    /// The continuation may enter EL0 but must return masked to this kernel stack.
+    /// All maps preserve kernel/device addresses and memory attributes exactly.
+    pub(crate) unsafe fn with_task<T>(
+        &self,
+        task: TaskSpace,
+        action: impl FnOnce() -> T,
+    ) -> Result<T, &'static str> {
+        let base = self._pages[0].physical_address() as u64;
+        if self.snapshot().root != base || !interrupts_masked() {
+            return Err("mmu_switch_state");
+        }
+        let root = self._pages[6 + task.index() * 3].physical_address() as u64;
+        // SAFETY: owned immutable root, identical kernel map, masked single CPU.
+        unsafe { switch_root(root) };
+        let result = action();
+        // SAFETY: continuation contract restores masked EL1; same live kernel map.
+        unsafe { switch_root(base) };
+        if self.snapshot().root != base || !interrupts_masked() {
+            return Err("mmu_restore_state");
+        }
+        Ok(result)
+    }
     pub fn snapshot(&self) -> Snapshot {
         let (sctlr, root, tcr, mair);
         // SAFETY: read-only EL1 registers; no memory/stack access or flag changes.
@@ -118,6 +165,28 @@ impl Mmu {
             tcr,
             mair,
         }
+    }
+}
+
+fn interrupts_masked() -> bool {
+    let daif: u64;
+    // SAFETY: read-only EL1 state, no memory access.
+    unsafe {
+        asm!("mrs {value}, daif", value = out(reg) daif, options(nomem, nostack, preserves_flags));
+    }
+    daif & 0x3c0 == 0x3c0
+}
+/// # Safety
+/// Root is a live, aligned, immutable owned table. Identical kernel mappings,
+/// PA/attributes, one masked EL1 CPU, no concurrent walkers on another core.
+unsafe fn switch_root(root: u64) {
+    // SAFETY: caller's map preserves this code/stack. All roots use ASID 0;
+    // invalidate ALL local EL1 translations (including global entries), and
+    // complete invalidation before any user entry. No nomem: memory ordering
+    // and permissions change. This is not an ASID/SMP optimization.
+    unsafe {
+        asm!("dsb sy", "msr ttbr0_el1, {root}", "isb", "tlbi vmalle1",
+             "dsb sy", "isb", root = in(reg) root, options(nostack, preserves_flags));
     }
 }
 

@@ -17,7 +17,7 @@ Examples use literal escape notation for actual TAB, LF, and CR bytes:
 ```
 
 Grammar: @rai1 TAB id TAB operation [TAB argument] line-ending.
-help/info/uptime/memory.info/memory.check/mmu.info/context.check/timer.check/schedule.check/schedule.run/schedule.fault/user.run/user.spin require exactly three fields; echo requires four, with a possibly
+help/info/uptime/memory.info/memory.check/mmu.info/context.check/timer.check/schedule.check/schedule.isolate/schedule.run/schedule.fault/user.run/user.spin require exactly three fields; echo requires four, with a possibly
 empty argument. Names are case-sensitive. ID: 1-10 ASCII digits with value
 1..4294967295; leading zeros are allowed and preserved. IDs are not remembered.
 
@@ -57,13 +57,13 @@ and educational pacing. Task IDs are distinct from request IDs.
 Both are also available as argument-free shell commands. `memory.info` returns:
 
 ```text
-page_size=4096; total_pages=256; free_pages=250; used_pages=6; pool_start=0x<16 lowercase hex digits>; pool_end=0x<16 lowercase hex digits>
+page_size=4096; total_pages=256; free_pages=244; used_pages=12; pool_start=0x<16 lowercase hex digits>; pool_end=0x<16 lowercase hex digits>
 ```
 
 Counts describe only the reserved pool. Addresses come from the linked image,
 not request arguments. `memory.check` reserves/tests/releases its currently free pages and on
-success returns `checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250`.
-The MMU permanently owns six pages. If no pages are free, the diagnostic returns
+success returns `checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244`.
+The MMU permanently owns twelve pages. If no pages are free, the diagnostic returns
 `memory_busy` before starting; failed
 internal invariants halt rather than fabricate success. See [MEMORY.md](MEMORY.md)
 for blocking behavior and unsafe contracts. There is no arbitrary memory API.
@@ -75,7 +75,7 @@ These additive v1 operations return unknown_operation on older kernels.
 Its payload is:
 
 ```text
-enabled=true; mode=identity; granule=4096; table_pages=6; root=0x<16 lowercase hex digits>; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+enabled=true; mode=identity; granule=4096; table_pages=12; root=0x<16 lowercase hex digits>; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
 ```
 
 Enabled/WXN/cache flags, root, TCR and MAIR are read from EL1 registers. Mode,
@@ -222,3 +222,27 @@ schedule_bad_transition, schedule_event_overflow, schedule_timer_early and timer
 setup/cleanup errors. Such errors abort the batch; they are not isolated task
 faults. No arbitrary entry address, saved frame, duration or code is accepted.
 See [TASK_LIFECYCLE.md](TASK_LIFECYCLE.md) for the limited syscall ABI and tests.
+
+## Task-private stack diagnostic
+
+`schedule.isolate` takes no argument (exactly three structured fields). Two rounds
+each perform permitted own-page reads/writes, then A-to-B and B-to-A read/write
+attempts. Expected hardware faults are checked; the victim subsequently runs,
+and both full pages must retain their marker bytes. The result fields are:
+
+```text
+rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=<hex>; ar_pc=<hex>; ar_far=<hex>; aw_esr=<hex>; aw_pc=<hex>; aw_far=<hex>; br_esr=<hex>; br_pc=<hex>; br_far=<hex>; bw_esr=<hex>; bw_pc=<hex>; bw_far=<hex>
+```
+
+ar/aw mean A reading/writing B's page; br/bw mean B reading/writing A's page.
+Each final-round tuple contains actual saved exception registers, checked against
+the expected result on both rounds. Read ESR is 0x9200000f; write ESR is 0x9200004f.
+PC/FAR depend on ELF placement. Flags are emitted only after all checks pass.
+
+Errors include isolation_expected_fault, isolation_own_access_failed,
+isolation_memory_changed, isolation_bad_context, isolation_probe_limit,
+schedule_busy and existing timer errors. Task-map selection also adds
+invalid_task_space, mmu_switch_state and mmu_restore_state internal errors to
+scheduling operations. Any such failure produces err, not a success report.
+No raw address, task ID, permission or duration is accepted from the caller.
+See [TASK_MEMORY.md](TASK_MEMORY.md) for safety limits and negative controls.

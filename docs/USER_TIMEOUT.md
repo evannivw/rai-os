@@ -152,3 +152,7 @@ The later [task lifecycle](TASK_LIFECYCLE.md) uses 20 ms slices and at most six
 preemptions per task, rather than this invocation's absolute 100 ms deadline.
 Its terminal tasks are skipped while ready peers continue. Neither limit is a
 general maximum application lifetime; both are bounds for current diagnostics.
+
+The later [private-task-map increment](TASK_MEMORY.md) raises current table
+ownership to twelve pages, leaving 244 pool pages free. Earlier six-table counts
+and captures above describe the original timer/deadline increments.

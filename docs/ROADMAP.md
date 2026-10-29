@@ -18,8 +18,8 @@ not isolated processes. One built-in program now runs with lower privilege. The 
 | Timer while running EL0 | Done for one invocation | A fixed elapsed deadline terminates a non-cooperative program and returns to the console. See [USER_TIMEOUT.md](USER_TIMEOUT.md). |
 | Two resumable contexts | Done as a bounded diagnostic | Alternate two EL0 loops with distinct saved state and stack storage. See [SCHEDULING.md](SCHEDULING.md). |
 | Task completion and fault lifecycle | Done for two bounded tasks, one CPU | A task exits, faults or reaches its slice cap; its ready peer continues. See [TASK_LIFECYCLE.md](TASK_LIFECYCLE.md). |
-| Separate task memory | Next foundation | Enforce private writable memory between tasks before claiming isolated services. |
-| Bounded IPC and service lifecycle | Planned | Services exchange validated messages; ownership and fault policy are explicit. |
+| Separate task memory | Done for two fixed stack pages | A/B task maps deny peer-stack reads/writes; shared code remains read-only. See [TASK_MEMORY.md](TASK_MEMORY.md). |
+| Bounded IPC and service lifecycle | Next foundation, in small steps | Services exchange validated messages; ownership and fault policy are explicit. |
 | Guest coordinator and executors | Planned | Move decision/execution services into RAI-OS with enforced permissions. Adapt host std/storage assumptions. |
 | Meta-driven policy | Planned | Real model proposals go through validated operations and produce observed outcomes. |
 

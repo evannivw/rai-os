@@ -32,7 +32,7 @@ fn dispatch(
                     clock.snapshot(),
                     task,
                     memory,
-                    mmu.snapshot(),
+                    mmu,
                     timer,
                 ) {
                     Ok(reply) => response(request.id, "ok", reply),
@@ -42,9 +42,9 @@ fn dispatch(
             Err(error) => response(error.id, "err", error.code),
         }
     } else if !line.is_empty() {
-        match command::parse_shell(line).and_then(|op| {
-            command::execute(op, clock.snapshot(), task, memory, mmu.snapshot(), timer)
-        }) {
+        match command::parse_shell(line)
+            .and_then(|op| command::execute(op, clock.snapshot(), task, memory, mmu, timer))
+        {
             Ok(reply) => uart::write_display(reply),
             Err(code) => {
                 uart::write("error: ");

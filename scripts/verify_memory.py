@@ -33,8 +33,8 @@ def main():
     assert symbols['__stack_top'][0] <= start and symbols['__exception_stack_top'][0] <= start
     assert end <= 0x48000000 and end - start == 1048576
     assert start % 4096 == end % 4096 == 0
-    expected = f'page_size=4096; total_pages=256; free_pages=250; used_pages=6; pool_start=0x{start:016x}; pool_end=0x{end:016x}'
-    check_result = 'checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250'
+    expected = f'page_size=4096; total_pages=256; free_pages=244; used_pages=12; pool_start=0x{start:016x}; pool_end=0x{end:016x}'
+    check_result = 'checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244'
     child = subprocess.Popen(['sh', 'scripts/qemu.sh', str(kernel)], cwd=ROOT,
                              stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     poll = selectors.DefaultSelector()
@@ -89,7 +89,7 @@ def main():
         send('task.status', 'task_id=1; state=completed; processed=7; total=7; words=2')
         send('echo', 'memory remains usable', 'memory remains usable')
         send('memory.info', expected)
-        print(f'PASS ({profile}): {count} structured + 3 shell exchanges; ELF reservations, 250 available physical pages, exhaustion, zeroing/reuse, invalid requests, task/echo recovery.')
+        print(f'PASS ({profile}): {count} structured + 3 shell exchanges; ELF reservations, 244 available physical pages, exhaustion, zeroing/reuse, invalid requests, task/echo recovery.')
         print(transcript.decode('ascii'), end='')
     finally:
         child.terminate()

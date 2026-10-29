@@ -1,0 +1,75 @@
+
+running 4 tests
+test tests::permissions_and_sparse_identity_mapping ... ok
+test tests::task_roots_share_only_read_only_user_regions_and_protect_all_tables ... ok
+test tests::rejects_invalid_user_regions_before_mutation ... ok
+test tests::rejects_bad_boundaries_and_table_aliases_before_mutating ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+PASS (release/normal): private-stack diagnostic or expected broken-map rejection; exact fault PC/address/syndrome, repeated runs, restored base root and subsequent task/user/memory operation.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400a7030; ar_far=0x00000000400ab000; aw_esr=0x000000009200004f; aw_pc=0x00000000400a7044; aw_far=0x00000000400ab000; br_esr=0x000000009200000f; br_pc=0x00000000400a7030; br_far=0x00000000400aa000; bw_esr=0x000000009200004f; bw_pc=0x00000000400a7044; bw_far=0x00000000400aa000
+@rai1	3	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	4	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	5	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400a7094; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400ab000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	6	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=138; b_ms=132; progress=29136228,87438402,53780367,176095725,76702679,242979603,103886891,319908984,133581882,392238624,161617539,466171617; context=true; stacks=true
+@rai1	7	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	8	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	9	ok	private stacks checked
+@rai1	10	ok	rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400a7030; ar_far=0x00000000400ab000; aw_esr=0x000000009200004f; aw_pc=0x00000000400a7044; aw_far=0x00000000400ab000; br_esr=0x000000009200000f; br_pc=0x00000000400a7030; br_far=0x00000000400aa000; bw_esr=0x000000009200004f; bw_pc=0x00000000400a7044; bw_far=0x00000000400aa000
+@rai1	11	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	12	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	13	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400a7094; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400ab000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	14	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=137; b_ms=139; progress=25558805,87869061,49297006,157976802,79292053,246348564,107593283,334494768,136877514,423930366,163352563,498397062; context=true; stacks=true
+@rai1	15	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	16	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	17	ok	private stacks checked
+@rai1	18	ok	rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400a7030; ar_far=0x00000000400ab000; aw_esr=0x000000009200004f; aw_pc=0x00000000400a7044; aw_far=0x00000000400ab000; br_esr=0x000000009200000f; br_pc=0x00000000400a7030; br_far=0x00000000400aa000; bw_esr=0x000000009200004f; bw_pc=0x00000000400a7044; bw_far=0x00000000400aa000
+@rai1	19	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	20	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	21	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400a7094; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400ab000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	22	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=140; b_ms=140; progress=27922920,75444924,57256378,164108559,82307256,253636368,110669989,342530553,140427694,416846340,169296805,506297577; context=true; stacks=true
+@rai1	23	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	24	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	25	ok	private stacks checked
+@rai1	26	err	bad_args
+@rai1	27	err	bad_args
+schedule.isolate extra
+error: unknown_command
+schedule.isolate
+rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400a7030; ar_far=0x00000000400ab000; aw_esr=0x000000009200004f; aw_pc=0x00000000400a7044; aw_far=0x00000000400ab000; br_esr=0x000000009200000f; br_pc=0x00000000400a7030; br_far=0x00000000400aa000; bw_esr=0x000000009200004f; bw_pc=0x00000000400a7044; bw_far=0x00000000400aa000
+@rai1	28	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	29	ok	after isolation
+PASS (release/open-peer): private-stack diagnostic or expected broken-map rejection; exact fault PC/address/syndrome, repeated runs, restored base root and subsequent task/user/memory operation.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	err	isolation_expected_fault
+@rai1	3	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	4	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	5	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400a7094; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400ab000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	6	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=135; b_ms=139; progress=25133452,88921011,52671575,162473646,81006191,252018531,105268962,340379013,134826387,413938221,162703415,500056554; context=true; stacks=true
+@rai1	7	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	8	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	9	ok	private stacks checked
+@rai1	10	err	isolation_expected_fault
+@rai1	11	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	12	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	13	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400a7094; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400ab000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	14	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=134; b_ms=141; progress=26725263,88389993,52386215,165539580,78021117,250096041,107248458,339530532,136631141,419050686,161304724,507702768; context=true; stacks=true
+@rai1	15	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	16	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	17	ok	private stacks checked
+@rai1	18	err	isolation_expected_fault
+@rai1	19	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	20	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	21	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400a7094; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400ab000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	22	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=140; b_ms=139; progress=24293991,89029575,54037141,167473290,83723319,255581409,112200829,326839422,142003567,411764703,165733645,494203281; context=true; stacks=true
+@rai1	23	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	24	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	25	ok	private stacks checked
+@rai1	26	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	27	ok	after isolation

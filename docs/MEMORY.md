@@ -3,7 +3,7 @@
 Implemented October 27, 2026. The kernel manages an explicitly reserved 1 MiB pool:
 256 pages of 4096 bytes. This module supplies physical-page ownership and zeroing,
 not a Rust heap allocator, process isolation, or all available system RAM.
-The subsequent [MMU layer](MMU.md) now owns six pages permanently (24 KiB).
+The subsequent [MMU layer](MMU.md) now owns twelve pages permanently (48 KiB), including the two fixed task maps.
 The existing word-count job still owns its fixed inline array; it has not been
 migrated to page-backed storage. Consumers are the MMU tables and a bounded diagnostic.
 
@@ -28,14 +28,14 @@ start/end addresses. Addresses may differ between debug and release or builds.
 These are actual allocator counters, not host RAM usage or total guest free RAM.
 
 `memory.check` uses only currently free pages; if none are free, it returns
-`memory_busy` without allocating. It allocates the 250 available pages, checks every byte
+`memory_busy` without allocating. It allocates the 244 available pages, checks every byte
 is zero, writes distinct markers at each page's two ends, then verifies all
 markers after all allocations. An extra allocation must fail. It releases all
 diagnostic-owned pages, allocates the first of those again, verifies that its old contents were cleared,
 and releases it. Success reports:
 
 ```text
-checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250
+checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
 ```
 
 Those flags are produced only after the checks execute. An invariant violation
@@ -112,7 +112,7 @@ exhaustion/reuse, invalid/double frees without state mutation, invalid ranges an
 a 65-page partial bitmap, actual RAM zeroing and markers, repeated diagnostics,
 invalid operation arguments, and task/echo operation after memory checks.
 
-The memory_busy branch guards complete exhaustion; six pages stay reserved for
+The memory_busy branch guards complete exhaustion; twelve pages stay reserved for
 tables, but no current UART operation can reserve the remaining pages permanently,
 so that branch is not exercised by the live command test. The page pool is not exhaustively tested against corrupt metadata,
 faulty hardware, concurrent callers, or adversarial privileged code.
@@ -127,11 +127,11 @@ repeated. Captures: [debug](evidence/2026-10-27-memory-debug.txt) and
 
 The captures above preserve the earlier, pre-MMU increment with 256 free pages.
 Current MMU captures and protection checks are in [MMU.md](MMU.md). The allocator
-now reports total=256, used=6, free=250; diagnostic completion preserves those
+now reports total=256, used=12, free=244; diagnostic completion preserves those
 counts and the live mappings. Isolated services remain pending.
 
 Reference: [QEMU virt bare-metal hardware configuration](https://www.qemu.org/docs/master/system/arm/virt.html#hardware-configuration-information-for-bare-metal-programming).
 
-Current ownership was updated with the October 28 timer increment: six table
-pages and 250 free pool pages. Earlier evidence files retain the actual counts
-from their original runs. The additional L3 table maps the GIC device pages.
+The October 28 timer increment used six tables and 250 free pages. Current
+[task-map ownership](TASK_MEMORY.md) uses twelve tables and 244 free pages.
+Earlier evidence files retain the actual counts from their original runs.

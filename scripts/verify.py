@@ -59,13 +59,13 @@ def main():
             checks += 1
 
         info = b"RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected"
-        exchange(b"help\n", b"help\r\nhelp | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>\r\n")
+        exchange(b"help\n", b"help\r\nhelp | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>\r\n")
         exchange(b"info\r\n", b"info\r\n" + info + b"\r\n")
         exchange(b"echo hello Rust\r", b"echo hello Rust\r\nhello Rust\r\n")
         exchange(b"echo\n", b"echo\r\n\r\n")
         exchange(b"oops\n", b"oops\r\nerror: unknown_command\r\n")
         exchange(b"echx\x7fo edited\n", b"echx\x08 \x08o edited\r\nedited\r\n")
-        exchange(b"@rai1\t1\thelp\n", b"@rai1\t1\tok\thelp | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>\r\n")
+        exchange(b"@rai1\t1\thelp\n", b"@rai1\t1\tok\thelp | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>\r\n")
         exchange(b"@rai1\t2\tinfo\r\n", b"@rai1\t2\tok\t" + info + b"\r\n")
         exchange(b"@rai1\t3\techo\tbridge ready\n", b"@rai1\t3\tok\tbridge ready\r\n")
         exchange(b"@rai1\t4\techo\t\n", b"@rai1\t4\tok\t\r\n")

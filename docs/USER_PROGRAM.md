@@ -57,8 +57,8 @@ are exposed. This ABI is experimental, not a compatibility promise.
 The ELF links dedicated `.user_text`, `.user_rodata` and an 8 KiB user stack after
 the kernel's exception stack. All permission boundaries are page aligned. A 4 KiB
 unmapped guard page lies on each side of the user stack. These reservations are
-outside the physical-page pool; its counts remain 256 total, six table pages,
-250 free. The initial mapped window still ends below 0x40200000.
+outside the physical-page pool; current counts are 256 total, twelve table pages,
+244 free after the later private-task-map increment. The initial mapped window still ends below 0x40200000.
 
 | Region | EL0 | EL1 |
 | --- | --- | --- |
@@ -143,7 +143,7 @@ linked from [TIMER.md](TIMER.md); deadline and timer-access evidence is in
 References: [Arm memory permissions](https://documentation-service.arm.com/static/63a43e333f28e5456434e18b)
 and [AArch64 exception model](https://documentation-service.arm.com/static/63a065c41d698c4dc521cb1c).
 
-Current ownership was updated with the October 28 timer increment: six table
+The October 28 timer increment initially used six table
 pages and 250 free pool pages. Earlier evidence files retain the actual counts
 from their original runs. The additional L3 table maps the GIC device pages.
 
@@ -155,3 +155,8 @@ halves with shared EL0 permissions; normal user.run still clears and owns all
 The later [task lifecycle](TASK_LIFECYCLE.md) also owns this region exclusively
 while running. Its linked tasks use a separate, intentionally smaller exit-only
 ABI, returning a scalar in x1; the legacy user.run write/exit ABI is unchanged.
+
+Current [task maps](TASK_MEMORY.md) use twelve table pages and 244 free pool
+pages. Legacy user.run/user.spin still use the base map with the full 8 KiB stack;
+scheduling owns the region exclusively and uses separate A/B writable pages.
+Previous counts and shared-map descriptions above describe earlier increments.

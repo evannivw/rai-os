@@ -114,7 +114,7 @@ def verify(profile, case):
             assert request('echo\tterminal task skipped') == 'terminal task skipped'
         check_schedule(request('schedule.check'))
         assert request('mmu.info') == before
-        assert request('memory.check') == 'checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250'
+        assert request('memory.check') == 'checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244'
         for command in ['schedule.run', 'schedule.fault']:
             for suffix in ['\t', '\textra']:
                 assert request(command + suffix, 'err') == 'bad_args'

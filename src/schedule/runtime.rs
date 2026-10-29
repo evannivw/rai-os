@@ -6,6 +6,7 @@ use super::{
 };
 use crate::{
     context::Frame,
+    mmu::{Mmu, TaskSpace},
     timer::{SLICE_MS, Timer},
 };
 use core::{fmt, ptr};
@@ -84,7 +85,7 @@ impl fmt::Display for RunReport {
         Ok(())
     }
 }
-pub fn run(timer: &mut Timer, mode: RunMode) -> Result<RunReport, &'static str> {
+pub fn run(timer: &mut Timer, mmu: &Mmu, mode: RunMode) -> Result<RunReport, &'static str> {
     if is_active() || crate::user::is_active() {
         return Err("schedule_busy");
     }
@@ -159,7 +160,7 @@ pub fn run(timer: &mut Timer, mode: RunMode) -> Result<RunReport, &'static str> 
         // SAFETY: valid_context checks EL0 mode/masks, executable user PC and this
         // task's assigned aligned stack. Stored frames are kernel-only; initial
         // GPRs are zero. The input and interrupt Observation are separate objects.
-        let observation = unsafe { run_turn(timer, &task.frame) }?;
+        let observation = unsafe { run_turn(timer, mmu, TaskSpace::from_index(id)?, &task.frame) }?;
         task.frame = observation.frame;
         let event = if !valid_context(&task.frame, task.stack, text) {
             task.reason = "bad_context";

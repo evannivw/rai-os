@@ -6,9 +6,10 @@ at EL0 with bounded write/exit syscalls and a timer-enforced invocation deadline
 A [bounded two-context scheduling diagnostic](SCHEDULING.md) now saves/resumes
 EL0 integer state on one CPU. A [bounded task lifecycle](TASK_LIFECYCLE.md) now
 lets one task finish or fault while its peer continues. There is no general task
-creation, process IPC, heap, separate process address
-spaces or isolated agent execution. EL1 stage-1 translation is active
-with one identity-mapped address space; see [MMU.md](MMU.md).
+creation, process IPC, heap or isolated agent execution. EL1 stage-1 translation
+now has a base map and two fixed task maps with private writable stack pages;
+user code/constants remain shared read-only. See [MMU.md](MMU.md) and
+[TASK_MEMORY.md](TASK_MEMORY.md).
 
 ## Boot
 
@@ -66,7 +67,9 @@ assumptions and limits. Rust panic still prints and halts without recovery.
   schedule/runtime.rs: two kernel-owned records, frame/stack validation, bounded
   execution and compact results. schedule/programs.rs: finite linked Rust user
   tasks plus a deliberate forbidden-read fixture. Terminal tasks are skipped;
-  distinct stack halves still share EL0 mappings. See [TASK_LIFECYCLE.md](TASK_LIFECYCLE.md).
+  each turn uses a task map that denies EL0 access to the peer stack.
+  schedule/isolation.rs checks real own/peer accesses and recovery. See
+  [TASK_LIFECYCLE.md](TASK_LIFECYCLE.md) and [TASK_MEMORY.md](TASK_MEMORY.md).
 - timer/: exclusive GICv2/CNTP adapter, controlled EL1 IRQ diagnostic and absolute
   EL0 budget or scheduling slice. IRQs are enabled in the diagnostic loop or EL0; successful handlers
   never use UART or allocate. User/schedule dispatch accesses only its paused session or observation. See [TIMER.md](TIMER.md).
@@ -78,7 +81,8 @@ assumptions and limits. Rust panic still prints and halts without recovery.
   See [TASKS.md](TASKS.md); this kernel job remains cooperative and unisolated.
 - protocol.rs: structured request parsing without execution.
 - command.rs: human-command parsing and execution of allowed operations. It
-  receives typed uptime/MMU snapshots and delegates memory use to its owned adapter.
+  receives a typed uptime snapshot and delegates memory/MMU operations to their
+  owned adapters; the MMU supplies register snapshots and fixed task-map switches.
 - main.rs: composition and panic handling.
 
 Both parsers converge on an operation enum; neither executes arbitrary text.
@@ -88,8 +92,9 @@ observed completion. Its host placement is provisional; the target is a guest
 service above the kernel once service execution/isolation exists. See the
 [placement and migration rationale](COORDINATOR.md#why-the-coordinator-is-currently-on-the-host). Meta API calls are not implemented.
 Credentials and HTTPS will remain on the host. The guest must independently
-validate operations. Multi-service isolation still requires separate service mappings, scheduling
-and IPC; module names do not supply those guarantees.
+validate operations. General isolated services still require service-specific memory
+ownership/lifetimes, IPC and permissions; the two fixed stack maps are a foundation,
+not a complete service security model. Module names do not supply those guarantees.
 
 ## Clock
 

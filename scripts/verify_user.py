@@ -77,7 +77,7 @@ def verify(profile, case=None):
             assert request('context.check') == CONTEXT
             assert request('echo\tkernel survived') == 'kernel survived'
         assert request('mmu.info') == before
-        assert request('memory.check') == 'checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250'
+        assert request('memory.check') == 'checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244'
         assert request('user.run\t', 'err') == 'bad_args'
         assert request('user.run\textra', 'err') == 'bad_args'
         if case is None:

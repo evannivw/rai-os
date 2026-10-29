@@ -113,3 +113,7 @@ Earlier evidence is retained verbatim. Broader regression results are recorded i
 - [Arm timer interrupt handling](https://documentation-service.arm.com/static/6294c39db334256d9ea8ae53)
 - [QEMU virt board](https://www.qemu.org/docs/master/system/arm/virt.html)
 - [QEMU board register map](https://github.com/qemu/qemu/blob/master/hw/arm/virt.c)
+
+The later [private-task-map increment](TASK_MEMORY.md) raises current table
+ownership to twelve pages, leaving 244 pool pages free. Earlier six-table counts
+and captures above describe the original timer/deadline increments.

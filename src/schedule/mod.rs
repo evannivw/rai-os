@@ -1,10 +1,13 @@
 //! Two-context diagnostics and a bounded task lifecycle on one CPU.
+mod isolation;
 mod lifecycle;
+pub use isolation::{IsolationReport, check as isolate};
 mod programs;
 mod runtime;
 use crate::{
     clock,
     context::Frame,
+    mmu::{Mmu, TaskSpace},
     timer::{SLICE_MS, Timer},
 };
 use core::{
@@ -68,7 +71,7 @@ pub(crate) fn capture(frame: &Frame, vector: u64) -> bool {
     true
 }
 
-pub fn check(timer: &mut Timer) -> Result<Report, &'static str> {
+pub fn check(timer: &mut Timer, mmu: &Mmu) -> Result<Report, &'static str> {
     if is_active() || crate::user::is_active() {
         return Err("schedule_busy");
     }
@@ -89,7 +92,7 @@ pub fn check(timer: &mut Timer) -> Result<Report, &'static str> {
         ptr::addr_of!(schedule_program_b_end) as u64,
     ];
     // Each context owns one 4 KiB half of the existing 8 KiB user region for the
-    // diagnostic lifetime. Distinct stacks, but shared mappings: NOT isolation.
+    // diagnostic lifetime. A task map permits only its own page at EL0.
     let stacks = [bottom + 4096 - 16, bottom + 8192 - 16];
     let flags = [0xa000_0340, 0x5000_0340];
     let seeds = [0xa5a5_0000_0000_1000_u64, 0x5a5a_0000_0000_2000];
@@ -123,7 +126,7 @@ pub fn check(timer: &mut Timer) -> Result<Report, &'static str> {
         let input = contexts[id]; // Read-only input separate from IRQ output.
         // SAFETY: initial frames use fixed user entries/stacks and EL0 status;
         // subsequent frames passed the validation below before being retained.
-        let observation = unsafe { run_turn(timer, &input) }?;
+        let observation = unsafe { run_turn(timer, mmu, TaskSpace::from_index(id)?, &input) }?;
         if observation.vector != 9 {
             return Err("schedule_user_fault");
         }
@@ -165,7 +168,20 @@ pub fn check(timer: &mut Timer) -> Result<Report, &'static str> {
 /// assigned aligned user SP and EL0t/IRQ-enabled PSTATE. One masked kernel CPU,
 /// installed vectors, exclusive user RAM, no active user/schedule invocation.
 /// The input is read-only and separate from the handler's output Observation.
-unsafe fn run_turn(timer: &mut Timer, input: &Frame) -> Result<Observation, &'static str> {
+unsafe fn run_turn(
+    timer: &mut Timer,
+    mmu: &Mmu,
+    space: TaskSpace,
+    input: &Frame,
+) -> Result<Observation, &'static str> {
+    // SAFETY: validated user frame, one masked kernel CPU; inner returns masked
+    // after exception capture/cleanup. Base map restoration also covers errors.
+    unsafe { mmu.with_task(space, || run_mapped_turn(timer, input)) }?
+}
+
+/// # Safety
+/// Same frame/entry contract as run_turn; the selected task map is already active.
+unsafe fn run_mapped_turn(timer: &mut Timer, input: &Frame) -> Result<Observation, &'static str> {
     unsafe extern "C" {
         fn schedule_enter(input: *const Frame);
     }

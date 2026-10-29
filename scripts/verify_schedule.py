@@ -74,7 +74,7 @@ def verify(profile, case=None):
             assert request('echo\tresumption checked') == 'resumption checked'
         check_timeout(request('user.spin'), symbols, 'spin')
         assert request('mmu.info') == before
-        assert request('memory.check') == 'checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250'
+        assert request('memory.check') == 'checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244'
         assert request('schedule.check\t', 'err') == 'bad_args'
         assert request('schedule.check\textra', 'err') == 'bad_args'
         child.stdin.write(b'schedule.check extra\n')

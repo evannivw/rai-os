@@ -9,9 +9,10 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     result = subprocess.run(
         ["sh", "scripts/console.sh"], cwd=ROOT,
-        input="schedule.run\nschedule.fault\nschedule.check\nuser.spin\ntimer.check\nuser.run\ncontext.check\ninfo\nuptime\nmmu.info\nmemory.info\nmemory.check\ntask.start\ntask.status\ntask.cancel 1\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
+        input="schedule.isolate\nschedule.run\nschedule.fault\nschedule.check\nuser.spin\ntimer.check\nuser.run\ncontext.check\ninfo\nuptime\nmmu.info\nmemory.info\nmemory.check\ntask.start\ntask.status\ntask.cancel 1\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
         text=True, capture_output=True, timeout=60,
     )
+    assert "rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true" in result.stdout
     assert result.returncode == 0, result.stdout + result.stderr
     assert "Connection: kernel boot and UART console confirmed." in result.stdout
     assert re.search(r"\[kernel / OK\] uptime_ms=\d+; counter_hz=[1-9]\d*", result.stdout)
@@ -25,9 +26,9 @@ def main():
     assert re.search(r"\[kernel / OK\] mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=\d+; vector=9;", result.stdout)
     assert "[kernel / OK] mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0" in result.stdout
     assert "[kernel / OK] round_trips=2; registers=31; flags=true; stack=true; resumed=true" in result.stdout
-    assert "[kernel / OK] enabled=true; mode=identity; granule=4096; table_pages=6;" in result.stdout
-    assert "[kernel / OK] page_size=4096; total_pages=256; free_pages=250; used_pages=6;" in result.stdout
-    assert "[kernel / OK] checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250" in result.stdout
+    assert "[kernel / OK] enabled=true; mode=identity; granule=4096; table_pages=12;" in result.stdout
+    assert "[kernel / OK] page_size=4096; total_pages=256; free_pages=244; used_pages=12;" in result.stdout
+    assert "[kernel / OK] checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244" in result.stdout
     assert "[kernel / OK] bridge alive" in result.stdout
     assert "[input rejected; not sent]" in result.stdout
     assert result.stdout.count("[kernel / OK] RAI-OS 0.1.0;") == 3

@@ -58,8 +58,9 @@ calls and synchronous fault containment. A [controlled EL1 timer IRQ diagnostic]
 now verifies asynchronous entry and return; a [fixed EL0 deadline](USER_TIMEOUT.md)
 can terminate a non-cooperative invocation. A [two-context diagnostic](SCHEDULING.md) now verifies
 suspension/resumption on one CPU. A [bounded task lifecycle](TASK_LIFECYCLE.md)
-now lets a task finish or fault while its peer continues. Separate service address
-spaces, general task creation and IPC remain pending. See the [kernel-to-service roadmap](ROADMAP.md). A [graphical host control panel](PANEL.md) now exposes real
+now lets a task finish or fault while its peer continues. [Private stack maps](TASK_MEMORY.md)
+now prevent these tasks from reading/writing each other's stack. General service
+address-space ownership, task creation and IPC remain pending. See the [kernel-to-service roadmap](ROADMAP.md). A [graphical host control panel](PANEL.md) now exposes real
 QEMU boot, info, uptime, echo, and a [cooperative word-count task](TASKS.md). This is a host UI, not a guest desktop. The
 correctness fixture is retained; verifier implementation resumes with demo jobs.
 

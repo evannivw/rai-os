@@ -52,9 +52,9 @@ at every switch and no change to translation tables in this increment.
   work. All initial PCs, stacks and status values come from kernel code, never UART.
 - The existing 8 KiB user-stack mapping is split into two 4 KiB halves. Each loop
   uses the last sixteen bytes of its half: a counter store and a distinct marker.
-  Outer guard pages remain; there is no guard between the halves. Both halves
-  are accessible from either EL0 context in the shared address space. These are
-  separate storage assignments, NOT enforced isolation between processes.
+  Outer guard pages remain; there is no unmapped page between the halves. The
+  later [task-map increment](TASK_MEMORY.md) now denies access to the peer half
+  in each task root. Shared executable code/constants remain read-only.
 - `src/schedule/programs.S` uses small assembly probes so all integer registers
   and flags have predictable values. Each normal loop is exactly ADD/STR/B, with
   no syscall, yield, timer read or voluntary exit. General application code remains
@@ -122,8 +122,8 @@ exclusive and use separate build directories. Normal images contain no injected
 MOV/BRK prefix in these probes.
 
 This is a fixed two-context scheduling diagnostic. It has no dynamic task creation,
-exit/wait lifecycle, runnable queue, priority policy, IPC or isolation between user
-contexts. The host coordinator and graphical panel have not moved into the guest.
+exit/wait lifecycle, runnable queue, priority policy or IPC. Its stack pages now
+use the separate task maps documented in [TASK_MEMORY.md](TASK_MEMORY.md). The host coordinator and graphical panel have not moved into the guest.
 Console/cooperative-job progress waits until this bounded command returns. A user
 fault aborts the whole diagnostic rather than continuing the other context.
 
@@ -135,3 +135,8 @@ two words per half, not every byte of stack capacity. The separate
 [schedule.run/schedule.fault lifecycle](TASK_LIFECYCLE.md) now supports explicit
 completion/fault states and continuing a ready peer. The original schedule.check
 remains a strict all-or-error register diagnostic.
+
+The original captures above predate private task maps. Current schedule.check
+switches roots through the same run_turn adapter as schedule.run/fault/isolate.
+Each return restores the base root before frame validation or command output;
+the new isolation diagnostic tests denied cross-stack accesses separately.

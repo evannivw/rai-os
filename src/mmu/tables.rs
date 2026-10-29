@@ -1,6 +1,6 @@
 //! Pure fixed-board table construction. No raw pointers or system registers.
 pub const PAGE_SIZE: usize = 4096;
-pub const TABLE_COUNT: usize = 6;
+pub const TABLE_COUNT: usize = 12;
 pub const GICD: usize = 0x0800_0000;
 pub const GICC: usize = 0x0801_0000;
 pub const UART: usize = 0x0900_0000;
@@ -57,7 +57,8 @@ fn leaf(address: usize, kind: Kind) -> u64 {
     }
 }
 
-/// Six pages: L1 root, low L2, UART L3, RAM L2, RAM L3, GIC L3.
+/// Base: L1 root, low L2, UART L3, RAM L2, RAM L3, GIC L3.
+/// Each task adds a private root/RAM L2/RAM L3; low device tables are shared.
 /// All unmapped entries remain invalid. No blocks or aliases; only the explicit user regions permit EL0.
 pub fn build(
     tables: [&mut [u64; 512]; TABLE_COUNT],
@@ -93,7 +94,7 @@ pub fn build(
         || user.text_start >= user.text_end
         || user.text_end >= user.rodata_end
         || user.rodata_end.checked_add(PAGE_SIZE) != Some(user.stack_start)
-        || user.stack_start >= user.stack_end
+        || user.stack_start.checked_add(2 * PAGE_SIZE) != Some(user.stack_end)
         || user
             .stack_end
             .checked_add(PAGE_SIZE)
@@ -110,7 +111,20 @@ pub fn build(
             return Err("invalid_table_page");
         }
     }
-    let [root, low_l2, uart_l3, ram_l2, ram_l3, gic_l3] = tables;
+    let [
+        root,
+        low_l2,
+        uart_l3,
+        ram_l2,
+        ram_l3,
+        gic_l3,
+        a_root,
+        a_l2,
+        a_l3,
+        b_root,
+        b_l2,
+        b_l3,
+    ] = tables;
     for table in [
         &mut *root,
         &mut *low_l2,
@@ -150,6 +164,19 @@ pub fn build(
         };
         ram_l3[(address - RAM_BASE) / PAGE_SIZE] = leaf(address, kind);
     }
+    // The kernel mapping is identical in every root. Only EL0 access to the
+    // peer's stack page is removed; PA, attributes and EL1 permissions stay fixed.
+    for (id, task_root, task_l2, task_l3) in [(0, a_root, a_l2, a_l3), (1, b_root, b_l2, b_l3)] {
+        task_root.copy_from_slice(root);
+        task_l2.copy_from_slice(ram_l2);
+        task_l3.copy_from_slice(ram_l3);
+        task_root[1] = addresses[7 + id * 3] as u64 | 3;
+        task_l2[0] = addresses[8 + id * 3] as u64 | 3;
+        let peer = user.stack_start + (id ^ 1) * PAGE_SIZE;
+        if !cfg!(feature = "isolation-test-open-peer") {
+            task_l3[(peer - RAM_BASE) / PAGE_SIZE] = leaf(peer, Kind::Data);
+        }
+    }
     Ok(())
 }
 
@@ -172,9 +199,7 @@ mod tests {
         }
     }
     fn addresses() -> [usize; TABLE_COUNT] {
-        [
-            0x40090000, 0x40091000, 0x40092000, 0x40093000, 0x40094000, 0x40095000,
-        ]
+        core::array::from_fn(|i| 0x40090000 + i * PAGE_SIZE)
     }
     #[test]
     fn permissions_and_sparse_identity_mapping() {
@@ -223,6 +248,40 @@ mod tests {
         assert_eq!(tables[5][16] & ((7 << 2) | PXN | UXN), PXN | UXN);
         assert_eq!(tables[2].iter().filter(|v| **v != 0).count(), 1);
         assert_eq!(tables[3].iter().filter(|v| **v != 0).count(), 1);
+    }
+    #[test]
+    fn task_roots_share_only_read_only_user_regions_and_protect_all_tables() {
+        let mut tables = [[0; 512]; TABLE_COUNT];
+        let addresses = addresses();
+        let layout = layout();
+        build(tables.each_mut(), addresses, layout).unwrap();
+        let start = (layout.user.stack_start - RAM_BASE) / PAGE_SIZE;
+        for id in 0..2 {
+            let root = 6 + id * 3;
+            assert_eq!(tables[root][0], tables[0][0]);
+            assert_eq!(tables[root][1], addresses[root + 1] as u64 | 3);
+            assert_eq!(tables[root + 1][0], addresses[root + 2] as u64 | 3);
+            assert!(tables[root][2..].iter().all(|e| *e == 0));
+            assert!(tables[root + 1][1..].iter().all(|e| *e == 0));
+            for index in 0..512 {
+                let expected = if index == start + (id ^ 1) {
+                    tables[4][index] & !(1 << 6)
+                } else {
+                    tables[4][index]
+                };
+                assert_eq!(tables[root + 2][index], expected);
+                let entry = tables[root + 2][index];
+                // Only the selected stack page is EL0 writable, with no aliases.
+                if entry & 3 == 3 && entry & (1 << 6) != 0 && entry & READ_ONLY == 0 {
+                    assert_eq!(index, start + id);
+                    assert_eq!(entry & 0xffff_f000, (RAM_BASE + index * PAGE_SIZE) as u64);
+                }
+            }
+            for address in addresses {
+                let entry = tables[root + 2][(address - RAM_BASE) / PAGE_SIZE];
+                assert_eq!(entry & ((3 << 6) | PXN | UXN), READ_ONLY | PXN | UXN);
+            }
+        }
     }
     #[test]
     fn rejects_invalid_user_regions_before_mutation() {
