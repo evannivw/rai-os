@@ -85,7 +85,7 @@ pub fn run(timer: &mut Timer, program: Program) -> Result<Report, &'static str> 
     let stack_start = ptr::addr_of_mut!(__user_stack_bottom) as u64;
     let stack_end = ptr::addr_of!(__user_stack_top) as u64;
     // One CPU, kernel IRQs masked: no competing publisher can race this check.
-    if !ACTIVE.load(Ordering::Acquire).is_null() {
+    if is_active() || crate::schedule::is_active() {
         return Err("user_busy");
     }
     // SAFETY: linker-owned, mapped user stack, no live user invocation. Clear old
@@ -258,4 +258,8 @@ pub fn interrupt(frame: &mut Frame) -> bool {
         frame.far,
         frame.user_sp,
     )
+}
+
+pub(crate) fn is_active() -> bool {
+    !ACTIVE.load(Ordering::Acquire).is_null()
 }

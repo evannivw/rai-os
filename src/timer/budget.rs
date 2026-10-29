@@ -1,5 +1,6 @@
 //! One fixed guest-counter deadline; independent of hardware access and transport.
 pub const USER_BUDGET_MS: u64 = 100;
+pub const SLICE_MS: u64 = 20;
 pub struct Budget {
     start: u64,
     pub deadline: u64,
@@ -7,10 +8,16 @@ pub struct Budget {
 }
 impl Budget {
     pub fn new(start: u64, frequency: u32) -> Result<Self, &'static str> {
+        Self::duration(start, frequency, USER_BUDGET_MS)
+    }
+    pub fn slice(start: u64, frequency: u32) -> Result<Self, &'static str> {
+        Self::duration(start, frequency, SLICE_MS)
+    }
+    fn duration(start: u64, frequency: u32, milliseconds: u64) -> Result<Self, &'static str> {
         if frequency == 0 {
             return Err("invalid_timer_frequency");
         }
-        let ticks = (u64::from(frequency) * USER_BUDGET_MS).div_ceil(1000);
+        let ticks = (u64::from(frequency) * milliseconds).div_ceil(1000);
         let deadline = start.checked_add(ticks).ok_or("timer_deadline_overflow")?;
         Ok(Self {
             start,
@@ -37,6 +44,11 @@ mod tests {
         assert!(budget.expired(budget.deadline + 1));
         assert_eq!(budget.elapsed_ms(budget.deadline), 100);
         assert_eq!(budget.elapsed_ms(999), 0);
+        let slice = Budget::slice(1000, 62_500_000).unwrap();
+        assert_eq!(slice.elapsed_ms(slice.deadline), 20);
+        assert!(slice.deadline < budget.deadline);
+        assert!(!slice.expired(slice.deadline - 1));
+        assert!(slice.expired(slice.deadline));
         let coarse = Budget::new(10, 3).unwrap();
         assert_eq!(coarse.deadline, 11); // Never round a positive budget to zero.
         assert!(Budget::new(u64::MAX, 1).is_err());

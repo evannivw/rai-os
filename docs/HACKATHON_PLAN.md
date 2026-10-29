@@ -1,7 +1,7 @@
 # RAI-OS hackathon plan
 
 Updated October 28, 2026. Local times: America/Guatemala. This is a proposed
-roadmap; completed foundations are identified below. AI and kernel scheduling remain pending.
+roadmap; completed foundations are identified below. AI and a general guest service runtime remain pending.
 
 ## Sources and eligibility
 
@@ -56,8 +56,9 @@ A [controlled EL1 context return](CONTEXT.md) is now verified.
 One [built-in Rust program at EL0](USER_PROGRAM.md) now has bounded write/exit
 calls and synchronous fault containment. A [controlled EL1 timer IRQ diagnostic](TIMER.md)
 now verifies asynchronous entry and return; a [fixed EL0 deadline](USER_TIMEOUT.md)
-can terminate a non-cooperative invocation. Suspension/resumption remains pending. Separate service address spaces,
-scheduling and IPC remain pending. See the [kernel-to-service roadmap](ROADMAP.md). A [graphical host control panel](PANEL.md) now exposes real
+can terminate a non-cooperative invocation. A [two-context diagnostic](SCHEDULING.md) now verifies
+suspension/resumption on one CPU. Separate service address spaces, a general task
+lifecycle and IPC remain pending. See the [kernel-to-service roadmap](ROADMAP.md). A [graphical host control panel](PANEL.md) now exposes real
 QEMU boot, info, uptime, echo, and a [cooperative word-count task](TASKS.md). This is a host UI, not a guest desktop. The
 correctness fixture is retained; verifier implementation resumes with demo jobs.
 

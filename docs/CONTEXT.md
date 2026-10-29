@@ -113,3 +113,7 @@ The [timer diagnostic](TIMER.md) reuses the 288-byte frame and snapshot validati
 for slot 5. Its assembly loop permits asynchronous IRQs only at a known PC.
 The original SVC allowlist and its rejection tests are unchanged. This is not a
 general scheduler or permission to unmask IRQs in arbitrary Rust code.
+
+The later [scheduling diagnostic](SCHEDULING.md) copies the shared Frame into
+kernel RAM and restores all user integer registers on a later turn. Its bounded
+EL0 restore path is separate from the original controlled EL1 SVC diagnostic.

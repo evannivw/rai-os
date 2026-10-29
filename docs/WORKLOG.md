@@ -570,3 +570,57 @@ broken timer or stuck kernel handler can still hang. Spurious/unexpected lower-E
 IRQs, cleanup readback failure, counter wrap/reset, nested/corrupt kernel stacks
 and SMP were not injected. The next area is saving/resuming two built-in contexts
 on one CPU, with explicit ownership and lifecycle tests before broader services.
+
+## Two resumable EL0 contexts on one CPU — October 28
+
+Added argument-free schedule.check as a bounded round-robin diagnostic. Two linked
+ADD/STR/B loops receive six 20 ms turns each. The kernel stores their integer
+Frames in RAM and restores the interrupted PC, x0-x30, status and SP_EL0 on later
+turns. The existing 8 KiB user RAM region supplies two distinct 4 KiB stack halves;
+there is no new mapping, separate address space or enforced isolation between
+those halves. Ordinary user.run/user.spin retain their separate 100 ms deadline.
+
+Each IRQ captures an output Observation separate from the read-only restore
+input. The fixed kernel return trampoline resumes masked Rust, which stops/checks
+timer hardware, validates the frame/stack, retains it and selects the other
+context. Validation checks thirty distinct seeded registers, progressing x0,
+complementary NZCV patterns, exact SP, a permitted PC and two observed stack words.
+The reply includes actual per-turn counters and A/B trace only after all checks
+pass. Both paused contexts are discarded when the twelve-turn test ends.
+
+The first Clippy run caught a modulo expression that should use is_multiple_of;
+that was corrected before boot verification. Normal debug boot then passed, and
+the first live run alternated ABABABABABAB with 137/136 ms of observed slice time
+and increasing counters. Hello, the EL1 timer diagnostic and echo still worked.
+The dedicated verifier passed debug/release: four normal runs per profile (48
+EL0 timer IRQs and 44 context switches), exact ELF loop instructions, alternating
+trace, strictly increasing per-context counters, arithmetic and at least 120 ms
+per context. The pure budget test now distinguishes 20 ms slices from 100 ms
+invocation deadlines. Timing is guest-counter observation, not CPU accounting.
+
+Two separate negative images passed twice each: A corrupts x7 and is rejected as
+schedule_context_corrupt; B executes BRK after A's first slice and the diagnostic
+returns schedule_user_fault. Both paths stop before resuming rejected state and
+leave hello, user.spin timeout, context/timer checks, memory/MMU state and echo
+usable. Argument rejection and direct shell operation were checked. Captures and
+unsafe/lifecycle limits are in [SCHEDULING.md](SCHEDULING.md).
+
+Regressions passed in debug and release: 37 boot/protocol checks, all controlled
+EL1 timer checks and unexpected-SGI rejection, EL1 SVC returns/rejection images,
+BRK diagnostics, MMU normal/five-fault checks and three table tests, memory/task
+integration and their three pure tests each, ten user image cases, and all three
+EL0 timeout image cases. Terminal integration now includes schedule.check;
+fifteen panel tests (four real QEMU), formatting, default plus twenty-two individual
+feature Clippy runs, console/panel Clippy and optimized panel compilation passed.
+Mixed schedule/user fault features were rejected. Local Markdown links and staged
+whitespace checks passed. Test QEMU children were reaped. GUI presentation was
+unchanged, so no native-window visual review was repeated.
+
+This verifies preemptive pause/resume for two fixed contexts, not a general task
+runtime, runnable queue, service isolation, process loader, agent migration or
+SMP. A synchronous task fault aborts the whole diagnostic. Stack observations
+cover only the counter and marker words, not the full stack capacity. Failed IRQ
+delivery can still hang until the host verifier times out; no guest recovery for
+broken timer delivery is claimed. The next step is explicit task completion and
+fault lifecycle so one context can finish/fail while another continues, before
+adding broader scheduling policy and IPC. Historical evidence remains intact.

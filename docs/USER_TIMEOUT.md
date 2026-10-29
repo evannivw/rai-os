@@ -140,3 +140,10 @@ user/model configurable; the Meta integration is still pending.
 - [Arm Generic Timer](https://documentation-service.arm.com/static/633d612a4c59b30b51771183): absolute compare registers and timer delivery.
 - [Arm architecture registers](https://documentation-service.arm.com/static/60df1943677cf7536a55ddef): CNTKCTL_EL1, SCTLR_EL1 and exception syndromes.
 - [Arm AArch64 exception model](https://documentation-service.arm.com/static/63a065c41d698c4dc521cb1c): lower-EL IRQ entry and saved execution state.
+
+## Later scheduling diagnostic
+
+[SCHEDULING.md](SCHEDULING.md) now demonstrates pause/resume with two contexts
+and 20 ms turns. It uses a separate bounded twelve-turn run; the 100 ms policy
+above still applies specifically to user.run/user.spin. Expiring a scheduling
+slice pauses its context rather than terminating it.

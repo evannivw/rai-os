@@ -24,7 +24,8 @@ user faults through slot 8. Slot 5 handles [controlled EL1 timer IRQs](TIMER.md)
 5. At EL1, the approved SVC site and controlled timer probe may restore registers and execute
    ERET. Rejected EL1 events initialize/take over PL011, report and wait forever.
    Slot 8 separately resumes valid user syscalls or terminates faulted/expired
-   invocations. Slot 9 terminates a user invocation whose timer deadline expired. There is no automatic retry, unwinding or return from a fatal report.
+   invocations. Slot 9 terminates an expired legacy user invocation, or captures a paused
+   context for the [scheduling diagnostic](SCHEDULING.md). There is no automatic retry, unwinding or return from a fatal report.
 
 `EXCEPTION` and `HALTED` lines are fatal console diagnostics, not successful
 `@rai1` responses or task results. The normal boot banners and protocol are

@@ -9,6 +9,7 @@ mod exceptions;
 mod memory;
 mod mmu;
 mod protocol;
+mod schedule;
 mod task;
 mod timer;
 mod uart;
@@ -70,6 +71,8 @@ fn panic(_info: &PanicInfo) -> ! {
 // Fault-injection builds run one intentional exception at a time.
 const _: () = assert!(
     cfg!(feature = "exception-self-test") as usize
+        + cfg!(feature = "schedule-test-corrupt-register") as usize
+        + cfg!(feature = "schedule-test-user-fault") as usize
         + cfg!(feature = "timer-test-unexpected-irq") as usize
         + cfg!(feature = "user-test-syscall-loop") as usize
         + cfg!(feature = "user-test-mask-irq") as usize

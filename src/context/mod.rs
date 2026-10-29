@@ -1,4 +1,4 @@
-//! Bounded EL1 diagnostic and shared integer frame; no interrupts/task switching.
+//! Bounded EL1 diagnostic and the shared integer exception/resumption frame.
 pub mod policy;
 use core::{
     arch::global_asm,
@@ -8,6 +8,7 @@ global_asm!(include_str!("probe.S"));
 
 // Layout is shared with synchronous_entry in exceptions.S. All bytes initialized.
 #[repr(C, align(16))]
+#[derive(Clone, Copy, Default)]
 pub struct Frame {
     pub registers: [u64; 31],
     pub elr: u64,

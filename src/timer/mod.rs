@@ -1,6 +1,6 @@
 //! Sole timer owner: controlled EL1 diagnostic and an absolute EL0 deadline.
 mod budget;
-pub use budget::{Budget, USER_BUDGET_MS};
+pub use budget::{Budget, SLICE_MS, USER_BUDGET_MS};
 mod hardware;
 use crate::{
     clock,
@@ -50,13 +50,22 @@ impl Timer {
         }
     }
     pub fn start_user_budget(&mut self) -> Result<Budget, &'static str> {
+        self.start_budget(Budget::new)
+    }
+    pub fn start_slice(&mut self) -> Result<Budget, &'static str> {
+        self.start_budget(Budget::slice)
+    }
+    fn start_budget(
+        &mut self,
+        make: fn(u64, u32) -> Result<Budget, &'static str>,
+    ) -> Result<Budget, &'static str> {
         if hardware::masks() != 0x3c0
             || !ACTIVE.load(Ordering::Acquire).is_null()
             || !hardware::quiescent()
         {
             return Err("timer_busy");
         }
-        let budget = Budget::new(clock::counter(), self.frequency)?;
+        let budget = make(clock::counter(), self.frequency)?;
         hardware::start();
         hardware::arm_deadline(budget.deadline);
         Ok(budget)

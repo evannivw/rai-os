@@ -80,7 +80,8 @@ python3 scripts/verify_user.py --release
 - This busy loop and polling UART do not reduce CPU use. No energy, speed, phone
   support, agent isolation or AI claim follows. `user.run` occupies
   execution until it exits, faults or reaches its fixed deadline. [EL0 timeout](USER_TIMEOUT.md) is now
-  implemented; suspension/resumption and scheduling remain future work; see [ROADMAP.md](ROADMAP.md).
+  implemented; a [bounded two-context scheduling diagnostic](SCHEDULING.md) also uses 20 ms
+  slices. General task lifecycle remains future work; see [ROADMAP.md](ROADMAP.md).
 
 ## Observed verification
 

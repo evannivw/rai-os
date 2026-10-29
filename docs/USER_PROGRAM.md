@@ -146,3 +146,8 @@ and [AArch64 exception model](https://documentation-service.arm.com/static/63a06
 Current ownership was updated with the October 28 timer increment: six table
 pages and 250 free pool pages. Earlier evidence files retain the actual counts
 from their original runs. The additional L3 table maps the GIC device pages.
+
+The separate [scheduling diagnostic](SCHEDULING.md) reuses the user RAM region
+only while this invocation is inactive. It splits the existing stack into two
+halves with shared EL0 permissions; normal user.run still clears and owns all
+8 KiB. No mappings or syscalls changed with that diagnostic.

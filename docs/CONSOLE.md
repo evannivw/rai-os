@@ -94,3 +94,8 @@ Enter `user.spin` to run a deliberately infinite EL0 loop. The kernel terminates
 it after the fixed deadline and returns `state=timed_out`; this is not success
 for the user program. Then enter `user.run` to verify normal execution continues.
 The [EL0 timeout guide](USER_TIMEOUT.md) explains the measured result and limits.
+
+Enter `schedule.check` to alternate two linked EL0 contexts on one CPU. The reply
+shows A/B order and twelve observed counters; each context continues on its later
+turns. This is a bounded diagnostic with shared user mappings, not isolated
+processes. See [SCHEDULING.md](SCHEDULING.md).

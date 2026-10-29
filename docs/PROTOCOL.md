@@ -17,7 +17,7 @@ Examples use literal escape notation for actual TAB, LF, and CR bytes:
 ```
 
 Grammar: @rai1 TAB id TAB operation [TAB argument] line-ending.
-help/info/uptime/memory.info/memory.check/mmu.info/context.check/timer.check/user.run/user.spin require exactly three fields; echo requires four, with a possibly
+help/info/uptime/memory.info/memory.check/mmu.info/context.check/timer.check/schedule.check/user.run/user.spin require exactly three fields; echo requires four, with a possibly
 empty argument. Names are case-sensitive. ID: 1-10 ASCII digits with value
 1..4294967295; leading zeros are allowed and preserved. IDs are not remembered.
 
@@ -176,3 +176,22 @@ produce `bad_args`. Internal setup/cleanup errors may return `user_busy`,
 `timer_busy`, `invalid_timer_frequency`, `timer_deadline_overflow` or
 `timer_cleanup_failed`; those branches were not all fault-injected.
 See [USER_TIMEOUT.md](USER_TIMEOUT.md) for timing and cleanup guarantees/limits.
+
+## Bounded context-switching diagnostic
+
+`schedule.check` has no argument (exactly three structured fields). It performs
+six 20 ms slices per linked EL0 context, then discards both paused contexts. It
+accepts no code, task IDs, duration or saved register input. The result contains:
+
+```text
+tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=<decimal>; b_ms=<decimal>; progress=<12 comma-separated decimals>; context=true; stacks=true
+```
+
+Progress entries match the trace; per-context counters must increase. Flags are
+emitted only after all actual frame/stack observations pass. The 100 ms deadline
+of user.run/user.spin is unchanged and does not apply to this diagnostic's context
+lifetime. Parsing errors return `bad_args`. Runtime errors can include
+`schedule_busy`, `schedule_user_fault`, `schedule_timer_early`,
+`schedule_context_corrupt`, or the timer's existing setup/cleanup errors. A failed
+check returns no success report and stops before resuming rejected state. See
+[SCHEDULING.md](SCHEDULING.md) for measured timing, tested failures and limitations.
