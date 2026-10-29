@@ -1,7 +1,7 @@
 //! Fixed EL0 clients of the scalar send/receive ABI. No shared writable memory.
 use core::arch::asm;
 #[inline(always)]
-fn call(number: u64, mut a: u64, mut b: u64, mut c: u64) -> (u64, u64, u64, u64) {
+pub(super) fn call(number: u64, mut a: u64, mut b: u64, mut c: u64) -> (u64, u64, u64, u64) {
     // Deliberately nonzero: the kernel must not accept this as a sender identity
     // or expose it as receive output after a failed call.
     let mut d = 999_u64;
@@ -14,7 +14,7 @@ fn call(number: u64, mut a: u64, mut b: u64, mut c: u64) -> (u64, u64, u64, u64)
     (a, b, c, d)
 }
 #[inline(always)]
-fn finish(code: u64, value: u64) -> ! {
+pub(super) fn finish(code: u64, value: u64) -> ! {
     // SAFETY: exit terminates this task. Fallback remains preemptible at EL0.
     unsafe {
         asm!("svc #0", "2: b 2b", in("x8") 2_u64, in("x0") code,
@@ -22,7 +22,7 @@ fn finish(code: u64, value: u64) -> ! {
     }
 }
 #[inline(always)]
-fn expect(result: (u64, u64, u64, u64), status: u64) {
+pub(super) fn expect(result: (u64, u64, u64, u64), status: u64) {
     if result.0 != status || result.1 != 0 || result.2 != 0 || result.3 != 0 {
         finish(1, result.0);
     }

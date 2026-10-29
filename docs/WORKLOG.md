@@ -773,3 +773,56 @@ general process/service runtime or agent framework. Expanding to C/D/E requires
 coordinated task, memory-map, scheduler and route changes; changing one constant
 is insufficient. Waiting/wakeup is the next small foundation before general
 service lifecycle. No AI, phone support or efficiency gain is claimed.
+
+## October 28, 2026 — blocking receive and message/closure wakeup
+
+Added ipc.wait and receive_wait syscall 12 in its own runtime mode. A pending
+receiver becomes Waiting and is excluded from dispatch. A successful send
+completes the pending receive through the protected saved result registers and
+marks the task Ready; its original saved PC resumes after the same syscall.
+Already-queued messages return immediately. All result and identity handling
+remains scalar, with private user stacks and no new unsafe copy boundary.
+
+Queue-first pending/Closed policy remains in the pure mailbox module; checked
+Waiting/wake/Deadlocked transitions remain in the lifecycle module. The runtime
+owns completion and closed-batch deadlock handling. Waiting does not close an
+endpoint. Exit, fault and timer/call limits do close it; if the receiver has no
+authorized live sender and no queued message, its pending call completes Closed.
+If the closed batch has no ready task, remaining waiters become Deadlocked and
+the console returns. No external event source exists in this diagnostic, so this
+is not a persistent-service idle policy or a hardware power-saving implementation.
+
+Normal QEMU bring-up observed AD,BS,AW,AS,BR,AE,BE: A blocked once, B sent 41,
+A woke once and replied 42, then both exited correctly. The older ipc.check
+request/reply still worked. The trace now stores 92 one-byte task/event entries,
+preserving the prior 92-byte trace-array footprint while adding wake/cancellation
+events. Wakeup preserves timer and syscall budgets and never counts a second call.
+
+Actual verification passed in debug and release: four pure mailbox tests and
+five lifecycle tests. Eight QEMU images per profile covered normal wakeup, mutual
+waiting, peer exit, peer fault, peer spin, peer call limit, queued-before-receive
+and invalid-send-before-valid-send. Twenty-five ipc.wait batches per profile
+passed, including a normal shell run. An independent host replay checked that
+waiters were never dispatched, W followed the peer's send, C followed a terminal
+peer, and X occurred only with no ready task. It also checked results/counters,
+call/timer bounds and the exact architectural fault. In the spin case A retained
+one pending receive and zero timer turns while B exhausted its six preemptions,
+then A woke with Closed. Invalid sends did not wake it. Subsequent IPC, user,
+scheduling, isolation, memory, MMU snapshot and echo checks passed. Repeated runs
+verified fresh records/queues; extra arguments were rejected.
+
+Full regressions passed in both profiles: 37 boot/protocol checks, scheduling,
+lifecycle, nonblocking IPC, isolation, timer, context, exceptions, MMU, memory,
+cooperative tasks, user and user-timeout. Host console integration and all 15 panel
+tests passed. Formatting, default plus all 38 individual diagnostic-feature Clippy
+checks, console/panel Clippy and release panel compilation passed. Mixed wait/IPC
+features were rejected. Final local links, staged whitespace and included files
+were reviewed. The GUI did not change; historical evidence and dates were preserved.
+
+Expanded [ROADMAP.md](ROADMAP.md) with the dependency sequence and the reason for
+each foundation, as requested. The next step is one small guest request/result
+service; external event delivery and persistent lifetime must be separate explicit
+increments. [IPC_WAIT.md](IPC_WAIT.md) documents the ABI, transitions, bounded
+failure policy and actual captures. Page ownership remains twelve tables and
+244 free pool pages. No receive timeout, WFI idle loop, SMP, dynamic task creation,
+guest coordinator, Meta integration or measured efficiency gain is claimed.

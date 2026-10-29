@@ -5,6 +5,7 @@ mod lifecycle;
 pub use isolation::{IsolationReport, check as isolate};
 mod programs;
 mod runtime;
+mod wait_programs;
 use crate::{
     clock,
     context::Frame,

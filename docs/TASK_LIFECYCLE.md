@@ -67,8 +67,12 @@ handling, not that every task succeeded.
 | Running, sixth timer preemption | LimitReached |
 | Running, valid exit syscall | Exited |
 | Running, user exception or invalid syscall/context | Faulted |
+| Running, empty blocking receive in ipc.wait | Waiting |
+| Waiting, message or no authorized live sender | Ready with the completed receive result |
+| Waiting, closed batch has no ready task | Deadlocked |
 
-Only Ready records are selected. The cursor first considers the other slot, then
+Only Ready records are selected. The later [blocking-receive increment](IPC_WAIT.md)
+adds Waiting and terminal Deadlocked states; Waiting does not close the endpoint. The cursor first considers the other slot, then
 the current one if its peer is terminal. Exited, Faulted and LimitReached records
 never restart within the batch. The command finishes when no ready record remains.
 `src/schedule/lifecycle.rs` holds these pure rules; it knows no UART, pointers,
@@ -94,8 +98,9 @@ an opaque numeric result. The kernel copies scalar values and never dereferences
 x1. Unknown syscall numbers or invalid exit codes terminate that task with
 bad_syscall while its peer continues. schedule.run/fault keep this exit-only ABI.
 The later [ipc.check mode](IPC.md) adds bounded send/receive calls to the same
-runtime, with syscall yields and a call-count limit. There is no write, wait or
-allocation syscall here. The legacy user.run write/exit ABI is unchanged.
+runtime, with syscall yields and a call-count limit. [ipc.wait](IPC_WAIT.md) now
+also offers blocking receive in its own mode. There is no write or allocation
+syscall here. The legacy user.run write/exit ABI is unchanged.
 
 The kernel does not prove that returned numeric results are semantically correct;
 the host verifier independently computes expected results. Public commands accept
@@ -164,7 +169,14 @@ observations, not fixed expected output or comparative efficiency evidence.
 The later [IPC increment](IPC.md) adds Ready-after-syscall and CallLimit events.
 Syscall yields preserve the accumulated timer preemption count. For ipc.check,
 the sixteenth send/receive attempt terminates the task before queue mutation;
-the shared trace reserves 46 entries to cover the bounded calls, timer returns
+the original IPC trace reserved 46 entries to cover the bounded calls, timer returns
 and exits of two tasks. The older schedule.run/fault still have at most twelve
 returns because they do not accept send/receive. Endpoint closure follows every
 terminal state, including timer/call limits and user faults.
+
+Current trace storage was compacted to 92 one-byte events for the waiting/wakeup
+increment. A record's high bit identifies A/B and its low seven bits encode the
+ASCII event. This preserves the 92-byte trace-array footprint while allowing
+kernel wake/cancellation events in addition to dispatch returns. Waking preserves
+saved PC, stack, other registers and timer/call budgets; only the receive result
+registers and lifecycle state change.

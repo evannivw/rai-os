@@ -4,15 +4,25 @@ pub const MAX_SLICES: u8 = 6;
 pub enum State {
     Ready,
     Running,
+    Waiting,
+    Deadlocked,
     Exited,
     Faulted,
     LimitReached,
 }
 impl State {
+    pub fn is_terminal(self) -> bool {
+        matches!(
+            self,
+            Self::Exited | Self::Faulted | Self::LimitReached | Self::Deadlocked
+        )
+    }
     pub fn name(self) -> &'static str {
         match self {
             Self::Ready => "ready",
             Self::Running => "running",
+            Self::Waiting => "waiting",
+            Self::Deadlocked => "deadlocked",
             Self::Exited => "exited",
             Self::Faulted => "faulted",
             Self::LimitReached => "limit_reached",
@@ -25,6 +35,7 @@ pub enum Event {
     Exit,
     Fault,
     Yield,
+    Wait,
     CallLimit,
 }
 pub struct Lifecycle {
@@ -37,6 +48,20 @@ impl Lifecycle {
             state: State::Ready,
             slices: 0,
         }
+    }
+    pub fn wake(&mut self) -> Result<(), &'static str> {
+        if self.state != State::Waiting {
+            return Err("schedule_bad_transition");
+        }
+        self.state = State::Ready;
+        Ok(())
+    }
+    pub fn deadlock(&mut self) -> Result<(), &'static str> {
+        if self.state != State::Waiting {
+            return Err("schedule_bad_transition");
+        }
+        self.state = State::Deadlocked;
+        Ok(())
     }
     pub fn start(&mut self) -> Result<(), &'static str> {
         if self.state != State::Ready {
@@ -59,6 +84,7 @@ impl Lifecycle {
                 }
             }
             Event::Yield => State::Ready,
+            Event::Wait => State::Waiting,
             Event::CallLimit => State::LimitReached,
             Event::Exit => State::Exited,
             Event::Fault => State::Faulted,
@@ -128,6 +154,31 @@ mod tests {
         assert_eq!(task.state, State::LimitReached);
         assert_eq!(task.slices, 1);
         assert!(task.start().is_err());
+    }
+    #[test]
+    fn waiter_is_not_selected_and_wakes_once_without_new_budget() {
+        let mut task = Lifecycle::new();
+        assert!(task.wake().is_err());
+        assert!(task.deadlock().is_err());
+        task.start().unwrap();
+        task.finish(Event::Preempt).unwrap();
+        task.start().unwrap();
+        task.finish(Event::Wait).unwrap();
+        assert_eq!(task.state.name(), "waiting");
+        assert!(!task.state.is_terminal());
+        assert_eq!(next_ready([task.state, State::Ready], 0), Some(1));
+        assert!(task.start().is_err());
+        task.wake().unwrap();
+        assert!(task.wake().is_err());
+        assert_eq!(task.slices, 1);
+        task.start().unwrap();
+        task.finish(Event::Wait).unwrap();
+        assert_eq!(next_ready([task.state, State::Waiting], 0), None);
+        task.deadlock().unwrap();
+        assert_eq!(task.state.name(), "deadlocked");
+        assert!(task.state.is_terminal());
+        assert!(task.start().is_err());
+        assert!(task.wake().is_err());
     }
     #[test]
     fn alternation_skips_non_ready_slots_without_restarting_terminal_tasks() {

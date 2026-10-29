@@ -72,6 +72,13 @@ fn panic(_info: &PanicInfo) -> ! {
 // Fault-injection builds run one intentional exception at a time.
 const _: () = assert!(
     cfg!(feature = "exception-self-test") as usize
+        + cfg!(feature = "wait-test-both") as usize
+        + cfg!(feature = "wait-test-peer-exit") as usize
+        + cfg!(feature = "wait-test-peer-fault") as usize
+        + cfg!(feature = "wait-test-peer-spin") as usize
+        + cfg!(feature = "wait-test-call-limit") as usize
+        + cfg!(feature = "wait-test-queued") as usize
+        + cfg!(feature = "wait-test-invalid-send") as usize
         + cfg!(feature = "ipc-test-rejections") as usize
         + cfg!(feature = "ipc-test-flood") as usize
         + cfg!(feature = "ipc-test-peer-exit") as usize

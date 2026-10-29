@@ -84,8 +84,9 @@ task's messages by changing operands. An unknown syscall or invalid exit code
 retains the runtime's terminal bad_syscall policy. The legacy user.run ABI and
 the exit-only schedule.run/fault modes remain unchanged.
 
-This first version polls on Empty. Blocking receive, a waiting state, wakeups,
-request timeouts and peer-death notifications are not implemented. Each task has
+ipc.check polls on Empty. The later [ipc.wait mode](IPC_WAIT.md) implements
+blocking receive and message/closure wakeup. Request timeouts and external event
+delivery are still pending. Each task has
 a fixed limit of sixteen attempted send/receive calls: attempts 1-15 are handled;
 attempt 16 terminates the task before servicing it, with state limit_reached.
 The trace marks that terminal attempt L, and calls includes it; message/error
@@ -109,7 +110,8 @@ application lifetime policy or a hard real-time guarantee.
 - Existing exception capture and MMU selection return to masked EL1 with the base
   root before mailbox handling. Kernel-only arrays cannot be accessed by EL0.
 
-The shared runtime reserves 46 trace slots for the bounded returns of two tasks.
+After the later waiting increment, the shared runtime reserves 92 compact trace
+slots for bounded dispatch returns, wakeups and cancellations of two tasks.
 Counters fit in u8 because at most 30 calls are serviced per batch. Storage is on
 the kernel stack; no heap, allocation syscall or physical-page mapping is added.
 The pool remains at twelve table pages and 244 free pages. One CPU, soft-float
@@ -124,7 +126,8 @@ The current implementation intentionally fixes two entries, stacks, MMU roots
 and route rows. Adding C/D/E requires coordinated changes to task ownership,
 private memory/maps, scheduler selection, route policy, storage and limits, plus
 new tests. Merely increasing TASK_COUNT would not make the system support them.
-The next small foundation is waiting/wakeup so a receiver can stop polling.
+[Waiting/wakeup](IPC_WAIT.md) now lets a receiver stop polling within the bounded
+batch. The next service step needs a concrete request/result contract.
 Dynamic task creation, reusable identities/capabilities and a service registry
 come later; there is no generic agent framework in this increment.
 
@@ -157,3 +160,14 @@ are rejected. Regression suite details are in [WORKLOG.md](WORKLOG.md).
 Captured output: [debug](evidence/2026-10-28-ipc-debug.txt) and
 [release](evidence/2026-10-28-ipc-release.txt). These are real QEMU observations,
 not evidence of mobile hardware support, AI integration or efficiency gains.
+
+## Later blocking-receive increment
+
+[ipc.wait](IPC_WAIT.md) now adds syscall 12 for blocking receive in its own mode.
+The earlier ipc.check remains nonblocking and its syscall ABI/output is unchanged.
+Pending receivers are not scheduled; messages or closure complete the original
+call. Mutual waiting in the closed batch is explicitly diagnosed. The shared
+runtime now stores up to 92 compact one-byte trace events, including wake and
+cancellation events. The original IPC increment used 46 two-byte trace entries;
+historical captures retain their actual output. Persistent services and external
+event delivery remain pending.

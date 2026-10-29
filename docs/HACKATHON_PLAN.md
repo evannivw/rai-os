@@ -61,8 +61,9 @@ suspension/resumption on one CPU. A [bounded task lifecycle](TASK_LIFECYCLE.md)
 now lets a task finish or fault while its peer continues. [Private stack maps](TASK_MEMORY.md)
 now prevent these tasks from reading/writing each other's stack. General service
 address-space ownership and task creation remain pending. Two fixed tasks now
-exchange [bounded scalar messages](IPC.md); waiting/wakeup and a general service
-runtime remain pending. See the [kernel-to-service roadmap](ROADMAP.md). A [graphical host control panel](PANEL.md) now exposes real
+exchange [bounded scalar messages](IPC.md) and [wait for messages](IPC_WAIT.md)
+without being scheduled while blocked. External event delivery, persistent
+service lifetime and a general service runtime remain pending. See the [kernel-to-service roadmap](ROADMAP.md). A [graphical host control panel](PANEL.md) now exposes real
 QEMU boot, info, uptime, echo, and a [cooperative word-count task](TASKS.md). This is a host UI, not a guest desktop. The
 correctness fixture is retained; verifier implementation resumes with demo jobs.
 

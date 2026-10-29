@@ -105,6 +105,23 @@ impl Mailboxes {
         inbox.len -= 1;
         Ok(message)
     }
+    /// Queue contents win over sender closure: an already-sent message is valid.
+    /// None means pending, not Empty. The scheduler must stop running the caller.
+    pub fn receive_wait(&mut self, caller: TaskId) -> Result<Option<Message>, Error> {
+        match self.receive(caller) {
+            Ok(message) => Ok(Some(message)),
+            Err(Error::Empty) => {
+                let possible_sender = (0..TASK_COUNT)
+                    .any(|id| self.live[id] && self.routes[id] & (1 << caller.0) != 0);
+                if possible_sender {
+                    Ok(None)
+                } else {
+                    Err(Error::Closed)
+                }
+            }
+            Err(error) => Err(error),
+        }
+    }
     pub fn close(&mut self, task: TaskId) {
         self.live[task.0] = false;
         self.boxes[task.0] = Mailbox::new();
@@ -115,6 +132,30 @@ mod tests {
     use super::*;
     fn id(raw: u64) -> TaskId {
         TaskId::from_raw(raw).unwrap()
+    }
+    #[test]
+    fn waiting_distinguishes_pending_closed_and_queued_before_close() {
+        let mut boxes = Mailboxes::new([0b10, 0b01]);
+        assert_eq!(boxes.receive_wait(id(1)), Ok(None));
+        // A failed send cannot satisfy the pending receive.
+        assert_eq!(boxes.send(id(2), 1, 0, 99), Err(Error::InvalidKind));
+        assert_eq!(boxes.receive_wait(id(1)), Ok(None));
+        boxes.send(id(2), 1, 1, 41).unwrap();
+        boxes.close(id(2));
+        assert_eq!(
+            boxes.receive_wait(id(1)),
+            Ok(Some(Message {
+                sender: id(2),
+                kind: 1,
+                value: 41
+            }))
+        );
+        assert_eq!(boxes.receive_wait(id(1)), Err(Error::Closed));
+        let mut denied = Mailboxes::new([0b10, 0]);
+        assert_eq!(denied.receive_wait(id(1)), Err(Error::Closed));
+        assert_eq!(denied.receive_wait(id(2)), Ok(None));
+        denied.close(id(2));
+        assert_eq!(denied.receive_wait(id(2)), Err(Error::Closed));
     }
     #[test]
     fn fifo_full_rejection_and_wrap_preserve_accepted_messages() {

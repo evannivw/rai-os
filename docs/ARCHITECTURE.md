@@ -7,7 +7,8 @@ A [bounded two-context scheduling diagnostic](SCHEDULING.md) now saves/resumes
 EL0 integer state on one CPU. A [bounded task lifecycle](TASK_LIFECYCLE.md) now
 lets one task finish or fault while its peer continues. There is no general task
 creation, heap or isolated agent execution. Two fixed tasks can now exchange
-[bounded scalar messages](IPC.md) through kernel-owned mailboxes. EL1 stage-1 translation
+[bounded scalar messages](IPC.md) through kernel-owned mailboxes and use
+[blocking receive](IPC_WAIT.md) with message/closure wakeup. EL1 stage-1 translation
 now has a base map and two fixed task maps with private writable stack pages;
 user code/constants remain shared read-only. See [MMU.md](MMU.md) and
 [TASK_MEMORY.md](TASK_MEMORY.md).
@@ -74,7 +75,10 @@ assumptions and limits. Rust panic still prints and halts without recovery.
 - ipc.rs: pure bounded FIFO mailboxes, checked task IDs, route permissions and
   endpoint closure. schedule/runtime.rs binds sender identity to the current
   record and translates scalar syscall inputs/results; schedule/ipc_programs.rs
-  contains linked Rust request/reply clients. No user pointers are dereferenced.
+  contains linked Rust request/reply clients. schedule/wait_programs.rs exercises
+  blocked receivers. Lifecycle Waiting states are skipped until the runtime
+  completes their pending result; a closed batch with no runnable task reports
+  remaining waiters as Deadlocked. No user pointers are dereferenced.
 - timer/: exclusive GICv2/CNTP adapter, controlled EL1 IRQ diagnostic and absolute
   EL0 budget or scheduling slice. IRQs are enabled in the diagnostic loop or EL0; successful handlers
   never use UART or allocate. User/schedule dispatch accesses only its paused session or observation. See [TIMER.md](TIMER.md).
@@ -98,7 +102,7 @@ service above the kernel once service execution/isolation exists. See the
 [placement and migration rationale](COORDINATOR.md#why-the-coordinator-is-currently-on-the-host). Meta API calls are not implemented.
 Credentials and HTTPS will remain on the host. The guest must independently
 validate operations. General isolated services still require service-specific memory
-ownership/lifetimes, waiting/wakeup and richer permission policies; the fixed
+ownership/lifetimes, external event delivery and richer permission policies; the fixed
 stack maps and scalar IPC are foundations,
 not a complete service security model. Module names do not supply those guarantees.
 

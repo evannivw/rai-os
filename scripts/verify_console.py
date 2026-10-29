@@ -9,12 +9,13 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     result = subprocess.run(
         ["sh", "scripts/console.sh"], cwd=ROOT,
-        input="ipc.check\nschedule.isolate\nschedule.run\nschedule.fault\nschedule.check\nuser.spin\ntimer.check\nuser.run\ncontext.check\ninfo\nuptime\nmmu.info\nmemory.info\nmemory.check\ntask.start\ntask.status\ntask.cancel 1\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
+        input="ipc.wait\nipc.check\nschedule.isolate\nschedule.run\nschedule.fault\nschedule.check\nuser.spin\ntimer.check\nuser.run\ncontext.check\ninfo\nuptime\nmmu.info\nmemory.info\nmemory.check\ntask.start\ntask.status\ntask.cancel 1\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
         text=True, capture_output=True, timeout=60,
     )
     assert "rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true" in result.stdout
     assert "a_value=42;" in result.stdout and "b_value=41;" in result.stdout
     assert "ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0;" in result.stdout
+    assert "blocked=1; woken=1; closed_wakes=0; deadlocked=0" in result.stdout
     assert result.returncode == 0, result.stdout + result.stderr
     assert "Connection: kernel boot and UART console confirmed." in result.stdout
     assert re.search(r"\[kernel / OK\] uptime_ms=\d+; counter_hz=[1-9]\d*", result.stdout)

@@ -124,3 +124,11 @@ message counters and syscall/scheduling trace. The kernel mediates the exchange;
 the host does not calculate or transport these guest-to-guest messages. The
 [bounded IPC guide](IPC.md) explains empty/full/closed inboxes and the current
 two-task limit. The graphical panel is unchanged.
+
+## Waiting without polling
+
+Enter `ipc.wait`. A stops receiving CPU turns until B sends its message, then
+resumes the same receive call and sends its reply. The report adds blocked,
+woken, closed_wakes and deadlocked counters. ipc.check retains its earlier
+nonblocking behavior. See [IPC_WAIT.md](IPC_WAIT.md) and the dependency explanation
+in [ROADMAP.md](ROADMAP.md). No graphical controls changed.

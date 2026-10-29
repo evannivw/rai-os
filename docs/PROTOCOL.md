@@ -17,7 +17,7 @@ Examples use literal escape notation for actual TAB, LF, and CR bytes:
 ```
 
 Grammar: @rai1 TAB id TAB operation [TAB argument] line-ending.
-help/info/uptime/memory.info/memory.check/mmu.info/context.check/timer.check/schedule.check/schedule.isolate/ipc.check/schedule.run/schedule.fault/user.run/user.spin require exactly three fields; echo requires four, with a possibly
+help/info/uptime/memory.info/memory.check/mmu.info/context.check/timer.check/schedule.check/schedule.isolate/ipc.check/ipc.wait/schedule.run/schedule.fault/user.run/user.spin require exactly three fields; echo requires four, with a possibly
 empty argument. Names are case-sensitive. ID: 1-10 ASCII digits with value
 1..4294967295; leading zeros are allowed and preserved. IDs are not remembered.
 
@@ -266,7 +266,7 @@ ones. P is timer preemption; E/F are terminal exit/fault. L means the sixth time
 preemption or sixteenth IPC attempt. The latter is counted in a_calls/b_calls but
 is not serviced or included in sent/received/rejected/empty. Successful sends
 count toward sent; successful receives toward received; Empty toward empty; all
-other returned IPC errors toward rejected. Trace storage is bounded at 46 entries.
+other returned IPC errors toward rejected. The later waiting increment expands shared trace capacity to 92 compact events.
 Normal sent=2, received=2, rejected=0; empty and the trace can vary with scheduling.
 
 The new IPC errors are scalar syscall results inside the task, not UART protocol
@@ -274,3 +274,34 @@ errors. They do not abort a task by themselves. No payload/address/recipient is
 accepted from UART in this diagnostic. See [IPC.md](IPC.md) for ABI, routing,
 FIFO/closure semantics, limits and actual QEMU tests. Existing parser, scheduler,
 MMU and timer errors retain their command-level meanings.
+
+## Blocking receive and wakeup diagnostic
+
+`ipc.wait` takes no argument (exactly three structured fields). Task A waits for
+B's value 41, then replies with 42. Normal results have a_code=0/a_value=41 and
+b_code=0/b_value=42. Its task and IPC fields match ipc.check; it additionally emits:
+
+```text
+blocked=<decimal>; woken=<decimal>; closed_wakes=<decimal>; deadlocked=<decimal>
+```
+
+blocked counts pending receive requests; woken counts those completed with a
+message; closed_wakes counts those completed with Closed because no authorized
+live sender remains; deadlocked counts waiters terminated when the closed batch
+has no ready task. Pending requests count once toward a_calls/b_calls. Their
+message/error result is counted only when completed, with no extra syscall.
+
+Trace D means a dispatched receive blocked. W means a pending receive completed
+with a message; C means it completed with Closed; X means deadlock termination.
+W/C/X are kernel state changes, not EL0 dispatches. The existing S/R/P/E/F/L
+meanings remain. A task between D and W/C/X must never get another CPU turn.
+Trace storage now supports 92 compact events; old command traces are unchanged.
+An immediate receive (message already queued or no live sender) remains R.
+
+The normal captured trace was AD,BS,AW,AS,BR,AE,BE with blocked=1, woken=1,
+closed_wakes=0 and deadlocked=0. Timer placement can change observations.
+The outer ok indicates handled batch execution, including explicit deadlocked
+states in the mutual-wait fixture; inspect task states/codes before treating it
+as a successful application operation. ipc_wait_invariant is a command-level
+internal error; existing parser/scheduler/MMU/timer errors retain their meaning.
+[IPC_WAIT.md](IPC_WAIT.md) defines syscall 12, closure and deadlock limits.
