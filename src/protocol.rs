@@ -32,6 +32,8 @@ pub fn parse(line: &str) -> Result<Request<'_>, Error<'_>> {
         Some("info") => Operation::Info,
         Some("timer.check") => Operation::TimerCheck,
         Some("schedule.check") => Operation::ScheduleCheck,
+        Some("schedule.run") => Operation::ScheduleRun,
+        Some("schedule.fault") => Operation::ScheduleFault,
         Some("user.run") => Operation::UserRun,
         Some("user.spin") => Operation::UserSpin,
         Some("context.check") => Operation::ContextCheck,

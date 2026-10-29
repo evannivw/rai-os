@@ -151,3 +151,7 @@ The separate [scheduling diagnostic](SCHEDULING.md) reuses the user RAM region
 only while this invocation is inactive. It splits the existing stack into two
 halves with shared EL0 permissions; normal user.run still clears and owns all
 8 KiB. No mappings or syscalls changed with that diagnostic.
+
+The later [task lifecycle](TASK_LIFECYCLE.md) also owns this region exclusively
+while running. Its linked tasks use a separate, intentionally smaller exit-only
+ABI, returning a scalar in x1; the legacy user.run write/exit ABI is unchanged.

@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     result = subprocess.run(
         ["sh", "scripts/console.sh"], cwd=ROOT,
-        input="schedule.check\nuser.spin\ntimer.check\nuser.run\ncontext.check\ninfo\nuptime\nmmu.info\nmemory.info\nmemory.check\ntask.start\ntask.status\ntask.cancel 1\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
+        input="schedule.run\nschedule.fault\nschedule.check\nuser.spin\ntimer.check\nuser.run\ncontext.check\ninfo\nuptime\nmmu.info\nmemory.info\nmemory.check\ntask.start\ntask.status\ntask.cancel 1\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
         text=True, capture_output=True, timeout=60,
     )
     assert result.returncode == 0, result.stdout + result.stderr
@@ -18,6 +18,9 @@ def main():
     assert result.stdout.count("[kernel / OK] task_id=1; state=completed; processed=0; total=0; words=0") == 2
     assert "[kernel / REJECTED] task_not_running" in result.stdout
     assert re.search(r"\[kernel / OK\] irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=\d+", result.stdout)
+    assert re.search(r"a_state=exited; a_slices=\d+; a_code=0; a_value=14091860730339196423", result.stdout)
+    assert re.search(r"a_state=faulted; a_slices=\d+; a_reason=exception", result.stdout)
+    assert result.stdout.count("b_value=14607574309510313995") == 2
     assert "[kernel / OK] tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB;" in result.stdout
     assert re.search(r"\[kernel / OK\] mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=\d+; vector=9;", result.stdout)
     assert "[kernel / OK] mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0" in result.stdout

@@ -1,0 +1,152 @@
+
+running 3 tests
+test tests::alternation_skips_non_ready_slots_without_restarting_terminal_tasks ... ok
+test tests::exits_and_faults_are_terminal_and_do_not_stop_the_peer ... ok
+test tests::preemption_requeues_until_the_exact_limit_then_stays_terminal ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+PASS (debug/normal): independently replayed lifecycle/fairness/terminal trace, exact Rust results or expected faults/limits, repeat runs and kernel/user/timer/memory continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400bf000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	3	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400b9004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400bd000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	4	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	5	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	6	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=70
+@rai1	7	ok	terminal task skipped
+@rai1	8	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	9	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400b9004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400bd000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	10	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	11	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	12	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=70
+@rai1	13	ok	terminal task skipped
+@rai1	14	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=138; b_ms=144; progress=28193683,75013257,56295678,157475211,81475095,247127544,110982665,336489927,140089694,425876976,163887169,513803949; context=true; stacks=true
+@rai1	15	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400bf000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	16	ok	checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250
+@rai1	17	err	bad_args
+@rai1	18	err	bad_args
+schedule.run extra
+error: unknown_command
+schedule.run
+tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	19	err	bad_args
+@rai1	20	err	bad_args
+schedule.fault extra
+error: unknown_command
+schedule.fault
+tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400b9004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400bd000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	21	ok	after lifecycle
+PASS (debug/spin): independently replayed lifecycle/fairness/terminal trace, exact Rust results or expected faults/limits, repeat runs and kernel/user/timer/memory continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400bf000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	tasks=2; slice_ms=20; max_slices=6; trace=AP,BE,AP,AP,AP,AP,AL; a_state=limit_reached; a_slices=6; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	3	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400b9004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400bd000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	4	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	5	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	6	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=71
+@rai1	7	ok	terminal task skipped
+@rai1	8	ok	tasks=2; slice_ms=20; max_slices=6; trace=AP,BE,AP,AP,AP,AP,AL; a_state=limit_reached; a_slices=6; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	9	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400b9004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400bd000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	10	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	11	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	12	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=72
+@rai1	13	ok	terminal task skipped
+@rai1	14	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=135; b_ms=138; progress=27268660,74805789,50907437,162525786,76264565,235409772,106032739,321242292,131468479,407633307,161063060,496401000; context=true; stacks=true
+@rai1	15	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400bf000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	16	ok	checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250
+@rai1	17	err	bad_args
+@rai1	18	err	bad_args
+schedule.run extra
+error: unknown_command
+@rai1	19	err	bad_args
+@rai1	20	err	bad_args
+schedule.fault extra
+error: unknown_command
+@rai1	21	ok	after lifecycle
+PASS (debug/both-spin): independently replayed lifecycle/fairness/terminal trace, exact Rust results or expected faults/limits, repeat runs and kernel/user/timer/memory continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400bf000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	tasks=2; slice_ms=20; max_slices=6; trace=AP,BP,AP,BP,AP,BP,AP,BP,AP,BP,AL,BL; a_state=limit_reached; a_slices=6; b_state=limit_reached; b_slices=6
+@rai1	3	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400b90a4; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400bd000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	4	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	5	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	6	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=72
+@rai1	7	ok	terminal task skipped
+@rai1	8	ok	tasks=2; slice_ms=20; max_slices=6; trace=AP,BP,AP,BP,AP,BP,AP,BP,AP,BP,AL,BL; a_state=limit_reached; a_slices=6; b_state=limit_reached; b_slices=6
+@rai1	9	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400b90a4; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400bd000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	10	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	11	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	12	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=73
+@rai1	13	ok	terminal task skipped
+@rai1	14	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=141; b_ms=138; progress=26400422,74194287,52892029,164043939,81652541,251887032,111086336,339690942,137911615,414130833,167090962,490617501; context=true; stacks=true
+@rai1	15	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400bf000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	16	ok	checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250
+@rai1	17	err	bad_args
+@rai1	18	err	bad_args
+schedule.run extra
+error: unknown_command
+@rai1	19	err	bad_args
+@rai1	20	err	bad_args
+schedule.fault extra
+error: unknown_command
+@rai1	21	ok	after lifecycle
+PASS (debug/invalid-exit): independently replayed lifecycle/fairness/terminal trace, exact Rust results or expected faults/limits, repeat runs and kernel/user/timer/memory continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400bf000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=bad_syscall; a_esr=0x0000000056000000; a_pc=0x00000000400b90c8; a_far_raw=0x0000000000000000; a_spsr=0x0000000020000340; a_sp=0x00000000400bcf90; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	3	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400b901c; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400bd000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	4	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	5	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	6	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=73
+@rai1	7	ok	terminal task skipped
+@rai1	8	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=bad_syscall; a_esr=0x0000000056000000; a_pc=0x00000000400b90c8; a_far_raw=0x0000000040080000; a_spsr=0x0000000020000340; a_sp=0x00000000400bcf90; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	9	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400b901c; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400bd000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	10	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	11	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	12	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=69
+@rai1	13	ok	terminal task skipped
+@rai1	14	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=141; b_ms=134; progress=29317622,77145432,56796401,153418269,82678580,242149311,109869895,307499268,137351857,389621577,162977053,475097757; context=true; stacks=true
+@rai1	15	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400bf000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	16	ok	checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250
+@rai1	17	err	bad_args
+@rai1	18	err	bad_args
+schedule.run extra
+error: unknown_command
+@rai1	19	err	bad_args
+@rai1	20	err	bad_args
+schedule.fault extra
+error: unknown_command
+@rai1	21	ok	after lifecycle
+PASS (debug/bad-call): independently replayed lifecycle/fairness/terminal trace, exact Rust results or expected faults/limits, repeat runs and kernel/user/timer/memory continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400bf000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=bad_syscall; a_esr=0x0000000056000000; a_pc=0x00000000400b90c4; a_far_raw=0x0000000000000000; a_spsr=0x0000000020000340; a_sp=0x00000000400bcf90; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	3	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400b901c; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400bd000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	4	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	5	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	6	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=72
+@rai1	7	ok	terminal task skipped
+@rai1	8	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=bad_syscall; a_esr=0x0000000056000000; a_pc=0x00000000400b90c4; a_far_raw=0x0000000040080000; a_spsr=0x0000000020000340; a_sp=0x00000000400bcf90; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	9	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400b901c; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400bd000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	10	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	11	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	12	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=73
+@rai1	13	ok	terminal task skipped
+@rai1	14	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=137; b_ms=135; progress=27816708,83236041,55997732,171912618,80558570,242549847,109503933,322649853,137175955,409870680,161816006,481020045; context=true; stacks=true
+@rai1	15	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400bf000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	16	ok	checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250
+@rai1	17	err	bad_args
+@rai1	18	err	bad_args
+schedule.run extra
+error: unknown_command
+@rai1	19	err	bad_args
+@rai1	20	err	bad_args
+schedule.fault extra
+error: unknown_command
+@rai1	21	ok	after lifecycle

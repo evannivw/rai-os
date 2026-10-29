@@ -17,7 +17,8 @@ not isolated processes. One built-in program now runs with lower privilege. The 
 | Controlled EL1 timer interrupt | Done | GICv2/CNTP delivers six IRQs per check; integer context survives. See [TIMER.md](TIMER.md). |
 | Timer while running EL0 | Done for one invocation | A fixed elapsed deadline terminates a non-cooperative program and returns to the console. See [USER_TIMEOUT.md](USER_TIMEOUT.md). |
 | Two resumable contexts | Done as a bounded diagnostic | Alternate two EL0 loops with distinct saved state and stack storage. See [SCHEDULING.md](SCHEDULING.md). |
-| Task completion and fault lifecycle | Next small increment, one CPU | Let a context finish or fault while another can continue; explicit states before a general runnable queue. |
+| Task completion and fault lifecycle | Done for two bounded tasks, one CPU | A task exits, faults or reaches its slice cap; its ready peer continues. See [TASK_LIFECYCLE.md](TASK_LIFECYCLE.md). |
+| Separate task memory | Next foundation | Enforce private writable memory between tasks before claiming isolated services. |
 | Bounded IPC and service lifecycle | Planned | Services exchange validated messages; ownership and fault policy are explicit. |
 | Guest coordinator and executors | Planned | Move decision/execution services into RAI-OS with enforced permissions. Adapt host std/storage assumptions. |
 | Meta-driven policy | Planned | Real model proposals go through validated operations and produce observed outcomes. |

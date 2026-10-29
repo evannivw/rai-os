@@ -99,3 +99,11 @@ Enter `schedule.check` to alternate two linked EL0 contexts on one CPU. The repl
 shows A/B order and twelve observed counters; each context continues on its later
 turns. This is a bounded diagnostic with shared user mappings, not isolated
 processes. See [SCHEDULING.md](SCHEDULING.md).
+
+## Task completion and fault handling
+
+Enter `schedule.run`: two finite Rust tasks return numeric results and finish.
+Enter `schedule.fault`: A deliberately reads kernel memory, is stopped by the
+MMU, and B still finishes. The host displays the real guest report; `a_state`
+and `b_state` distinguish exited, faulted and limit_reached. No new graphical
+panel controls are included. See [TASK_LIFECYCLE.md](TASK_LIFECYCLE.md).

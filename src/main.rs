@@ -71,6 +71,10 @@ fn panic(_info: &PanicInfo) -> ! {
 // Fault-injection builds run one intentional exception at a time.
 const _: () = assert!(
     cfg!(feature = "exception-self-test") as usize
+        + cfg!(feature = "lifecycle-test-spin") as usize
+        + cfg!(feature = "lifecycle-test-both-spin") as usize
+        + cfg!(feature = "lifecycle-test-invalid-exit") as usize
+        + cfg!(feature = "lifecycle-test-bad-call") as usize
         + cfg!(feature = "schedule-test-corrupt-register") as usize
         + cfg!(feature = "schedule-test-user-fault") as usize
         + cfg!(feature = "timer-test-unexpected-irq") as usize

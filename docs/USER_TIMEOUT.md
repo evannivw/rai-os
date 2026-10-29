@@ -147,3 +147,8 @@ user/model configurable; the Meta integration is still pending.
 and 20 ms turns. It uses a separate bounded twelve-turn run; the 100 ms policy
 above still applies specifically to user.run/user.spin. Expiring a scheduling
 slice pauses its context rather than terminating it.
+
+The later [task lifecycle](TASK_LIFECYCLE.md) uses 20 ms slices and at most six
+preemptions per task, rather than this invocation's absolute 100 ms deadline.
+Its terminal tasks are skipped while ready peers continue. Neither limit is a
+general maximum application lifetime; both are bounds for current diagnostics.

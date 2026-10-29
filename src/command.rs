@@ -4,7 +4,7 @@ use crate::mmu::Snapshot as MmuSnapshot;
 use crate::task::{Snapshot, Task};
 use core::fmt;
 
-pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
+pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
 pub const INFO: &str =
     "RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected";
 
@@ -16,6 +16,8 @@ pub enum Operation<'a> {
     ContextCheck,
     TimerCheck,
     ScheduleCheck,
+    ScheduleRun,
+    ScheduleFault,
     UserRun,
     UserSpin,
     MemoryInfo,
@@ -32,6 +34,8 @@ pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
         "info" => Ok(Operation::Info),
         "timer.check" => Ok(Operation::TimerCheck),
         "schedule.check" => Ok(Operation::ScheduleCheck),
+        "schedule.run" => Ok(Operation::ScheduleRun),
+        "schedule.fault" => Ok(Operation::ScheduleFault),
         "user.run" => Ok(Operation::UserRun),
         "user.spin" => Ok(Operation::UserSpin),
         "context.check" => Ok(Operation::ContextCheck),
@@ -77,6 +81,7 @@ pub enum Reply<'a> {
     User(crate::user::Report),
     Timer(crate::timer::Report),
     Schedule(crate::schedule::Report),
+    ScheduleRun(crate::schedule::RunReport),
     Mmu(MmuSnapshot),
     Memory(MemorySnapshot),
     MemoryCheck(MemoryCheck),
@@ -85,6 +90,7 @@ pub enum Reply<'a> {
 impl fmt::Display for Reply<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::ScheduleRun(report) => write!(f, "{report}"),
             Self::Schedule(report) => write!(f, "{report}"),
             Self::Timer(report) => write!(f, "{report}"),
             Self::User(report) => write!(f, "{report}"),
@@ -111,6 +117,14 @@ pub fn execute<'a>(
     timer: &mut crate::timer::Timer,
 ) -> Result<Reply<'a>, &'static str> {
     Ok(match operation {
+        Operation::ScheduleRun => Reply::ScheduleRun(crate::schedule::run(
+            timer,
+            crate::schedule::RunMode::Finish,
+        )?),
+        Operation::ScheduleFault => Reply::ScheduleRun(crate::schedule::run(
+            timer,
+            crate::schedule::RunMode::Fault,
+        )?),
         Operation::ScheduleCheck => Reply::Schedule(crate::schedule::check(timer)?),
         Operation::TimerCheck => Reply::Timer(timer.check()?),
         Operation::UserRun => Reply::User(crate::user::run(timer, crate::user::Program::Hello)?),

@@ -118,3 +118,10 @@ Architectural references:
 
 - [Arm AArch64 exception model](https://documentation-service.arm.com/static/67ac57fb091bfc3e0a9479cc): vector layout, exception state, VBAR and return context.
 - [Arm architecture reference manual](https://documentation-service.arm.com/static/685eb35c3cb5b729562ba389): BRK syndrome class and immediate value.
+
+The later [task lifecycle](TASK_LIFECYCLE.md) reuses the existing EL0 capture
+route for slots 8/9. The handler records state and returns to the fixed kernel
+continuation; the runtime then interprets exit, timer preemption or task fault.
+An EL0 task fault can terminate only that task while its ready peer continues.
+Unexpected EL1 exceptions retain the fatal policy. Shared user mappings still
+prevent any claim of isolation between these two tasks.

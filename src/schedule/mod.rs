@@ -1,4 +1,7 @@
-//! Bounded two-context round-robin diagnostic on one CPU, not isolated processes.
+//! Two-context diagnostics and a bounded task lifecycle on one CPU.
+mod lifecycle;
+mod programs;
+mod runtime;
 use crate::{
     clock,
     context::Frame,
@@ -9,6 +12,7 @@ use core::{
     fmt, ptr,
     sync::atomic::{AtomicPtr, Ordering},
 };
+pub use runtime::{RunMode, RunReport, run};
 global_asm!(include_str!("resume.S"));
 global_asm!(include_str!("programs.S"),
     corrupt = const cfg!(feature = "schedule-test-corrupt-register") as u8,
@@ -18,6 +22,7 @@ struct Observation {
     frame: Frame,
     vector: u64,
     at: u64,
+    elapsed_ms: u64,
 }
 static ACTIVE: AtomicPtr<Observation> = AtomicPtr::new(ptr::null_mut());
 pub struct Report {
@@ -73,7 +78,6 @@ pub fn check(timer: &mut Timer) -> Result<Report, &'static str> {
         fn schedule_program_b();
         static schedule_program_a_end: u8;
         static schedule_program_b_end: u8;
-        fn schedule_enter(input: *const Frame);
     }
     let bottom = ptr::addr_of_mut!(__user_stack_bottom) as u64;
     let entries = [
@@ -117,25 +121,11 @@ pub fn check(timer: &mut Timer) -> Result<Report, &'static str> {
     for turn in 0..TURNS {
         let id = turn % 2;
         let input = contexts[id]; // Read-only input separate from IRQ output.
-        let budget = timer.start_slice()?;
-        let mut observation = Observation {
-            frame: Frame::default(),
-            vector: 0,
-            at: 0,
-        };
-        ACTIVE.store(&mut observation, Ordering::Release);
-        // SAFETY: input is fully initialized kernel-owned RAM, validated user PC,
-        // SP and PSTATE, no EL1 register values. Assembly saves C callee registers,
-        // restores all user GPRs last, and ERET enables IRQ only at EL0. Slot 8/9
-        // captures output then returns via the fixed masked user_return trampoline.
-        unsafe { schedule_enter(&input) };
-        ACTIVE.store(ptr::null_mut(), Ordering::Release);
-        timer.finish_user_budget()?;
+        // SAFETY: initial frames use fixed user entries/stacks and EL0 status;
+        // subsequent frames passed the validation below before being retained.
+        let observation = unsafe { run_turn(timer, &input) }?;
         if observation.vector != 9 {
             return Err("schedule_user_fault");
-        }
-        if !budget.expired(observation.at) {
-            return Err("schedule_timer_early");
         }
         let saved = observation.frame;
         let step = if id == 0 { 1 } else { 3 };
@@ -164,8 +154,37 @@ pub fn check(timer: &mut Timer) -> Result<Report, &'static str> {
         contexts[id] = saved; // Keep the interrupted PC and registers for its next turn.
         report.trace[turn] = b'A' + id as u8;
         report.progress[turn] = saved.registers[0];
-        report.elapsed[id] += budget.elapsed_ms(observation.at);
+        report.elapsed[id] += observation.elapsed_ms;
     }
     // Both contexts remain paused; this bounded diagnostic discards them here.
     Ok(report)
+}
+
+/// # Safety
+/// Input is kernel-owned and initialized, with a validated executable EL0 PC,
+/// assigned aligned user SP and EL0t/IRQ-enabled PSTATE. One masked kernel CPU,
+/// installed vectors, exclusive user RAM, no active user/schedule invocation.
+/// The input is read-only and separate from the handler's output Observation.
+unsafe fn run_turn(timer: &mut Timer, input: &Frame) -> Result<Observation, &'static str> {
+    unsafe extern "C" {
+        fn schedule_enter(input: *const Frame);
+    }
+    let budget = timer.start_slice()?;
+    let mut observation = Observation {
+        frame: Frame::default(),
+        vector: 0,
+        at: 0,
+        elapsed_ms: 0,
+    };
+    ACTIVE.store(&mut observation, Ordering::Release);
+    // SAFETY: caller establishes the validated frame contract above. Assembly
+    // retains the C caller and returns masked via the fixed user_return path.
+    unsafe { schedule_enter(input) };
+    ACTIVE.store(ptr::null_mut(), Ordering::Release);
+    timer.finish_user_budget()?;
+    if observation.vector == 9 && !budget.expired(observation.at) {
+        return Err("schedule_timer_early");
+    }
+    observation.elapsed_ms = budget.elapsed_ms(observation.at);
+    Ok(observation)
 }

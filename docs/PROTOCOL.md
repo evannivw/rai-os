@@ -17,7 +17,7 @@ Examples use literal escape notation for actual TAB, LF, and CR bytes:
 ```
 
 Grammar: @rai1 TAB id TAB operation [TAB argument] line-ending.
-help/info/uptime/memory.info/memory.check/mmu.info/context.check/timer.check/schedule.check/user.run/user.spin require exactly three fields; echo requires four, with a possibly
+help/info/uptime/memory.info/memory.check/mmu.info/context.check/timer.check/schedule.check/schedule.run/schedule.fault/user.run/user.spin require exactly three fields; echo requires four, with a possibly
 empty argument. Names are case-sensitive. ID: 1-10 ASCII digits with value
 1..4294967295; leading zeros are allowed and preserved. IDs are not remembered.
 
@@ -195,3 +195,30 @@ lifetime. Parsing errors return `bad_args`. Runtime errors can include
 `schedule_context_corrupt`, or the timer's existing setup/cleanup errors. A failed
 check returns no success report and stops before resuming rejected state. See
 [SCHEDULING.md](SCHEDULING.md) for measured timing, tested failures and limitations.
+
+## Bounded task lifecycle
+
+`schedule.run` and `schedule.fault` take no arguments (exactly three structured
+fields). The first runs two finite linked Rust tasks; the second makes A attempt
+a forbidden kernel read while B computes normally. Both return a batch report:
+
+```text
+tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+```
+
+This example was observed; preemption counts and trace can change with timing.
+Trace entries identify A/B and P (preempted, ready again), E (exited), F (faulted),
+or L (sixth preemption, limit reached). Terminal tasks never run again in that
+batch. Each task has state and slices fields; exited tasks add code/value,
+faulted tasks add reason/esr/pc/far_raw/spsr/sp, and limited tasks add no fields.
+Reasons are exception, bad_syscall or bad_context. Fault register fields are
+hexadecimal; FAR is raw and is not a meaningful fault address for every exception.
+
+An outer `ok` means the batch was handled, including expected task faults or
+limits. Clients must inspect each task's state, not equate `ok` with all tasks
+succeeding. Parsing errors use the existing bad_args/unknown_command rules.
+Internal errors include schedule_busy, schedule_bad_context,
+schedule_bad_transition, schedule_event_overflow, schedule_timer_early and timer
+setup/cleanup errors. Such errors abort the batch; they are not isolated task
+faults. No arbitrary entry address, saved frame, duration or code is accepted.
+See [TASK_LIFECYCLE.md](TASK_LIFECYCLE.md) for the limited syscall ABI and tests.

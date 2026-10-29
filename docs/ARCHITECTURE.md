@@ -4,7 +4,9 @@ An educational AArch64 kernel for QEMU, with a long-term microkernel direction.
 Kernel modules share privilege and memory. One built-in Rust program now runs
 at EL0 with bounded write/exit syscalls and a timer-enforced invocation deadline; see [USER_PROGRAM.md](USER_PROGRAM.md).
 A [bounded two-context scheduling diagnostic](SCHEDULING.md) now saves/resumes
-EL0 integer state on one CPU. There is no general task lifecycle, process IPC, heap, separate process address
+EL0 integer state on one CPU. A [bounded task lifecycle](TASK_LIFECYCLE.md) now
+lets one task finish or fault while its peer continues. There is no general task
+creation, process IPC, heap, separate process address
 spaces or isolated agent execution. EL1 stage-1 translation is active
 with one identity-mapped address space; see [MMU.md](MMU.md).
 
@@ -59,8 +61,12 @@ assumptions and limits. Rust panic still prints and halts without recovery.
 - user/: one linked Rust program, privilege transition, bounded copy/exit policy
   and synchronous invocation lifecycle. User faults and elapsed deadlines terminate
   only that invocation; [USER_TIMEOUT.md](USER_TIMEOUT.md) describes the boundary.
-- schedule/: fixed A/B selection, validated saved frames, distinct stack halves
-  and twelve bounded IRQ-driven turns. User mappings remain shared.
+- schedule/mod.rs: shared validated EL0 entry/capture and the original twelve-IRQ
+  context diagnostic. schedule/lifecycle.rs: pure states and ready-task selection.
+  schedule/runtime.rs: two kernel-owned records, frame/stack validation, bounded
+  execution and compact results. schedule/programs.rs: finite linked Rust user
+  tasks plus a deliberate forbidden-read fixture. Terminal tasks are skipped;
+  distinct stack halves still share EL0 mappings. See [TASK_LIFECYCLE.md](TASK_LIFECYCLE.md).
 - timer/: exclusive GICv2/CNTP adapter, controlled EL1 IRQ diagnostic and absolute
   EL0 budget or scheduling slice. IRQs are enabled in the diagnostic loop or EL0; successful handlers
   never use UART or allocate. User/schedule dispatch accesses only its paused session or observation. See [TIMER.md](TIMER.md).

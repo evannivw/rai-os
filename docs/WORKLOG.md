@@ -624,3 +624,47 @@ delivery can still hang until the host verifier times out; no guest recovery for
 broken timer delivery is claimed. The next step is explicit task completion and
 fault lifecycle so one context can finish/fail while another continues, before
 adding broader scheduling policy and IPC. Historical evidence remains intact.
+
+## October 28, 2026 — bounded task records and terminal states
+
+Added schedule.run and schedule.fault to the shell, structured protocol and host
+terminal model. Two kernel-stack task records now retain saved integer context,
+stack bounds, lifecycle and scalar outcomes. Pure lifecycle rules are separate
+from the runtime and timer/exception adapter. Ready tasks alternate; terminal
+records are skipped. A valid exit, a user fault and a six-preemption cap produce
+explicit exited, faulted and limit_reached results. The original schedule.check
+retains its strict register-integrity diagnostic and all-or-error behavior.
+
+Two finite linked Rust tasks return independently verifiable numeric results.
+The public fault diagnostic makes A read kernel memory: QEMU reports the expected
+EL0 permission fault, while B completes and the console remains usable. The small
+exit-only ABI validates syscall number and exit code, carries an opaque scalar
+in x1 and accepts no pointers. Saved context is checked before re-entry. Full task
+records stay inside the runtime; compact outcome records keep the command reply
+enum small (the initial full-frame reply triggered Clippy's large-enum check and
+was replaced before verification).
+
+Actual verification passed in debug and release: three pure lifecycle tests and
+five QEMU images per profile (normal, A spinning, both spinning, exit code 256,
+syscall 99), with 22 lifecycle invocations per profile. The host independently
+replays selection/terminal traces, verifies numeric results and checks exact
+fault syndrome/site/address and saved context. Repeated commands plus subsequent
+user/context/timer/schedule/MMU/memory/echo operations verify continued operation.
+Normal finite tasks exited before a first tick in these captures; dedicated spin
+fixtures establish preemption, continued peer completion and the exact cap.
+
+Regression suites passed in both profiles: boot/protocol (37 cases), schedule,
+timer, context, exceptions, MMU, memory, cooperative tasks, user and user-timeout.
+Host console integration and the panel's 15 tests passed; the release panel built.
+Formatting passed for kernel/console and panel. Clippy passed for the normal
+kernel, all 26 individual diagnostic features, console and panel. A mixed
+lifecycle/schedule fault-feature build was correctly rejected. Local Markdown
+links and staged whitespace were checked before commit.
+
+See [TASK_LIFECYCLE.md](TASK_LIFECYCLE.md) and its captured debug/release evidence.
+No physical page mappings changed: six table pages and 250 free pool pages.
+Task records are temporary kernel RAM, not persistent processes. User tasks still
+share writable mappings; this does not provide inter-task isolation, IPC, dynamic
+loading, a guest coordinator, AI or efficiency gains. The next foundation is
+separate task memory before claiming isolated guest services. Historical captures
+and contribution dates remain unchanged.

@@ -131,5 +131,7 @@ If timer delivery fails, a loop can still hang; the verifier's host timeout reap
 QEMU but does not recover the guest. Corrupted kernel stacks, spurious/unexpected
 IRQs, full stack exhaustion, cross-context malicious memory writes, missing timer
 cleanup, counter resets/wrap and SMP were not injected. The stack check observes
-two words per half, not every byte of stack capacity. Next work should add explicit
-completion/fault lifecycle to the small scheduler before broader services.
+two words per half, not every byte of stack capacity. The separate
+[schedule.run/schedule.fault lifecycle](TASK_LIFECYCLE.md) now supports explicit
+completion/fault states and continuing a ready peer. The original schedule.check
+remains a strict all-or-error register diagnostic.

@@ -7,6 +7,8 @@ pub enum Operation<'a> {
     ContextCheck,
     TimerCheck,
     ScheduleCheck,
+    ScheduleRun,
+    ScheduleFault,
     UserRun,
     UserSpin,
     MemoryInfo,
@@ -28,6 +30,8 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         "info" => Ok(Operation::Info),
         "timer.check" => Ok(Operation::TimerCheck),
         "schedule.check" => Ok(Operation::ScheduleCheck),
+        "schedule.run" => Ok(Operation::ScheduleRun),
+        "schedule.fault" => Ok(Operation::ScheduleFault),
         "user.run" => Ok(Operation::UserRun),
         "user.spin" => Ok(Operation::UserSpin),
         "context.check" => Ok(Operation::ContextCheck),
@@ -53,7 +57,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
+            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
     }
 }
 
@@ -66,6 +70,8 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
         Operation::Info => "info".to_owned(),
         Operation::TimerCheck => "timer.check".to_owned(),
         Operation::ScheduleCheck => "schedule.check".to_owned(),
+        Operation::ScheduleRun => "schedule.run".to_owned(),
+        Operation::ScheduleFault => "schedule.fault".to_owned(),
         Operation::UserRun => "user.run".to_owned(),
         Operation::UserSpin => "user.spin".to_owned(),
         Operation::ContextCheck => "context.check".to_owned(),
@@ -134,6 +140,8 @@ mod tests {
         for (name, operation) in [
             ("timer.check", Operation::TimerCheck),
             ("schedule.check", Operation::ScheduleCheck),
+            ("schedule.run", Operation::ScheduleRun),
+            ("schedule.fault", Operation::ScheduleFault),
             ("user.run", Operation::UserRun),
             ("user.spin", Operation::UserSpin),
             ("context.check", Operation::ContextCheck),
