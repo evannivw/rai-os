@@ -6,6 +6,7 @@ mod command;
 mod console;
 mod context;
 mod exceptions;
+mod ipc;
 mod memory;
 mod mmu;
 mod protocol;
@@ -71,6 +72,10 @@ fn panic(_info: &PanicInfo) -> ! {
 // Fault-injection builds run one intentional exception at a time.
 const _: () = assert!(
     cfg!(feature = "exception-self-test") as usize
+        + cfg!(feature = "ipc-test-rejections") as usize
+        + cfg!(feature = "ipc-test-flood") as usize
+        + cfg!(feature = "ipc-test-peer-exit") as usize
+        + cfg!(feature = "ipc-test-peer-fault") as usize
         + cfg!(feature = "isolation-test-open-peer") as usize
         + cfg!(feature = "lifecycle-test-spin") as usize
         + cfg!(feature = "lifecycle-test-both-spin") as usize

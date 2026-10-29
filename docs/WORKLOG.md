@@ -719,3 +719,57 @@ programs, a measured speedup, or agent/Meta integration. No SMP, cache/ASID
 optimization, private executable images, demand paging or dynamic memory lifetime
 was introduced. The next foundation is bounded message exchange with validated
 ownership, before moving a coordinator or executors into guest services.
+
+## October 28, 2026 — bounded scalar task messages
+
+Added ipc.check using the existing private-stack task runtime. Two linked Rust
+EL0 programs exchange request kind=1/value=41 and response kind=2/value=42.
+The kernel copies scalar messages into two-slot FIFO inboxes and returns them
+in saved registers; no user pointer is dereferenced or shared writable user
+buffer added. Numeric TaskId validation and kernel-configured route permissions
+are separate from UART, MMU and scheduling. Caller identity is derived from the
+selected task record; receive has no selectable foreign inbox.
+
+The runtime now handles send/receive syscall returns by yielding to the next
+ready task while preserving its timer count. Empty/full/invalid/denied/closed
+results return explicit scalar statuses with unused output registers zeroed.
+The sixteenth IPC attempt terminates before servicing the request; the existing
+six-preemption bound remains. Endpoint closure on every terminal state discards
+pending incoming messages; messages already sent to a live peer remain queued.
+Each invocation starts with fresh inboxes and batch-scoped IDs. Legacy lifecycle
+commands and the earlier single-program syscall ABI remain unchanged.
+
+The first debug bring-up caught an out-of-user-text instruction access after a
+Rust tuple comparison. MMU protection stopped the programs and the console
+remained usable. Replacing tuple comparisons with explicit scalar checks kept
+that logic in the linked user code. The corrected request/reply then ran in
+actual QEMU before negative cases were added; final debug/release checks passed.
+
+Verification passed: three pure mailbox tests and four lifecycle tests, including
+FIFO/wrap, full rejection without overwriting, invalid IDs/kinds, explicit routes,
+close/discard, delivery after sender exit, fresh queues and syscall-yield limits.
+Each build profile ran five QEMU images: normal, invalid/full requests, receive
+flood, peer exit and peer fault. Sixteen IPC batches per profile passed, including
+a normal shell run. The host independently replayed scheduling and call limits,
+checked result values/counters and the peer fault's exact architectural report.
+Real Rust tasks checked full/closed/denied/error returns, zeroed unused result
+registers and inability to receive from B by passing B's ID while A was running.
+Subsequent scheduling, lifecycle, legacy user, isolation, memory and echo checks
+passed with unchanged MMU snapshots. Repeated runs verified queue cleanup.
+
+Regressions passed in debug and release: 37 boot/protocol checks, scheduling,
+lifecycle, private-stack isolation, timer, context, exceptions, MMU, memory,
+cooperative tasks, user and user-timeout suites. Host console integration and all
+15 panel tests passed. Formatting, default plus all 31 individual diagnostic
+feature Clippy checks, console/panel Clippy and release panel compilation passed.
+Mixed IPC/lifecycle fault features were rejected. Local Markdown links, included
+files and staged whitespace were checked before committing. GUI controls did not
+change. No historical captures, commits or contribution dates were rewritten.
+
+See [IPC.md](IPC.md) and its actual debug/release captures. Physical-page ownership
+remains twelve table pages and 244 free pool pages. IPC storage is bounded kernel
+stack metadata. This is still two fixed tasks with nonblocking receive, not a
+general process/service runtime or agent framework. Expanding to C/D/E requires
+coordinated task, memory-map, scheduler and route changes; changing one constant
+is insufficient. Waiting/wakeup is the next small foundation before general
+service lifecycle. No AI, phone support or efficiency gain is claimed.

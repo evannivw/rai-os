@@ -115,3 +115,12 @@ four denied writes and twelve successful own-page accesses, across two rounds.
 The guest also checks the complete stack pages and restores the base MMU root.
 The command accepts no arguments and is available through the host terminal or
 direct UART. See [TASK_MEMORY.md](TASK_MEMORY.md). No graphical controls changed.
+
+## Messages between tasks
+
+Enter `ipc.check`. A sends the number 41 to task ID 2, B responds with 42 to ID 1,
+and both Rust tasks exit with code=0. The console displays actual task values,
+message counters and syscall/scheduling trace. The kernel mediates the exchange;
+the host does not calculate or transport these guest-to-guest messages. The
+[bounded IPC guide](IPC.md) explains empty/full/closed inboxes and the current
+two-task limit. The graphical panel is unchanged.

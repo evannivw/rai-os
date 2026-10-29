@@ -19,7 +19,8 @@ not isolated processes. One built-in program now runs with lower privilege. The 
 | Two resumable contexts | Done as a bounded diagnostic | Alternate two EL0 loops with distinct saved state and stack storage. See [SCHEDULING.md](SCHEDULING.md). |
 | Task completion and fault lifecycle | Done for two bounded tasks, one CPU | A task exits, faults or reaches its slice cap; its ready peer continues. See [TASK_LIFECYCLE.md](TASK_LIFECYCLE.md). |
 | Separate task memory | Done for two fixed stack pages | A/B task maps deny peer-stack reads/writes; shared code remains read-only. See [TASK_MEMORY.md](TASK_MEMORY.md). |
-| Bounded IPC and service lifecycle | Next foundation, in small steps | Services exchange validated messages; ownership and fault policy are explicit. |
+| Bounded task messages | Done for two fixed tasks | Checked IDs/routes, two-slot FIFO inboxes, request/reply, closed/full/empty errors and a call cap. See [IPC.md](IPC.md). |
+| Waiting and wakeup | Next small foundation | A task waiting for a message sleeps rather than repeatedly polling; terminal-peer policy remains explicit. |
 | Guest coordinator and executors | Planned | Move decision/execution services into RAI-OS with enforced permissions. Adapt host std/storage assumptions. |
 | Meta-driven policy | Planned | Real model proposals go through validated operations and produce observed outcomes. |
 

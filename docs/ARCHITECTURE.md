@@ -6,7 +6,8 @@ at EL0 with bounded write/exit syscalls and a timer-enforced invocation deadline
 A [bounded two-context scheduling diagnostic](SCHEDULING.md) now saves/resumes
 EL0 integer state on one CPU. A [bounded task lifecycle](TASK_LIFECYCLE.md) now
 lets one task finish or fault while its peer continues. There is no general task
-creation, process IPC, heap or isolated agent execution. EL1 stage-1 translation
+creation, heap or isolated agent execution. Two fixed tasks can now exchange
+[bounded scalar messages](IPC.md) through kernel-owned mailboxes. EL1 stage-1 translation
 now has a base map and two fixed task maps with private writable stack pages;
 user code/constants remain shared read-only. See [MMU.md](MMU.md) and
 [TASK_MEMORY.md](TASK_MEMORY.md).
@@ -70,6 +71,10 @@ assumptions and limits. Rust panic still prints and halts without recovery.
   each turn uses a task map that denies EL0 access to the peer stack.
   schedule/isolation.rs checks real own/peer accesses and recovery. See
   [TASK_LIFECYCLE.md](TASK_LIFECYCLE.md) and [TASK_MEMORY.md](TASK_MEMORY.md).
+- ipc.rs: pure bounded FIFO mailboxes, checked task IDs, route permissions and
+  endpoint closure. schedule/runtime.rs binds sender identity to the current
+  record and translates scalar syscall inputs/results; schedule/ipc_programs.rs
+  contains linked Rust request/reply clients. No user pointers are dereferenced.
 - timer/: exclusive GICv2/CNTP adapter, controlled EL1 IRQ diagnostic and absolute
   EL0 budget or scheduling slice. IRQs are enabled in the diagnostic loop or EL0; successful handlers
   never use UART or allocate. User/schedule dispatch accesses only its paused session or observation. See [TIMER.md](TIMER.md).
@@ -93,7 +98,8 @@ service above the kernel once service execution/isolation exists. See the
 [placement and migration rationale](COORDINATOR.md#why-the-coordinator-is-currently-on-the-host). Meta API calls are not implemented.
 Credentials and HTTPS will remain on the host. The guest must independently
 validate operations. General isolated services still require service-specific memory
-ownership/lifetimes, IPC and permissions; the two fixed stack maps are a foundation,
+ownership/lifetimes, waiting/wakeup and richer permission policies; the fixed
+stack maps and scalar IPC are foundations,
 not a complete service security model. Module names do not supply those guarantees.
 
 ## Clock

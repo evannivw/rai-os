@@ -4,7 +4,7 @@ use crate::mmu::Snapshot as MmuSnapshot;
 use crate::task::{Snapshot, Task};
 use core::fmt;
 
-pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
+pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
 pub const INFO: &str =
     "RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected";
 
@@ -15,6 +15,7 @@ pub enum Operation<'a> {
     MmuInfo,
     ContextCheck,
     TimerCheck,
+    IpcCheck,
     ScheduleIsolate,
     ScheduleCheck,
     ScheduleRun,
@@ -34,6 +35,7 @@ pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
         "help" => Ok(Operation::Help),
         "info" => Ok(Operation::Info),
         "timer.check" => Ok(Operation::TimerCheck),
+        "ipc.check" => Ok(Operation::IpcCheck),
         "schedule.isolate" => Ok(Operation::ScheduleIsolate),
         "schedule.check" => Ok(Operation::ScheduleCheck),
         "schedule.run" => Ok(Operation::ScheduleRun),
@@ -121,6 +123,11 @@ pub fn execute<'a>(
     timer: &mut crate::timer::Timer,
 ) -> Result<Reply<'a>, &'static str> {
     Ok(match operation {
+        Operation::IpcCheck => Reply::ScheduleRun(crate::schedule::run(
+            timer,
+            mmu,
+            crate::schedule::RunMode::Messages,
+        )?),
         Operation::ScheduleRun => Reply::ScheduleRun(crate::schedule::run(
             timer,
             mmu,

@@ -92,8 +92,10 @@ and register/stack integrity independently of this task runtime.
 Only SVC #0 with x8=2 is accepted. x0 is an exit code from 0 through 255; x1 is
 an opaque numeric result. The kernel copies scalar values and never dereferences
 x1. Unknown syscall numbers or invalid exit codes terminate that task with
-bad_syscall while its peer continues. There is no write, wait, IPC or allocation
-syscall in this runtime. The legacy user.run write/exit ABI is unchanged.
+bad_syscall while its peer continues. schedule.run/fault keep this exit-only ABI.
+The later [ipc.check mode](IPC.md) adds bounded send/receive calls to the same
+runtime, with syscall yields and a call-count limit. There is no write, wait or
+allocation syscall here. The legacy user.run write/exit ABI is unchanged.
 
 The kernel does not prove that returned numeric results are semantically correct;
 the host verifier independently computes expected results. Public commands accept
@@ -124,7 +126,7 @@ The later [private-stack increment](TASK_MEMORY.md) now selects a distinct task
 root per turn. Each task can access only its own writable stack page at EL0;
 code/constants remain shared read-only. Checking SP alone would not supply this
 protection: it is enforced by page permissions and translation-cache maintenance.
-No FPU/SIMD state, SMP, dynamic loader, persistent task creation, priorities, IPC,
+No FPU/SIMD state, SMP, dynamic loader, persistent task creation, priorities,
 agent execution or Meta integration is added. The UART command blocks until its
 batch completes. Broken timer delivery and corrupted kernel stacks remain outside
 the demonstrated guarantees. Direct cross-stack reads/writes are now tested by
@@ -158,3 +160,11 @@ in [WORKLOG.md](WORKLOG.md).
 Actual captured output: [debug](evidence/2026-10-28-lifecycle-debug.txt) and
 [release](evidence/2026-10-28-lifecycle-release.txt). Timing-dependent traces are
 observations, not fixed expected output or comparative efficiency evidence.
+
+The later [IPC increment](IPC.md) adds Ready-after-syscall and CallLimit events.
+Syscall yields preserve the accumulated timer preemption count. For ipc.check,
+the sixteenth send/receive attempt terminates the task before queue mutation;
+the shared trace reserves 46 entries to cover the bounded calls, timer returns
+and exits of two tasks. The older schedule.run/fault still have at most twelve
+returns because they do not accept send/receive. Endpoint closure follows every
+terminal state, including timer/call limits and user faults.

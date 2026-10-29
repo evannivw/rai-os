@@ -6,6 +6,7 @@ pub enum Operation<'a> {
     MmuInfo,
     ContextCheck,
     TimerCheck,
+    IpcCheck,
     ScheduleIsolate,
     ScheduleCheck,
     ScheduleRun,
@@ -30,6 +31,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         "help" => Ok(Operation::Help),
         "info" => Ok(Operation::Info),
         "timer.check" => Ok(Operation::TimerCheck),
+        "ipc.check" => Ok(Operation::IpcCheck),
         "schedule.isolate" => Ok(Operation::ScheduleIsolate),
         "schedule.check" => Ok(Operation::ScheduleCheck),
         "schedule.run" => Ok(Operation::ScheduleRun),
@@ -59,7 +61,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
+            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
     }
 }
 
@@ -71,6 +73,7 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
         Operation::Help => "help".to_owned(),
         Operation::Info => "info".to_owned(),
         Operation::TimerCheck => "timer.check".to_owned(),
+        Operation::IpcCheck => "ipc.check".to_owned(),
         Operation::ScheduleIsolate => "schedule.isolate".to_owned(),
         Operation::ScheduleCheck => "schedule.check".to_owned(),
         Operation::ScheduleRun => "schedule.run".to_owned(),
@@ -142,6 +145,7 @@ mod tests {
     fn memory_operations_are_bounded_and_argument_free() {
         for (name, operation) in [
             ("timer.check", Operation::TimerCheck),
+            ("ipc.check", Operation::IpcCheck),
             ("schedule.isolate", Operation::ScheduleIsolate),
             ("schedule.check", Operation::ScheduleCheck),
             ("schedule.run", Operation::ScheduleRun),

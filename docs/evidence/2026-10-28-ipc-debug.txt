@@ -1,0 +1,159 @@
+
+running 3 tests
+test tests::closing_discards_own_queue_but_preserves_already_sent_messages ... ok
+test tests::fifo_full_rejection_and_wrap_preserve_accepted_messages ... ok
+test tests::identity_routes_and_invalid_inputs_do_not_mutate_mailboxes ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 4 tests
+test tests::alternation_skips_non_ready_slots_without_restarting_terminal_tasks ... ok
+test tests::exits_and_faults_are_terminal_and_do_not_stop_the_peer ... ok
+test tests::preemption_requeues_until_the_exact_limit_then_stays_terminal ... ok
+test tests::syscall_yield_preserves_timer_budget_and_call_limit_is_terminal ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+PASS (debug/normal): real EL0 IPC, expected results/errors, replayed scheduling/call bounds, fresh queues, preserved task isolation and kernel/user continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AR,BS,AR,BE,AE; a_state=exited; a_slices=0; a_code=0; a_value=42; b_state=exited; b_slices=0; b_code=0; b_value=41; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=1; a_calls=3; b_calls=2
+@rai1	3	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	4	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	5	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	6	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	7	ok	tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AR,BS,AR,BE,AE; a_state=exited; a_slices=0; a_code=0; a_value=42; b_state=exited; b_slices=0; b_code=0; b_value=41; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=1; a_calls=3; b_calls=2
+@rai1	8	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	9	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	10	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	11	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	12	ok	tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AR,BS,AR,BE,AE; a_state=exited; a_slices=0; a_code=0; a_value=42; b_state=exited; b_slices=0; b_code=0; b_value=41; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=1; a_calls=3; b_calls=2
+@rai1	13	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	14	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	15	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	16	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	17	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=136; b_ms=150; progress=27025401,88750554,52969333,177512583,79598128,266755407,109334785,355798755,136865960,444710448,163113403,534249969; context=true; stacks=true
+@rai1	18	ok	rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400be62c; ar_far=0x00000000400c2000; aw_esr=0x000000009200004f; aw_pc=0x00000000400be640; aw_far=0x00000000400c2000; br_esr=0x000000009200000f; br_pc=0x00000000400be62c; br_far=0x00000000400c1000; bw_esr=0x000000009200004f; bw_pc=0x00000000400be640; bw_far=0x00000000400c1000
+@rai1	19	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	20	err	bad_args
+@rai1	21	err	bad_args
+ipc.check extra
+error: unknown_command
+ipc.check
+tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AR,BS,AR,BE,AE; a_state=exited; a_slices=0; a_code=0; a_value=42; b_state=exited; b_slices=0; b_code=0; b_value=41; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=1; a_calls=3; b_calls=2
+@rai1	22	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	23	ok	after IPC
+PASS (debug/rejections): real EL0 IPC, expected results/errors, replayed scheduling/call bounds, fresh queues, preserved task isolation and kernel/user continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	tasks=2; slice_ms=20; max_slices=6; trace=AS,BS,AS,BS,AS,BS,AS,BS,AS,BS,AR,BS,AS,BS,AS,BS,AS,BS,AR,BS,AE,BS,BS,BS,BS,BS,BL; a_state=exited; a_slices=0; a_code=0; a_value=10; b_state=limit_reached; b_slices=0; ipc_capacity=2; max_calls=16; sent=2; received=0; rejected=21; empty=2; a_calls=10; b_calls=16
+@rai1	3	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	4	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	5	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be9d0; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	6	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	7	ok	tasks=2; slice_ms=20; max_slices=6; trace=AS,BS,AS,BS,AS,BS,AS,BS,AS,BS,AR,BS,AS,BS,AS,BS,AS,BS,AR,BS,AE,BS,BS,BS,BS,BS,BL; a_state=exited; a_slices=0; a_code=0; a_value=10; b_state=limit_reached; b_slices=0; ipc_capacity=2; max_calls=16; sent=2; received=0; rejected=21; empty=2; a_calls=10; b_calls=16
+@rai1	8	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	9	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	10	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be9d0; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	11	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	12	ok	tasks=2; slice_ms=20; max_slices=6; trace=AS,BS,AS,BS,AS,BS,AS,BS,AS,BS,AR,BS,AS,BS,AS,BS,AS,BS,AR,BS,AE,BS,BS,BS,BS,BS,BL; a_state=exited; a_slices=0; a_code=0; a_value=10; b_state=limit_reached; b_slices=0; ipc_capacity=2; max_calls=16; sent=2; received=0; rejected=21; empty=2; a_calls=10; b_calls=16
+@rai1	13	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	14	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	15	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be9d0; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	16	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	17	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=143; b_ms=148; progress=28635300,81697101,58535278,170827689,87476127,260207934,112934176,349380144,142778167,439156443,171112143,528503178; context=true; stacks=true
+@rai1	18	ok	rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400beb3c; ar_far=0x00000000400c2000; aw_esr=0x000000009200004f; aw_pc=0x00000000400beb50; aw_far=0x00000000400c2000; br_esr=0x000000009200000f; br_pc=0x00000000400beb3c; br_far=0x00000000400c1000; bw_esr=0x000000009200004f; bw_pc=0x00000000400beb50; bw_far=0x00000000400c1000
+@rai1	19	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	20	err	bad_args
+@rai1	21	err	bad_args
+ipc.check extra
+error: unknown_command
+@rai1	22	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	23	ok	after IPC
+PASS (debug/flood): real EL0 IPC, expected results/errors, replayed scheduling/call bounds, fresh queues, preserved task isolation and kernel/user continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	tasks=2; slice_ms=20; max_slices=6; trace=AR,BE,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AL; a_state=limit_reached; a_slices=0; b_state=exited; b_slices=0; b_code=0; b_value=99; ipc_capacity=2; max_calls=16; sent=0; received=0; rejected=0; empty=15; a_calls=16; b_calls=0
+@rai1	3	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	4	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	5	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	6	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	7	ok	tasks=2; slice_ms=20; max_slices=6; trace=AR,BE,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AL; a_state=limit_reached; a_slices=0; b_state=exited; b_slices=0; b_code=0; b_value=99; ipc_capacity=2; max_calls=16; sent=0; received=0; rejected=0; empty=15; a_calls=16; b_calls=0
+@rai1	8	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	9	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	10	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	11	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	12	ok	tasks=2; slice_ms=20; max_slices=6; trace=AR,BE,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AR,AL; a_state=limit_reached; a_slices=0; b_state=exited; b_slices=0; b_code=0; b_value=99; ipc_capacity=2; max_calls=16; sent=0; received=0; rejected=0; empty=15; a_calls=16; b_calls=0
+@rai1	13	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	14	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	15	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	16	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	17	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=133; b_ms=141; progress=26503932,80415834,52066154,164938128,80025102,254390472,108533022,331802877,134181178,421223703,160326685,510189480; context=true; stacks=true
+@rai1	18	ok	rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400be348; ar_far=0x00000000400c2000; aw_esr=0x000000009200004f; aw_pc=0x00000000400be35c; aw_far=0x00000000400c2000; br_esr=0x000000009200000f; br_pc=0x00000000400be348; br_far=0x00000000400c1000; bw_esr=0x000000009200004f; bw_pc=0x00000000400be35c; bw_far=0x00000000400c1000
+@rai1	19	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	20	err	bad_args
+@rai1	21	err	bad_args
+ipc.check extra
+error: unknown_command
+@rai1	22	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	23	ok	after IPC
+PASS (debug/peer-exit): real EL0 IPC, expected results/errors, replayed scheduling/call bounds, fresh queues, preserved task isolation and kernel/user continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	tasks=2; slice_ms=20; max_slices=6; trace=AR,BE,AS,AE; a_state=exited; a_slices=0; a_code=0; a_value=5; b_state=exited; b_slices=0; b_code=0; b_value=99; ipc_capacity=2; max_calls=16; sent=0; received=0; rejected=1; empty=1; a_calls=2; b_calls=0
+@rai1	3	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	4	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	5	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be0a4; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	6	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	7	ok	tasks=2; slice_ms=20; max_slices=6; trace=AR,BE,AS,AE; a_state=exited; a_slices=0; a_code=0; a_value=5; b_state=exited; b_slices=0; b_code=0; b_value=99; ipc_capacity=2; max_calls=16; sent=0; received=0; rejected=1; empty=1; a_calls=2; b_calls=0
+@rai1	8	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	9	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	10	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be0a4; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	11	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	12	ok	tasks=2; slice_ms=20; max_slices=6; trace=AR,BE,AS,AE; a_state=exited; a_slices=0; a_code=0; a_value=5; b_state=exited; b_slices=0; b_code=0; b_value=99; ipc_capacity=2; max_calls=16; sent=0; received=0; rejected=1; empty=1; a_calls=2; b_calls=0
+@rai1	13	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	14	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	15	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be0a4; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	16	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	17	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=140; b_ms=135; progress=26959143,87482895,55178294,160041690,84972954,246942999,114664295,325021089,138638908,401349003,167914279,488256957; context=true; stacks=true
+@rai1	18	ok	rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400be408; ar_far=0x00000000400c2000; aw_esr=0x000000009200004f; aw_pc=0x00000000400be41c; aw_far=0x00000000400c2000; br_esr=0x000000009200000f; br_pc=0x00000000400be408; br_far=0x00000000400c1000; bw_esr=0x000000009200004f; bw_pc=0x00000000400be41c; bw_far=0x00000000400c1000
+@rai1	19	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	20	err	bad_args
+@rai1	21	err	bad_args
+ipc.check extra
+error: unknown_command
+@rai1	22	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	23	ok	after IPC
+PASS (debug/peer-fault): real EL0 IPC, expected results/errors, replayed scheduling/call bounds, fresh queues, preserved task isolation and kernel/user continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	tasks=2; slice_ms=20; max_slices=6; trace=AR,BF,AS,AE; a_state=exited; a_slices=0; a_code=0; a_value=5; b_state=faulted; b_slices=0; b_reason=exception; b_esr=0x000000009200000f; b_pc=0x00000000400be004; b_far_raw=0x0000000040080000; b_spsr=0x0000000000000340; b_sp=0x00000000400c3000; ipc_capacity=2; max_calls=16; sent=0; received=0; rejected=1; empty=1; a_calls=2; b_calls=0
+@rai1	3	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	4	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	5	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	6	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	7	ok	tasks=2; slice_ms=20; max_slices=6; trace=AR,BF,AS,AE; a_state=exited; a_slices=0; a_code=0; a_value=5; b_state=faulted; b_slices=0; b_reason=exception; b_esr=0x000000009200000f; b_pc=0x00000000400be004; b_far_raw=0x0000000040080000; b_spsr=0x0000000000000340; b_sp=0x00000000400c3000; ipc_capacity=2; max_calls=16; sent=0; received=0; rejected=1; empty=1; a_calls=2; b_calls=0
+@rai1	8	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	9	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	10	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	11	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	12	ok	tasks=2; slice_ms=20; max_slices=6; trace=AR,BF,AS,AE; a_state=exited; a_slices=0; a_code=0; a_value=5; b_state=faulted; b_slices=0; b_reason=exception; b_esr=0x000000009200000f; b_pc=0x00000000400be004; b_far_raw=0x0000000040080000; b_spsr=0x0000000000000340; b_sp=0x00000000400c3000; ipc_capacity=2; max_calls=16; sent=0; received=0; rejected=1; empty=1; a_calls=2; b_calls=0
+@rai1	13	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	14	ok	tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	15	ok	tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400be004; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400c2000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+@rai1	16	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	17	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=145; b_ms=137; progress=28565452,66962271,55090554,156719643,84528803,245856381,114295296,329587938,142431954,404349210,172098192,483404355; context=true; stacks=true
+@rai1	18	ok	rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400be620; ar_far=0x00000000400c2000; aw_esr=0x000000009200004f; aw_pc=0x00000000400be634; aw_far=0x00000000400c2000; br_esr=0x000000009200000f; br_pc=0x00000000400be620; br_far=0x00000000400c1000; bw_esr=0x000000009200004f; bw_pc=0x00000000400be634; bw_far=0x00000000400c1000
+@rai1	19	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	20	err	bad_args
+@rai1	21	err	bad_args
+ipc.check extra
+error: unknown_command
+@rai1	22	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400c4000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	23	ok	after IPC

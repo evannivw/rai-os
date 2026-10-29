@@ -24,6 +24,8 @@ pub enum Event {
     Preempt,
     Exit,
     Fault,
+    Yield,
+    CallLimit,
 }
 pub struct Lifecycle {
     pub state: State,
@@ -56,6 +58,8 @@ impl Lifecycle {
                     State::Ready
                 }
             }
+            Event::Yield => State::Ready,
+            Event::CallLimit => State::LimitReached,
             Event::Exit => State::Exited,
             Event::Fault => State::Faulted,
         };
@@ -109,6 +113,21 @@ mod tests {
         assert!(task.finish(Event::Exit).is_err());
         assert_eq!(task.slices, MAX_SLICES);
         assert_eq!(next_ready([task.state, State::Exited], 0), None);
+    }
+    #[test]
+    fn syscall_yield_preserves_timer_budget_and_call_limit_is_terminal() {
+        let mut task = Lifecycle::new();
+        task.start().unwrap();
+        task.finish(Event::Preempt).unwrap();
+        task.start().unwrap();
+        task.finish(Event::Yield).unwrap();
+        assert_eq!(task.state, State::Ready);
+        assert_eq!(task.slices, 1);
+        task.start().unwrap();
+        task.finish(Event::CallLimit).unwrap();
+        assert_eq!(task.state, State::LimitReached);
+        assert_eq!(task.slices, 1);
+        assert!(task.start().is_err());
     }
     #[test]
     fn alternation_skips_non_ready_slots_without_restarting_terminal_tasks() {

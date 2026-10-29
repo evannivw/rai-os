@@ -17,7 +17,7 @@ Examples use literal escape notation for actual TAB, LF, and CR bytes:
 ```
 
 Grammar: @rai1 TAB id TAB operation [TAB argument] line-ending.
-help/info/uptime/memory.info/memory.check/mmu.info/context.check/timer.check/schedule.check/schedule.isolate/schedule.run/schedule.fault/user.run/user.spin require exactly three fields; echo requires four, with a possibly
+help/info/uptime/memory.info/memory.check/mmu.info/context.check/timer.check/schedule.check/schedule.isolate/ipc.check/schedule.run/schedule.fault/user.run/user.spin require exactly three fields; echo requires four, with a possibly
 empty argument. Names are case-sensitive. ID: 1-10 ASCII digits with value
 1..4294967295; leading zeros are allowed and preserved. IDs are not remembered.
 
@@ -246,3 +246,31 @@ invalid_task_space, mmu_switch_state and mmu_restore_state internal errors to
 scheduling operations. Any such failure produces err, not a success report.
 No raw address, task ID, permission or duration is accepted from the caller.
 See [TASK_MEMORY.md](TASK_MEMORY.md) for safety limits and negative controls.
+
+## Bounded task message exchange
+
+`ipc.check` takes no argument (exactly three structured fields). Two fixed Rust
+EL0 tasks exchange request kind=1/value=41 and response kind=2/value=42 through
+kernel-owned FIFO inboxes. Normal success has both tasks exited with code=0,
+a_value=42 and b_value=41. The outer ok still means the batch was handled; inspect
+task states/codes, especially in fault-injection images.
+
+The reply uses schedule.run's task fields and adds:
+
+```text
+ipc_capacity=2; max_calls=16; sent=<decimal>; received=<decimal>; rejected=<decimal>; empty=<decimal>; a_calls=<decimal>; b_calls=<decimal>
+```
+
+Trace S/R entries are handled send/receive attempts, including rejected or empty
+ones. P is timer preemption; E/F are terminal exit/fault. L means the sixth timer
+preemption or sixteenth IPC attempt. The latter is counted in a_calls/b_calls but
+is not serviced or included in sent/received/rejected/empty. Successful sends
+count toward sent; successful receives toward received; Empty toward empty; all
+other returned IPC errors toward rejected. Trace storage is bounded at 46 entries.
+Normal sent=2, received=2, rejected=0; empty and the trace can vary with scheduling.
+
+The new IPC errors are scalar syscall results inside the task, not UART protocol
+errors. They do not abort a task by themselves. No payload/address/recipient is
+accepted from UART in this diagnostic. See [IPC.md](IPC.md) for ABI, routing,
+FIFO/closure semantics, limits and actual QEMU tests. Existing parser, scheduler,
+MMU and timer errors retain their command-level meanings.

@@ -145,6 +145,6 @@ This verifies the supported QEMU board with fixed linked tasks. It does not clai
 protection from kernel bugs, side channels, DMA, hardware faults, all malicious
 programs, SMP races or full stack exhaustion. Code is shared; there is no private
 executable image per task. Kernel modules remain mutually trusted at EL1. A guest
-coordinator, agents, phone support and Meta integration remain pending. The next
-foundation is bounded message exchange with explicit ownership and validation,
-not direct reads of another task's data.
+coordinator, agents, phone support and Meta integration remain pending. The later [IPC increment](IPC.md) now exchanges scalar messages through
+kernel-owned mailboxes while these private stack mappings remain active. Tasks
+do not read each other's memory to communicate.

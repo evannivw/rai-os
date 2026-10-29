@@ -1,4 +1,5 @@
 //! Two-context diagnostics and a bounded task lifecycle on one CPU.
+mod ipc_programs;
 mod isolation;
 mod lifecycle;
 pub use isolation::{IsolationReport, check as isolate};

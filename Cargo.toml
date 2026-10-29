@@ -8,6 +8,10 @@ description = "Educational AArch64 kernel for QEMU virt"
 [features]
 # Deliberately halts at boot; verification uses a separate target directory.
 exception-self-test = []
+ipc-test-rejections = []
+ipc-test-flood = []
+ipc-test-peer-exit = []
+ipc-test-peer-fault = []
 isolation-test-open-peer = []
 lifecycle-test-spin = []
 lifecycle-test-both-spin = []
