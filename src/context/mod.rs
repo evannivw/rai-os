@@ -27,7 +27,7 @@ const _: () = {
 
 #[repr(C, align(16))]
 #[derive(Default)]
-struct Snapshot {
+pub(crate) struct Snapshot {
     registers: [u64; 31],
     nzcv: u64,
     sp: u64,
@@ -43,6 +43,21 @@ const _: () = {
     assert!(offset_of!(Snapshot, before_sp) == 272);
 };
 
+impl Snapshot {
+    pub(crate) fn matches(&self, flags: u64) -> bool {
+        !(self
+            .registers
+            .iter()
+            .enumerate()
+            .any(|(i, value)| *value != 0xa5a5_0000_0000_1000 + i as u64)
+            || self.nzcv != flags
+            || self.daif != 0x3c0
+            || self.sp != self.before_sp
+            || self.sp == 0
+            || !self.sp.is_multiple_of(16))
+    }
+}
+
 pub fn check() -> Result<&'static str, &'static str> {
     unsafe extern "C" {
         fn context_probe(output: *mut Snapshot, flags: u64);
@@ -54,17 +69,7 @@ pub fn check() -> Result<&'static str, &'static str> {
         // Probe preserves C callee-saved registers and writes only this buffer;
         // the allowlisted SVC has no side effects on interrupted Rust state.
         unsafe { context_probe(&mut snapshot, flags) };
-        if snapshot
-            .registers
-            .iter()
-            .enumerate()
-            .any(|(i, value)| *value != 0xa5a5_0000_0000_1000 + i as u64)
-            || snapshot.nzcv != flags
-            || snapshot.daif != 0x3c0
-            || snapshot.sp != snapshot.before_sp
-            || snapshot.sp == 0
-            || !snapshot.sp.is_multiple_of(16)
-        {
+        if !snapshot.matches(flags) {
             return Err("context_corrupt");
         }
     }

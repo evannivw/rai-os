@@ -76,9 +76,9 @@ def build(profile, case=None):
 def normal(profile):
     kernel, symbols = build(profile)
     root = symbols['__page_pool_start'][0]
-    info = (f'enabled=true; mode=identity; granule=4096; table_pages=5; root=0x{root:016x}; '
+    info = (f'enabled=true; mode=identity; granule=4096; table_pages=6; root=0x{root:016x}; '
             'tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false')
-    memory = (f'page_size=4096; total_pages=256; free_pages=251; used_pages=5; pool_start=0x{root:016x}; '
+    memory = (f'page_size=4096; total_pages=256; free_pages=250; used_pages=6; pool_start=0x{root:016x}; '
               f'pool_end=0x{symbols["__page_pool_end"][0]:016x}')
     with guest(kernel, f'normal-{profile}') as (child, _, line, _, transcript):
         assert line() == 'RAI-OS: boot OK | AArch64 EL1 | UART PL011'
@@ -86,7 +86,7 @@ def normal(profile):
         requests = [
             ('mmu.info', 'ok', info),
             ('memory.info', 'ok', memory),
-            ('memory.check', 'ok', 'checked_pages=251; exhausted=true; zeroed=true; reused=true; free_pages=251'),
+            ('memory.check', 'ok', 'checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250'),
             ('mmu.info', 'ok', info),
             ('mmu.info\t', 'err', 'bad_args'),
             ('mmu.info\textra', 'err', 'bad_args'),
@@ -101,7 +101,7 @@ def normal(profile):
         child.stdin.flush()
         assert line() == 'mmu.info'
         assert line() == info
-        print(f'PASS ({profile}): enabled MMU register readback, identity root, 5 owned table pages, memory check preserves mappings, arguments and shell.')
+        print(f'PASS ({profile}): enabled MMU register readback, identity root, 6 owned table pages, memory check preserves mappings, arguments and shell.')
         print(transcript.decode('ascii'), end='')
 
 

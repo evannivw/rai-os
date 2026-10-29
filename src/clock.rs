@@ -8,7 +8,7 @@ pub struct Clock {
     frequency: NonZeroU32,
 }
 
-fn counter() -> u64 {
+pub(crate) fn counter() -> u64 {
     let value;
     // SAFETY: QEMU virt boots us at EL1 with physical counter access enabled.
     // ISB orders the counter read after prior instructions. These instructions

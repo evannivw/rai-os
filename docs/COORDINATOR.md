@@ -123,3 +123,6 @@ Retained [test output](evidence/2026-10-26-coordinator-tests.txt) and
 Priority increment evidence: [test output](evidence/2026-10-26-priority-tests.txt)
 and [native window](evidence/2026-10-26-priority.png). The earlier FIFO evidence
 above is retained unchanged.
+
+The later [timer diagnostic](TIMER.md) adds controlled EL1 IRQ handling, not a
+guest scheduler. Coordinator placement and host queue ownership remain unchanged.

@@ -1,0 +1,16 @@
+Actual QEMU UART, October 28, 2026 (debug), user-test-gic.
+CR bytes are rendered as \r; LF bytes remain line breaks.
+
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r
+Console ready: type help for commands\r
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400b7000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	2	ok	mode=EL0; state=faulted; esr=0x000000009200000f; pc=0x00000000400b1004; far_raw=0x0000000008000000; spsr=0x00000000000003c0; sp=0x00000000400b5f90; syscalls=0\r
+@rai1	3	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	4	ok	kernel survived\r
+@rai1	5	ok	mode=EL0; state=faulted; esr=0x000000009200000f; pc=0x00000000400b1004; far_raw=0x0000000008000000; spsr=0x00000000000003c0; sp=0x00000000400b5f90; syscalls=0\r
+@rai1	6	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	7	ok	kernel survived\r
+@rai1	8	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400b7000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	9	ok	checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250\r
+@rai1	10	err	bad_args\r
+@rai1	11	err	bad_args\r

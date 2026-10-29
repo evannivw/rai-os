@@ -106,3 +106,10 @@ see [ROADMAP.md](ROADMAP.md) for subsequent scheduling/service work.
 
 Reference: [Arm AArch64 exception model](https://documentation-service.arm.com/static/63a065c41d698c4dc521cb1c)
 for saved return state, SVC return address and ERET semantics.
+
+## Later timer use
+
+The [timer diagnostic](TIMER.md) reuses the 288-byte frame and snapshot validation
+for slot 5. Its assembly loop permits asynchronous IRQs only at a known PC.
+The original SVC allowlist and its rejection tests are unchanged. This is not a
+general scheduler or permission to unmask IRQs in arbitrary Rust code.

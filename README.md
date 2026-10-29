@@ -3,7 +3,7 @@
 An educational AArch64 operating-system prototype in Rust, exploring how an
 AI coordinator could adapt work to goals, events, and resource limits.
 
-**Working today:** bare-metal boot in QEMU, fatal EL1 exception diagnostics, a checked EL1 context return, one EL0 Rust program with bounded syscalls, PL011 UART input/output, help/info/uptime/echo,
+**Working today:** bare-metal boot in QEMU, fatal EL1 exception diagnostics, a checked EL1 context return, controlled EL1 timer interrupts, one EL0 Rust program with bounded syscalls, PL011 UART input/output, help/info/uptime/echo,
 a bounded structured protocol, a physical-page pool with diagnostics, active EL1 memory permissions, a cooperative word-count task, a Rust host terminal
 console, a graphical host control panel, and a bounded priority host coordinator.
 **Not implemented:** Meta integration, autonomous agents, a native guest desktop, multi-task
@@ -34,6 +34,8 @@ python3 scripts/verify_exceptions.py
 python3 scripts/verify_exceptions.py --release
 python3 scripts/verify_context.py
 python3 scripts/verify_context.py --release
+python3 scripts/verify_timer.py
+python3 scripts/verify_timer.py --release
 python3 scripts/verify_user.py
 python3 scripts/verify_user.py --release
 python3 scripts/verify_memory.py
@@ -58,6 +60,7 @@ and 37 console/protocol cases, including the guest counter. See the guides for h
 - [MMU tables and permissions](docs/MMU.md)
 - [Physical pages and memory diagnostics](docs/MEMORY.md)
 - [First EL0 Rust program and syscall ABI](docs/USER_PROGRAM.md)
+- [Controlled timer interrupts](docs/TIMER.md)
 - [Resumable EL1 context](docs/CONTEXT.md)
 - [Kernel exception diagnostics](docs/EXCEPTIONS.md)
 - [Kernel clock and uptime](docs/CLOCK.md)

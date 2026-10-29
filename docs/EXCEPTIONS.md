@@ -7,7 +7,7 @@ work, not recovery, process isolation, preemption, or a complete interrupt syste
 Updated October 28: slot 4 also supports one [controlled EL1 return](CONTEXT.md);
 the fatal path and historical captures below remain applicable to rejected EL1 events.
 The later [EL0 increment](USER_PROGRAM.md) adds bounded syscalls and contained
-user faults through slot 8. Unexpected kernel exceptions still halt the guest.
+user faults through slot 8. Slot 5 now handles [controlled timer IRQs](TIMER.md). Unexpected kernel exceptions still halt the guest.
 
 ## What happens
 
@@ -15,12 +15,12 @@ user faults through slot 8. Unexpected kernel exceptions still halt the guest.
 2. It writes the 2 KiB-aligned table address to VBAR_EL1 and executes ISB.
 3. The table has sixteen 128-byte slots. Slot 4 (current EL, SP_EL1,
    synchronous, offset 0x200) now saves an integer context before dispatch.
-   Slot 8 now also saves a frame for the EL0 dispatcher. Other slots record their
+   Slots 5 and 8 also save frames for timer IRQ and EL0 dispatch. Other slots record their
    number and enter the fatal-only path.
 4. Assembly masks interrupts, uses a single-CPU nested-entry guard and captures
    ESR_EL1, ELR_EL1, SPSR_EL1, FAR_EL1 and entry SP. Rust runs on a dedicated
    16 KiB, 16-byte-aligned stack. Slot 4 first needs space on the normal stack.
-5. At EL1, only the explicitly approved SVC site may restore registers and execute
+5. At EL1, the approved SVC site and controlled timer probe may restore registers and execute
    ERET. Rejected EL1 events initialize/take over PL011, report and wait forever.
    Slot 8 separately resumes valid user syscalls or terminates a faulting user
    invocation. There is no automatic retry, unwinding or return from a fatal report.
@@ -44,7 +44,9 @@ added in this increment.
 
 ESR/ELR interpretation also depends on exception type; do not treat all sixteen
 slots as synchronous faults with a valid memory address. IRQ/FIQ/SError remain
-masked during ordinary execution and have no controller/device service routine.
+masked during ordinary execution. Only the controlled EL1 assembly timer probe
+unmasks IRQs and uses the GICv2/CNTP handler. IRQ ESR/FAR values are not decoded
+as synchronous fault information.
 
 ## Verify a deliberate exception
 
@@ -90,14 +92,15 @@ and kernel Clippy passed for both the default and self-test configurations.
   approved-return path saves/restores its integer context; see [CONTEXT.md](CONTEXT.md).
 - UART ownership is permanently transferred on a fatal exception. No Rust MMIO
   references or locks are held across accesses. This needs redesign for SMP,
-  resumable interrupts, or concurrent drivers.
+  general resumable interrupts, or concurrent drivers. The controlled timer handler
+  never uses UART and cannot interrupt ordinary UART access.
 - Diagnostic output still depends on working RAM and PL011; a fault in the
   reporting path can halt silently. UART polling can block on broken hardware.
   Faults before VBAR installation are not covered. The nested guard is implemented
   but not fault-injected in these tests.
 - This original increment injected only synchronous EL1 BRK. The later
   [MMU tests](MMU.md) also inject data/instruction aborts. The later EL0 tests also exercise slot 8. Corrupted stacks and
-  IRQ/FIQ/SError remain untested. No universal recovery claim.
+  FIQ/SError remain untested; controlled IRQ tests are documented in [TIMER.md](TIMER.md). No universal recovery claim.
 
 ## Relation to the coordinator and future services
 

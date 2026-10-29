@@ -12,7 +12,7 @@ with one identity-mapped address space; see [MMU.md](MMU.md).
 QEMU loads the ELF through -kernel. The linker places _start at 0x40080000,
 inside virt RAM starting at 0x40000000, leaving room at the start for the DTB.
 Supported configuration: virt-9.2, TCG, Cortex-A53, one CPU, 128 MiB, EL1,
-secure=off, virtualization=off, no firmware. Entry requires MMU/caches off. Rust constructs page tables and
+gic-version=2, secure=off, virtualization=off, no firmware. Entry requires MMU/caches off. Rust constructs page tables and
 enables the MMU before the boot banner; caches remain off.
 
 boot.S masks interrupts, checks EL1, selects SP_EL1, creates a 16-byte-aligned
@@ -33,12 +33,12 @@ Configuration: 115200, 8N1, no FIFO or interrupts; the driver polls readiness.
 Polling consumes CPU while waiting and is not evidence of energy efficiency.
 
 Unsafe blocks document the mapping, alignment, and exclusive ownership:
-one CPU, interrupts disabled, exclusive UART access, and either pre-MMU access
+one CPU, interrupts masked during UART access, exclusive UART access, and either pre-MMU access
 or the active Device-nGnRnE identity mapping. A fatal handler
 may take over UART permanently without resuming the interrupted writer. These assumptions
 must be revisited for another board, remapping, or concurrency. Linker symbols and
 Assembly entry form the boot contract. EL1 exception vectors support one
-allowlisted EL1 return and bounded EL0 syscall/fault handling; other events enter a fatal UART diagnostic on
+allowlisted EL1 return, controlled timer IRQs and bounded EL0 syscall/fault handling; other events enter a fatal UART diagnostic on
 a dedicated stack; see [EXCEPTIONS.md](EXCEPTIONS.md) for
 assumptions and limits. Rust panic still prints and halts without recovery.
 
@@ -51,12 +51,15 @@ assumptions and limits. Rust panic still prints and halts without recovery.
   table pages and EL1 register activation/readback. Code is read-only/executable,
   data is non-executable, and tables/constants are read-only/non-executable.
   Explicit user code/constants/stack pages permit EL0; kernel/device pages do not.
-- exceptions.S / exceptions.rs: EL1 entry, full integer frame for slot 4,
+- exceptions.S / exceptions.rs: EL1 entry, full integer frames for slots 4, 5 and 8,
   dedicated handler stack, allowlisted EL1 return, EL0 dispatch, or fatal report.
 - context/: pure return policy, fixed frame layout and bounded SVC/ERET diagnostic.
   See [CONTEXT.md](CONTEXT.md); no task switching.
 - user/: one linked Rust program, privilege transition, bounded copy/exit policy
   and synchronous invocation lifecycle. User faults terminate only that invocation.
+- timer/: exclusive GICv2/CNTP adapter and a controlled EL1 IRQ diagnostic.
+  Only its assembly probe unmasks IRQs; successful handlers never use UART,
+  allocate or access other services. See [TIMER.md](TIMER.md).
 - clock.rs: read-only generic counter adapter and boot-relative time.
 - uart.rs: bytes and MMIO, including allocation-free formatted output.
 - console.rs: framing, response rendering, and interleaving a bounded task step

@@ -1,0 +1,32 @@
+Actual QEMU UART and verifier output, October 28, 2026 (debug).
+CR bytes are rendered as \r; LF bytes remain line breaks.
+
+PASS (debug): 24 real timer IRQs in four checks, all GPRs/NZCV/SP, actual shutdown/masks, repeated start, invalid arguments and kernel/EL0/memory continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r
+Console ready: type help for commands\r
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400b7000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	2	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=73\r
+@rai1	3	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	4	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0\r
+@rai1	5	ok	after IRQs\r
+@rai1	6	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=72\r
+@rai1	7	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	8	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0\r
+@rai1	9	ok	after IRQs\r
+@rai1	10	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=74\r
+@rai1	11	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true\r
+@rai1	12	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0\r
+@rai1	13	ok	after IRQs\r
+@rai1	14	err	bad_args\r
+@rai1	15	err	bad_args\r
+@rai1	16	ok	enabled=true; mode=identity; granule=4096; table_pages=6; root=0x00000000400b7000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false\r
+@rai1	17	ok	checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250\r
+timer.check\r
+irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=75\r
+@rai1	18	ok	final cleanup\r
+PASS (debug): actual unexpected SGI 1 reached vector 5 and remained fatal; exact PC/state/stacks and halt verified.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011\r
+SELF-TEST: unexpected SGI 1\r
+IRQ: unexpected intid=1; vector=5\r
+EXCEPTION: vector=5; esr=0x0000000000000000; ec=0x00; elr=0x0000000040090518; spsr=0x00000000a0000345; far_raw=0x0000000000000000; entry_sp=0x00000000400abbb0; handler_sp=0x00000000400afd50\r
+HALTED: exception is fatal; restart QEMU\r

@@ -1,6 +1,8 @@
 //! Pure fixed-board table construction. No raw pointers or system registers.
 pub const PAGE_SIZE: usize = 4096;
-pub const TABLE_COUNT: usize = 5;
+pub const TABLE_COUNT: usize = 6;
+pub const GICD: usize = 0x0800_0000;
+pub const GICC: usize = 0x0801_0000;
 pub const UART: usize = 0x0900_0000;
 pub const RAM_BASE: usize = 0x4000_0000;
 pub const WINDOW_END: usize = 0x4020_0000;
@@ -55,7 +57,7 @@ fn leaf(address: usize, kind: Kind) -> u64 {
     }
 }
 
-/// Five pages: L1 root, low L2, UART L3, RAM L2, RAM L3.
+/// Six pages: L1 root, low L2, UART L3, RAM L2, RAM L3, GIC L3.
 /// All unmapped entries remain invalid. No blocks or aliases; only the explicit user regions permit EL0.
 pub fn build(
     tables: [&mut [u64; 512]; TABLE_COUNT],
@@ -108,13 +110,14 @@ pub fn build(
             return Err("invalid_table_page");
         }
     }
-    let [root, low_l2, uart_l3, ram_l2, ram_l3] = tables;
+    let [root, low_l2, uart_l3, ram_l2, ram_l3, gic_l3] = tables;
     for table in [
         &mut *root,
         &mut *low_l2,
         &mut *uart_l3,
         &mut *ram_l2,
         &mut *ram_l3,
+        &mut *gic_l3,
     ] {
         table.fill(0);
     }
@@ -122,6 +125,9 @@ pub fn build(
     root[1] = addresses[3] as u64 | 3;
     low_l2[(UART >> 21) & 511] = addresses[2] as u64 | 3;
     uart_l3[(UART >> 12) & 511] = leaf(UART, Kind::Device);
+    low_l2[(GICD >> 21) & 511] = addresses[5] as u64 | 3;
+    gic_l3[0] = leaf(GICD, Kind::Device);
+    gic_l3[16] = leaf(GICC, Kind::Device);
     ram_l2[0] = addresses[4] as u64 | 3;
     for address in (layout.text_start..layout.ram_end).step_by(PAGE_SIZE) {
         if (user.rodata_end..user.stack_start).contains(&address)
@@ -166,7 +172,9 @@ mod tests {
         }
     }
     fn addresses() -> [usize; TABLE_COUNT] {
-        [0x40090000, 0x40091000, 0x40092000, 0x40093000, 0x40094000]
+        [
+            0x40090000, 0x40091000, 0x40092000, 0x40093000, 0x40094000, 0x40095000,
+        ]
     }
     #[test]
     fn permissions_and_sparse_identity_mapping() {
@@ -176,7 +184,15 @@ mod tests {
         let rodata = tables[4][0x84];
         let data = tables[4][0x86];
         let table = tables[4][0x90];
-        for entry in [code, rodata, data, table, tables[2][0]] {
+        for entry in [
+            code,
+            rodata,
+            data,
+            table,
+            tables[2][0],
+            tables[5][0],
+            tables[5][16],
+        ] {
             assert_ne!(entry & AF, 0);
             assert_eq!(entry & (1 << 6), 0); // No EL0 access.
             assert_ne!(entry & UXN, 0);
@@ -201,7 +217,10 @@ mod tests {
         assert_eq!(tables[4][0], 0); // DTB/low RAM not mapped.
         assert_eq!(tables[4][0x1a0], 0); // Pool end is exclusive.
         assert_eq!(tables[0].iter().filter(|v| **v != 0).count(), 2);
-        assert_eq!(tables[1].iter().filter(|v| **v != 0).count(), 1);
+        assert_eq!(tables[1].iter().filter(|v| **v != 0).count(), 2);
+        assert_eq!(tables[5].iter().filter(|v| **v != 0).count(), 2);
+        assert_eq!(tables[5][0] & ((7 << 2) | PXN | UXN), PXN | UXN);
+        assert_eq!(tables[5][16] & ((7 << 2) | PXN | UXN), PXN | UXN);
         assert_eq!(tables[2].iter().filter(|v| **v != 0).count(), 1);
         assert_eq!(tables[3].iter().filter(|v| **v != 0).count(), 1);
     }

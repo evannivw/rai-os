@@ -17,7 +17,8 @@ vector 3
 // Save original registers before assigning a vector number.
     b synchronous_entry
     .space 124 // Slot 4: current EL, SPx, synchronous.
-vector 5
+    b timer_irq_entry
+    .space 124 // Slot 5: current EL, SPx, IRQ.
 vector 6
 vector 7
     b user_synchronous_entry
@@ -89,6 +90,10 @@ exception_reporting:
 synchronous_entry:
     save_integer_frame
     mov x20, #4
+    b .Ldispatch_sync
+timer_irq_entry:
+    save_integer_frame
+    mov x20, #5
     b .Ldispatch_sync
 user_synchronous_entry:
     save_integer_frame

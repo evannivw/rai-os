@@ -18,7 +18,7 @@ impl fmt::Display for Snapshot {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "enabled={}; mode=identity; granule=4096; table_pages=5; root=0x{:016x}; tcr=0x{:016x}; mair=0x{:016x}; wxn={}; caches={}",
+            "enabled={}; mode=identity; granule=4096; table_pages={TABLE_COUNT}; root=0x{:016x}; tcr=0x{:016x}; mair=0x{:016x}; wxn={}; caches={}",
             self.sctlr & 1 != 0,
             self.root,
             self.tcr,

@@ -1,9 +1,9 @@
-//! EL1 diagnostics plus one allowlisted synchronous return; no general recovery.
+//! EL1 diagnostics, controlled SVC/IRQ returns and bounded EL0 dispatch.
 use core::arch::{asm, global_asm};
 
 global_asm!(include_str!("exceptions.S"));
 
-// SAFETY: assembly fatal entry or synchronous dispatch calls this after capturing
+// SAFETY: assembly fatal entry or context dispatch calls this after capturing
 // EL1 registers, masking interrupts and selecting our dedicated aligned stack.
 // This fatal reporter never resumes interrupted code or unwinds.
 // One CPU owns PL011; the nested-exception guard prevents recursive reporting.
@@ -64,12 +64,26 @@ pub fn self_test() {
     unsafe { exception_test_trigger() };
 }
 
-// SAFETY: synchronous_entry saves a fully initialized, aligned Frame on the
+// SAFETY: synchronous/IRQ entry saves a fully initialized, aligned Frame on the
 // live normal stack and passes its exclusive address while using the dedicated
 // exception stack. One CPU, DAIF masked, no unwinding and no recursive entry.
 // This exclusive borrow ends before assembly restores the frame and executes ERET.
 #[unsafe(no_mangle)]
 pub extern "C" fn exception_dispatch(frame: &mut crate::context::Frame, vector: u64) -> u64 {
+    if vector == 5 {
+        if let Err(id) = crate::timer::interrupt(frame) {
+            crate::uart::write_display(format_args!("IRQ: unexpected intid={id}; vector=5\n"));
+            exception_report(
+                5,
+                frame.esr,
+                frame.elr,
+                frame.spsr,
+                frame.far,
+                frame as *const _ as u64 + core::mem::size_of::<crate::context::Frame>() as u64,
+            );
+        }
+        return 0;
+    }
     if vector == 8 {
         return crate::user::dispatch(frame) as u64;
     }

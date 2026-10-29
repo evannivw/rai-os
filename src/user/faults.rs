@@ -54,3 +54,15 @@ core::arch::global_asm!(
     "mrs x0, sctlr_el1",
     "ret",
 );
+
+#[cfg(feature = "user-test-gic")]
+core::arch::global_asm!(
+    ".section .user.text, \"ax\"",
+    ".global user_fault_probe",
+    ".global user_fault_instruction",
+    "user_fault_probe:",
+    "mov x9, #0x08000000",
+    "user_fault_instruction:",
+    "ldr w0, [x9]",
+    "ret",
+);

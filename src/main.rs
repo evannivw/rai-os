@@ -10,6 +10,7 @@ mod memory;
 mod mmu;
 mod protocol;
 mod task;
+mod timer;
 mod uart;
 mod user;
 
@@ -32,6 +33,8 @@ pub extern "C" fn kernel_main() -> ! {
     // SAFETY: single EL1 CPU, masked interrupts, cold MMU/caches; linker bounds
     // and the fixed-board mapper cover all live kernel memory plus UART.
     let mmu = unsafe { mmu::Mmu::enable(&mut memory) };
+    // SAFETY: sole GIC/timer owner; EL1, masked IRQs, fixed identity MMIO mappings.
+    let mut timer = unsafe { timer::Timer::initialize(clock.snapshot().counter_hz) };
     uart::write("RAI-OS: boot OK | AArch64 EL1 | UART PL011\n");
     #[cfg(feature = "exception-self-test")]
     exceptions::self_test();
@@ -48,7 +51,12 @@ pub extern "C" fn kernel_main() -> ! {
         feature = "context-test-wrong-site"
     ))]
     context::self_test();
-    console::run(&clock, &mut memory, &mmu)
+    #[cfg(feature = "timer-test-unexpected-irq")]
+    {
+        uart::write("SELF-TEST: unexpected SGI 1\n");
+        timer.check().expect("unexpected IRQ test resumed");
+    }
+    console::run(&clock, &mut memory, &mmu, &mut timer)
 }
 
 #[panic_handler]
@@ -62,10 +70,12 @@ fn panic(_info: &PanicInfo) -> ! {
 // Fault-injection builds run one intentional exception at a time.
 const _: () = assert!(
     cfg!(feature = "exception-self-test") as usize
+        + cfg!(feature = "timer-test-unexpected-irq") as usize
         + cfg!(feature = "user-test-invalid-calls") as usize
         + cfg!(feature = "user-test-read-kernel") as usize
         + cfg!(feature = "user-test-write-code") as usize
         + cfg!(feature = "user-test-uart") as usize
+        + cfg!(feature = "user-test-gic") as usize
         + cfg!(feature = "user-test-execute-stack") as usize
         + cfg!(feature = "user-test-privileged") as usize
         + cfg!(feature = "context-test-unknown-svc") as usize

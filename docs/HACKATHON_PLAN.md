@@ -54,7 +54,8 @@ entry and a [bounded physical-page allocator](MEMORY.md) are implemented foundat
 for future guest services. [EL1 page tables and permissions](MMU.md) are now active;
 A [controlled EL1 context return](CONTEXT.md) is now verified.
 One [built-in Rust program at EL0](USER_PROGRAM.md) now has bounded write/exit
-calls and synchronous fault containment. Separate service address spaces,
+calls and synchronous fault containment. A [controlled EL1 timer IRQ diagnostic](TIMER.md)
+now verifies asynchronous entry and return; EL0 preemption is still pending. Separate service address spaces,
 scheduling and IPC remain pending. See the [kernel-to-service roadmap](ROADMAP.md). A [graphical host control panel](PANEL.md) now exposes real
 QEMU boot, info, uptime, echo, and a [cooperative word-count task](TASKS.md). This is a host UI, not a guest desktop. The
 correctness fixture is retained; verifier implementation resumes with demo jobs.

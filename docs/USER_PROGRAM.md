@@ -56,8 +56,8 @@ are exposed. This ABI is experimental, not a compatibility promise.
 The ELF links dedicated `.user_text`, `.user_rodata` and an 8 KiB user stack after
 the kernel's exception stack. All permission boundaries are page aligned. A 4 KiB
 unmapped guard page lies on each side of the user stack. These reservations are
-outside the physical-page pool; its counts remain 256 total, five table pages,
-251 free. The initial mapped window still ends below 0x40200000.
+outside the physical-page pool; its counts remain 256 total, six table pages,
+250 free. The initial mapped window still ends below 0x40200000.
 
 | Region | EL0 | EL1 |
 | --- | --- | --- |
@@ -96,7 +96,8 @@ run request was handled and a report is available: callers must inspect state
 and exit code. Kernel exceptions still halt the guest unless they are the exact
 existing EL1 diagnostic SVC. FAR validity depends on the exception class.
 
-There is no timer, preemption or CPU budget yet. A looping program would block
+The [timer diagnostic](TIMER.md) runs only at EL1; EL0 still has IRQs masked.
+There is no user preemption or CPU budget yet. A looping program would block
 console/task progress; fault containment does not imply resource isolation.
 Only the built-in image and explicit test variants are accepted, not arbitrary
 binaries. There is no user heap, filesystem, dynamic linker, independent process
@@ -110,8 +111,9 @@ python3 scripts/verify_user.py
 python3 scripts/verify_user.py --release
 ```
 
-Verified with Rust 1.90.0 and QEMU 11.1.2 on macOS ARM64. Each profile boots seven
-images: normal, invalid calls, and five hardware fault probes. Every image runs
+Verified with Rust 1.90.0 and QEMU 11.1.2 on macOS ARM64. Each profile boots eight
+images: normal, invalid calls, and six hardware fault probes (including the
+GIC distributor read added with the timer increment). Every image runs
 the program twice and checks context/echo continuity, unchanged MMU status,
 physical-page diagnostics and malformed UART argument rejection. The normal image
 also runs through the direct shell. ELF checks independently validate sections,
@@ -120,17 +122,22 @@ stack/guard placement and test PCs.
 The invalid-call program checks eight error replies (unknown number, kernel
 pointer, overflowing span, boundary crossing, oversized/empty text, control byte,
 invalid exit code), then writes/exits normally. Fault probes attempt kernel read,
-code write, UART read, stack execution and a privileged register read. The verifier
+code write, UART/GIC reads, stack execution and a privileged register read. The verifier
 checks exact syndromes and fault PCs/addresses where valid, saved EL0 state, user
 SP bounds and successful subsequent kernel commands. Pure tests cover range
 validation and the updated mapping permissions/layout rejection.
 
 Test features are mutually exclusive with other test features and build into
 `target/user-self-test/<case>`. Normal images have no fault-probe symbols.
-Captures: [debug](evidence/2026-10-28-user-debug.txt) and
+Original seven-case captures: [debug](evidence/2026-10-28-user-debug.txt) and
 [release](evidence/2026-10-28-user-release.txt). Regression results are recorded in
 [WORKLOG.md](WORKLOG.md). Cumulative output exhaustion, corrupted/nested kernel
-stacks, timers and SMP were not injected by these tests.
+stacks and SMP were not injected by these tests. Separate timer/GIC evidence is
+linked from [TIMER.md](TIMER.md).
 
 References: [Arm memory permissions](https://documentation-service.arm.com/static/63a43e333f28e5456434e18b)
 and [AArch64 exception model](https://documentation-service.arm.com/static/63a065c41d698c4dc521cb1c).
+
+Current ownership was updated with the October 28 timer increment: six table
+pages and 250 free pool pages. Earlier evidence files retain the actual counts
+from their original runs. The additional L3 table maps the GIC device pages.

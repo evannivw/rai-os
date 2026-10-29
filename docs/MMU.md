@@ -12,7 +12,7 @@ sh scripts/console.sh
 ```
 
 Enter `mmu.info`, `memory.info`, and `memory.check`. The first reads translation
-registers; the others show 256 total pages, five reserved for tables, and 251
+registers; the others show 256 total pages, six reserved for tables, and 250
 available pages. A memory check leaves the table pages and mappings intact.
 The graphical host panel is optional and unchanged.
 
@@ -21,7 +21,7 @@ python3 scripts/verify_mmu.py
 python3 scripts/verify_mmu.py --release
 ```
 
-Each run executes two pure table-construction tests, a normal QEMU boot with seven
+Each run executes three pure table-construction tests, a normal QEMU boot with seven
 structured exchanges and one shell query, then five separate intentional-fault
 boots. `--case write-text` (or another case below) narrows the fault selection;
 it still runs the pure tests and normal boot.
@@ -58,8 +58,9 @@ addresses, and disabled TTBR1 walks. No address randomization or aliases.
 | Mapped region | EL1 permission | Memory type |
 | --- | --- | --- |
 | Kernel text, including vectors | Read / execute | Normal non-cacheable |
-| Constants and five table pages | Read only, no execution | Normal non-cacheable |
+| Constants and six table pages | Read only, no execution | Normal non-cacheable |
 | Data, BSS, both stacks, remaining pool | Read / write, no execution | Normal non-cacheable |
+| Two GIC pages at 0x08000000 and 0x08010000 | Read / write, no execution | Device-nGnRnE |
 | One PL011 page at 0x09000000 | Read / write, no execution | Device-nGnRnE |
 | User code/constants | Read only, no execution at EL1 | Normal non-cacheable |
 | User stack | Read / write, no execution | Normal non-cacheable |
@@ -77,8 +78,8 @@ a deliberate small initial window, not general device discovery. All section
 permission boundaries are 4 KiB aligned. Kernel stacks still lack guard pages;
 the later user stack has an unmapped guard page on each side.
 
-Five allocator-owned pages (20 KiB) hold one L1 root and two L2/L3 branches: one
-for UART, one for RAM. Unused entries remain invalid. The MMU owner keeps these
+Six allocator-owned pages (24 KiB) hold one L1 root, low-device and RAM L2
+tables, and three L3 tables for GIC, UART and RAM. Unused entries remain invalid. The MMU owner keeps these
 non-copy Page tokens for the rest of execution. They cannot be returned through
 any command, and their mapped contents become read-only after activation.
 
@@ -113,3 +114,7 @@ Architectural references:
 
 - [Arm memory management](https://developer.arm.com/-/media/Arm%20Developer%20Community/PDF/Learn%20the%20Architecture/LearnTheArchitecture-MemoryManagement-101811_0100_00_en.pdf): translation stages, tables and permissions.
 - [Arm memory model](https://developer.arm.com/-/media/Arm%20Developer%20Community/PDF/Learn%20the%20Architecture/Armv8-A%20memory%20model%20guide.pdf): memory attributes and ordering.
+
+Current ownership was updated with the October 28 timer increment: six table
+pages and 250 free pool pages. Earlier evidence files retain the actual counts
+from their original runs. The additional L3 table maps the GIC device pages.

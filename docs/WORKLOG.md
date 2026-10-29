@@ -472,3 +472,47 @@ program could block progress. Cumulative output exhaustion and corrupt/nested
 kernel stacks were not fault-injected. No phone, AI or efficiency claim was tested.
 The next area is timer/interrupt infrastructure, followed by scheduling, in small
 verified increments. Existing provenance and earlier evidence remain unchanged.
+
+## Controlled EL1 timer IRQs — October 28
+
+Added a sole GICv2/CNTP owner and argument-free timer.check through the shell,
+structured UART protocol and host console. QEMU explicitly selects GICv2. Two
+EL1-only Device pages map the distributor and CPU interface; a sixth owned table
+page leaves 250 pages free. Historical captures and prior log entries are intact.
+
+The assembly diagnostic seeds all 31 integer registers and two NZCV patterns,
+unmasks IRQ only in a branch-to-self loop, and receives three physical-timer IRQs
+per round. Slot 5 saves the existing integer frame and uses the handler stack.
+The handler validates ID 30, saved PC/state and the active stack-owned round;
+rearm/disable precedes EOI. On the third tick it redirects to a fixed continuation
+and restores IRQ masking. Rust checks the captured context, timing and actual
+hardware shutdown before emitting success. Successful handlers never allocate,
+use UART or touch service state. Ordinary Rust and EL0 remain IRQ-masked.
+
+First normal debug boot and a six-IRQ run passed with context/user/echo continuity.
+The dedicated verifier then passed in debug and release: four checks (24 IRQs)
+per normal image, exact loop instruction, register/flags/SP preservation, repeated
+start/stop, live hardware masks/enables, invalid arguments, unchanged mappings and
+memory checks. A separate image injected real SGI 1 and verified the exact fatal
+IRQ/vector/PC/state/stack report and absence of subsequent responses. EL0's new
+GIC read probe was denied by hardware; all eight user images per profile passed,
+including repeated execution and kernel continuity. Captures are in [TIMER.md](TIMER.md).
+
+Regressions passed in both profiles: 37 boot/protocol checks, 36 SVC returns and
+both rejected SVC images, BRK diagnostics, five MMU fault images with normal
+mapping/ownership checks and three table tests, 18 memory exchanges with three
+allocator tests, and 28 task exchanges with three task tests. Terminal integration
+and all fifteen panel tests (four real QEMU) passed. Formatting, default kernel
+and sixteen individual test-feature Clippy runs, console/panel Clippy and optimized
+panel compilation passed. A mixed GIC-user/IRQ-test configuration was rejected.
+The ad-hoc check runner initially requested Python's unavailable tomllib module;
+rerunning it with standard-library text parsing completed the checks without
+installing dependencies. Local Markdown links and whitespace checks passed.
+No native-window review was repeated because the GUI did not change.
+
+This is controlled EL1 IRQ delivery, not EL0 preemption, scheduling or agent
+migration. If delivery fails the probe spins; host test timeouts terminate QEMU,
+but there is no guest recovery deadline yet. Spurious IDs have a non-EOI/non-tick
+path but were not injected. Corrupt/nested stacks, SIMD, SMP and alternate boards
+remain untested. Busy-loop execution is not an efficiency result. The next small
+step is timer-based control of a running EL0 invocation, before multiple services.

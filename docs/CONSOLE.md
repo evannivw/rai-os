@@ -85,3 +85,7 @@ Enter `user.run` to start the linked lower-privilege Rust program. Its write/exi
 calls are numeric SVCs inside QEMU, distinct from this host command. The terminal
 displays the returned state and output. A faulted state is not program success,
 even if the request itself was handled. See [USER_PROGRAM.md](USER_PROGRAM.md).
+
+Enter `timer.check` to receive six actual timer IRQs in two controlled EL1
+rounds. A successful reply reports preserved integer state and disabled timer
+afterward. See [TIMER.md](TIMER.md); this does not schedule the EL0 program.

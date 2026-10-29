@@ -17,7 +17,7 @@ Examples use literal escape notation for actual TAB, LF, and CR bytes:
 ```
 
 Grammar: @rai1 TAB id TAB operation [TAB argument] line-ending.
-help/info/uptime/memory.info/memory.check/mmu.info/context.check/user.run require exactly three fields; echo requires four, with a possibly
+help/info/uptime/memory.info/memory.check/mmu.info/context.check/timer.check/user.run require exactly three fields; echo requires four, with a possibly
 empty argument. Names are case-sensitive. ID: 1-10 ASCII digits with value
 1..4294967295; leading zeros are allowed and preserved. IDs are not remembered.
 
@@ -57,13 +57,13 @@ and educational pacing. Task IDs are distinct from request IDs.
 Both are also available as argument-free shell commands. `memory.info` returns:
 
 ```text
-page_size=4096; total_pages=256; free_pages=251; used_pages=5; pool_start=0x<16 lowercase hex digits>; pool_end=0x<16 lowercase hex digits>
+page_size=4096; total_pages=256; free_pages=250; used_pages=6; pool_start=0x<16 lowercase hex digits>; pool_end=0x<16 lowercase hex digits>
 ```
 
 Counts describe only the reserved pool. Addresses come from the linked image,
 not request arguments. `memory.check` reserves/tests/releases its currently free pages and on
-success returns `checked_pages=251; exhausted=true; zeroed=true; reused=true; free_pages=251`.
-The MMU permanently owns five pages. If no pages are free, the diagnostic returns
+success returns `checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250`.
+The MMU permanently owns six pages. If no pages are free, the diagnostic returns
 `memory_busy` before starting; failed
 internal invariants halt rather than fabricate success. See [MEMORY.md](MEMORY.md)
 for blocking behavior and unsafe contracts. There is no arbitrary memory API.
@@ -75,7 +75,7 @@ These additive v1 operations return unknown_operation on older kernels.
 Its payload is:
 
 ```text
-enabled=true; mode=identity; granule=4096; table_pages=5; root=0x<16 lowercase hex digits>; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+enabled=true; mode=identity; granule=4096; table_pages=6; root=0x<16 lowercase hex digits>; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
 ```
 
 Enabled/WXN/cache flags, root, TCR and MAIR are read from EL1 registers. Mode,
@@ -140,3 +140,17 @@ arbitrary code execution.
 This interface is not a security boundary against a malicious host. Before
 adding side effects, define permissions, policy, exclusive protocol mode, and
 subsequently real service isolation.
+
+## Controlled timer diagnostic
+
+`timer.check` requires exactly three machine fields, or an argument-free shell
+command. A successful reply has this field order (`elapsed_ms` varies):
+
+```text
+irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=<decimal>
+```
+
+Counts and true flags are emitted only after all observations pass. Errors are
+`timer_requires_masked_irqs`, `timer_busy`, or `timer_check_failed`; malformed
+arguments return `bad_args`. Failed IRQ delivery can hang the controlled probe;
+the host timeout is not guest recovery. See [TIMER.md](TIMER.md).

@@ -8,7 +8,7 @@ sys.dont_write_bytecode = True
 from verify_exceptions import elf_symbols
 from verify_mmu import ROOT, OUTPUT, guest
 
-CASES = ['invalid-calls', 'read-kernel', 'write-code', 'uart', 'execute-stack', 'privileged']
+CASES = ['invalid-calls', 'read-kernel', 'write-code', 'uart', 'gic', 'execute-stack', 'privileged']
 CONTEXT = 'round_trips=2; registers=31; flags=true; stack=true; resumed=true'
 
 
@@ -66,7 +66,7 @@ def verify(profile, case=None):
                     expected = 0x8200000f if case == 'execute-stack' else 0x9200000f
                     if case == 'write-code': expected |= 1 << 6
                     assert esr == expected, result
-                    expected_far = {'read-kernel': 0x40080000, 'uart': 0x09000000,
+                    expected_far = {'read-kernel': 0x40080000, 'uart': 0x09000000, 'gic': 0x08000000,
                                     'write-code': symbols['user_program'][0], 'execute-stack': sp}[case]
                     assert far == expected_far, result
                 expected_pc = sp if case == 'execute-stack' else symbols['user_fault_instruction'][0]
@@ -74,7 +74,7 @@ def verify(profile, case=None):
             assert request('context.check') == CONTEXT
             assert request('echo\tkernel survived') == 'kernel survived'
         assert request('mmu.info') == before
-        assert request('memory.check') == 'checked_pages=251; exhausted=true; zeroed=true; reused=true; free_pages=251'
+        assert request('memory.check') == 'checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250'
         assert request('user.run\t', 'err') == 'bad_args'
         assert request('user.run\textra', 'err') == 'bad_args'
         if case is None:

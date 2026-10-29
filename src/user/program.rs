@@ -33,6 +33,7 @@ pub extern "C" fn user_program() -> ! {
         feature = "user-test-read-kernel",
         feature = "user-test-write-code",
         feature = "user-test-uart",
+        feature = "user-test-gic",
         feature = "user-test-execute-stack",
         feature = "user-test-privileged"
     ))]

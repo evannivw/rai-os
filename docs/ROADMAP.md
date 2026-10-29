@@ -12,9 +12,11 @@ not isolated processes. One built-in program now runs with lower privilege. The 
 | Fatal exception diagnostics | Done | A deliberate fault reports its cause and stops safely within the tested conditions. |
 | Physical-page ownership | Done | Allocate, zero, test and release a reserved pool without overlapping kernel regions. |
 | Translation tables and permissions | Done | MMU rejects forbidden writes, instruction fetches and unmapped reads. |
-| Resumable EL1 exception context | Done for one controlled SVC | Save/restore integer state and resume; other events remain fatal. See [CONTEXT.md](CONTEXT.md). |
+| Resumable EL1 exception context | Done for one controlled SVC | Save/restore integer state and resume; unrecognized synchronous events remain fatal. See [CONTEXT.md](CONTEXT.md). |
 | One lower-privilege program and bounded syscall | Done for one built-in program | Rust at EL0 writes through a checked syscall and exits; its synchronous faults are contained. See [USER_PROGRAM.md](USER_PROGRAM.md). |
-| Timer interrupt and scheduling | Next area, split into small increments | Save/switch execution contexts; one service cannot monopolize the CPU. Requires interrupt-controller setup and synchronization review. |
+| Controlled EL1 timer interrupt | Done | GICv2/CNTP delivers six IRQs per check; integer context survives. See [TIMER.md](TIMER.md). |
+| Timer while running EL0 | Next small increment | Bound a user invocation without requiring voluntary exit; review return and cleanup rules. |
+| Scheduling | Planned | Save/switch service contexts and assign CPU time. Requires additional lifecycle and synchronization work. |
 | Bounded IPC and service lifecycle | Planned | Services exchange validated messages; ownership and fault policy are explicit. |
 | Guest coordinator and executors | Planned | Move decision/execution services into RAI-OS with enforced permissions. Adapt host std/storage assumptions. |
 | Meta-driven policy | Planned | Real model proposals go through validated operations and produce observed outcomes. |
