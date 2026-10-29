@@ -34,4 +34,3 @@ Console ready: type help for commands\r
 @rai1	11	ok	checked_pages=250; exhausted=true; zeroed=true; reused=true; free_pages=250\r
 @rai1	12	err	bad_args\r
 @rai1	13	err	bad_args\r
-
