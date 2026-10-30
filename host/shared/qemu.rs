@@ -14,6 +14,7 @@ pub struct Connection {
 impl Connection {
     pub fn start(kernel: &str) -> Result<Self, String> {
         let mut child = Command::new("sh")
+            .env_remove("MODEL_API_KEY")
             .arg("scripts/qemu.sh")
             .arg(kernel)
             .stdin(Stdio::piped())

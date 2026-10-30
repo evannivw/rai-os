@@ -1,0 +1,4 @@
+{"event":"proposal_source","model":"muse-spark-1.3","source":"meta"}
+{"event":"model_response","latency_ms":3745,"model":"muse-spark-1.3","usage":{"completion_tokens":139,"prompt_tokens":330,"total_tokens":469}}
+{"event":"validated_proposal","proposal":{"operation":"decline","reason":"Goal requires delete operation and unlisted record restricted@1; only record.count on listed records is allowed.","record":"","state_version":1}}
+{"event":"finished","status":"declined"}

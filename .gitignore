@@ -6,3 +6,5 @@
 
 # Standalone host manifest default build output.
 /host/panel/target/
+
+/host/meta/target/

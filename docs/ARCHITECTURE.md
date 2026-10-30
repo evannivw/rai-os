@@ -106,8 +106,13 @@ See [PROTOCOL.md](PROTOCOL.md). The [host console](CONSOLE.md) already transport
 requests over UART. The [small host coordinator](COORDINATOR.md) sequences a bounded priority queue (FIFO ties) using
 observed completion. Its host placement is provisional; the target is a guest
 service above the kernel once service execution/isolation exists. See the
-[placement and migration rationale](COORDINATOR.md#why-the-coordinator-is-currently-on-the-host). Meta API calls are not implemented.
-Credentials and HTTPS will remain on the host. The guest must independently
+[placement and migration rationale](COORDINATOR.md#why-the-coordinator-is-currently-on-the-host). A separate
+[Meta bridge](META_BRIDGE.md) now makes one real structured proposal and validates
+it before guest execution. host/meta/src separates proposal policy (domain), local
+configuration, HTTPS provider transport and composition. It reuses the shared UART
+adapter; JSON dependencies stay in its own host manifest. The existing priority
+coordinator and graphical panel have not been connected to this bridge.
+Credentials and HTTPS remain on the host. The guest must independently
 validate operations. General isolated services still require service-specific memory
 ownership/lifetimes, external event delivery and richer permission policies; the fixed
 stack maps and scalar IPC are foundations,

@@ -1,7 +1,7 @@
 # RAI-OS hackathon plan
 
 Updated October 29, 2026. Local times: America/Guatemala. This is a proposed
-roadmap; completed foundations are identified below. AI and a general guest service runtime remain pending.
+roadmap; completed foundations are identified below. One real Meta-to-guest operation is verified; a continuous autonomous coordinator and a general guest service runtime remain pending.
 
 ## Sources and eligibility
 
@@ -122,15 +122,18 @@ resolve an eligible real provider before calling the final demo integrated.
 
 ## Revised delivery targets — October 29
 
-The kernel foundations and one useful protected service are implemented. The
-original October 29 target for a real Meta operation has not yet been met.
+The kernel foundations and one useful protected service are implemented. The first
+real Meta operation was subsequently verified on October 29 through the
+[host bridge](META_BRIDGE.md): Muse Spark 1.3 selected notes@2, and the guest returned
+44 bytes/9 tokens. A second live request declined an unavailable operation without
+booting QEMU. This completes the first integration path, not the autonomous demo.
 The main delivery risk is extending infrastructure without completing the model
 and useful workload path. These are targets, not completed-work claims.
 
 | Date | Target | Exit condition |
 | --- | --- | --- |
-| Oct 29 | Bounded guest service; resolve Meta access | Guest service verified; operational eligible model access still to confirm. |
-| Oct 30 | First actual Meta decision | Proposal -> validated allowed operation -> observed guest result. |
+| Oct 29 | Bounded guest service; resolve Meta access | Guest service and authenticated Meta access verified; two live bridge outcomes captured. |
+| Oct 30 | First actual Meta decision | First path verified Oct 29; extend it into a bounded coordinator with observed feedback. |
 | Oct 31-Nov 1 | Useful workload, events and failures; feature freeze | Repeatable cases, independent result checks and fair baseline/comparison. |
 | Nov 2 | Corrections, evidence, reproducibility | Clean-checkout run and reviewed results/limitations. |
 | Nov 3 | Video and submission preparation | Three-minute video, contribution attribution and accessible links. |
@@ -138,7 +141,7 @@ and useful workload path. These are targets, not completed-work claims.
 
 Protect the complete delivery path before adding GUI polish, persistent guest
 services, more cores or phone support. The small record-count checker is not the
-full independent review-pack verifier. Real Meta usage, useful adaptation and
+full independent review-pack verifier. Real Meta usage is now observed; useful adaptation and
 comparative benefit remain pending; do not infer them from passing kernel tests.
 
 ## Non-goals and teaching

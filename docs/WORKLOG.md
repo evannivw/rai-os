@@ -883,3 +883,57 @@ handling, full artifact verification and a fair baseline. This small service
 checker does not replace the full independent demo verifier. Persistent guest
 services, external wake sources, phone support and measured gains remain pending.
 All new artifacts/commit text are English; historical evidence/dates are preserved.
+
+## October 29, 2026 — first real Meta proposal and guest execution
+
+Added the standalone Rust host/meta package and scripts/meta.sh. The bridge loads
+MODEL_API_KEY from the environment or ignored .env.local without shell evaluation,
+requests one structured proposal from Muse Spark 1.3, validates the fixed record
+allowlist/state version/operation, then sends a typed request over the existing
+UART adapter. The kernel and its protected record worker are unchanged. The
+model does not receive record bodies or calculate the reported guest result.
+
+Kept domain validation and dispatch gating separate from local configuration,
+HTTPS transport and main composition. Invalid/duplicate/extra JSON fields,
+unknown operations/records, stale versions, malformed or incomplete provider
+responses and refusal stop before execution. Decline is an explicit outcome with
+no QEMU boot. Result reporting requires matching record identity, expected length,
+bounded counts and successful matching exits. It reports observed, not verified
+AI intent or full demo correctness. Existing priorities/GUI are not connected yet.
+
+The local key was accepted by the authenticated Meta model catalog. Python's
+initial TLS check failed certificate validation; system curl 8.7.1 succeeded
+with verification enabled. The Rust adapter therefore uses curl with fixed HTTPS
+endpoint, private stdin configuration, no secret arguments, no curlrc, no redirect
+or automatic retry, 10-second connection/30-second total timeout and a 64 KiB
+body cap. All process error messages are sanitized. Both curl and QEMU children
+exclude MODEL_API_KEY from their environment; the secret file remains ignored.
+
+Two actual inference requests were made, with no automatic retries. For
+"Count the words in the latest available revision of the notes.", Meta selected
+record.count notes@2. Real QEMU execution returned 44 bytes/9 tokens. API wall
+latency was 2012 ms with provider-reported usage 333 prompt/142 completion/475
+total tokens; boot plus guest operation was 105 ms. For "Delete the notes and
+read restricted@1.", Meta declined, with no QEMU start. That API request measured
+3745 ms and reported 330/139/469 tokens. These are individual observations, not
+performance comparisons. Dollar cost and inference energy were not measured.
+Captured credential-free JSON events are linked from META_BRIDGE.md.
+
+Verification passed: twelve host Rust tests in debug/release; six real-QEMU
+record requests in each offline profile checked against exact fixture bytes by
+the independent Python tokenizer; malformed/denied/stale/unknown/oversized
+proposals and explicit decline; empty key failure before network access. A dummy
+curl sentinel verified offline replay never invokes the provider; a process
+wrapper verified the QEMU child lacks the dummy credential. Both live captures
+passed log consistency checks; the successful count was independently checked.
+A saved log is not cryptographic proof of a network call, and offline replay is
+explicitly labeled rather than passed off as Meta output.
+
+Existing host console integration and all sixteen panel tests passed after the
+shared adapter's environment-filter change. Kernel/root, bridge and panel
+formatting checks, bridge all-target Clippy, console and panel Clippy passed.
+No unrelated kernel changes required repeating all kernel fault-injection suites.
+Updated architecture, roadmap, setup/use instructions and delivery targets to
+reflect the first real Meta path while retaining historical pending-work entries.
+Continuous event handling, useful multi-step adaptation, guest-resident
+coordination, the complete artifact verifier and fair baseline remain pending.

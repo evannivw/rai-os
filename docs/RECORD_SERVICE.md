@@ -148,8 +148,9 @@ performance advantage is established by these results.
 
 ## Next step
 
-Connect one real Meta proposal through the host bridge to an allowlisted request
-and its checked result. Credentials/HTTPS remain on the host. Then extend the
+One real Meta proposal is now connected through the [host bridge](META_BRIDGE.md)
+to an allowlisted request and its observed result. Credentials/HTTPS remain on
+the host. Next, extend the
 useful workload and event loop alongside the independent result verifier and a
 fair deterministic baseline. Persistent task lifetime, external wake sources and
 additional executors are explicit future increments, not prerequisites to show
