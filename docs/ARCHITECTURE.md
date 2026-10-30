@@ -87,7 +87,11 @@ assumptions and limits. Rust panic still prints and halts without recovery.
   completes their pending result; a closed batch with no runnable task reports
   remaining waiters as Deadlocked. No user pointers are dereferenced.
 - records.rs: allowed immutable fixture IDs and bounded ASCII token counting;
-  source bytes are shared user read-only data, and counting executes in user text.
+  source bytes are shared user read-only data, and counting/token selection execute in user text.
+- record_index.rs / user/index_program.rs: synchronous exact per-record index
+  at EL0, using checked output copies and normal-exit publication. The host exports
+  its text unchanged; an independent Python checker validates the exact revision.
+  See [RECORD_INDEX.md](RECORD_INDEX.md). This is not yet a coordinator operation.
 - service.rs: validated input -> bounded guest execution -> completion/result checks.
   schedule/service_programs.rs: fixed EL0 request/reply client and worker. This is
   one closed batch per host request, without persistent lifetime or external wakes.

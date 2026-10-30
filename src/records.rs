@@ -1,4 +1,4 @@
-//! Immutable public fixture records and a bounded ASCII token-count operation.
+//! Immutable public fixture records and bounded ASCII token operations.
 //! No UART, scheduling or provider dependency. Denied source bytes are not linked.
 use core::fmt;
 pub const MAX_BYTES: usize = 128;
@@ -114,4 +114,87 @@ pub fn count(id: u64) -> u64 {
         i += 1;
     }
     (id << 32) | ((i as u64) << 16) | tokens
+}
+
+/// Lowercase token byte; zero terminates a token or an invalid source position.
+// SAFETY: EL0 code reads only the same bounded, immutable public RECORDS.
+#[unsafe(link_section = ".user.text")]
+#[inline(never)]
+pub fn token_byte(id: u64, position: usize) -> u8 {
+    if id == 0 || id > 6 {
+        return 0;
+    }
+    normalized(&RECORDS[id as usize - 1], position)
+}
+#[inline(always)]
+fn normalized(source: &RecordData, position: usize) -> u8 {
+    if position >= source.length {
+        return 0;
+    }
+    match source.bytes[position] {
+        b'A'..=b'Z' => source.bytes[position] + 32,
+        b'a'..=b'z' | b'0'..=b'9' => source.bytes[position],
+        _ => 0,
+    }
+}
+#[inline(always)]
+fn compare(source: &RecordData, mut a: usize, mut b: usize) -> i8 {
+    loop {
+        let left = normalized(source, a);
+        let right = normalized(source, b);
+        if left < right {
+            return -1;
+        }
+        if left > right {
+            return 1;
+        }
+        if left == 0 {
+            return 0;
+        }
+        a += 1;
+        b += 1;
+    }
+}
+/// Select the smallest distinct token after the previous token (source offset + 1).
+/// Zero means end; otherwise packed offset+1, length, frequency in successive bytes.
+/// Repeated scans trade speed for constant working memory in this reference implementation.
+// SAFETY: linked EL0 code; checked IDs/offsets, bounded read-only source, no pointers
+// supplied by callers. Helpers inline so debug builds never call EL1-only code.
+#[unsafe(link_section = ".user.text")]
+#[inline(never)]
+pub fn next_token(id: u64, previous: u64) -> u64 {
+    if id == 0 || id > 6 || previous > MAX_BYTES as u64 {
+        return 0;
+    }
+    let source = &RECORDS[id as usize - 1];
+    let mut position = 0;
+    let mut best = 0;
+    let mut length = 0;
+    let mut count = 0;
+    while position < source.length {
+        if normalized(source, position) == 0 {
+            position += 1;
+            continue;
+        }
+        let start = position;
+        while normalized(source, position) != 0 {
+            position += 1;
+        }
+        if previous != 0 && compare(source, start, previous as usize - 1) <= 0 {
+            continue;
+        }
+        let order = if best == 0 {
+            -1
+        } else {
+            compare(source, start, best - 1)
+        };
+        if order < 0 {
+            best = start + 1;
+            length = position - start;
+            count = 1;
+        } else if order == 0 {
+            count += 1;
+        }
+    }
+    best as u64 | ((length as u64) << 8) | ((count as u64) << 16)
 }

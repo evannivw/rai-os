@@ -343,3 +343,22 @@ pending goal before sending any work. [GUEST_COORDINATOR.md](GUEST_COORDINATOR.m
 defines status fields, traces, errors, gateway syscalls and the manual-first scope.
 Its session and the standalone worker session are mutually exclusive through
 user-RAM ownership. This is not yet the endpoint used by the live Meta bridge.
+
+
+## Exact per-record index (October 30)
+
+`record.index` requires exactly four fields: `@rai1\t70\trecord.index\tnotes@1\n`.
+The shell equivalent is `record.index notes@1`. Response:
+
+```text
+record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1
+```
+
+The index is comma-separated lowercase ASCII tokens in lexical order, each with
+a positive decimal occurrence count; `-` denotes an empty index. It uses the
+same six allowed embedded revisions and denied/unknown/bad-argument rules as
+record.count. Partial or timed-out output is not published: errors are
+`index_failed`, `index_timed_out`, `index_bad_output`, or an existing runtime error
+such as `user_memory_busy`. Stop any active worker/coordinator before invoking it.
+No new SVC operation is introduced. See [RECORD_INDEX.md](RECORD_INDEX.md) for
+the independent checker, bounds and distinction from a complete review pack.

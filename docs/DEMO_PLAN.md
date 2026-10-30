@@ -26,20 +26,23 @@ manifest. A final READY state must be independently verified against the current
 goal; superseded or partial work cannot qualify. Source preservation and explicit
 permissions remain mandatory. The full artifact/verifier is not implemented yet.
 
-The next implementation slice must produce and independently check one concrete
-artifact from the existing immutable records. Then extend the guest coordinator
+The first [exact per-record index](RECORD_INDEX.md) now produces an EL0 artifact
+and checks it independently against immutable records. It is a synchronous command,
+not yet a retained coordinator job. Next add the bounded [native guest display](GUEST_GRAPHICS_PLAN.md)
+requested on October 30, then extend the guest coordinator
 from one record goal to the bounded dependency list needed for that artifact.
 Permit model choices only where they affect a real plan (ready-job order and
 valid result reuse), with identical capabilities available to the baseline.
-Do not add phone drivers, graphics drivers, more cores, general networking or a
-generic agent framework to obtain this demo.
+The October 30 scope adjustment permits one minimal guest display adapter and
+observed-result view. Do not expand it into phone drivers, a window system, more
+cores, general networking or a generic agent framework.
 
 ## Completion gates and dates
 
 | Target | Deliverable | Exit evidence |
 | --- | --- | --- |
 | Oct 30 | Guest coordinator -> host Meta -> guest worker | One live trace, offline stale/invalid/duplicate tests, clear per-clone credentials, documented limits. |
-| Oct 31 | First useful artifact and independent checker | Actual guest-produced output checked against fixture bytes; deliberately incorrect output rejected. |
+| Oct 31 | First useful artifact and independent checker | Per-record index/checker completed Oct 30; next native-display boot and observed index. Multi-record pack still pending. |
 | Nov 1 | Complete bounded workload; feature freeze | Current-goal artifact, interrupted/revised-goal case, deterministic baseline using the same operations. Freeze scenario, prompts and metrics before comparison. |
 | Nov 2 | Evidence and presentation | Repeated runs including inference/transport time; visible actual events/results; clean-checkout rehearsal. |
 | Nov 3 | Three-minute video and submission package | Accessible video/repository, original contributions and team listed, reproducible commands and known limitations. |
@@ -64,8 +67,9 @@ until the corresponding evidence exists.
    and budgets. Report full wall time, model overhead and failures. A two-panel
    view is presentation of evidence, not an assumption that the AI side wins.
 
-Use the existing terminal or host panel to display the real trace before adding
-visual polish. Scripted revision events are synthetic inputs; no phone battery,
+Keep the existing terminal/host tools for debugging. The next visual increment
+is guest-rendered output, explicitly distinct from the Mac panel; see the
+[native display acceptance gates](GUEST_GRAPHICS_PLAN.md). Scripted revision events are synthetic inputs; no phone battery,
 GPU telemetry or physical sensor behavior has been implemented.
 
 ## Suggested three-minute structure

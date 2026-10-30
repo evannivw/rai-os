@@ -191,3 +191,16 @@ November 3; submit November 4 before the 18:00 internal target.
 The tiny count workload verifies the integration boundary. It does not establish
 useful scheduling advantage or implement the full review-pack contract. Freeze
 additional kernel mechanisms unless an actual demo output requires a small change.
+
+
+## October 30: useful artifact and native graphics scope
+
+The first [exact record index](RECORD_INDEX.md) is now produced by a bounded EL0
+program and independently checked against fixture bytes. It is one immutable
+record per synchronous invocation, not a full review pack or Meta-selected job.
+The user requested a native guest screen next; [GUEST_GRAPHICS_PLAN.md](GUEST_GRAPHICS_PLAN.md)
+supersedes earlier blanket GUI exclusions with two small gates: actual guest
+pixels, then observed index/error rendering. No finished kernel is required to
+begin that work. Native graphics remain unimplemented. Return afterward to
+retained jobs, multi-record/revision-aware results and fair comparison; the
+[delivery plan](DEMO_PLAN.md) and submission deadline remain in force.

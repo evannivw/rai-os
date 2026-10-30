@@ -1,5 +1,6 @@
 //! Single synchronous EL0 invocation; no loader, scheduler or multi-process runtime.
 mod faults;
+mod index_program;
 mod policy;
 mod program;
 use crate::{
@@ -11,6 +12,7 @@ use crate::{
 pub enum Program {
     Hello,
     Spin,
+    RecordIndex(crate::records::RecordId),
 }
 
 struct Timeout {
@@ -33,17 +35,30 @@ struct Session {
     budget: Budget,
     ranges: [(u64, u64); 2],
     text: (u64, u64),
+    output_limit: usize,
 }
 // Only the single synchronous invocation owns this pointer; never exposed to EL0.
 static ACTIVE: AtomicPtr<Session> = AtomicPtr::new(ptr::null_mut());
 pub struct Report {
-    output: [u8; MAX_OUTPUT],
+    output: [u8; INDEX_OUTPUT],
     length: usize,
     calls: u64,
     rejected: u64,
     code: u64,
     fault: Option<(u64, u64, u64, u64, u64)>,
     timeout: Option<Timeout>,
+}
+pub const INDEX_OUTPUT: usize = 384;
+impl Report {
+    pub fn successful_output(&self) -> Result<&str, &'static str> {
+        if self.timeout.is_some() {
+            return Err("index_timed_out");
+        }
+        if self.fault.is_some() || self.code != 0 || self.rejected != 0 {
+            return Err("index_failed");
+        }
+        core::str::from_utf8(&self.output[..self.length]).map_err(|_| "index_bad_output")
+    }
 }
 impl fmt::Display for Report {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -79,7 +94,7 @@ pub fn run(timer: &mut Timer, program: Program) -> Result<Report, &'static str> 
         static __user_rodata_end: u8;
         static mut __user_stack_bottom: [u8; 8192];
         static __user_stack_top: u8;
-        fn user_enter(entry: u64);
+        fn user_enter(entry: u64, argument: u64);
         fn user_program();
         fn user_spin();
     }
@@ -100,8 +115,13 @@ pub fn run(timer: &mut Timer, program: Program) -> Result<Report, &'static str> 
     }
     let budget = timer.start_user_budget()?;
     let mut session = Session {
+        output_limit: if matches!(program, Program::RecordIndex(_)) {
+            INDEX_OUTPUT
+        } else {
+            MAX_OUTPUT
+        },
         report: Report {
-            output: [0; MAX_OUTPUT],
+            output: [0; INDEX_OUTPUT],
             length: 0,
             calls: 0,
             rejected: 0,
@@ -123,16 +143,17 @@ pub fn run(timer: &mut Timer, program: Program) -> Result<Report, &'static str> 
         ),
     };
     ACTIVE.store(&mut session, Ordering::Release);
-    let entry = match program {
-        Program::Hello => user_program as *const () as u64,
-        Program::Spin => user_spin as *const () as u64,
+    let (entry, argument) = match program {
+        Program::Hello => (user_program as *const () as u64, 0),
+        Program::Spin => (user_spin as *const () as u64, 0),
+        Program::RecordIndex(id) => (index_program::record_index as *const () as u64, id.raw()),
     };
     // SAFETY: live exclusive Session remains on the suspended kernel stack; only
     // guarded lower-EL dispatch borrows it during this call. Assembly preserves C
     // callee-saved state and returns only through exit/fault/timeout termination.
     // Only selected linked entries are accepted. IRQs are masked in kernel Rust;
     // ERET unmasks them only at EL0, and every termination returns masked.
-    unsafe { user_enter(entry) };
+    unsafe { user_enter(entry, argument) };
     ACTIVE.store(ptr::null_mut(), Ordering::Release);
     timer.finish_user_budget()?;
     Ok(session.report)
@@ -200,7 +221,7 @@ pub fn dispatch(frame: &mut Frame) -> bool {
 
 fn write(session: &mut Session, address: u64, length: u64) -> Result<u64, u64> {
     let length = readable(address, length, session.ranges)?;
-    if length > MAX_OUTPUT - session.report.length {
+    if length > session.output_limit - session.report.length {
         return Err(OUTPUT_FULL);
     }
     let mut copy = [0u8; MAX_OUTPUT];

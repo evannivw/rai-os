@@ -8,6 +8,7 @@ pub enum Operation<'a> {
     TimerCheck,
     IpcWait,
     RecordCount(&'a str),
+    RecordIndex(&'a str),
     CoordStart,
     CoordObserve(&'a str),
     CoordPropose(u32, &'a str),
@@ -57,6 +58,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         "worker.status" => Ok(Operation::WorkerStatus),
         "worker.stop" => Ok(Operation::WorkerStop),
         _ if line.starts_with("worker.count ") => Ok(Operation::WorkerCount(&line[13..])),
+        _ if line.starts_with("record.index ") => Ok(Operation::RecordIndex(&line[13..])),
         _ if line.starts_with("record.count ") => Ok(Operation::RecordCount(&line[13..])),
         "ipc.check" => Ok(Operation::IpcCheck),
         "schedule.isolate" => Ok(Operation::ScheduleIsolate),
@@ -88,7 +90,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, record.count <key>, worker.start, worker.count <key>, worker.status, worker.stop, coord.start, coord.observe <key>, coord.propose <ticket>:<key>, coord.status, coord.stop, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
+            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, record.count <key>, record.index <key>, worker.start, worker.count <key>, worker.status, worker.stop, coord.start, coord.observe <key>, coord.propose <ticket>:<key>, coord.status, coord.stop, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
     }
 }
 
@@ -108,6 +110,7 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
         Operation::WorkerStatus => "worker.status".to_owned(),
         Operation::WorkerStop => "worker.stop".to_owned(),
         Operation::RecordCount(key)
+        | Operation::RecordIndex(key)
         | Operation::WorkerCount(key)
         | Operation::CoordObserve(key)
         | Operation::CoordPropose(_, key) => {
@@ -123,6 +126,7 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
                 Operation::CoordPropose(0, _) => return Err("Invalid proposal ticket"),
                 Operation::CoordPropose(ticket, _) => format!("coord.propose\t{ticket}:{key}"),
                 Operation::CoordObserve(_) => format!("coord.observe\t{key}"),
+                Operation::RecordIndex(_) => format!("record.index\t{key}"),
                 Operation::WorkerCount(_) => format!("worker.count\t{key}"),
                 _ => format!("record.count\t{key}"),
             }

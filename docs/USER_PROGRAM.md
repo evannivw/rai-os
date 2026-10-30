@@ -44,8 +44,10 @@ Writes accept 1..64 bytes wholly within either the user constant region or user
 stack. Address addition is checked for overflow. The kernel copies into a bounded
 local buffer before validating printable ASCII (space allowed; control characters
 rejected). No bytes are committed on error. Cumulative output is limited to 64
-bytes per invocation. No user-memory reference escapes the handler, and there is
-no concurrent user execution or remapping during the copy.
+bytes for hello/spin; the later built-in [record index](RECORD_INDEX.md) permits
+384 cumulative bytes while preserving the 64-byte per-write bound. No user-memory
+reference escapes the handler, and there is no concurrent user execution or
+remapping during the copy.
 
 Errors: 1=unknown call, 2=invalid address/range, 3=invalid length or exit code,
 4=invalid text, 5=output buffer full. Unknown numbers and invalid arguments return
@@ -70,8 +72,8 @@ outside the physical-page pool; current counts are 256 total, twelve table pages
 
 The mappings are immutable and shared in a single translation context. Each run
 clears the user stack and creates a fresh result/session. The transition saves
-kernel callee-saved registers on SP_EL1, assigns SP_EL0, clears x0-x30, and uses
-ERET to enter EL0t with IRQ enabled and D/A/F masked (0x340). No kernel register values
+kernel callee-saved registers on SP_EL1, assigns SP_EL0, clears x1-x30 and passes
+a validated scalar in x0 (zero for hello/spin), then uses ERET to enter EL0t with IRQ enabled and D/A/F masked (0x340). No kernel register values
 are intentionally passed to the program.
 
 Vector 8 captures user registers on the private EL1 stack, including SP_EL0, then

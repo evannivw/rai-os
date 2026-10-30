@@ -17,7 +17,7 @@ user_enter:
     mov x0, #0x340             // EL0t, IRQ enabled; D/A/F remain masked.
     msr spsr_el1, x0
     // Do not expose kernel register contents/pointers to the program.
-    mov x0, xzr
+    mov x0, x1              // Validated scalar argument; zero for legacy entries.
     mov x1, xzr
     mov x2, xzr
     mov x3, xzr

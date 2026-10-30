@@ -9,9 +9,10 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     result = subprocess.run(
         ["sh", "scripts/console.sh"], cwd=ROOT,
-        input="coord.start\ncoord.observe notes@1\ncoord.propose 1:notes@1\ncoord.status\ncoord.propose 1:notes@1\ncoord.stop\nworker.start\nworker.count notes@1\nworker.status\nuser.run\nworker.count notes@2\nworker.stop\nrecord.count notes@1\nrecord.count empty@1\nrecord.count restricted@1\nrecord.count notes@1\tbad\nipc.wait\nipc.check\nschedule.isolate\nschedule.run\nschedule.fault\nschedule.check\nuser.spin\ntimer.check\nuser.run\ncontext.check\ninfo\nuptime\nmmu.info\nmemory.info\nmemory.check\ntask.start\ntask.status\ntask.cancel 1\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
+        input="record.index notes@1\ncoord.start\ncoord.observe notes@1\ncoord.propose 1:notes@1\ncoord.status\ncoord.propose 1:notes@1\ncoord.stop\nworker.start\nworker.count notes@1\nworker.status\nuser.run\nworker.count notes@2\nworker.stop\nrecord.count notes@1\nrecord.count empty@1\nrecord.count restricted@1\nrecord.count notes@1\tbad\nipc.wait\nipc.check\nschedule.isolate\nschedule.run\nschedule.fault\nschedule.check\nuser.spin\ntimer.check\nuser.run\ncontext.check\ninfo\nuptime\nmmu.info\nmemory.info\nmemory.check\ntask.start\ntask.status\ntask.cancel 1\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
         text=True, capture_output=True, timeout=60,
     )
+    assert "index=10:1,7:1,a:1,at:1,pump:2,review:1" in result.stdout
     assert "coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=1; record=notes@1; bytes=30; tokens=7; completed=1;" in result.stdout
     assert "[kernel / REJECTED] coord_already_completed" in result.stdout
     assert "[kernel / OK] record=notes@1; bytes=30; tokens=7; worker=EL0; state=waiting; completed=1;" in result.stdout

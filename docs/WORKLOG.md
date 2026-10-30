@@ -1164,3 +1164,60 @@ preparation November 3, submission November 4 before 18:00 Guatemala (official
 20:00). These are targets. The counting path closes integration but does not
 implement the full review-pack contract or demonstrate an AI performance win.
 The remaining useful workload/verifier/comparison/video requirements stay visible.
+
+
+## 2026-10-30 — Exact EL0 record index and the next native display gate
+
+Added record.index for the same six immutable public fixture records. A linked
+Rust EL0 program selects distinct lowercase ASCII tokens in lexical order and
+emits exact frequencies through existing checked write/exit SVCs. Empty input
+produces an explicit empty index. The kernel publishes only normal zero-code
+completion without rejected writes; a partial nonzero exit or 100 ms timeout
+returns an error without publishing the partial result. This reuses the single
+invocation runtime and exclusive user-memory lease, not the retained coordinator.
+An active worker/coordinator therefore rejects the invocation as user_memory_busy.
+
+The entry transition now passes one checked RecordId scalar in x0, with zero for
+legacy hello/spin; all other user registers are still cleared. The per-write bound
+remains 64 bytes. Index cumulative output is 384 bytes, while hello/spin retain
+64 bytes. No new mappings, heap, filesystem, SVC number or external dependency
+was introduced. Token selection is independent of formatting and transport.
+Repeated scans and one-byte writes are a simple first correctness implementation,
+not a deliberately weak comparison baseline. Optimize the shared executor before
+freezing a fair AI-versus-deterministic policy experiment.
+
+A Rust host exporter saves exact guest output without overwriting existing files.
+A separate Python checker reconstructs the index using regex/Counter against the
+requested revision and SHA-256-checked fixture bytes. Its optional token lookup
+runs on the host after acceptance. The combined scripts/index.sh command requires
+no key. A direct debug export of notes@1 observed 91 ms boot and 7880 microseconds
+request wall time, including UART/host scheduling; this is one smoke measurement,
+not a benchmark. It found pump twice among seven tokens/six distinct tokens.
+
+Actual QEMU checks passed in debug and release: three images per profile (normal,
+partial failure, spin), 100 structured requests plus one shell request per profile.
+They exercised all six records twice, empty content, revisions, denied/malformed
+input, output mutations, memory-owner contention, timeout/failure recovery and
+kernel/user continuity. Mutated count/order/case/identity/duplicates/omissions and
+false completion were rejected independently. Real normal captures are retained
+in docs/evidence/2026-10-30-record-index-{debug,release}.txt. Their raw UART CRLF
+bytes are preserved with a scoped .gitattributes rule. Export integration
+also passed non-overwrite, invalid/denied key, missing ELF, verified lookup and
+corrupt/oversized/non-ASCII artifact checks.
+
+Existing boot/protocol, user privilege/fault, user timeout, record service, MMU
+fault and offline guest Meta bridge suites passed in debug and release. Host
+console integration, five shared-model Rust tests and twenty-three Meta host
+Rust tests passed. Formatting, default/two new fault-feature kernel Clippy,
+exporter host Clippy and panel all-target Clippy passed. No live model request
+was made and no credentials were changed. Source fixture bytes are unchanged.
+
+The user requested native guest graphics, distinct from the Mac panel, alongside
+iterative useful-work development. GUEST_GRAPHICS_PLAN.md now specifies the next
+two gates: actual guest pixels, then an observed index/error view. This supersedes
+earlier blanket graphics exclusions without expanding to phone drivers or a
+window system. Native graphics are still pending; no screenshot/display boot is
+claimed. The index is not yet a Meta-selected retained job or the full multi-record
+review pack, and no AI efficiency advantage has been established. Subsequent work
+must connect useful jobs/results, revisions and fair comparison while preserving
+the submission deadline and historical contribution dates.

@@ -10,6 +10,7 @@ mod ipc;
 mod memory;
 mod mmu;
 mod protocol;
+mod record_index;
 mod records;
 mod schedule;
 mod service;
@@ -75,6 +76,8 @@ fn panic(_info: &PanicInfo) -> ! {
 // Fault-injection builds run one intentional exception at a time.
 const _: () = assert!(
     cfg!(feature = "exception-self-test") as usize
+        + cfg!(feature = "index-test-partial") as usize
+        + cfg!(feature = "index-test-spin") as usize
         + cfg!(feature = "coord-test-forged-completion") as usize
         + cfg!(feature = "coord-test-worker-gateway") as usize
         + cfg!(feature = "coord-test-fault") as usize

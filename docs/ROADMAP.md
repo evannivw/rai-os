@@ -149,3 +149,16 @@ EL0 admission. It transports observations while inference is pending; stale
 responses are rejected inside RAI-OS. The kernel/ABI are unchanged. See
 [GUEST_META_BRIDGE.md](GUEST_META_BRIDGE.md). The next delivery slice is a useful
 artifact plus independent checker, following [DEMO_PLAN.md](DEMO_PLAN.md).
+
+
+## October 30: useful artifact and native graphics scope
+
+The first [exact record index](RECORD_INDEX.md) is now produced by a bounded EL0
+program and independently checked against fixture bytes. It is one immutable
+record per synchronous invocation, not a full review pack or Meta-selected job.
+The user requested a native guest screen next; [GUEST_GRAPHICS_PLAN.md](GUEST_GRAPHICS_PLAN.md)
+supersedes earlier blanket GUI exclusions with two small gates: actual guest
+pixels, then observed index/error rendering. No finished kernel is required to
+begin that work. Native graphics remain unimplemented. Return afterward to
+retained jobs, multi-record/revision-aware results and fair comparison; the
+[delivery plan](DEMO_PLAN.md) and submission deadline remain in force.

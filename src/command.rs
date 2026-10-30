@@ -4,7 +4,7 @@ use crate::mmu::Snapshot as MmuSnapshot;
 use crate::task::{Snapshot, Task};
 use core::fmt;
 
-pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start | coord.observe <key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
+pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | record.index <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start | coord.observe <key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
 pub const INFO: &str =
     "RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected";
 
@@ -26,6 +26,7 @@ pub enum Operation<'a> {
     WorkerStatus,
     WorkerStop,
     RecordCount(crate::records::RecordId),
+    RecordIndex(crate::records::RecordId),
     IpcCheck,
     ScheduleIsolate,
     ScheduleCheck,
@@ -62,6 +63,10 @@ pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
         "worker.stop" => Ok(Operation::WorkerStop),
         "worker.count" => Err("bad_args"),
         _ if line.starts_with("worker.count ") => Ok(Operation::WorkerCount(
+            crate::records::RecordId::parse(&line[13..])?,
+        )),
+        "record.index" => Err("bad_args"),
+        _ if line.starts_with("record.index ") => Ok(Operation::RecordIndex(
             crate::records::RecordId::parse(&line[13..])?,
         )),
         "record.count" => Err("bad_args"),
@@ -125,6 +130,7 @@ pub enum Reply<'a> {
     WorkerCount(crate::schedule::worker::Count),
     Text(&'a str),
     Service(crate::service::Report),
+    Index(crate::record_index::Report),
     Uptime(Uptime),
     Task(Snapshot),
     User(crate::user::Report),
@@ -143,6 +149,7 @@ impl fmt::Display for Reply<'_> {
             Self::Coordinator(report) => write!(f, "{report}"),
             Self::Worker(report) => write!(f, "{report}"),
             Self::WorkerCount(report) => write!(f, "{report}"),
+            Self::Index(report) => write!(f, "{report}"),
             Self::Service(report) => write!(f, "{report}"),
             Self::ScheduleRun(report) => write!(f, "{report}"),
             Self::Isolation(report) => write!(f, "{report}"),
@@ -186,6 +193,7 @@ pub fn execute<'a>(
         Operation::WorkerCount(id) => Reply::WorkerCount(sessions.worker.count(id, timer, mmu)?),
         Operation::WorkerStatus => Reply::Worker(sessions.worker.status()),
         Operation::WorkerStop => Reply::Worker(sessions.worker.stop()),
+        Operation::RecordIndex(id) => Reply::Index(crate::record_index::build(id, timer)?),
         Operation::RecordCount(id) => Reply::Service(crate::service::count(id, timer, mmu)?),
         Operation::IpcWait => Reply::ScheduleRun(crate::schedule::run(
             timer,

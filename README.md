@@ -3,7 +3,7 @@
 An educational AArch64 operating-system prototype in Rust, exploring how an
 AI coordinator could adapt work to goals, events, and resource limits.
 
-**Working today:** bare-metal boot in QEMU, fatal EL1 exception diagnostics, a checked EL1 context return, controlled EL1 timer interrupts, one EL0 Rust program with bounded syscalls and a timer-enforced deadline, a two-context scheduling diagnostic, bounded task completion and fault handling, task-private stack mappings, bounded scalar messages between two tasks, blocking receive with wakeup, a bounded EL0 record-count service, a persistent EL0 worker with protected session memory, a [guest EL0 coordinator](docs/GUEST_COORDINATOR.md) with versioned proposal admission and a [Meta transport bridge](docs/GUEST_META_BRIDGE.md), PL011 UART input/output, help/info/uptime/echo,
+**Working today:** an [exact EL0 record index with independent checking](docs/RECORD_INDEX.md), bare-metal boot in QEMU, fatal EL1 exception diagnostics, a checked EL1 context return, controlled EL1 timer interrupts, one EL0 Rust program with bounded syscalls and a timer-enforced deadline, a two-context scheduling diagnostic, bounded task completion and fault handling, task-private stack mappings, bounded scalar messages between two tasks, blocking receive with wakeup, a bounded EL0 record-count service, a persistent EL0 worker with protected session memory, a [guest EL0 coordinator](docs/GUEST_COORDINATOR.md) with versioned proposal admission and a [Meta transport bridge](docs/GUEST_META_BRIDGE.md), PL011 UART input/output, help/info/uptime/echo,
 a bounded structured protocol, a physical-page pool with diagnostics, active EL1 memory permissions, a cooperative word-count task, a Rust host terminal
 console, a graphical host control panel, a bounded priority host coordinator, a
 [bounded event-driven Meta coordinator](docs/META_COORDINATOR.md), and a
@@ -20,6 +20,7 @@ Install Rustup and QEMU (9.2 or newer with virt-9.2), then:
 cargo run --locked             # Direct kernel UART console
 sh scripts/console.sh          # Rust host terminal controlling QEMU
 sh scripts/panel.sh            # Native graphical host panel
+sh scripts/index.sh notes@1 target/notes-v1.index  # New output path; real guest index + checker
 # After configuring a local key as described in docs/META_BRIDGE.md:
 sh scripts/meta.sh 'Count the words in the latest available revision of the notes.'
 sh scripts/meta.sh --coordinate fixtures/coordinator/v1/revisions.json
@@ -56,6 +57,9 @@ python3 scripts/verify_ipc.py
 python3 scripts/verify_ipc.py --release
 python3 scripts/verify_wait.py
 python3 scripts/verify_wait.py --release
+python3 scripts/verify_record_index.py
+python3 scripts/verify_record_index.py --release
+python3 scripts/verify_index_export.py
 python3 scripts/verify_service.py
 python3 scripts/verify_service.py --release
 python3 scripts/verify_worker.py
@@ -87,6 +91,8 @@ and 37 console/protocol cases, including the guest counter. See the guides for h
 
 ## Documentation
 
+- [Exact record index](docs/RECORD_INDEX.md)
+- [Next native guest graphics increment](docs/GUEST_GRAPHICS_PLAN.md)
 - [Getting started](docs/GETTING_STARTED.md)
 - [Architecture and unsafe contracts](docs/ARCHITECTURE.md)
 - [UART protocol](docs/PROTOCOL.md)

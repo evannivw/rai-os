@@ -4,7 +4,7 @@ use core::arch::asm;
 static MESSAGE: [u8; 14] = *b"Hello from EL0";
 
 #[inline(always)]
-fn call(number: u64, first: u64, second: u64) -> (u64, u64) {
+pub(super) fn call(number: u64, first: u64, second: u64) -> (u64, u64) {
     let value;
     let error;
     // SAFETY: our integer-only ABI preserves all registers except x0/x1. The
@@ -16,7 +16,7 @@ fn call(number: u64, first: u64, second: u64) -> (u64, u64) {
     (value, error)
 }
 #[inline(always)]
-fn exit(code: u64) -> ! {
+pub(super) fn exit(code: u64) -> ! {
     // SAFETY: exit terminates this invocation and restores the saved EL1 caller.
     // If the ABI ever violates that contract, the following branch cannot return
     // through the deliberately cleared user link register.

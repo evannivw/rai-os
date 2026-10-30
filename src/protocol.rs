@@ -50,6 +50,10 @@ pub fn parse(line: &str) -> Result<Request<'_>, Error<'_>> {
             crate::records::RecordId::parse(fields.next().ok_or(error("bad_args"))?)
                 .map_err(error)?,
         ),
+        Some("record.index") => Operation::RecordIndex(
+            crate::records::RecordId::parse(fields.next().ok_or(error("bad_args"))?)
+                .map_err(error)?,
+        ),
         Some("record.count") => Operation::RecordCount(
             crate::records::RecordId::parse(fields.next().ok_or(error("bad_args"))?)
                 .map_err(error)?,
