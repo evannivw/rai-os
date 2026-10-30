@@ -17,6 +17,7 @@ mod task;
 mod timer;
 mod uart;
 mod user;
+mod user_memory;
 
 use core::arch::global_asm;
 use core::panic::PanicInfo;
@@ -74,6 +75,11 @@ fn panic(_info: &PanicInfo) -> ! {
 // Fault-injection builds run one intentional exception at a time.
 const _: () = assert!(
     cfg!(feature = "exception-self-test") as usize
+        + cfg!(feature = "worker-test-bad-sequence") as usize
+        + cfg!(feature = "worker-test-fault") as usize
+        + cfg!(feature = "worker-test-spin") as usize
+        + cfg!(feature = "worker-test-flood") as usize
+        + cfg!(feature = "worker-test-bad-reply") as usize
         + cfg!(feature = "service-test-bad-request") as usize
         + cfg!(feature = "service-test-wrong-kind") as usize
         + cfg!(feature = "service-test-bad-reply") as usize

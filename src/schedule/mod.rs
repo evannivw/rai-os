@@ -7,6 +7,8 @@ mod programs;
 mod runtime;
 mod service_programs;
 mod wait_programs;
+pub mod worker;
+mod worker_program;
 use crate::{
     clock,
     context::Frame,
@@ -75,6 +77,7 @@ pub(crate) fn capture(frame: &Frame, vector: u64) -> bool {
 }
 
 pub fn check(timer: &mut Timer, mmu: &Mmu) -> Result<Report, &'static str> {
+    let _user_memory = crate::user_memory::Lease::acquire()?;
     if is_active() || crate::user::is_active() {
         return Err("schedule_busy");
     }

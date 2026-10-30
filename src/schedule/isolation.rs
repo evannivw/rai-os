@@ -41,6 +41,7 @@ impl fmt::Display for IsolationReport {
 }
 
 pub fn check(timer: &mut Timer, mmu: &Mmu) -> Result<IsolationReport, &'static str> {
+    let _user_memory = crate::user_memory::Lease::acquire()?;
     if is_active() || crate::user::is_active() {
         return Err("schedule_busy");
     }

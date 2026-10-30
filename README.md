@@ -3,7 +3,7 @@
 An educational AArch64 operating-system prototype in Rust, exploring how an
 AI coordinator could adapt work to goals, events, and resource limits.
 
-**Working today:** bare-metal boot in QEMU, fatal EL1 exception diagnostics, a checked EL1 context return, controlled EL1 timer interrupts, one EL0 Rust program with bounded syscalls and a timer-enforced deadline, a two-context scheduling diagnostic, bounded task completion and fault handling, task-private stack mappings, bounded scalar messages between two tasks, blocking receive with wakeup, a bounded EL0 record-count service, PL011 UART input/output, help/info/uptime/echo,
+**Working today:** bare-metal boot in QEMU, fatal EL1 exception diagnostics, a checked EL1 context return, controlled EL1 timer interrupts, one EL0 Rust program with bounded syscalls and a timer-enforced deadline, a two-context scheduling diagnostic, bounded task completion and fault handling, task-private stack mappings, bounded scalar messages between two tasks, blocking receive with wakeup, a bounded EL0 record-count service, a persistent EL0 worker with protected session memory, PL011 UART input/output, help/info/uptime/echo,
 a bounded structured protocol, a physical-page pool with diagnostics, active EL1 memory permissions, a cooperative word-count task, a Rust host terminal
 console, a graphical host control panel, a bounded priority host coordinator, a
 [bounded event-driven Meta coordinator](docs/META_COORDINATOR.md), and a
@@ -57,6 +57,8 @@ python3 scripts/verify_wait.py
 python3 scripts/verify_wait.py --release
 python3 scripts/verify_service.py
 python3 scripts/verify_service.py --release
+python3 scripts/verify_worker.py
+python3 scripts/verify_worker.py --release
 python3 scripts/verify_meta.py          # Offline; no provider calls
 python3 scripts/verify_meta.py --release
 python3 scripts/verify_coordinator.py   # Offline events/proposals, real QEMU
@@ -88,6 +90,7 @@ and 37 console/protocol cases, including the guest counter. See the guides for h
 - [Physical pages and memory diagnostics](docs/MEMORY.md)
 - [Event-driven Meta coordinator](docs/META_COORDINATOR.md)
 - [Meta bridge, local credentials and live evidence](docs/META_BRIDGE.md)
+- [Persistent guest worker and memory ownership](docs/PERSISTENT_WORKER.md)
 - [First bounded guest record service](docs/RECORD_SERVICE.md)
 - [Waiting, wakeup and closed-batch deadlock handling](docs/IPC_WAIT.md)
 - [Bounded task messages and syscall ABI](docs/IPC.md)

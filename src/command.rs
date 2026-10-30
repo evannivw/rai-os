@@ -4,7 +4,7 @@ use crate::mmu::Snapshot as MmuSnapshot;
 use crate::task::{Snapshot, Task};
 use core::fmt;
 
-pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
+pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | worker.start | worker.count <key> | worker.status | worker.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
 pub const INFO: &str =
     "RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected";
 
@@ -16,6 +16,10 @@ pub enum Operation<'a> {
     ContextCheck,
     TimerCheck,
     IpcWait,
+    WorkerStart,
+    WorkerCount(crate::records::RecordId),
+    WorkerStatus,
+    WorkerStop,
     RecordCount(crate::records::RecordId),
     IpcCheck,
     ScheduleIsolate,
@@ -38,6 +42,13 @@ pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
         "info" => Ok(Operation::Info),
         "timer.check" => Ok(Operation::TimerCheck),
         "ipc.wait" => Ok(Operation::IpcWait),
+        "worker.start" => Ok(Operation::WorkerStart),
+        "worker.status" => Ok(Operation::WorkerStatus),
+        "worker.stop" => Ok(Operation::WorkerStop),
+        "worker.count" => Err("bad_args"),
+        _ if line.starts_with("worker.count ") => Ok(Operation::WorkerCount(
+            crate::records::RecordId::parse(&line[13..])?,
+        )),
         "record.count" => Err("bad_args"),
         _ if line.starts_with("record.count ") => Ok(Operation::RecordCount(
             crate::records::RecordId::parse(&line[13..])?,
@@ -86,6 +97,8 @@ pub struct Uptime {
 }
 
 pub enum Reply<'a> {
+    Worker(crate::schedule::worker::Status),
+    WorkerCount(crate::schedule::worker::Count),
     Text(&'a str),
     Service(crate::service::Report),
     Uptime(Uptime),
@@ -103,6 +116,8 @@ pub enum Reply<'a> {
 impl fmt::Display for Reply<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::Worker(report) => write!(f, "{report}"),
+            Self::WorkerCount(report) => write!(f, "{report}"),
             Self::Service(report) => write!(f, "{report}"),
             Self::ScheduleRun(report) => write!(f, "{report}"),
             Self::Isolation(report) => write!(f, "{report}"),
@@ -130,8 +145,13 @@ pub fn execute<'a>(
     memory: &mut Memory,
     mmu: &crate::mmu::Mmu,
     timer: &mut crate::timer::Timer,
+    worker: &mut crate::schedule::worker::Worker,
 ) -> Result<Reply<'a>, &'static str> {
     Ok(match operation {
+        Operation::WorkerStart => Reply::Worker(worker.start(timer, mmu)?),
+        Operation::WorkerCount(id) => Reply::WorkerCount(worker.count(id, timer, mmu)?),
+        Operation::WorkerStatus => Reply::Worker(worker.status()),
+        Operation::WorkerStop => Reply::Worker(worker.stop()),
         Operation::RecordCount(id) => Reply::Service(crate::service::count(id, timer, mmu)?),
         Operation::IpcWait => Reply::ScheduleRun(crate::schedule::run(
             timer,

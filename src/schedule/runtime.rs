@@ -134,6 +134,7 @@ impl fmt::Display for RunReport {
     }
 }
 pub fn run(timer: &mut Timer, mmu: &Mmu, mode: RunMode) -> Result<RunReport, &'static str> {
+    let _user_memory = crate::user_memory::Lease::acquire()?;
     if is_active() || crate::user::is_active() {
         return Err("schedule_busy");
     }
@@ -370,7 +371,7 @@ pub fn run(timer: &mut Timer, mmu: &Mmu, mode: RunMode) -> Result<RunReport, &'s
         waiting: wait_enabled,
     })
 }
-fn valid_context(frame: &Frame, stack: (u64, u64), text: (u64, u64)) -> bool {
+pub(super) fn valid_context(frame: &Frame, stack: (u64, u64), text: (u64, u64)) -> bool {
     frame.spsr & !0xf000_0000 == 0x340
         && frame.elr >= text.0
         && frame.elr < text.1

@@ -8,6 +8,10 @@ pub enum Operation<'a> {
     TimerCheck,
     IpcWait,
     RecordCount(&'a str),
+    WorkerStart,
+    WorkerCount(&'a str),
+    WorkerStatus,
+    WorkerStop,
     IpcCheck,
     ScheduleIsolate,
     ScheduleCheck,
@@ -34,6 +38,10 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         "info" => Ok(Operation::Info),
         "timer.check" => Ok(Operation::TimerCheck),
         "ipc.wait" => Ok(Operation::IpcWait),
+        "worker.start" => Ok(Operation::WorkerStart),
+        "worker.status" => Ok(Operation::WorkerStatus),
+        "worker.stop" => Ok(Operation::WorkerStop),
+        _ if line.starts_with("worker.count ") => Ok(Operation::WorkerCount(&line[13..])),
         _ if line.starts_with("record.count ") => Ok(Operation::RecordCount(&line[13..])),
         "ipc.check" => Ok(Operation::IpcCheck),
         "schedule.isolate" => Ok(Operation::ScheduleIsolate),
@@ -65,7 +73,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, record.count <key>, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
+            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, record.count <key>, worker.start, worker.count <key>, worker.status, worker.stop, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
     }
 }
 
@@ -78,7 +86,10 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
         Operation::Info => "info".to_owned(),
         Operation::TimerCheck => "timer.check".to_owned(),
         Operation::IpcWait => "ipc.wait".to_owned(),
-        Operation::RecordCount(key) => {
+        Operation::WorkerStart => "worker.start".to_owned(),
+        Operation::WorkerStatus => "worker.status".to_owned(),
+        Operation::WorkerStop => "worker.stop".to_owned(),
+        Operation::RecordCount(key) | Operation::WorkerCount(key) => {
             if key.is_empty()
                 || key.len() > 32
                 || !key
@@ -87,7 +98,12 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
             {
                 return Err("Record key requires 1-32 ASCII letters, digits, @ or -");
             }
-            format!("record.count\t{key}")
+            let command = if matches!(operation, Operation::WorkerCount(_)) {
+                "worker.count"
+            } else {
+                "record.count"
+            };
+            format!("{command}\t{key}")
         }
         Operation::IpcCheck => "ipc.check".to_owned(),
         Operation::ScheduleIsolate => "schedule.isolate".to_owned(),
@@ -162,6 +178,9 @@ mod tests {
         for (name, operation) in [
             ("timer.check", Operation::TimerCheck),
             ("ipc.wait", Operation::IpcWait),
+            ("worker.start", Operation::WorkerStart),
+            ("worker.status", Operation::WorkerStatus),
+            ("worker.stop", Operation::WorkerStop),
             ("ipc.check", Operation::IpcCheck),
             ("schedule.isolate", Operation::ScheduleIsolate),
             ("schedule.check", Operation::ScheduleCheck),
@@ -187,6 +206,20 @@ mod tests {
 
     #[test]
     fn record_requests_preserve_identity_and_reject_frame_injection() {
+        assert_eq!(
+            encode(8, &parse_input("worker.count notes@2").unwrap()).unwrap(),
+            "@rai1\t8\tworker.count\tnotes@2\n"
+        );
+        for key in [
+            "",
+            "notes@1\nworker.stop",
+            "notes@1\textra",
+            "notes@1\r",
+            "é",
+            &"a".repeat(33),
+        ] {
+            assert!(encode(8, &Operation::WorkerCount(key)).is_err());
+        }
         assert_eq!(
             encode(9, &parse_input("record.count notes@2").unwrap()).unwrap(),
             "@rai1\t9\trecord.count\tnotes@2\n"

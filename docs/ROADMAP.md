@@ -1,6 +1,6 @@
 # From a booting kernel to guest services
 
-Status: October 29, 2026. Each step should produce a small, independently
+Status: October 30, 2026. Each step should produce a small, independently
 observable result before the next. The kernel supplies mechanisms and enforces
 access; a future coordinator chooses policy above it. Kernel Rust modules are
 not isolated processes. Fixed linked programs now run with lower privilege. The existing coordinator still runs on the host.
@@ -22,6 +22,7 @@ not isolated processes. Fixed linked programs now run with lower privilege. The 
 | Bounded task messages | Done for two fixed tasks | Checked IDs/routes, two-slot FIFO inboxes, request/reply, closed/full/empty errors and a call cap. See [IPC.md](IPC.md). |
 | Waiting and wakeup | Done for the two-task batch | A receiver stops getting CPU turns and resumes with a message or Closed; mutual waiting is reported as deadlocked. See [IPC_WAIT.md](IPC_WAIT.md). |
 | One bounded guest service | Done for immutable record token counts | Host request -> EL0 client/worker -> checked result, with private stacks and scalar IPC. See [RECORD_SERVICE.md](RECORD_SERVICE.md). Persistent lifetime remains separate. |
+| One persistent guest worker | Done for one fixed EL0 service | Retains private stack/register state between host requests, with exclusive RAM ownership and explicit stop/failure cleanup. See [PERSISTENT_WORKER.md](PERSISTENT_WORKER.md). |
 | Guest coordinator and executors | Planned | Move decision/execution services into RAI-OS with enforced permissions. Adapt host std/storage assumptions. |
 | Meta-driven policy | First single proposal verified on the host | Muse Spark 1.3 selects a permitted operation; host/guest validation precedes execution. A bounded two-revision event loop now retains observations and rejects stale/duplicate work. See [META_COORDINATOR.md](META_COORDINATOR.md). |
 
@@ -121,3 +122,12 @@ multi-step workload with explicit constraints; independent demo artifact verific
 fair baseline/comparison including model overhead; presentation, reproducibility,
 three-minute video and submission. See the revised [schedule](HACKATHON_PLAN.md).
 Do not continue expanding kernel mechanisms without a concrete demo dependency.
+
+## October 30 kernel consolidation
+
+At the user's request, delivered step 22: a persistent EL0 worker, independent
+of further model experiments. The same linked program waits/resumes over multiple
+requests, and every EL0 entry now respects an exclusive fixed-RAM lease. This
+provides a lifetime boundary for a later guest service/coordinator; it does not
+move the current host coordinator or complete a general kernel. Keep the remaining
+demo/verifier/baseline/video work visible when deciding the next increment.

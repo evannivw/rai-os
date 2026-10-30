@@ -155,3 +155,12 @@ useful workload and event loop alongside the independent result verifier and a
 fair deterministic baseline. Persistent task lifetime, external wake sources and
 additional executors are explicit future increments, not prerequisites to show
 this first model -> validated operation -> guest result path.
+
+## Separate persistent mode (October 30)
+
+`record.count` retains its original closed-batch contract. New `worker.*`
+commands reuse counting/IPC with a retained EL0 continuation; see
+[PERSISTENT_WORKER.md](PERSISTENT_WORKER.md). While that session holds the fixed
+user RAM lease, `record.count` returns `user_memory_busy`. Stop the worker before
+using this batch mode or the existing Meta bridge. The bridge is not migrated
+by this kernel increment.

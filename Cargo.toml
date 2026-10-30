@@ -6,6 +6,12 @@ license = "Apache-2.0"
 description = "Educational AArch64 kernel for QEMU virt"
 
 [features]
+worker-test-bad-sequence = []
+worker-test-fault = []
+worker-test-spin = []
+worker-test-flood = []
+worker-test-bad-reply = []
+
 service-test-bad-request = []
 service-test-wrong-kind = []
 service-test-bad-reply = []

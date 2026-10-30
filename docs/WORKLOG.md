@@ -989,3 +989,58 @@ hackathon plan. META_COORDINATOR.md separates real Meta evidence from delayed
 replay evidence and explains the fixed goal, event source, limits and host placement.
 The older priority coordinator/panel remain separate; this is not guest-resident
 coordination, arbitrary file watching or the full review-pack verifier/benchmark.
+
+
+## 2026-10-30 — Persistent EL0 worker and exclusive user RAM
+
+At the user's request, returned to kernel consolidation instead of extending
+model/workload experiments. Added worker.start/count/status/stop in the direct
+shell, structured UART protocol and Rust host console. The kernel retains one
+linked EL0 worker's integer frame and private B stack across requests. Its own
+local completed counter is sent as an IPC sequence and checked against each
+admitted request. Empty receive waits for future host ingress; it is not treated
+as the existing closed-batch deadlock. Endpoint 1 is kernel host ingress, endpoint
+2 is the worker; no extra EL0 client is implied.
+
+An exclusive user-memory lease now covers all legacy EL0 entry paths as well as
+the new session. Other EL0 commands return user_memory_busy while the suspended
+worker owns the fixed region. Stop/failure retires its continuation, clears RAM
+and releases the lease before legacy execution resumes. EL1 diagnostics remain
+available. The existing twelve table pages and 244 free pool pages are unchanged.
+Each start/count has six timer expirations and sixteen syscall-attempt limits;
+the sixteenth attempt is not served. Limits span all resumes within that operation,
+not the entire session. A timer slice restarts after a syscall, so the six-slice
+cap is not a 120 ms aggregate deadline. Waiting gets no worker CPU turns, but
+the console still polls. No power/performance advantage is claimed.
+
+Built and executed on macOS ARM64, Rust 1.90.0 and QEMU 11.1.2, fixed virt-9.2,
+Cortex-A53/TCG/one CPU. New verification passed in debug and release: six images
+per profile, 670 structured requests plus two direct-shell count requests per
+profile. Normal sessions each processed 25 records and then stopped/restarted;
+all six record counts were independently derived with Python regex from fixture
+bytes. EL1 timer/context diagnostics also ran after twelve completed records,
+then the same continuation completed subsequent requests. Invalid framing, denied
+records, repeated starts/stops and overlapping user entries were checked. Five
+fault modes covered a forbidden kernel read, infinite computation, invalid-call
+flood, wrong result ID and wrong sequence. Each was contained, retained a failed
+status and permitted legacy EL0 execution after releasing ownership. Selected
+actual replies are retained in docs/evidence/2026-10-30-worker-{debug,release}.txt;
+full generated transcripts remain under target/verification.
+
+Regression suites passed in both profiles: boot/protocol, schedule, lifecycle,
+IPC/wait, isolation, timer/context/exceptions, MMU/physical memory, cooperative
+jobs, user/timeout, record service, offline Meta bridge and offline coordinator.
+The host-console integration passed with new worker commands; four console Rust
+tests and sixteen panel tests passed. Formatting, default kernel Clippy, all 47
+individual fault-feature Clippy builds, host console/panel Clippy, panel release
+build and mixed-feature rejection passed. Repository Markdown file links and
+Git whitespace checks passed. No live provider requests or credentials were
+needed or changed in this increment.
+
+Added PERSISTENT_WORKER.md and updated architecture, protocol, setup, README,
+roadmap and the scope note in the hackathon plan. The current Meta coordinator
+still lives on the host and uses record.count batches. This adds one guest
+service lifetime; it does not provide multiple persistent workers, dynamic
+process loading, a guest AI coordinator, persistent storage or a finished OS.
+The useful demo workload, full independent artifact verifier, fair comparison
+and three-minute video remain pending against the unchanged November 4 deadline.

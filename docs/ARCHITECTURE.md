@@ -10,7 +10,9 @@ creation, heap or isolated agent execution. Two fixed tasks can now exchange
 [bounded scalar messages](IPC.md) through kernel-owned mailboxes and use
 [blocking receive](IPC_WAIT.md) with message/closure wakeup. A first
 [record-count service](RECORD_SERVICE.md) now reuses those mechanisms to process
-immutable fixture records at EL0 and return results over UART. EL1 stage-1 translation
+immutable fixture records at EL0 and return results over UART. A separate
+[persistent worker](PERSISTENT_WORKER.md) now retains its EL0 continuation and
+private stack between console requests. EL1 stage-1 translation
 now has a base map and two fixed task maps with private writable stack pages;
 user code/constants remain shared read-only. See [MMU.md](MMU.md) and
 [TASK_MEMORY.md](TASK_MEMORY.md).
@@ -86,6 +88,12 @@ assumptions and limits. Rust panic still prints and halts without recovery.
 - service.rs: validated input -> bounded guest execution -> completion/result checks.
   schedule/service_programs.rs: fixed EL0 request/reply client and worker. This is
   one closed batch per host request, without persistent lifetime or external wakes.
+- user_memory.rs: exclusive lease over fixed user RAM, held across suspended
+  worker lifetime and acquired by every legacy EL0 entry before clearing stacks.
+- schedule/worker.rs: one retained frame, mailbox pair, per-request budgets,
+  ingress/reply validation and explicit stop/failure cleanup. Endpoint 1 is kernel
+  host ingress; worker_program.rs executes at EL0 as endpoint 2. The console owns
+  the session. This is not a general daemon scheduler or guest AI coordinator.
 - timer/: exclusive GICv2/CNTP adapter, controlled EL1 IRQ diagnostic and absolute
   EL0 budget or scheduling slice. IRQs are enabled in the diagnostic loop or EL0; successful handlers
   never use UART or allocate. User/schedule dispatch accesses only its paused session or observation. See [TIMER.md](TIMER.md).

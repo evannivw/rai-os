@@ -156,3 +156,14 @@ milestone. QEMU host portability does not mean guest Linux app compatibility.
 The user wants short Spanish explanations, one small verified step at a time.
 Project artifacts and all new commit text are English. Follow AGENTS.md for
 architecture boundaries, honest testing, and commit/push per completed increment.
+
+## Scope adjustment — October 30
+
+The user explicitly prioritized a kernel increment before more AI/workload work.
+Implemented one [persistent guest worker](PERSISTENT_WORKER.md): retained EL0
+state between console requests, exclusive user-RAM ownership, bounded execution
+and stop/failure recovery. The host Meta coordinator remains unchanged and still
+uses closed record batches. This is a concrete service-lifetime foundation, not
+completion of the kernel or of the submission demo. The remaining useful workload,
+independent artifact verifier, fair comparison and three-minute video remain
+pending; the November 4 deadline and internal target are unchanged.

@@ -72,6 +72,7 @@ impl fmt::Display for Report {
 }
 
 pub fn run(timer: &mut Timer, program: Program) -> Result<Report, &'static str> {
+    let _user_memory = crate::user_memory::Lease::acquire()?;
     unsafe extern "C" {
         static __user_text_start: u8;
         static __user_text_end: u8;

@@ -128,10 +128,11 @@ terminator. The rejected tail never becomes another command. The guest uses a
 fixed buffer and has no line timeout. An incomplete request waits for a terminator;
 the host must impose its own timeout and terminate the line or restart QEMU.
 
-## Future Meta bridge
+## Host Meta bridge
 
 The host console currently starts scripts/qemu.sh and uses its stdin/stdout.
-Meta calls are not implemented. The key will live in the host environment.
+The separate [Meta bridge](META_BRIDGE.md) now makes real provider calls; its key
+stays in the host environment or an ignored checkout-local file.
 The bridge must validate an allowed operation, field contents, and lengths before
 serializing. Never concatenate arbitrary model output onto UART: a newline
 starts another request. The guest repeats validation before execution.
@@ -319,3 +320,14 @@ packed IPC result, validation errors and batch lifetime. `record.count` takes no
 source path or arbitrary content. Request IDs remain UART correlation IDs;
 internal task IDs and record IDs are separate namespaces. The operation does
 not implement scenario release/availability events or the full review-pack index.
+
+## Persistent worker operations
+
+`worker.start`, `worker.status`, and `worker.stop` require exactly three fields.
+`worker.count` requires exactly four, with one allowed immutable fixture key.
+For example: `@rai1\t50\tworker.count\tnotes@2\n`.
+These additive commands retain one EL0 continuation between requests instead of
+running a new batch. See [PERSISTENT_WORKER.md](PERSISTENT_WORKER.md) for exact
+status/count fields, syscall protocol, per-request budgets and failure behavior.
+While the worker owns user RAM, other EL0-entry commands return `user_memory_busy`.
+`worker.stop` releases ownership; status and unrelated EL1 diagnostics still work.

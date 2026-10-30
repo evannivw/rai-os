@@ -61,6 +61,15 @@ Commands: help, info, uptime, echo <ASCII text>, exit. See [CONSOLE.md](CONSOLE.
 This is a terminal tool, not the planned graphical host interface.
 The programmatic wire format is documented in [PROTOCOL.md](PROTOCOL.md).
 
+## Persistent guest worker
+
+Inside either console, run `worker.start`, `worker.count notes@1`,
+`worker.count notes@2`, `worker.status`, then `worker.stop`. The same EL0 worker
+keeps its state between requests. Other EL0 diagnostics return `user_memory_busy`
+until stop or worker failure releases the shared user RAM. See
+[PERSISTENT_WORKER.md](PERSISTENT_WORKER.md) for limits and verification.
+No API key is required; the Meta bridge remains a separate host program.
+
 ## Original host example
 
 ```sh
