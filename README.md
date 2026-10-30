@@ -11,6 +11,9 @@ console, a graphical host control panel, a bounded priority host coordinator, a
 **Not implemented:** a general autonomous OS coordinator, guest-resident agents, a window system or interactive guest desktop, general multi-task
 scheduling, dynamically created process address spaces, persistent storage, or measured efficiency gains.
 
+A [retained index mode](docs/RETAINED_INDEX.md) now transfers exact EL0 results
+and reuses completed immutable revisions, with native created/reused views.
+
 ## Run
 
 Install Rustup and QEMU (9.2 or newer with virt-9.2), then:
@@ -60,6 +63,8 @@ python3 scripts/verify_wait.py
 python3 scripts/verify_wait.py --release
 python3 scripts/verify_display.py
 python3 scripts/verify_display.py --release
+python3 scripts/verify_coord_index.py
+python3 scripts/verify_coord_index.py --release
 python3 scripts/verify_record_index.py
 python3 scripts/verify_record_index.py --release
 python3 scripts/verify_index_export.py

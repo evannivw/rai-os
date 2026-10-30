@@ -1,0 +1,171 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	err	coord_not_indexing
+@rai1	3	ok	worker=EL0; state=waiting; completed=0; reason=none; calls=1; slices=0
+@rai1	4	err	user_memory_busy
+@rai1	5	ok	coordinator=EL0; worker=EL0; state=stopped; event=none; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=0; b_slices=0; trace=
+@rai1	6	ok	worker=EL0; state=waiting; completed=0; reason=none; calls=1; slices=0
+@rai1	7	ok	worker=EL0; state=stopped; completed=0; reason=none; calls=0; slices=0
+@rai1	8	ok	coordinator=EL0; worker=EL0; state=idle; event=started; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=1; a_slices=0; b_slices=0; trace=AO,BD,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0
+@rai1	9	err	coord_result_unavailable
+@rai1	10	err	coord_no_goal
+@rai1	11	err	user_memory_busy
+@rai1	12	err	user_memory_busy
+@rai1	13	err	user_memory_busy
+@rai1	14	err	bad_args
+@rai1	15	err	bad_args
+@rai1	16	err	bad_args
+@rai1	17	err	record_denied
+@rai1	18	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=1; record=notes@1; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0
+@rai1	19	err	coord_result_unavailable
+@rai1	20	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=duplicate; ticket=1; record=notes@1; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0
+@rai1	21	err	coord_stale_proposal
+@rai1	22	err	coord_wrong_record
+@rai1	23	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=87
+@rai1	24	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	25	ok	coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=1; record=notes@1; bytes=30; tokens=7; completed=1; a_calls=10; b_calls=8; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=33
+@rai1	26	ok	record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1
+@rai1	27	err	coord_already_completed
+@rai1	28	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=1; record=notes@1; bytes=30; tokens=7; completed=1; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=33
+@rai1	29	ok	record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1
+@rai1	30	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=4; record=notes@2; bytes=0; tokens=0; completed=1; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=0
+@rai1	31	err	coord_result_unavailable
+@rai1	32	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=duplicate; ticket=4; record=notes@2; bytes=0; tokens=0; completed=1; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=0
+@rai1	33	err	coord_stale_proposal
+@rai1	34	err	coord_wrong_record
+@rai1	35	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=77
+@rai1	36	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	37	ok	coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=4; record=notes@2; bytes=44; tokens=9; completed=2; a_calls=13; b_calls=11; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=2; cache_hits=0; output_bytes=50
+@rai1	38	ok	record=notes@2; bytes=44; worker=EL0; state=completed; index=11:1,8:1,at:1,b:1,first:1,pump:2,review:1,safety:1
+@rai1	39	err	coord_already_completed
+@rai1	40	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=4; record=notes@2; bytes=44; tokens=9; completed=2; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=2; cache_hits=0; output_bytes=50
+@rai1	41	ok	record=notes@2; bytes=44; worker=EL0; state=completed; index=11:1,8:1,at:1,b:1,first:1,pump:2,review:1,safety:1
+@rai1	42	ok	coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=7; record=notes@1; bytes=30; tokens=7; completed=2; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=2; cache_hits=1; output_bytes=33
+@rai1	43	ok	record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1
+@rai1	44	err	coord_already_completed
+@rai1	45	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=7; record=notes@1; bytes=30; tokens=7; completed=2; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=2; cache_hits=1; output_bytes=33
+@rai1	46	ok	record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1
+@rai1	47	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=9; record=brief@1; bytes=0; tokens=0; completed=2; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=2; cache_hits=1; output_bytes=0
+@rai1	48	err	coord_result_unavailable
+@rai1	49	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=duplicate; ticket=9; record=brief@1; bytes=0; tokens=0; completed=2; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=2; cache_hits=1; output_bytes=0
+@rai1	50	err	coord_stale_proposal
+@rai1	51	err	coord_wrong_record
+@rai1	52	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=84
+@rai1	53	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	54	ok	coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=9; record=brief@1; bytes=56; tokens=9; completed=3; a_calls=15; b_calls=13; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=3; cache_hits=1; output_bytes=70
+@rai1	55	ok	record=brief@1; bytes=56; worker=EL0; state=completed; index=a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1
+@rai1	56	err	coord_already_completed
+@rai1	57	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=9; record=brief@1; bytes=56; tokens=9; completed=3; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=3; cache_hits=1; output_bytes=70
+@rai1	58	ok	record=brief@1; bytes=56; worker=EL0; state=completed; index=a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1
+@rai1	59	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=12; record=checklist@1; bytes=0; tokens=0; completed=3; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=3; cache_hits=1; output_bytes=0
+@rai1	60	err	coord_result_unavailable
+@rai1	61	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=duplicate; ticket=12; record=checklist@1; bytes=0; tokens=0; completed=3; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=3; cache_hits=1; output_bytes=0
+@rai1	62	err	coord_stale_proposal
+@rai1	63	err	coord_wrong_record
+@rai1	64	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=81
+@rai1	65	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	66	ok	coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=12; record=checklist@1; bytes=41; tokens=6; completed=4; a_calls=11; b_calls=9; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=4; cache_hits=1; output_bytes=41
+@rai1	67	ok	record=checklist@1; bytes=41; worker=EL0; state=completed; index=cables:1,check:2,first:1,safety:1,seals:1
+@rai1	68	err	coord_already_completed
+@rai1	69	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=12; record=checklist@1; bytes=41; tokens=6; completed=4; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=4; cache_hits=1; output_bytes=41
+@rai1	70	ok	record=checklist@1; bytes=41; worker=EL0; state=completed; index=cables:1,check:2,first:1,safety:1,seals:1
+@rai1	71	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=15; record=empty@1; bytes=0; tokens=0; completed=4; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=4; cache_hits=1; output_bytes=0
+@rai1	72	err	coord_result_unavailable
+@rai1	73	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=duplicate; ticket=15; record=empty@1; bytes=0; tokens=0; completed=4; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=4; cache_hits=1; output_bytes=0
+@rai1	74	err	coord_stale_proposal
+@rai1	75	err	coord_wrong_record
+@rai1	76	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=79
+@rai1	77	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	78	ok	coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=15; record=empty@1; bytes=0; tokens=0; completed=5; a_calls=6; b_calls=4; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=5; cache_hits=1; output_bytes=1
+@rai1	79	ok	record=empty@1; bytes=0; worker=EL0; state=completed; index=-
+@rai1	80	err	coord_already_completed
+@rai1	81	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=15; record=empty@1; bytes=0; tokens=0; completed=5; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=5; cache_hits=1; output_bytes=1
+@rai1	82	ok	record=empty@1; bytes=0; worker=EL0; state=completed; index=-
+@rai1	83	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=18; record=appendix@1; bytes=0; tokens=0; completed=5; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=5; cache_hits=1; output_bytes=0
+@rai1	84	err	coord_result_unavailable
+@rai1	85	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=duplicate; ticket=18; record=appendix@1; bytes=0; tokens=0; completed=5; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=5; cache_hits=1; output_bytes=0
+@rai1	86	err	coord_stale_proposal
+@rai1	87	err	coord_wrong_record
+@rai1	88	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=83
+@rai1	89	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	90	ok	coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=18; record=appendix@1; bytes=108; tokens=17; completed=6; a_calls=24; b_calls=22; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=6; cache_hits=1; output_bytes=132
+@rai1	91	ok	record=appendix@1; bytes=108; worker=EL0; state=completed; index=after:1,east:1,field:1,from:1,gate:1,index:1,inspect:1,keep:1,notes:1,optional:1,preview:1,rain:1,required:1,separate:1,the:2,this:1
+@rai1	92	err	coord_already_completed
+@rai1	93	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=18; record=appendix@1; bytes=108; tokens=17; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=1; output_bytes=132
+@rai1	94	ok	record=appendix@1; bytes=108; worker=EL0; state=completed; index=after:1,east:1,field:1,from:1,gate:1,index:1,inspect:1,keep:1,notes:1,optional:1,preview:1,rain:1,required:1,separate:1,the:2,this:1
+@rai1	95	ok	coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=21; record=brief@1; bytes=56; tokens=9; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=2; output_bytes=70
+@rai1	96	ok	record=brief@1; bytes=56; worker=EL0; state=completed; index=a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1
+@rai1	97	err	coord_already_completed
+@rai1	98	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=21; record=brief@1; bytes=56; tokens=9; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=2; output_bytes=70
+@rai1	99	ok	record=brief@1; bytes=56; worker=EL0; state=completed; index=a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1
+@rai1	100	ok	coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=23; record=notes@1; bytes=30; tokens=7; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=3; output_bytes=33
+@rai1	101	ok	record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1
+@rai1	102	err	coord_already_completed
+@rai1	103	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=23; record=notes@1; bytes=30; tokens=7; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=3; output_bytes=33
+@rai1	104	ok	record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1
+@rai1	105	ok	coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=25; record=notes@2; bytes=44; tokens=9; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=4; output_bytes=50
+@rai1	106	ok	record=notes@2; bytes=44; worker=EL0; state=completed; index=11:1,8:1,at:1,b:1,first:1,pump:2,review:1,safety:1
+@rai1	107	err	coord_already_completed
+@rai1	108	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=25; record=notes@2; bytes=44; tokens=9; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=4; output_bytes=50
+@rai1	109	ok	record=notes@2; bytes=44; worker=EL0; state=completed; index=11:1,8:1,at:1,b:1,first:1,pump:2,review:1,safety:1
+@rai1	110	ok	coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=27; record=checklist@1; bytes=41; tokens=6; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=5; output_bytes=41
+@rai1	111	ok	record=checklist@1; bytes=41; worker=EL0; state=completed; index=cables:1,check:2,first:1,safety:1,seals:1
+@rai1	112	err	coord_already_completed
+@rai1	113	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=27; record=checklist@1; bytes=41; tokens=6; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=5; output_bytes=41
+@rai1	114	ok	record=checklist@1; bytes=41; worker=EL0; state=completed; index=cables:1,check:2,first:1,safety:1,seals:1
+@rai1	115	ok	coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=29; record=empty@1; bytes=0; tokens=0; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=6; output_bytes=1
+@rai1	116	ok	record=empty@1; bytes=0; worker=EL0; state=completed; index=-
+@rai1	117	err	coord_already_completed
+@rai1	118	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=29; record=empty@1; bytes=0; tokens=0; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=6; output_bytes=1
+@rai1	119	ok	record=empty@1; bytes=0; worker=EL0; state=completed; index=-
+@rai1	120	ok	coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=31; record=appendix@1; bytes=108; tokens=17; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=7; output_bytes=132
+@rai1	121	ok	record=appendix@1; bytes=108; worker=EL0; state=completed; index=after:1,east:1,field:1,from:1,gate:1,index:1,inspect:1,keep:1,notes:1,optional:1,preview:1,rain:1,required:1,separate:1,the:2,this:1
+@rai1	122	err	coord_already_completed
+@rai1	123	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=31; record=appendix@1; bytes=108; tokens=17; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=7; output_bytes=132
+@rai1	124	ok	record=appendix@1; bytes=108; worker=EL0; state=completed; index=after:1,east:1,field:1,from:1,gate:1,index:1,inspect:1,keep:1,notes:1,optional:1,preview:1,rain:1,required:1,separate:1,the:2,this:1
+@rai1	125	ok	coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=33; record=brief@1; bytes=56; tokens=9; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=8; output_bytes=70
+@rai1	126	ok	record=brief@1; bytes=56; worker=EL0; state=completed; index=a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1
+@rai1	127	err	coord_already_completed
+@rai1	128	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=33; record=brief@1; bytes=56; tokens=9; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=8; output_bytes=70
+@rai1	129	ok	record=brief@1; bytes=56; worker=EL0; state=completed; index=a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1
+@rai1	130	ok	coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=35; record=notes@1; bytes=30; tokens=7; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=9; output_bytes=33
+@rai1	131	ok	record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1
+@rai1	132	err	coord_already_completed
+@rai1	133	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=35; record=notes@1; bytes=30; tokens=7; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=9; output_bytes=33
+@rai1	134	ok	record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1
+@rai1	135	ok	coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=37; record=notes@2; bytes=44; tokens=9; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=10; output_bytes=50
+@rai1	136	ok	record=notes@2; bytes=44; worker=EL0; state=completed; index=11:1,8:1,at:1,b:1,first:1,pump:2,review:1,safety:1
+@rai1	137	err	coord_already_completed
+@rai1	138	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=37; record=notes@2; bytes=44; tokens=9; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=10; output_bytes=50
+@rai1	139	ok	record=notes@2; bytes=44; worker=EL0; state=completed; index=11:1,8:1,at:1,b:1,first:1,pump:2,review:1,safety:1
+@rai1	140	ok	coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=39; record=checklist@1; bytes=41; tokens=6; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=11; output_bytes=41
+@rai1	141	ok	record=checklist@1; bytes=41; worker=EL0; state=completed; index=cables:1,check:2,first:1,safety:1,seals:1
+@rai1	142	err	coord_already_completed
+@rai1	143	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=39; record=checklist@1; bytes=41; tokens=6; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=11; output_bytes=41
+@rai1	144	ok	record=checklist@1; bytes=41; worker=EL0; state=completed; index=cables:1,check:2,first:1,safety:1,seals:1
+@rai1	145	ok	coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=41; record=empty@1; bytes=0; tokens=0; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=12; output_bytes=1
+@rai1	146	ok	record=empty@1; bytes=0; worker=EL0; state=completed; index=-
+@rai1	147	err	coord_already_completed
+@rai1	148	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=41; record=empty@1; bytes=0; tokens=0; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=12; output_bytes=1
+@rai1	149	ok	record=empty@1; bytes=0; worker=EL0; state=completed; index=-
+@rai1	150	ok	coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=43; record=appendix@1; bytes=108; tokens=17; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=13; output_bytes=132
+@rai1	151	ok	record=appendix@1; bytes=108; worker=EL0; state=completed; index=after:1,east:1,field:1,from:1,gate:1,index:1,inspect:1,keep:1,notes:1,optional:1,preview:1,rain:1,required:1,separate:1,the:2,this:1
+@rai1	152	err	coord_already_completed
+@rai1	153	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=43; record=appendix@1; bytes=108; tokens=17; completed=6; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=6; cache_hits=13; output_bytes=132
+@rai1	154	ok	record=appendix@1; bytes=108; worker=EL0; state=completed; index=after:1,east:1,field:1,from:1,gate:1,index:1,inspect:1,keep:1,notes:1,optional:1,preview:1,rain:1,required:1,separate:1,the:2,this:1
+@rai1	155	ok	coordinator=EL0; worker=EL0; state=stopped; event=none; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=0; b_slices=0; trace=
+@rai1	156	ok	coordinator=EL0; worker=EL0; state=idle; event=started; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=1; a_slices=0; b_slices=0; trace=AO,BD,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0
+@rai1	157	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=45; record=appendix@1; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0
+@rai1	158	err	coord_stale_proposal
+@rai1	159	ok	coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=45; record=appendix@1; bytes=108; tokens=17; completed=1; a_calls=24; b_calls=22; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=132
+@rai1	160	ok	record=appendix@1; bytes=108; worker=EL0; state=completed; index=after:1,east:1,field:1,from:1,gate:1,index:1,inspect:1,keep:1,notes:1,optional:1,preview:1,rain:1,required:1,separate:1,the:2,this:1
+coord.result
+record=appendix@1; bytes=108; worker=EL0; state=completed; index=after:1,east:1,field:1,from:1,gate:1,index:1,inspect:1,keep:1,notes:1,optional:1,preview:1,rain:1,required:1,separate:1,the:2,this:1
+@rai1	161	ok	coordinator=EL0; worker=EL0; state=stopped; event=none; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=0; b_slices=0; trace=
+@rai1	162	ok	coordinator=EL0; worker=EL0; state=idle; event=started; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=1; a_slices=0; b_slices=0; trace=AO,BD,AH
+@rai1	163	err	coord_not_indexing
+@rai1	164	ok	coordinator=EL0; worker=EL0; state=stopped; event=none; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=0; b_slices=0; trace=
+@rai1	165	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400b5000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	166	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	167	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244

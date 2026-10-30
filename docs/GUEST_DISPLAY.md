@@ -139,3 +139,14 @@ Generated screenshots and raw transcripts are stored under `target/verification/
 
 The adapter is an original implementation of those interfaces. ramfb is an initial
 software display for the fixed TCG demo; no accelerated GPU performance is claimed.
+
+## Retained coordinator views
+
+The same native screen now renders `coord.start index`, observe, propose, status
+and result outcomes. A new goal displays WAITING FOR PLAN and its exact proposal
+command. Successful jobs display INDEX CREATED; cache reuse displays INDEX REUSED
+with the original revision's content. Duplicate observations/status preserve the
+reuse label. Errors replace the visible result; successful status restores the
+retained state. Stop returns to the standalone ready screen. The coordinator
+and worker remain at EL0; the renderer still runs at EL1. See
+[RETAINED_INDEX.md](RETAINED_INDEX.md).

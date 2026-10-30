@@ -362,3 +362,12 @@ record.count. Partial or timed-out output is not published: errors are
 such as `user_memory_busy`. Stop any active worker/coordinator before invoking it.
 No new SVC operation is introduced. See [RECORD_INDEX.md](RECORD_INDEX.md) for
 the independent checker, bounds and distinction from a complete review pack.
+
+## Retained index mode
+
+`coord.start` optionally accepts exactly one argument, `index`; default count
+mode and its reports remain unchanged. `coord.result` takes no argument and
+returns the current completed index in the `record.index` artifact format.
+Index-mode reports append operation, cached_records, cache_hits and output_bytes.
+Observe/propose use the existing record and ticket syntax. See
+[RETAINED_INDEX.md](RETAINED_INDEX.md) for fields, errors and a reproducible cycle.

@@ -10,9 +10,13 @@ const INK: u32 = 0x203b34;
 const MUTED: u32 = 0x657970;
 const GREEN: u32 = 0x367763;
 const LINE: u32 = 0xdce3da;
+#[derive(Clone, Copy)]
 pub enum View<'a> {
     Ready,
+    CoordinatorReady,
     Index(RecordId, &'a str),
+    Reused(RecordId, &'a str),
+    Pending(RecordId, u64),
     Error(&'a str),
 }
 struct Label {
@@ -112,7 +116,7 @@ pub fn render(s: &mut Display, view: View<'_>) {
     line(s, 538);
     text(s, "01 / CONTENT", 40, 554, Size::Small, MUTED);
     match view {
-        View::Ready => {
+        View::Ready | View::CoordinatorReady => {
             circle(s, 430, 563, 4, GREEN);
             text(s, "Make sense of a note.", 40, 580, Size::Body, INK);
             text(
@@ -124,13 +128,35 @@ pub fn render(s: &mut Display, view: View<'_>) {
                 MUTED,
             );
             text(s, "In the console, enter:", 40, 655, Size::Small, MUTED);
-            text(s, "record.index notes@1", 40, 680, Size::Body, GREEN);
+            text(
+                s,
+                if matches!(view, View::CoordinatorReady) {
+                    "coord.observe notes@1"
+                } else {
+                    "record.index notes@1"
+                },
+                40,
+                680,
+                Size::Body,
+                GREEN,
+            );
         }
-        View::Index(id, output) => {
+        View::Index(id, output) | View::Reused(id, output) => {
             let mut label = Label::new();
             let _ = write!(label, "{id}");
             text(s, label.text(), 40, 580, Size::Body, INK);
-            text(s, "INDEX CREATED", 336, 558, Size::Small, GREEN);
+            text(
+                s,
+                if matches!(view, View::Reused(..)) {
+                    "INDEX REUSED"
+                } else {
+                    "INDEX CREATED"
+                },
+                336,
+                558,
+                Size::Small,
+                GREEN,
+            );
             if output == "-" {
                 text(
                     s,
@@ -175,6 +201,23 @@ pub fn render(s: &mut Display, view: View<'_>) {
                     x += width;
                 }
             }
+        }
+        View::Pending(id, ticket) => {
+            text(s, "WAITING FOR PLAN", 309, 558, Size::Small, MUTED);
+            let mut label = Label::new();
+            let _ = write!(label, "{id}");
+            text(s, label.text(), 40, 580, Size::Body, INK);
+            text(
+                s,
+                "The coordinator is waiting for a proposal.",
+                40,
+                621,
+                Size::Small,
+                MUTED,
+            );
+            let mut label = Label::new();
+            let _ = write!(label, "coord.propose {ticket}:{id}");
+            text(s, label.text(), 40, 667, Size::Small, GREEN);
         }
         View::Error(code) => {
             text(s, "NOT COMPLETED", 323, 558, Size::Small, 0x98644c);

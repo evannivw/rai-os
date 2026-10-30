@@ -84,3 +84,11 @@ The public repository, eligible Meta integration, three-minute video and clear
 identification of event-built work are submission requirements from the supplied
 guide. Preserve earlier work and the unresolved eligibility distinction. This
 plan does not declare compliance or eligibility on the organizers' behalf.
+
+## October 30: retained useful output
+
+The [retained index](RETAINED_INDEX.md) supplies a reproducible notes@1 -> notes@2
+-> notes@1 cycle: two real EL0 worker jobs and an exact cache hit, with native
+created/reused views. This manual deterministic example is not an AI advantage
+benchmark. Meta-selected indexing, combined outputs, the fair baseline, final
+three-minute video and submission remain outstanding.

@@ -10,6 +10,8 @@ pub enum Operation<'a> {
     RecordCount(&'a str),
     RecordIndex(&'a str),
     CoordStart,
+    CoordIndexStart,
+    CoordResult,
     CoordObserve(&'a str),
     CoordPropose(u32, &'a str),
     CoordStatus,
@@ -45,6 +47,8 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         "timer.check" => Ok(Operation::TimerCheck),
         "ipc.wait" => Ok(Operation::IpcWait),
         "coord.start" => Ok(Operation::CoordStart),
+        "coord.start index" => Ok(Operation::CoordIndexStart),
+        "coord.result" => Ok(Operation::CoordResult),
         "coord.status" => Ok(Operation::CoordStatus),
         "coord.stop" => Ok(Operation::CoordStop),
         _ if line.starts_with("coord.observe ") => Ok(Operation::CoordObserve(&line[14..])),
@@ -90,7 +94,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, record.count <key>, record.index <key>, worker.start, worker.count <key>, worker.status, worker.stop, coord.start, coord.observe <key>, coord.propose <ticket>:<key>, coord.status, coord.stop, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
+            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, record.count <key>, record.index <key>, worker.start, worker.count <key>, worker.status, worker.stop, coord.start [index], coord.result, coord.observe <key>, coord.propose <ticket>:<key>, coord.status, coord.stop, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
     }
 }
 
@@ -103,6 +107,8 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
         Operation::Info => "info".to_owned(),
         Operation::TimerCheck => "timer.check".to_owned(),
         Operation::IpcWait => "ipc.wait".to_owned(),
+        Operation::CoordIndexStart => "coord.start\tindex".to_owned(),
+        Operation::CoordResult => "coord.result".to_owned(),
         Operation::CoordStart => "coord.start".to_owned(),
         Operation::CoordStatus => "coord.status".to_owned(),
         Operation::CoordStop => "coord.stop".to_owned(),

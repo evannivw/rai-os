@@ -8,6 +8,8 @@ mod context;
 #[cfg(feature = "guest-display")]
 mod display;
 mod exceptions;
+mod index_cursor;
+mod index_stream;
 mod ipc;
 mod memory;
 mod mmu;
@@ -78,6 +80,13 @@ fn panic(_info: &PanicInfo) -> ! {
 // Fault-injection builds run one intentional exception at a time.
 const _: () = assert!(
     cfg!(feature = "exception-self-test") as usize
+        + cfg!(feature = "index-stream-test-order") as usize
+        + cfg!(feature = "index-stream-test-length") as usize
+        + cfg!(feature = "index-stream-test-truncated") as usize
+        + cfg!(feature = "index-stream-test-overflow") as usize
+        + cfg!(feature = "index-stream-test-after-end") as usize
+        + cfg!(feature = "index-stream-test-format") as usize
+        + cfg!(feature = "coord-index-test-forged-reuse") as usize
         + cfg!(feature = "user-test-display-read") as usize
         + cfg!(feature = "user-test-display-write") as usize
         + cfg!(feature = "user-test-display-execute") as usize

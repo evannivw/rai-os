@@ -106,3 +106,11 @@ text file alone does not authenticate which CPU produced it; actual execution is
 established separately by real-QEMU tests and linked EL0 entry checks. An exported
 file remains untrusted until the checker succeeds. An interrupted disk write may
 leave an incomplete file that must be rejected, not treated as a committed pack.
+
+## Retained execution
+
+`coord.start index` now runs the same index serializer through the retained EL0
+worker. Completed immutable revisions can be reused without another worker job;
+`coord.result` exposes the identical independently checkable artifact format.
+Standalone `record.index` remains available outside retained sessions. See
+[RETAINED_INDEX.md](RETAINED_INDEX.md) for commands, limits and storage ownership.

@@ -1299,3 +1299,60 @@ overflowing EL0 output: the view reports unavailable statistics instead of
 panicking, and oversized labels explicitly defer to the console. A pure boundary
 test passed; the affected normal graphical/fallback paths were rerun in both
 profiles and retained the same captured pixels for valid fixtures.
+
+
+## 2026-10-30 — Retained exact index and revision reuse
+
+Added coord.start index and coord.result while preserving default count mode and
+its existing 14-field report/Meta bridge. EL0 coordinator A retains admission and
+reuse policy; EL0 worker B constructs the exact index using a constant-space
+serializer shared with standalone record.index. Seven-byte scalar IPC chunks
+carry the index without exposing either private writable stack. The kernel
+validates order, encoding, padding, length, canonical structure, worker sequence,
+proposal identity and publication before committing one of six fixed revision
+slots. The payload cache is kernel-owned storage, not a new isolated memory
+service or a buffer on A's stack. Only metadata is supplied back to A.
+
+Observing notes@1, proposing it, completing notes@2 and returning to notes@1 now
+produces event=reused with completed=2, a_calls=2 and b_calls=0. A cache hit returns
+the exact original revision and does not run B. Pending goals cannot expose a
+previous artifact. Stop/fatal failure clears every slot and releases the pair's
+user-memory lease; old tickets remain invalid after restart. Index mode has a
+384-byte result bound, 128 syscall-attempt limit per task and 192 trace pairs.
+Count-mode limits remain unchanged. Timer slices still do not constitute an
+aggregate command deadline. Six immutable fixtures and synchronous commands
+remain the only source/dispatch model; there is no filesystem or background watch.
+
+Native views now display the actual pending goal/proposal, created index and
+reused index. Duplicate/status reads preserve the reuse label. Parse/execution
+errors replace visible content, failed status remains an error, and stop restores
+the original screen. Appearance outside the content area is unchanged. Renderer
+privilege remains EL1; this does not add a user-space compositor or touch input.
+
+Verification passed in debug and release: two stream boundary unit tests and
+15 real-QEMU boots per profile (normal retained session, twelve injected service/
+stream failures, normal graphical transitions, graphical truncated-stream failure).
+Each profile's 13 headless boots issued 424 protocol requests. Checks cover all
+six independently verified artifacts, independent IPC trace replay, exact reuse,
+wrong/stale/duplicate proposals, cache reset, forged reuse, truncated/oversized/
+misordered/noncanonical streams, wrong end length and data after completion.
+Failures after a successful first job remove both its cache entry and the partial
+next output. Tests reject forged audit reports and an artifact for the wrong
+revision. Native captures show pending/created/reused/error/stop and recovery;
+pending/reused debug and release PNGs match byte-for-byte. Raw normal UART and
+selected actual screenshots are retained under docs/evidence/2026-10-30-coord-index-*.
+
+Existing guest-coordinator count, persistent worker, standalone record-index,
+boot/protocol, offline guest-Meta bridge, private-stack isolation, user timeout
+and full native-display suites passed in both profiles. Host console integration
+also exercised the new start/index/reuse/result commands. Five console unit tests
+and 23 Meta unit tests passed; the existing host panel compiled. Rust formatting,
+default/display/new-fault-feature Clippy and host-console Clippy passed. No live
+provider request or credential change was made. Test coverage and exact commands
+are documented in RETAINED_INDEX.md.
+
+This is a deterministic reuse mechanism, not an AI efficiency result. The next
+increment is to connect the existing Meta proposal transport to these useful
+index artifacts. Combined multi-record outputs, fair baseline comparison, the
+three-minute video and final submission remain pending. The hackathon dates and
+November 4 deadline are unchanged.

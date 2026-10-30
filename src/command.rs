@@ -4,7 +4,7 @@ use crate::mmu::Snapshot as MmuSnapshot;
 use crate::task::{Snapshot, Task};
 use core::fmt;
 
-pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | record.index <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start | coord.observe <key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
+pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | record.index <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start [index] | coord.result | coord.observe <key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
 pub const INFO: &str =
     "RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected";
 
@@ -17,6 +17,8 @@ pub enum Operation<'a> {
     TimerCheck,
     IpcWait,
     CoordStart,
+    CoordIndexStart,
+    CoordResult,
     CoordObserve(crate::records::RecordId),
     CoordPropose(crate::schedule::coordinator::Proposal),
     CoordStatus,
@@ -49,6 +51,8 @@ pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
         "timer.check" => Ok(Operation::TimerCheck),
         "ipc.wait" => Ok(Operation::IpcWait),
         "coord.start" => Ok(Operation::CoordStart),
+        "coord.start index" => Ok(Operation::CoordIndexStart),
+        "coord.result" => Ok(Operation::CoordResult),
         "coord.status" => Ok(Operation::CoordStatus),
         "coord.stop" => Ok(Operation::CoordStop),
         "coord.observe" | "coord.propose" => Err("bad_args"),
@@ -126,6 +130,7 @@ pub struct Uptime {
 
 pub enum Reply<'a> {
     Coordinator(crate::schedule::coordinator::Report),
+    CoordIndex(crate::schedule::coordinator::Artifact),
     Worker(crate::schedule::worker::Status),
     WorkerCount(crate::schedule::worker::Count),
     Text(&'a str),
@@ -146,6 +151,7 @@ pub enum Reply<'a> {
 impl fmt::Display for Reply<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::CoordIndex(report) => write!(f, "{report}"),
             Self::Coordinator(report) => write!(f, "{report}"),
             Self::Worker(report) => write!(f, "{report}"),
             Self::WorkerCount(report) => write!(f, "{report}"),
@@ -180,6 +186,10 @@ pub fn execute<'a>(
     sessions: &mut crate::schedule::Sessions,
 ) -> Result<Reply<'a>, &'static str> {
     Ok(match operation {
+        Operation::CoordIndexStart => {
+            Reply::Coordinator(sessions.coordinator.start_index(timer, mmu)?)
+        }
+        Operation::CoordResult => Reply::CoordIndex(sessions.coordinator.artifact()?),
         Operation::CoordStart => Reply::Coordinator(sessions.coordinator.start(timer, mmu)?),
         Operation::CoordObserve(id) => {
             Reply::Coordinator(sessions.coordinator.observe(id, timer, mmu)?)

@@ -32,7 +32,12 @@ pub fn parse(line: &str) -> Result<Request<'_>, Error<'_>> {
         Some("info") => Operation::Info,
         Some("timer.check") => Operation::TimerCheck,
         Some("ipc.wait") => Operation::IpcWait,
-        Some("coord.start") => Operation::CoordStart,
+        Some("coord.start") => match fields.next() {
+            None => Operation::CoordStart,
+            Some("index") => Operation::CoordIndexStart,
+            _ => return Err(error("bad_args")),
+        },
+        Some("coord.result") => Operation::CoordResult,
         Some("coord.status") => Operation::CoordStatus,
         Some("coord.stop") => Operation::CoordStop,
         Some("coord.observe") => Operation::CoordObserve(

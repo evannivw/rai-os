@@ -173,3 +173,11 @@ freeze its appearance and return to useful guest-service execution. Next migrate
 the exact index into a retained coordinator job with bounded output transfer,
 then combine revision-aware results and compare policies fairly. No touch/window
 system, phone support or AI performance advantage is implied by the new screen.
+
+## October 30: retained index delivered
+
+The exact content index now runs as a retained EL0 coordinator/worker job, with
+bounded scalar output transfer, six immutable revision slots, explicit reuse
+without B execution and native observed-state rendering. See
+[RETAINED_INDEX.md](RETAINED_INDEX.md). Next connect the existing Meta transport
+to this mode, then build combined revision-aware outputs and compare fairly.

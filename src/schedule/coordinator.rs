@@ -3,6 +3,7 @@
 use super::{run_turn, runtime::valid_context};
 use crate::{
     context::Frame,
+    index_stream::{Stream, Text},
     ipc::{self, Mailboxes, Message, TaskId},
     mmu::{Mmu, TaskSpace},
     records::RecordId,
@@ -37,10 +38,36 @@ pub struct Report {
     completed: u64,
     calls: [u8; 2],
     slices: [u8; 2],
-    trace: [u8; 192],
+    trace: [u8; 384],
+    index_mode: bool,
+    active_reused: bool,
+    cached: u64,
+    hits: u64,
+    output_bytes: usize,
     length: usize,
 }
 impl Report {
+    #[cfg(feature = "guest-display")]
+    pub fn index_mode(&self) -> bool {
+        self.index_mode
+    }
+    #[cfg(feature = "guest-display")]
+    pub fn pending(&self) -> Option<(RecordId, u64)> {
+        if self.state != "awaiting_proposal" {
+            return None;
+        }
+        RecordId::from_raw(self.result >> 32)
+            .ok()
+            .map(|id| (id, self.ticket))
+    }
+    #[cfg(feature = "guest-display")]
+    pub fn reused(&self) -> bool {
+        self.active_reused
+    }
+    #[cfg(feature = "guest-display")]
+    pub fn failure(&self) -> Option<&'static str> {
+        (self.state == "failed").then_some(self.event)
+    }
     fn stopped() -> Self {
         Self {
             state: "stopped",
@@ -50,7 +77,12 @@ impl Report {
             completed: 0,
             calls: [0; 2],
             slices: [0; 2],
-            trace: [0; 192],
+            trace: [0; 384],
+            index_mode: false,
+            active_reused: false,
+            cached: 0,
+            hits: 0,
+            output_bytes: 0,
             length: 0,
         }
     }
@@ -84,7 +116,42 @@ impl fmt::Display for Report {
             }
             f.write_str(core::str::from_utf8(event).map_err(|_| fmt::Error)?)?;
         }
+        if self.index_mode {
+            write!(
+                f,
+                "; operation=record.index; cached_records={}; cache_hits={}; output_bytes={}",
+                self.cached, self.hits, self.output_bytes
+            )?;
+        }
         Ok(())
+    }
+}
+#[derive(Clone, Copy)]
+struct Cached {
+    result: u64,
+    text: Text,
+}
+pub struct Artifact {
+    id: RecordId,
+    text: Text,
+}
+impl Artifact {
+    pub fn id(&self) -> RecordId {
+        self.id
+    }
+    pub fn text(&self) -> &str {
+        self.text.as_str()
+    }
+}
+impl fmt::Display for Artifact {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "record={}; bytes={}; worker=EL0; state=completed; index={}",
+            self.id(),
+            self.id().bytes(),
+            self.text()
+        )
     }
 }
 /// Typed proposal boundary; tickets are nonzero u32 values, keys use the record allowlist.
@@ -99,6 +166,8 @@ pub struct Coordinator {
     report: Report,
     // Monotonic across stop/start within this boot. Never reuse a delayed proposal ticket.
     issued: u32,
+    cache: [Option<Cached>; 6],
+    input: Option<(u64, u32, RecordId)>,
 }
 fn endpoint(id: usize) -> TaskId {
     TaskId::from_raw(id as u64 + 1).expect("fixed task")
@@ -126,12 +195,33 @@ impl Coordinator {
             boxes: Mailboxes::new([0b10, 0b01]),
             report: Report::stopped(),
             issued: 0,
+            cache: [None; 6],
+            input: None,
         }
     }
     pub fn status(&self) -> Report {
         self.report
     }
+    pub fn artifact(&self) -> Result<Artifact, &'static str> {
+        if !self.report.index_mode {
+            return Err("coord_not_indexing");
+        }
+        if self.report.state != "completed" || self.lease.is_none() {
+            return Err("coord_result_unavailable");
+        }
+        let id = RecordId::from_raw(self.report.result >> 32)?;
+        let entry = self.cache[id.raw() as usize - 1].ok_or("coord_result_unavailable")?;
+        if entry.result != self.report.result {
+            return Err("coord_result_unavailable");
+        }
+        Ok(Artifact {
+            id,
+            text: entry.text,
+        })
+    }
     fn retire(&mut self) {
+        self.cache = [None; 6];
+        self.input = None;
         if self.lease.is_some() {
             // SAFETY: exclusive lease over both stack pages; tasks suspended, base map
             // restored by run_turn; single masked CPU, no DMA or live user references.
@@ -150,15 +240,29 @@ impl Coordinator {
     }
     fn fail(&mut self, error: &'static str) -> &'static str {
         self.retire();
+        self.report.cached = 0;
+        self.report.output_bytes = 0;
         self.report.state = "failed";
         self.report.event = error;
         error
     }
     pub fn start(&mut self, timer: &mut Timer, mmu: &Mmu) -> Result<Report, &'static str> {
+        self.start_mode(timer, mmu, false)
+    }
+    pub fn start_index(&mut self, timer: &mut Timer, mmu: &Mmu) -> Result<Report, &'static str> {
+        self.start_mode(timer, mmu, true)
+    }
+    fn start_mode(
+        &mut self,
+        timer: &mut Timer,
+        mmu: &Mmu,
+        index_mode: bool,
+    ) -> Result<Report, &'static str> {
         if self.report.state != "stopped" {
             return Err("coord_not_stopped");
         }
         self.lease = Some(Lease::acquire()?);
+        self.report.index_mode = index_mode;
         // SAFETY: fresh exclusive lease, neither task entered; fixed linker-owned RAM.
         unsafe {
             ptr::write_bytes(bounds(0).0.0 as *mut u8, 0, 8192);
@@ -175,6 +279,8 @@ impl Coordinator {
                 ..Frame::default()
             };
         }
+        self.tasks[0].frame.registers[0] = u64::from(index_mode);
+        self.input = None;
         self.finish_turn(timer, mmu)
     }
     pub fn observe(
@@ -217,12 +323,20 @@ impl Coordinator {
         }
     }
     fn input(&mut self, kind: u64, ticket: u32, id: RecordId) {
-        self.tasks[0].frame.registers[..4].copy_from_slice(&[0, kind, ticket as u64, id.raw()]);
+        self.input = Some((kind, ticket, id));
+        // EL0 owns cache-use policy; the gateway supplies only attested metadata.
+        let value = if self.report.index_mode {
+            self.cache[id.raw() as usize - 1].map_or(id.raw() << 32, |entry| entry.result)
+        } else {
+            id.raw()
+        };
+        self.tasks[0].frame.registers[..4].copy_from_slice(&[0, kind, ticket as u64, value]);
         self.tasks[0].wait = Wait::Ready;
     }
     fn trace(&mut self, id: usize, event: u8) -> Result<(), &'static str> {
         let n = self.report.length;
-        if n + 2 > self.report.trace.len() {
+        let limit = if self.report.index_mode { 384 } else { 192 };
+        if n + 2 > limit {
             return Err("coord_trace_limit");
         }
         self.report.trace[n] = b'A' + id as u8;
@@ -266,6 +380,9 @@ impl Coordinator {
         let mut publication = None;
         let mut worker_result = None;
         let mut worker_sequence = None;
+        let mut stream = Stream::new();
+        let mut end = None;
+        let mut requested = false;
         loop {
             let ready = [cursor, cursor ^ 1]
                 .into_iter()
@@ -304,7 +421,12 @@ impl Coordinator {
                     return Err("coord_task_fault");
                 }
                 self.report.calls[id] += 1;
-                if self.report.calls[id] == ipc::MAX_CALLS {
+                let limit = if self.report.index_mode {
+                    128
+                } else {
+                    ipc::MAX_CALLS
+                };
+                if self.report.calls[id] == limit {
                     self.trace(id, b'L')?;
                     return Err("coord_call_limit");
                 }
@@ -314,10 +436,49 @@ impl Coordinator {
                     10 => {
                         match self.boxes.send(endpoint(id), args[0], args[1], args[2]) {
                             Ok(()) => {
-                                if id == 1 && args[1] == 21 {
+                                if self.report.index_mode {
+                                    if id == 0 {
+                                        let (kind, ticket, record) =
+                                            self.input.ok_or("coord_index_request")?;
+                                        if requested
+                                            || args[0] != 2
+                                            || args[1] != 40
+                                            || kind != 31
+                                            || self.report.state != "awaiting_proposal"
+                                            || u64::from(ticket) != self.report.ticket
+                                            || record.raw() != self.report.result >> 32
+                                            || args[2] != record.raw()
+                                        {
+                                            return Err("coord_index_request");
+                                        }
+                                        requested = true;
+                                    } else {
+                                        if !requested || args[0] != 1 || end.is_some() {
+                                            return Err("coord_index_order");
+                                        }
+                                        match args[1] {
+                                            41 if worker_result.is_none() => {
+                                                worker_result = Some(args[2])
+                                            }
+                                            42 if worker_result.is_some() => {
+                                                stream.push(args[2])?
+                                            }
+                                            43 if worker_result.is_some() => {
+                                                if stream.len() == 0
+                                                    || args[2] & 0xffff_ffff != stream.len() as u64
+                                                {
+                                                    return Err("coord_index_length");
+                                                }
+                                                end = Some(args[2] & 0xffff_ffff);
+                                                worker_sequence = Some(args[2] >> 32);
+                                            }
+                                            _ => return Err("coord_index_order"),
+                                        }
+                                    }
+                                } else if id == 1 && args[1] == 21 {
                                     worker_result = Some(args[2]);
                                 }
-                                if id == 1 && args[1] == 23 {
+                                if !self.report.index_mode && id == 1 && args[1] == 23 {
                                     worker_sequence = Some(args[2]);
                                 }
                             }
@@ -372,7 +533,11 @@ impl Coordinator {
         }
         let [state, ticket, result, completed, event] =
             publication.ok_or("coord_missing_report")?;
-        if state > 2 || event > 7 || ticket > self.issued as u64 || completed > self.issued as u64 {
+        if state > 2
+            || event > (if self.report.index_mode { 8 } else { 7 })
+            || ticket > self.issued as u64
+            || completed > self.issued as u64
+        {
             return Err("coord_bad_report");
         }
         if state == 0 {
@@ -397,6 +562,17 @@ impl Coordinator {
             {
                 return Err("coord_bad_report");
             }
+            if self.report.index_mode {
+                let (kind, input_ticket, input_id) = self.input.ok_or("coord_bad_report")?;
+                if kind != 31
+                    || u64::from(input_ticket) != ticket
+                    || input_id.raw() != result >> 32
+                    || ticket != self.report.ticket
+                    || !requested
+                {
+                    return Err("coord_bad_report");
+                }
+            }
         } else if completed != self.report.completed
             || worker_result.is_some()
             || worker_sequence.is_some()
@@ -406,11 +582,51 @@ impl Coordinator {
         // A non-executing event may repeat a confirmed result, never invent one.
         if state == 2
             && event != 3
+            && event != 8
             && (self.report.state != "completed"
                 || result != self.report.result
                 || ticket != self.report.ticket)
         {
             return Err("coord_bad_report");
+        }
+        if self.report.index_mode {
+            if event == 3 {
+                let text = stream.finish(end.ok_or("coord_index_length")?, result & 0xffff)?;
+                let slot = (result >> 32) as usize - 1;
+                if let Some(old) = self.cache[slot]
+                    && (old.result != result || old.text != text)
+                {
+                    return Err("coord_index_changed");
+                }
+                // Only publish/store after full stream, attested worker completion and both waits.
+                self.cache[slot] = Some(Cached { result, text });
+            } else if event == 8 {
+                let (kind, input_ticket, input_id) = self.input.ok_or("coord_bad_report")?;
+                if state != 2
+                    || kind != 30
+                    || u64::from(input_ticket) != ticket
+                    || input_id.raw() != result >> 32
+                    || self.cache[input_id.raw() as usize - 1]
+                        .is_none_or(|entry| entry.result != result)
+                {
+                    return Err("coord_bad_report");
+                }
+                self.report.hits = self.report.hits.checked_add(1).ok_or("coord_cache_limit")?;
+            }
+            if event == 1 || event == 3 {
+                self.report.active_reused = false;
+            } else if event == 8 {
+                self.report.active_reused = true;
+            }
+            self.report.cached = self.cache.iter().filter(|entry| entry.is_some()).count() as u64;
+            self.report.output_bytes = if state == 2 {
+                self.cache[(result >> 32) as usize - 1]
+                    .ok_or("coord_bad_report")?
+                    .text
+                    .len()
+            } else {
+                0
+            };
         }
         self.report.state = ["idle", "awaiting_proposal", "completed"][state as usize];
         self.report.event = [
@@ -422,6 +638,7 @@ impl Coordinator {
             "wrong_record",
             "already_completed",
             "no_goal",
+            "reused",
         ][event as usize];
         self.report.ticket = ticket;
         self.report.result = result;

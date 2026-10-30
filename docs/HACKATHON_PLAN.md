@@ -215,3 +215,12 @@ freeze its appearance and return to useful guest-service execution. Next migrate
 the exact index into a retained coordinator job with bounded output transfer,
 then combine revision-aware results and compare policies fairly. No touch/window
 system, phone support or AI performance advantage is implied by the new screen.
+
+## October 30: retained index slice delivered
+
+The exact index now passes through the guest coordinator/worker, bounded scalar
+IPC and validated revision storage. The native display exposes actual pending,
+created and reused states. The Meta bridge continues to count; extend it to this
+useful artifact next, then combine revision-aware results and measure a fair
+comparison. This increment makes no AI-performance claim and does not change
+the stated event dates or deadline. See [RETAINED_INDEX.md](RETAINED_INDEX.md).

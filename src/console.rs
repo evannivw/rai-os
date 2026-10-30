@@ -33,6 +33,18 @@ impl Console<'_> {
     ) -> Result<command::Reply<'a>, &'static str> {
         #[cfg(feature = "guest-display")]
         let is_index = matches!(operation, command::Operation::RecordIndex(_));
+        #[cfg(feature = "guest-display")]
+        let is_coordinator_index = matches!(
+            operation,
+            command::Operation::CoordIndexStart | command::Operation::CoordResult
+        ) || (self.sessions.coordinator.status().index_mode()
+            && matches!(
+                operation,
+                command::Operation::CoordObserve(_)
+                    | command::Operation::CoordPropose(_)
+                    | command::Operation::CoordStatus
+                    | command::Operation::CoordStop
+            ));
         let result = command::execute(
             operation,
             self.clock.snapshot(),
@@ -53,11 +65,49 @@ impl Console<'_> {
                 _ => {}
             }
         }
+        #[cfg(feature = "guest-display")]
+        if is_coordinator_index && let Some(display) = &mut self.display {
+            use crate::display::view::{self, View};
+            match &result {
+                Err(code) => view::render(display, View::Error(code)),
+                Ok(_) => {
+                    let report = self.sessions.coordinator.status();
+                    if let Ok(artifact) = self.sessions.coordinator.artifact() {
+                        let value = if report.reused() {
+                            View::Reused(artifact.id(), artifact.text())
+                        } else {
+                            View::Index(artifact.id(), artifact.text())
+                        };
+                        view::render(display, value);
+                    } else if let Some((id, ticket)) = report.pending() {
+                        view::render(display, View::Pending(id, ticket));
+                    } else if let Some(error) = report.failure() {
+                        view::render(display, View::Error(error));
+                    } else {
+                        view::render(
+                            display,
+                            if report.index_mode() {
+                                View::CoordinatorReady
+                            } else {
+                                View::Ready
+                            },
+                        );
+                    }
+                }
+            }
+        }
         result
     }
     fn parse_error(&mut self, line: &str, code: &str) {
         #[cfg(feature = "guest-display")]
-        if (line.starts_with("record.index") || line.split('\t').nth(2) == Some("record.index"))
+        if (line.starts_with("record.index")
+            || line.split('\t').nth(2) == Some("record.index")
+            || (self.sessions.coordinator.status().index_mode()
+                && (line.starts_with("coord.")
+                    || line
+                        .split('\t')
+                        .nth(2)
+                        .is_some_and(|op| op.starts_with("coord.")))))
             && let Some(display) = &mut self.display
         {
             crate::display::view::render(display, crate::display::view::View::Error(code));

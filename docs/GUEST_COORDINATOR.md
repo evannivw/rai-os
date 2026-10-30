@@ -182,3 +182,13 @@ integration is now available as `--guest`: it reads the pending goal/ticket,
 asks Meta for a supported proposal and submits it through this boundary while
 keeping the guest authoritative over admission and observed completion.
 See [GUEST_META_BRIDGE.md](GUEST_META_BRIDGE.md) and the current [delivery plan](DEMO_PLAN.md).
+
+## Retained index extension
+
+The count-mode behavior above remains available unchanged. `coord.start index`
+now selects exact indexing, bounded scalar output transfer and six immutable
+revision slots. `coord.result` retrieves the active completed artifact, and
+observing a previously completed revision produces `event=reused` without a
+worker turn. See [RETAINED_INDEX.md](RETAINED_INDEX.md) for the different mode
+budgets, metadata ABI, ownership, native views and verification. The Meta bridge
+still uses count mode.

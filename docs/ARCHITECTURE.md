@@ -170,3 +170,12 @@ desktop/window system remains pending.
 - https://github.com/qemu/qemu/blob/master/hw/char/pl011.c
 
 See [ROADMAP.md](ROADMAP.md) for completed foundations and the next service prerequisites.
+
+## Retained exact indexes
+
+The optional coordinator index mode retains EL0 policy and worker contexts.
+A owns goal/admission/reuse decisions, B serializes exact indexes through bounded
+scalar IPC, and the kernel holds six committed 384-byte result slots after
+stream/publication validation. No task receives another task's writable pointer.
+The native view renders pending/created/reused outcomes. See
+[RETAINED_INDEX.md](RETAINED_INDEX.md); count-mode Meta transport is unchanged.
