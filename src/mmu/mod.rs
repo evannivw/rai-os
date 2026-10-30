@@ -2,6 +2,8 @@
 mod tables;
 use crate::memory::{Memory, Page};
 use core::{arch::asm, fmt, ptr};
+#[cfg(feature = "guest-display")]
+pub(crate) use tables::display_memory;
 use tables::{Layout, MAIR, TABLE_COUNT, TCR, UserLayout};
 
 #[derive(Clone, Copy)]

@@ -72,7 +72,7 @@ still deny EL0 and set unprivileged execute-never. WXN additionally
 forbids execution of writable mappings. Instruction/data caches remain disabled;
 this increment makes no speed or battery claim.
 
-Only RAM from 0x40080000 through the exclusive pool end is mapped. The linker
+In the default headless build, only RAM from 0x40080000 through the exclusive pool end is mapped. The linker
 requires the entire kernel/stacks/pool to fit below 0x40200000. Low RAM containing
 the DTB, the rest of the 128 MiB RAM, and other device ranges are unmapped. This is
 a deliberate small initial window, not general device discovery. All section
@@ -124,3 +124,14 @@ Architectural references:
 The October 28 timer increment used six tables and 250 free pages. Current
 [task-map ownership](TASK_MEMORY.md) uses twelve tables and 244 free pages.
 Earlier evidence files retain the actual counts from their original runs.
+
+
+## Optional native display mapping — October 30
+
+The guest-display feature adds an EL1-only Device page at 0x09020000 for fw_cfg
+and one normal non-cacheable EL1-only RW/NX L2 block at 0x41000000..0x41200000.
+The linker reserves that entire 2 MiB separately from the kernel/page pool. All
+three roots share the mappings, with no alias or extra table-page allocation.
+EL0 read/write/execute attempts on display RAM and access to fw_cfg were tested
+as real hardware faults. See [GUEST_DISPLAY.md](GUEST_DISPLAY.md) for the adapter
+contract and graphics-specific tests. The default build keeps the original map.

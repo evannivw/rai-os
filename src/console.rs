@@ -16,50 +16,116 @@ fn response(id: &str, status: &str, payload: impl Display) {
     uart::write("\n");
 }
 
-fn dispatch(
-    line: &str,
-    clock: &Clock,
-    task: &mut Task,
-    memory: &mut Memory,
-    mmu: &Mmu,
-    timer: &mut Timer,
-    sessions: &mut crate::schedule::Sessions,
-) {
-    if line.starts_with('@') {
-        match protocol::parse(line) {
-            Ok(request) => {
-                match command::execute(
-                    request.operation,
-                    clock.snapshot(),
-                    task,
-                    memory,
-                    mmu,
-                    timer,
-                    sessions,
-                ) {
+struct Console<'a> {
+    clock: &'a Clock,
+    task: Task,
+    memory: &'a mut Memory,
+    mmu: &'a Mmu,
+    timer: &'a mut Timer,
+    sessions: crate::schedule::Sessions,
+    #[cfg(feature = "guest-display")]
+    display: Option<crate::display::Display>,
+}
+impl Console<'_> {
+    fn execute<'a>(
+        &mut self,
+        operation: command::Operation<'a>,
+    ) -> Result<command::Reply<'a>, &'static str> {
+        #[cfg(feature = "guest-display")]
+        let is_index = matches!(operation, command::Operation::RecordIndex(_));
+        let result = command::execute(
+            operation,
+            self.clock.snapshot(),
+            &mut self.task,
+            self.memory,
+            self.mmu,
+            self.timer,
+            &mut self.sessions,
+        );
+        #[cfg(feature = "guest-display")]
+        if is_index && let Some(display) = &mut self.display {
+            use crate::display::view::{self, View};
+            match &result {
+                Ok(command::Reply::Index(report)) => {
+                    view::render(display, View::Index(report.id(), report.output()))
+                }
+                Err(code) => view::render(display, View::Error(code)),
+                _ => {}
+            }
+        }
+        result
+    }
+    fn parse_error(&mut self, line: &str, code: &str) {
+        #[cfg(feature = "guest-display")]
+        if (line.starts_with("record.index") || line.split('\t').nth(2) == Some("record.index"))
+            && let Some(display) = &mut self.display
+        {
+            crate::display::view::render(display, crate::display::view::View::Error(code));
+        }
+        #[cfg(not(feature = "guest-display"))]
+        let _ = (line, code);
+    }
+    fn dispatch(&mut self, line: &str) {
+        if line.starts_with('@') {
+            match protocol::parse(line) {
+                Ok(request) => match self.execute(request.operation) {
                     Ok(reply) => response(request.id, "ok", reply),
                     Err(code) => response(request.id, "err", code),
+                },
+                Err(error) => {
+                    self.parse_error(line, error.code);
+                    response(error.id, "err", error.code);
                 }
             }
-            Err(error) => response(error.id, "err", error.code),
-        }
-    } else if !line.is_empty() {
-        match command::parse_shell(line).and_then(|op| {
-            command::execute(op, clock.snapshot(), task, memory, mmu, timer, sessions)
-        }) {
-            Ok(reply) => uart::write_display(reply),
-            Err(code) => {
-                uart::write("error: ");
-                uart::write(code);
+        } else if !line.is_empty() {
+            let result = match command::parse_shell(line) {
+                Ok(operation) => self.execute(operation),
+                Err(code) => {
+                    self.parse_error(line, code);
+                    Err(code)
+                }
+            };
+            match result {
+                Ok(reply) => uart::write_display(reply),
+                Err(code) => {
+                    uart::write("error: ");
+                    uart::write(code);
+                }
             }
+            uart::write("\n");
         }
-        uart::write("\n");
     }
 }
 
 pub fn run(clock: &Clock, memory: &mut Memory, mmu: &Mmu, timer: &mut Timer) -> ! {
-    let mut task = Task::new();
-    let mut sessions = crate::schedule::Sessions::new();
+    #[cfg(feature = "guest-display")]
+    // SAFETY: sole owner at boot, fixed mappings active, one CPU/IRQs masked.
+    let display = match unsafe { crate::display::Display::initialize() } {
+        Ok(Some(mut display)) => {
+            crate::display::view::render(&mut display, crate::display::view::View::Ready);
+            uart::write("Display ready: 480x800 guest framebuffer\n");
+            Some(display)
+        }
+        Ok(None) => {
+            uart::write("Display unavailable: ramfb not configured\n");
+            None
+        }
+        Err(error) => {
+            uart::write(error);
+            uart::write("\n");
+            None
+        }
+    };
+    let mut console = Console {
+        clock,
+        task: Task::new(),
+        memory,
+        mmu,
+        timer,
+        sessions: crate::schedule::Sessions::new(),
+        #[cfg(feature = "guest-display")]
+        display,
+    };
     let mut buffer = [0u8; CAPACITY];
     let mut length = 0;
     let mut rejected = None;
@@ -68,7 +134,7 @@ pub fn run(clock: &Clock, memory: &mut Memory, mmu: &Mmu, timer: &mut Timer) -> 
     uart::write("Console ready: type help for commands\n");
     loop {
         // Every loop gets a bounded task step, even during a partial/invalid frame.
-        task.step(clock.snapshot().milliseconds);
+        console.task.step(clock.snapshot().milliseconds);
         let byte = match uart::try_get() {
             Ok(Some(byte)) => byte,
             Ok(None) => {
@@ -95,7 +161,7 @@ pub fn run(clock: &Clock, memory: &mut Memory, mmu: &Mmu, timer: &mut Timer) -> 
             } else {
                 // Input was restricted to ASCII; keep a checked conversion anyway.
                 match core::str::from_utf8(&buffer[..length]) {
-                    Ok(line) => dispatch(line, clock, &mut task, memory, mmu, timer, &mut sessions),
+                    Ok(line) => console.dispatch(line),
                     Err(_) => response("0", "err", "invalid_byte"),
                 }
             }

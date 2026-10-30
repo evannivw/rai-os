@@ -204,3 +204,14 @@ pixels, then observed index/error rendering. No finished kernel is required to
 begin that work. Native graphics remain unimplemented. Return afterward to
 retained jobs, multi-record/revision-aware results and fair comparison; the
 [delivery plan](DEMO_PLAN.md) and submission deadline remain in force.
+
+
+## October 30: native first screen delivered
+
+The [native guest display](GUEST_DISPLAY.md) now draws actual RAI-OS pixels and
+observed index/error results in QEMU, with optional protected framebuffer/device
+mappings and verified failure containment. The first visual slice is complete;
+freeze its appearance and return to useful guest-service execution. Next migrate
+the exact index into a retained coordinator job with bounded output transfer,
+then combine revision-aware results and compare policies fairly. No touch/window
+system, phone support or AI performance advantage is implied by the new screen.

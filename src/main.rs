@@ -5,6 +5,8 @@ mod clock;
 mod command;
 mod console;
 mod context;
+#[cfg(feature = "guest-display")]
+mod display;
 mod exceptions;
 mod ipc;
 mod memory;
@@ -76,6 +78,10 @@ fn panic(_info: &PanicInfo) -> ! {
 // Fault-injection builds run one intentional exception at a time.
 const _: () = assert!(
     cfg!(feature = "exception-self-test") as usize
+        + cfg!(feature = "user-test-display-read") as usize
+        + cfg!(feature = "user-test-display-write") as usize
+        + cfg!(feature = "user-test-display-execute") as usize
+        + cfg!(feature = "user-test-fw-cfg") as usize
         + cfg!(feature = "index-test-partial") as usize
         + cfg!(feature = "index-test-spin") as usize
         + cfg!(feature = "coord-test-forged-completion") as usize

@@ -6,6 +6,11 @@ license = "Apache-2.0"
 description = "Educational AArch64 kernel for QEMU virt"
 
 [features]
+guest-display = []
+user-test-display-read = ["guest-display"]
+user-test-display-write = ["guest-display"]
+user-test-display-execute = ["guest-display"]
+user-test-fw-cfg = ["guest-display"]
 index-test-partial = []
 index-test-spin = []
 coord-test-forged-completion = []

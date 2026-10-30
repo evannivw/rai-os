@@ -5,6 +5,16 @@ pub struct Report {
     id: RecordId,
     execution: user::Report,
 }
+impl Report {
+    #[cfg(feature = "guest-display")]
+    pub fn id(&self) -> RecordId {
+        self.id
+    }
+    #[cfg(feature = "guest-display")]
+    pub fn output(&self) -> &str {
+        self.execution.successful_output().unwrap_or("")
+    }
+}
 pub fn build(id: RecordId, timer: &mut Timer) -> Result<Report, &'static str> {
     let execution = user::run(timer, user::Program::RecordIndex(id))?;
     if execution.successful_output()?.is_empty() {

@@ -1221,3 +1221,81 @@ claimed. The index is not yet a Meta-selected retained job or the full multi-rec
 review pack, and no AI efficiency advantage has been established. Subsequent work
 must connect useful jobs/results, revisions and fair comparison while preserving
 the submission deadline and historical contribution dates.
+
+
+## 2026-10-30 — First native RAI-OS screen with protected framebuffer
+
+Delivered the user's requested lightweight visual direction as actual guest
+pixels: a warm-paper portrait layout, understated type, original geometric mark
+and fine-line constellation. The illustration is decorative, not fabricated
+agent/CPU/battery telemetry. The lower area starts with an actionable console
+command and renders actual record.index revision, token statistics and entries,
+with distinct empty/error states. Index failure replaces the previous result;
+unrelated commands leave it unchanged. This is the first guest screen, not the
+older Mac panel, interactive touch UI or completed desktop/window system.
+
+Added an opt-in guest-display feature and scripts/desktop.sh (release by default).
+The fixed TCG virt-9.2 machine gains ramfb; scripts/qemu.sh retains its headless
+default and supports visible Cocoa or capture-only display modes. A new fw_cfg
+adapter discovers/configures the device with bounded enumeration and DMA polling.
+The optional linker reservation is 2 MiB at 0x41000000..0x41200000. Pixel storage is
+1,536,000 bytes; descriptor/configuration data occupy a separate reserved final
+page so timeout cannot leave DMA pointing at expired stack data. Barriers order
+non-cacheable writes. No heap, guest networking or external Cargo dependency was
+introduced. The headless build has no framebuffer reservation or display mappings.
+
+The MMU adds one EL1-only RW/NX normal L2 block and one EL1-only/NX Device page for
+fw_cfg, shared identically by the base/A/B roots. Table ownership remains twelve
+pages with 244 available pool pages. Presentation receives observed results and
+never owns command/AI policy or device registers. The display owner has a private
+constructor and clipped pixel access. This renderer currently shares EL1 privilege;
+it is not an isolated GUI service. The content-index program remains at EL0 and
+cannot overlap retained worker/coordinator ownership of user RAM.
+
+Typography uses licensed Ubuntu Light from the existing epaint_default_fonts
+0.32.3 distribution. The original font, copyright notice and UFL-1.0 license are
+included. The modified font is named Ubuntu Light derivative RAI ASCII. Its
+committed 4-bit glyph coverage is 45,701 bytes plus metrics. Pillow 11.3.0 with
+FreeType 2.13.3 generated those assets outside the kernel; exact regeneration was
+checked. No font engine or source TTF is linked into the guest. Pixel geometry and
+renderer code are original. Component sizes do not establish whole-OS efficiency.
+
+Real QEMU debug/release verification passed five table tests and eight boots per
+profile: the normal graphical path, missing device, bad configuration, DMA write
+rejection, and four intentional EL0 access failures. The test harness initially
+needed to recognize QEMU's expected warning for a deliberately injected non-opt/
+fw_cfg entry; after that correction all fallback tests passed. EL0 framebuffer
+read/write/execute probes produced exact level-2 permission faults, and fw_cfg
+reads produced a level-3 permission fault. Pixels stayed intact and indexing
+worked after each contained fault. Clippy prompted consolidation of the shared
+memory-layout module into a single definition; final checks passed.
+
+QMP screenshots validated actual dimensions/pixels and all six independently
+checked record indexes, revision changes, repeatable views, empty/denied/malformed
+requests, coordinator contention, stale-result removal and recovery. Selected
+captures matched byte-for-byte between debug and release. A separate release run
+opened the real macOS Cocoa/QEMU window, exercised the same normal transitions
+and closed its owned instance. Evidence includes raw UART transcripts and actual
+boot/notes screenshots under docs/evidence/2026-10-30-display-*.
+
+Existing headless boot/protocol, MMU faults, user faults, user timeout, record
+index, persistent worker, private-stack isolation and offline guest-Meta bridge
+suites passed in debug and release. Host console integration passed. Formatting,
+default/display and all four new fault-feature Clippy checks passed. No provider
+call or credential change was made. Graphics redraw happens only at boot/on index
+outcomes, but UART still busy-polls and caches stay disabled: no CPU/battery or AI
+performance advantage is claimed. Drawing time is included before a graphical
+UART response, outside the EL0 index budget.
+
+Both initial native-display gates are complete. Freeze this visual slice and
+return to kernel/service work: a retained coordinator index job with bounded
+output transfer, then revision-aware combined results and a fair comparison.
+Meta-selected indexing, the full review pack, interactive GUI, physical phones,
+comparative gains, final video and submission remain pending. Historical dates
+and the November 4 deadline are unchanged.
+
+Final display review also hardened derived token statistics against malformed or
+overflowing EL0 output: the view reports unavailable statistics instead of
+panicking, and oversized labels explicitly defer to the console. A pure boundary
+test passed; the affected normal graphical/fallback paths were rerun in both
+profiles and retained the same captured pixels for valid fixtures.

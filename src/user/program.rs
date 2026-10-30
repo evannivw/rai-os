@@ -30,6 +30,10 @@ pub(super) fn exit(code: u64) -> ! {
 #[unsafe(link_section = ".user.text")]
 pub extern "C" fn user_program() -> ! {
     #[cfg(any(
+        feature = "user-test-display-read",
+        feature = "user-test-display-write",
+        feature = "user-test-display-execute",
+        feature = "user-test-fw-cfg",
         feature = "user-test-read-kernel",
         feature = "user-test-write-code",
         feature = "user-test-uart",

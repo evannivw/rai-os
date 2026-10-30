@@ -62,5 +62,12 @@ SECTIONS {
     ASSERT(__data_start == __rodata_end, "MMU writable boundary mismatch")
     ASSERT((exception_vectors & 2047) == 0, "EL1 vectors must be 2 KiB aligned")
     ASSERT(exception_vectors_end - exception_vectors == 2048, "EL1 vectors must contain 16 slots")
+    .framebuffer 0x41000000 (NOLOAD) : {
+        __display_start = .;
+        KEEP(*(.framebuffer))
+        __display_end = .;
+    } > RAM
+    ASSERT(SIZEOF(.framebuffer) == 0 || SIZEOF(.framebuffer) == 2M, "Invalid display reservation")
+    ASSERT(__page_pool_end < __display_start, "Display overlaps allocator")
     /DISCARD/ : { *(.eh_frame*) }
 }

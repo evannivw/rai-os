@@ -88,3 +88,55 @@ core::arch::global_asm!(
     "msr cntp_ctl_el0, xzr",
     "ret",
 );
+
+// Deliberate unprivileged access to the display reservation/device.
+#[cfg(feature = "user-test-display-read")]
+core::arch::global_asm!(
+    ".section .user.text, \"ax\"",
+    ".global user_fault_probe",
+    ".global user_fault_instruction",
+    "user_fault_probe:",
+    "mov x9, #0x41000000",
+    "user_fault_instruction:",
+    "ldr w0, [x9]",
+    "ret",
+);
+
+// Deliberate unprivileged access to the display reservation/device.
+#[cfg(feature = "user-test-display-write")]
+core::arch::global_asm!(
+    ".section .user.text, \"ax\"",
+    ".global user_fault_probe",
+    ".global user_fault_instruction",
+    "user_fault_probe:",
+    "mov x9, #0x41000000",
+    "user_fault_instruction:",
+    "str wzr, [x9]",
+    "ret",
+);
+
+// Deliberate unprivileged access to the display reservation/device.
+#[cfg(feature = "user-test-display-execute")]
+core::arch::global_asm!(
+    ".section .user.text, \"ax\"",
+    ".global user_fault_probe",
+    ".global user_fault_instruction",
+    "user_fault_probe:",
+    "mov x9, #0x41000000",
+    "user_fault_instruction:",
+    "br x9",
+    "ret",
+);
+
+// Deliberate unprivileged access to the display reservation/device.
+#[cfg(feature = "user-test-fw-cfg")]
+core::arch::global_asm!(
+    ".section .user.text, \"ax\"",
+    ".global user_fault_probe",
+    ".global user_fault_instruction",
+    "user_fault_probe:",
+    "mov x9, #0x09020000",
+    "user_fault_instruction:",
+    "ldr w0, [x9]",
+    "ret",
+);

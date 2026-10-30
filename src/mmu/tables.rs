@@ -1,4 +1,7 @@
 //! Pure fixed-board table construction. No raw pointers or system registers.
+#[cfg(feature = "guest-display")]
+#[path = "../display/memory.rs"]
+pub(crate) mod display_memory;
 pub const PAGE_SIZE: usize = 4096;
 pub const TABLE_COUNT: usize = 12;
 pub const GICD: usize = 0x0800_0000;
@@ -59,7 +62,8 @@ fn leaf(address: usize, kind: Kind) -> u64 {
 
 /// Base: L1 root, low L2, UART L3, RAM L2, RAM L3, GIC L3.
 /// Each task adds a private root/RAM L2/RAM L3; low device tables are shared.
-/// All unmapped entries remain invalid. No blocks or aliases; only the explicit user regions permit EL0.
+/// All unmapped entries remain invalid. Only explicit user regions permit EL0.
+/// The optional display adds one EL1-only 2 MiB RAM block, never an alias.
 pub fn build(
     tables: [&mut [u64; 512]; TABLE_COUNT],
     addresses: [usize; TABLE_COUNT],
@@ -143,6 +147,14 @@ pub fn build(
     gic_l3[0] = leaf(GICD, Kind::Device);
     gic_l3[16] = leaf(GICC, Kind::Device);
     ram_l2[0] = addresses[4] as u64 | 3;
+    #[cfg(feature = "guest-display")]
+    {
+        const _: () = assert!(display_memory::END - display_memory::START == 2 * 1024 * 1024);
+        const _: () = assert!(display_memory::START.is_multiple_of(2 * 1024 * 1024));
+        uart_l3[(display_memory::FW_CFG >> 12) & 511] = leaf(display_memory::FW_CFG, Kind::Device);
+        // L2 block descriptor: same normal non-cacheable, EL1-only RW/NX policy.
+        ram_l2[(display_memory::START >> 21) & 511] = leaf(display_memory::START, Kind::Data) & !2;
+    }
     for address in (layout.text_start..layout.ram_end).step_by(PAGE_SIZE) {
         if (user.rodata_end..user.stack_start).contains(&address)
             || (user.stack_end..user.stack_end + PAGE_SIZE).contains(&address)
@@ -246,8 +258,14 @@ mod tests {
         assert_eq!(tables[5].iter().filter(|v| **v != 0).count(), 2);
         assert_eq!(tables[5][0] & ((7 << 2) | PXN | UXN), PXN | UXN);
         assert_eq!(tables[5][16] & ((7 << 2) | PXN | UXN), PXN | UXN);
-        assert_eq!(tables[2].iter().filter(|v| **v != 0).count(), 1);
-        assert_eq!(tables[3].iter().filter(|v| **v != 0).count(), 1);
+        assert_eq!(
+            tables[2].iter().filter(|v| **v != 0).count(),
+            1 + usize::from(cfg!(feature = "guest-display"))
+        );
+        assert_eq!(
+            tables[3].iter().filter(|v| **v != 0).count(),
+            1 + usize::from(cfg!(feature = "guest-display"))
+        );
     }
     #[test]
     fn task_roots_share_only_read_only_user_regions_and_protect_all_tables() {
@@ -262,7 +280,7 @@ mod tests {
             assert_eq!(tables[root][1], addresses[root + 1] as u64 | 3);
             assert_eq!(tables[root + 1][0], addresses[root + 2] as u64 | 3);
             assert!(tables[root][2..].iter().all(|e| *e == 0));
-            assert!(tables[root + 1][1..].iter().all(|e| *e == 0));
+            assert_eq!(tables[root + 1][1..], tables[3][1..]);
             for index in 0..512 {
                 let expected = if index == start + (id ^ 1) {
                     tables[4][index] & !(1 << 6)
@@ -282,6 +300,26 @@ mod tests {
                 assert_eq!(entry & ((3 << 6) | PXN | UXN), READ_ONLY | PXN | UXN);
             }
         }
+    }
+    #[cfg(feature = "guest-display")]
+    #[test]
+    fn display_is_reserved_privileged_non_executable_and_not_aliased() {
+        let mut tables = [[0; 512]; TABLE_COUNT];
+        build(tables.each_mut(), addresses(), layout()).unwrap();
+        let mmio = tables[2][(display_memory::FW_CFG >> 12) & 511];
+        assert_eq!(mmio & (3 | (3 << 6) | (7 << 2) | PXN | UXN), 3 | PXN | UXN);
+        assert_eq!(mmio & 0xffff_f000, display_memory::FW_CFG as u64);
+        for table in [3, 7, 10] {
+            let block = tables[table][8];
+            assert_eq!(block & 0xffe0_0000, display_memory::START as u64);
+            assert_eq!(
+                block & (3 | (3 << 6) | (7 << 2) | PXN | UXN),
+                1 | NORMAL | PXN | UXN
+            );
+            assert_eq!(tables[table][7], 0);
+            assert_eq!(tables[table][9], 0);
+        }
+        assert!(layout().ram_end <= display_memory::START);
     }
     #[test]
     fn rejects_invalid_user_regions_before_mutation() {

@@ -119,6 +119,9 @@ assumptions and limits. Rust panic still prints and halts without recovery.
 - command.rs: human-command parsing and execution of allowed operations. It
   receives a typed uptime snapshot and delegates memory/MMU operations to their
   owned adapters; the MMU supplies register snapshots and fixed task-map switches.
+- display/: optional guest framebuffer adapter, original renderer and glyph data.
+  The console owns it and supplies observed index results. It currently runs at EL1,
+  not as an isolated GUI service. See [GUEST_DISPLAY.md](GUEST_DISPLAY.md).
 - main.rs: composition and panic handling.
 
 Both parsers converge on an operation enum; neither executes arbitrary text.
@@ -155,7 +158,9 @@ there is no mutable global clock. See [CLOCK.md](CLOCK.md) for access assumption
 frequency conversion, real-QEMU checks, and the distinction from timer interrupts.
 The host console and [graphical panel](PANEL.md) transport uptime like other
 commands through shared host adapters. The panel is a separate native application;
-its GUI dependencies do not enter the kernel. A guest desktop remains pending.
+its GUI dependencies do not enter the kernel. The separate [native guest display](GUEST_DISPLAY.md)
+now draws a bounded view inside QEMU without those dependencies. An interactive
+desktop/window system remains pending.
 
 ## References
 

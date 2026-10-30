@@ -1,9 +1,13 @@
-# Next increment: a native guest display
+# Native guest display: original scope and completed gates
 
 Scope decision, October 30, 2026. Requested by the user after the first useful
 workload: make RAI-OS draw its own visible screen in QEMU. This supersedes the
 blanket graphics-driver exclusion in the earlier delivery plan. No graphics
-implementation or screenshot is claimed by this document.
+implementation or screenshot was claimed by the original plan below.
+
+**Later on October 30:** both gates are now implemented and tested; see
+[GUEST_DISPLAY.md](GUEST_DISPLAY.md) for actual captures, commands, safety and
+limits. This plan is retained to distinguish intended scope from delivered work.
 
 ## Why it can start now
 
@@ -54,4 +58,4 @@ comparison and the three-minute submission video.
 - [QEMU fw_cfg specification](https://www.qemu.org/docs/master/specs/fw_cfg.html)
 
 These describe the virtual-device interfaces. No external implementation has been
-copied into RAI-OS. Device selection and guest graphics are still pending execution.
+copied into RAI-OS. The subsequent implementation and execution evidence are in [GUEST_DISPLAY.md](GUEST_DISPLAY.md).
