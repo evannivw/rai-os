@@ -110,7 +110,11 @@ service above the kernel once service execution/isolation exists. See the
 [Meta bridge](META_BRIDGE.md) now makes one real structured proposal and validates
 it before guest execution. host/meta/src separates proposal policy (domain), local
 configuration, HTTPS provider transport and composition. It reuses the shared UART
-adapter; JSON dependencies stay in its own host manifest. The existing priority
+adapter; JSON dependencies stay in its own host manifest. Its new
+[bounded coordinator](META_COORDINATOR.md) maintains released revisions and actual
+observations, applies timed fixture events while a provider request is pending,
+and rejects stale or duplicate work before UART dispatch. State policy remains
+separate from thread/clock/QEMU adapters. The existing priority
 coordinator and graphical panel have not been connected to this bridge.
 Credentials and HTTPS remain on the host. The guest must independently
 validate operations. General isolated services still require service-specific memory

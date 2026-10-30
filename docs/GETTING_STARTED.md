@@ -15,7 +15,9 @@ qemu-system-aarch64 --version
 
 rust-toolchain.toml pins Rust 1.90.0, rustfmt, Clippy, and the bare-metal target.
 Rustup downloads them on first use. Another computer can clone the public repo
-and follow these steps. No API key, Apple linker, or cross-GCC is required.
+and follow these steps. The kernel/offline checks need no API key, Apple linker
+or cross-GCC. Live Meta modes require your own key; follow the
+[checkout-root credential setup](META_BRIDGE.md#each-clone-needs-its-own-key).
 
 ## Kernel commands
 

@@ -1,0 +1,12 @@
+{"event":"coordinator_started","event_source":"scripted_release_fixture","goal":"Maintain a token count for the latest released revision of notes. Reuse observed results for unchanged revisions.","max_model_calls":4,"model":null,"source":"replay"}
+{"changed":true,"elapsed_ms":0,"event":"release_applied","index":0,"record":"notes@1","scheduled_ms":0,"state_version":1}
+{"call_id":1,"elapsed_ms":0,"event":"decision_requested","snapshot":{"authorized_records":[["notes@1",30]],"completed_results":[],"required_record":"notes@1","state_version":1}}
+{"changed":true,"elapsed_ms":152,"event":"release_applied","index":1,"record":"notes@2","scheduled_ms":150,"state_version":2}
+{"call_id":1,"event":"decision_response","latency_ms":405,"snapshot_version":1,"source":"replay","usage":null}
+{"call_id":1,"event":"stale_proposal_discarded","snapshot_version":1,"state_version":2}
+{"call_id":2,"elapsed_ms":411,"event":"decision_requested","snapshot":{"authorized_records":[["notes@1",30],["notes@2",44]],"completed_results":[],"required_record":"notes@2","state_version":2}}
+{"call_id":2,"event":"decision_response","latency_ms":12,"snapshot_version":2,"source":"replay","usage":null}
+{"event":"guest_boot_confirmed"}
+{"call_id":2,"elapsed_ms":477,"event":"operation_dispatched","proposal":{"operation":"record.count","reason":"Offline coordinator fixture; not a model decision.","record":"notes@2","state_version":2},"request_id":1}
+{"elapsed_ms":482,"event":"observation_recorded","observed":{"bytes":44,"record":"notes@2","tokens":9},"payload":"record=notes@2; bytes=44; tokens=9; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=12887785481; b_state=exited; b_slices=0; b_code=0; b_value=12887785481; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0","pending_record":null,"request_id":1,"state_version":3}
+{"elapsed_ms":482,"event":"coordinator_finished","model_calls":2,"snapshot":{"authorized_records":[["notes@1",30],["notes@2",44]],"completed_results":[{"bytes":44,"record":"notes@2","tokens":9}],"required_record":"notes@2","state_version":3},"status":"observed_current_revision"}

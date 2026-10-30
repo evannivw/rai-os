@@ -1,7 +1,7 @@
 # RAI-OS hackathon plan
 
 Updated October 29, 2026. Local times: America/Guatemala. This is a proposed
-roadmap; completed foundations are identified below. One real Meta-to-guest operation is verified; a continuous autonomous coordinator and a general guest service runtime remain pending.
+roadmap; completed foundations are identified below. One real Meta-to-guest operation is verified; a bounded revision-event coordinator is also verified. General autonomous OS coordination and a general guest service runtime remain pending.
 
 ## Sources and eligibility
 
@@ -126,14 +126,17 @@ The kernel foundations and one useful protected service are implemented. The fir
 real Meta operation was subsequently verified on October 29 through the
 [host bridge](META_BRIDGE.md): Muse Spark 1.3 selected notes@2, and the guest returned
 44 bytes/9 tokens. A second live request declined an unavailable operation without
-booting QEMU. This completes the first integration path, not the autonomous demo.
+booting QEMU. A subsequent [bounded event loop](META_COORDINATOR.md) also completed
+two revisions using real Meta calls and retained observations, without duplicate
+work. Scripted events and offline stale-response tests are labeled explicitly.
+This establishes coordination mechanics, not the complete autonomous demo.
 The main delivery risk is extending infrastructure without completing the model
 and useful workload path. These are targets, not completed-work claims.
 
 | Date | Target | Exit condition |
 | --- | --- | --- |
 | Oct 29 | Bounded guest service; resolve Meta access | Guest service and authenticated Meta access verified; two live bridge outcomes captured. |
-| Oct 30 | First actual Meta decision | First path verified Oct 29; extend it into a bounded coordinator with observed feedback. |
+| Oct 30 | First actual Meta decision | First path and bounded revision loop verified Oct 29; next extend the useful workload and constraints. |
 | Oct 31-Nov 1 | Useful workload, events and failures; feature freeze | Repeatable cases, independent result checks and fair baseline/comparison. |
 | Nov 2 | Corrections, evidence, reproducibility | Clean-checkout run and reviewed results/limitations. |
 | Nov 3 | Video and submission preparation | Three-minute video, contribution attribution and accessible links. |

@@ -40,7 +40,10 @@ pub fn parse_proposal(text: &str) -> Result<Proposal, &'static str> {
     serde_json::from_str(text).map_err(|_| "invalid_proposal_json")
 }
 pub fn validate(proposal: &Proposal) -> Result<Action, &'static str> {
-    if proposal.state_version != STATE_VERSION {
+    validate_at(proposal, STATE_VERSION)
+}
+pub fn validate_at(proposal: &Proposal, version: u64) -> Result<Action, &'static str> {
+    if proposal.state_version != version {
         return Err("stale_proposal");
     }
     if proposal.reason.trim().is_empty()
@@ -77,7 +80,7 @@ pub fn execute<T>(
         _ => run(&action).map(Some),
     }
 }
-#[derive(Serialize)]
+#[derive(Clone, Debug, PartialEq, Serialize)]
 pub struct Observed {
     pub record: &'static str,
     pub bytes: u64,
@@ -224,6 +227,25 @@ mod tests {
             "record=notes@2".into(),
         ] {
             assert!(observe(&action, &bad).is_err());
+        }
+    }
+}
+
+/// A bounded, already-observed snapshot; never includes future scenario events.
+#[derive(Clone, Serialize)]
+pub struct DecisionContext {
+    pub state_version: u64,
+    pub authorized_records: Vec<(&'static str, u64)>,
+    pub completed_results: Vec<Observed>,
+    pub required_record: Option<&'static str>,
+}
+impl DecisionContext {
+    pub fn single() -> Self {
+        Self {
+            state_version: STATE_VERSION,
+            authorized_records: RECORDS.to_vec(),
+            completed_results: Vec::new(),
+            required_record: None,
         }
     }
 }

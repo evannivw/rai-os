@@ -1,6 +1,8 @@
-//! One model proposal -> host validation -> real bounded guest operation.
+//! Single-proposal bridge and bounded event-driven host coordinator.
 mod config;
+mod coordinator;
 mod domain;
+mod loop_runner;
 #[allow(dead_code)] // Share the established protocol without adding a second UART adapter.
 #[path = "../../shared/model.rs"]
 mod model;
@@ -13,10 +15,16 @@ fn run() -> Result<(), String> {
     let args: Vec<_> = std::env::args().skip(1).collect();
     if args.is_empty() {
         return Err(
-            "usage: rai-meta <kernel> <goal> OR rai-meta <kernel> --replay <proposal.json>".into(),
+            "usage: rai-meta <kernel> <goal> | --replay <proposal.json> | --coordinate <events.json> | --coordinate-replay <events.json> <proposals.json>".into(),
         );
     }
     let kernel = &args[0];
+    if args.len() == 3 && args[1] == "--coordinate" {
+        return loop_runner::run(kernel, Path::new(&args[2]), None);
+    }
+    if args.len() == 4 && args[1] == "--coordinate-replay" {
+        return loop_runner::run(kernel, Path::new(&args[2]), Some(Path::new(&args[3])));
+    }
     // Validate CLI shape before reading a credential or performing network I/O.
     let proposal = if args.len() == 3 && args[1] == "--replay" {
         let p = domain::parse_proposal(&config::bounded_file(Path::new(&args[2]), 2048)?)?;

@@ -23,7 +23,7 @@ not isolated processes. Fixed linked programs now run with lower privilege. The 
 | Waiting and wakeup | Done for the two-task batch | A receiver stops getting CPU turns and resumes with a message or Closed; mutual waiting is reported as deadlocked. See [IPC_WAIT.md](IPC_WAIT.md). |
 | One bounded guest service | Done for immutable record token counts | Host request -> EL0 client/worker -> checked result, with private stacks and scalar IPC. See [RECORD_SERVICE.md](RECORD_SERVICE.md). Persistent lifetime remains separate. |
 | Guest coordinator and executors | Planned | Move decision/execution services into RAI-OS with enforced permissions. Adapt host std/storage assumptions. |
-| Meta-driven policy | First single proposal verified on the host | Muse Spark 1.3 selects a permitted operation; host/guest validation precedes execution. Continuous coordination remains planned. See [META_BRIDGE.md](META_BRIDGE.md). |
+| Meta-driven policy | First single proposal verified on the host | Muse Spark 1.3 selects a permitted operation; host/guest validation precedes execution. A bounded two-revision event loop now retains observations and rejects stale/duplicate work. See [META_COORDINATOR.md](META_COORDINATOR.md). |
 
 This is a dependency roadmap, not a promise to finish every row before the
 hackathon. EL0/scheduling/IPC require careful validation; a working demo can
@@ -114,9 +114,10 @@ individual increments. Done means the stated bounded behavior, not general OS su
 | 18 | Blocking receive and wakeup | Waiting tasks receive no CPU turns until completion/closure. |
 | 19 | Bounded record service | Host chooses a record; an EL0 worker scans it and returns an independently checked count. |
 | 20 | First real Meta proposal | Host bridge validates the model choice and executes the guest service; a live unsupported goal is declined. |
+| 21 | Bounded event-driven coordinator | Retain results, react to released revisions, ignore duplicate events and discard stale proposals. Runs on the host. |
 
-Remaining delivery path: a continuous bounded coordinator around the verified Meta
-bridge; useful multi-step workload and event handling; independent demo artifact verification;
+Remaining delivery path: extend the bounded revision coordinator into a useful
+multi-step workload with explicit constraints; independent demo artifact verification;
 fair baseline/comparison including model overhead; presentation, reproducibility,
 three-minute video and submission. See the revised [schedule](HACKATHON_PLAN.md).
 Do not continue expanding kernel mechanisms without a concrete demo dependency.

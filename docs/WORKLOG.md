@@ -937,3 +937,55 @@ Updated architecture, roadmap, setup/use instructions and delivery targets to
 reflect the first real Meta path while retaining historical pending-work entries.
 Continuous event handling, useful multi-step adaptation, guest-resident
 coordination, the complete artifact verifier and fair baseline remain pending.
+
+## October 29, 2026 — bounded event-driven Meta coordination
+
+Added a pure revision/observation state module and a separate host loop adapter.
+The new --coordinate mode consumes bounded, explicitly scripted release events,
+keeps one provider request pending while continuing to receive due events, and
+passes only released metadata and actual prior observations to Meta. New releases
+and completed observations advance state_version; duplicate/older events do not.
+The host admits only the latest pending notes revision and never repeats a
+completed exact revision. A response tied to an older snapshot is discarded
+before UART dispatch. Due events are also applied after boot and before result
+recording; a superseded immutable result cannot fulfill a newer goal.
+
+One QEMU connection is reused, while every record operation still runs its own
+bounded EL0 client/worker batch. The kernel/ABI and shared UART adapter are
+unchanged. The session permits at most four proposal attempts and eight release
+events scheduled within 30 seconds. Invalid proposals/provider/guest errors stop
+without hidden retries. A decline explicitly reports unfinished work. Provider
+threads are joined on normal cleanup, with the existing HTTP timeout; this does
+not add signal handling or cancellation of an in-flight model request.
+
+The live debug session made two real Muse Spark 1.3 calls. It processed notes@1
+as 30 bytes/7 tokens, then notes@2 as 44 bytes/9 tokens. The second request included
+the first observation. Two duplicate events produced no model call or execution.
+There was one guest boot. API latencies measured 2311 and 1648 ms; reported total
+tokens were 554 and 538, respectively. Session duration was 12003 ms including
+intentional fixture waits. No cost/energy/comparative benefit was measured.
+This sequence demonstrates coordination mechanics; deterministic rules can also
+solve this small case. Future-workload planning remains the substantive demo goal.
+
+Eighteen Rust tests passed in debug and release, including prior proposal/secret
+checks, bounded event state, stale/future/completed admission rejection, duplicate
+suppression, superseded completion and provider snapshots excluding future events.
+Real-QEMU offline coordinator tests passed in both profiles: revision/duplicate
+sequence, delayed first proposal crossing a new release, wrong-version/future
+rejection and decline without boot. In the delayed case the old response was
+discarded and only notes@2 executed. Independent Python auditing reconstructed
+state/versions/history and verified exact guest counts; altered histories were
+rejected. The live capture passed the same audit. Existing single-proposal bridge
+offline tests also passed in both profiles with all six allowed guest records.
+Root/bridge formatting and bridge all-target Clippy passed. No kernel, panel or
+shared transport changes required broader unrelated regression repeats.
+
+Added config/meta.env.example with an empty setting, plus explicit per-checkout
+credential instructions: reviewers supply their own key in root .env.local,
+never the tracked template. Copy instructions preserve an existing local file;
+Git exclusion and environment precedence are explained. No real credential was
+changed or included. Updated README, getting-started, architecture, roadmap and
+hackathon plan. META_COORDINATOR.md separates real Meta evidence from delayed
+replay evidence and explains the fixed goal, event source, limits and host placement.
+The older priority coordinator/panel remain separate; this is not guest-resident
+coordination, arbitrary file watching or the full review-pack verifier/benchmark.

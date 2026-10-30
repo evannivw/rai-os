@@ -5,9 +5,10 @@ AI coordinator could adapt work to goals, events, and resource limits.
 
 **Working today:** bare-metal boot in QEMU, fatal EL1 exception diagnostics, a checked EL1 context return, controlled EL1 timer interrupts, one EL0 Rust program with bounded syscalls and a timer-enforced deadline, a two-context scheduling diagnostic, bounded task completion and fault handling, task-private stack mappings, bounded scalar messages between two tasks, blocking receive with wakeup, a bounded EL0 record-count service, PL011 UART input/output, help/info/uptime/echo,
 a bounded structured protocol, a physical-page pool with diagnostics, active EL1 memory permissions, a cooperative word-count task, a Rust host terminal
-console, a graphical host control panel, a bounded priority host coordinator, and a
+console, a graphical host control panel, a bounded priority host coordinator, a
+[bounded event-driven Meta coordinator](docs/META_COORDINATOR.md), and a
 [Meta host bridge](docs/META_BRIDGE.md) that validates one real model proposal and executes a guest record operation.
-**Not implemented:** a continuous autonomous Meta coordinator, guest-resident agents, a native guest desktop, general multi-task
+**Not implemented:** a general autonomous OS coordinator, guest-resident agents, a native guest desktop, general multi-task
 scheduling, dynamically created process address spaces, persistent storage, or measured efficiency gains.
 
 ## Run
@@ -21,7 +22,12 @@ sh scripts/console.sh          # Rust host terminal controlling QEMU
 sh scripts/panel.sh            # Native graphical host panel
 # After configuring a local key as described in docs/META_BRIDGE.md:
 sh scripts/meta.sh 'Count the words in the latest available revision of the notes.'
+sh scripts/meta.sh --coordinate fixtures/coordinator/v1/revisions.json
 ```
+
+Each person supplies their own API key in the checkout-root `.env.local`; see
+[exact credential setup](docs/META_BRIDGE.md#each-clone-needs-its-own-key). The
+[public template](config/meta.env.example) contains no key. Offline tests need none.
 
 The repository pins Rust 1.90.0 and aarch64-unknown-none-softfloat.
 Only macOS ARM64 has been tested. The host console is not a kernel GUI.
@@ -53,6 +59,8 @@ python3 scripts/verify_service.py
 python3 scripts/verify_service.py --release
 python3 scripts/verify_meta.py          # Offline; no provider calls
 python3 scripts/verify_meta.py --release
+python3 scripts/verify_coordinator.py   # Offline events/proposals, real QEMU
+python3 scripts/verify_coordinator.py --release
 python3 scripts/verify_user_timeout.py
 python3 scripts/verify_user_timeout.py --release
 python3 scripts/verify_user.py
@@ -78,6 +86,7 @@ and 37 console/protocol cases, including the guest counter. See the guides for h
 - [Kernel-to-service roadmap](docs/ROADMAP.md)
 - [MMU tables and permissions](docs/MMU.md)
 - [Physical pages and memory diagnostics](docs/MEMORY.md)
+- [Event-driven Meta coordinator](docs/META_COORDINATOR.md)
 - [Meta bridge, local credentials and live evidence](docs/META_BRIDGE.md)
 - [First bounded guest record service](docs/RECORD_SERVICE.md)
 - [Waiting, wakeup and closed-batch deadlock handling](docs/IPC_WAIT.md)

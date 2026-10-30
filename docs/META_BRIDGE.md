@@ -2,8 +2,9 @@
 
 Implemented and exercised October 29, 2026. The Rust host bridge asks Meta for
 one structured proposal, validates it, executes one allowed operation in the
-RAI-OS guest, and reports the observed result. This is the first connected model
-step, not a persistent autonomous coordinator or demonstrated optimization.
+RAI-OS guest, and reports the observed result. This page documents the single-proposal mode. A bounded
+[event-driven coordinator](META_COORDINATOR.md) now also reuses this bridge;
+neither mode establishes a performance or optimization advantage.
 
 ## Run from a clean checkout
 
@@ -44,6 +45,38 @@ To test transport without API access, write a separate proposal JSON file:
 Then run `sh scripts/meta.sh --replay /path/to/proposal.json`. Replay does not
 load the key or contact Meta. Its events explicitly say source=replay/model=null;
 it cannot be presented as a live model integration.
+
+## Each clone needs its own key
+
+The repository contains only a [blank template](../config/meta.env.example).
+Every evaluator or participant supplies their own Meta Model API credential.
+After installing the requirements, start a fresh checkout with:
+
+```sh
+git clone https://github.com/evannivw/rai-os.git
+cd rai-os
+cp -n config/meta.env.example .env.local
+chmod 600 .env.local
+```
+
+The copy command leaves an existing .env.local unchanged. Open `.env.local` in
+your editor (it is a hidden file) and put your key after `MODEL_API_KEY=`. Do not
+edit the public template. On macOS, `open -e .env.local` opens the local file in
+TextEdit; keep it plain text. Save, then run either:
+
+```sh
+sh scripts/meta.sh 'Count the words in the latest available revision of the notes.'
+sh scripts/meta.sh --coordinate fixtures/coordinator/v1/revisions.json
+```
+
+The exact destination is `<your-checkout>/rai-os/.env.local`, alongside README.md
+and Cargo.toml, not inside host/meta, src, or the QEMU console. No credential is
+built into the guest. The script runs from the repository root even when invoked
+from elsewhere. Confirm exclusion with `git check-ignore .env.local`; it should
+print `.env.local`. The loader never prints the value. An empty key produces
+invalid_api_key_format; if an environment variable is set, it overrides the file.
+A missing file reports cannot_open_local_file. Fix the local setting rather than
+pasting credentials into an issue or chat. Kernel and offline tests need no key.
 
 ## What runs where
 
@@ -174,6 +207,7 @@ controlled run; routine offline tests are explicitly separate.
 - [Reasoning and output-token budget](https://dev.meta.ai/docs/reasoning)
 - [curl configuration and limits](https://curl.se/docs/manpage.html)
 
-Next: a bounded event-driven coordinator and useful multi-step workload, with
+The [bounded event-driven coordinator](META_COORDINATOR.md) is now implemented
+for two immutable notes revisions. Next: a useful multi-step workload, with
 independent result verification and a fair deterministic baseline. The single
 choice here establishes the integration path, not the final hackathon demo.
