@@ -14,7 +14,8 @@ immutable fixture records at EL0 and return results over UART. A separate
 [persistent worker](PERSISTENT_WORKER.md) now retains its EL0 continuation and
 private stack between console requests. An initial [guest coordinator](GUEST_COORDINATOR.md)
 now runs at EL0 alongside that worker, admitting versioned manual proposals and
-retaining results. Its Meta transport integration remains pending. EL1 stage-1 translation
+retaining results. The [guest Meta bridge](GUEST_META_BRIDGE.md) now transports its
+pending goal/ticket to Meta and forwards typed proposals for guest admission. EL1 stage-1 translation
 now has a base map and two fixed task maps with private writable stack pages;
 user code/constants remain shared read-only. See [MMU.md](MMU.md) and
 [TASK_MEMORY.md](TASK_MEMORY.md).
@@ -131,6 +132,11 @@ observations, applies timed fixture events while a provider request is pending,
 and rejects stale or duplicate work before UART dispatch. State policy remains
 separate from thread/clock/QEMU adapters. The existing priority
 coordinator and graphical panel have not been connected to this bridge.
+A new --guest mode reads the actual EL0 coordinator reports instead of maintaining
+host goal/admission policy. guest_bridge.rs owns transport/lifecycle,
+guest_report.rs validates decoded observations, and decision_source.rs shares
+bounded provider/replay thread ownership with the older host mode. Its late
+proposals are rejected inside the guest. See [GUEST_META_BRIDGE.md](GUEST_META_BRIDGE.md).
 Credentials and HTTPS remain on the host. The guest must independently
 validate operations. General isolated services still require service-specific memory
 ownership/lifetimes, external event delivery and richer permission policies; the fixed

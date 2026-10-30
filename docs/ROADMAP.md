@@ -23,7 +23,7 @@ not isolated processes. Fixed linked programs now run with lower privilege. The 
 | Waiting and wakeup | Done for the two-task batch | A receiver stops getting CPU turns and resumes with a message or Closed; mutual waiting is reported as deadlocked. See [IPC_WAIT.md](IPC_WAIT.md). |
 | One bounded guest service | Done for immutable record token counts | Host request -> EL0 client/worker -> checked result, with private stacks and scalar IPC. See [RECORD_SERVICE.md](RECORD_SERVICE.md). Persistent lifetime remains separate. |
 | One persistent guest worker | Done for one fixed EL0 service | Retains private stack/register state between host requests, with exclusive RAM ownership and explicit stop/failure cleanup. See [PERSISTENT_WORKER.md](PERSISTENT_WORKER.md). |
-| Guest coordinator and executor | Initial EL0 pair implemented | Retains a goal, rejects stale/manual proposals, dispatches by IPC and remembers the result. Host Meta transport into this path remains pending. See [GUEST_COORDINATOR.md](GUEST_COORDINATOR.md). |
+| Guest coordinator and executor | Initial EL0 pair implemented | Retains a goal, rejects stale/manual proposals, dispatches by IPC and remembers the result. Real Meta transport is available through --guest; admission stays at EL0. See [GUEST_COORDINATOR.md](GUEST_COORDINATOR.md). |
 | Meta-driven policy | First single proposal verified on the host | Muse Spark 1.3 selects a permitted operation; host/guest validation precedes execution. A bounded two-revision event loop now retains observations and rejects stale/duplicate work. See [META_COORDINATOR.md](META_COORDINATOR.md). |
 
 This is a dependency roadmap, not a promise to finish every row before the
@@ -140,3 +140,12 @@ private context switching, limits and cleanup. This first path uses manual typed
 proposals. Next connect the existing host Meta provider to the guest's pending
 goal/ticket, without duplicating goal authority in the host. Full workload,
 independent demo artifact verification and comparative evidence remain pending.
+
+## October 30 guest Meta connection
+
+Step 24 closes the integration described in step 23: the --guest bridge requests
+Meta proposals from actual guest reports and sends the original ticket back for
+EL0 admission. It transports observations while inference is pending; stale
+responses are rejected inside RAI-OS. The kernel/ABI are unchanged. See
+[GUEST_META_BRIDGE.md](GUEST_META_BRIDGE.md). The next delivery slice is a useful
+artifact plus independent checker, following [DEMO_PLAN.md](DEMO_PLAN.md).

@@ -1109,3 +1109,58 @@ bridge/coordinator still uses record.count; no credentials were changed or
 provider call made in this increment. Next connect that provider to the guest's
 pending goal/ticket through an explicit host mode. Full workload, independent
 demo artifact verifier, comparative benefit, video and submission remain pending.
+
+
+## 2026-10-30 — Real Meta proposals for the guest-owned coordinator
+
+Added --guest and --guest-replay modes to the existing host bridge. One QEMU
+connection starts the retained EL0 coordinator/worker. Scripted observations go
+to coord.observe; the model receives the actual guest pending ticket and current
+allowed record metadata. The host does not maintain a replacement goal version,
+filter older observations, or own a completed-result cache. Its original-ticket
+proposal goes to coord.propose, where EL0 admits or rejects it. The existing
+kernel/ABI, provider HTTP configuration and secret loader are unchanged.
+
+Extracted shared bounded provider/replay thread ownership into decision_source.rs
+and kept the older host coordinator's behavior covered by its existing tests.
+New guest_report.rs strictly decodes the fourteen report fields and checks
+observed transitions; guest_bridge.rs owns transport, timing, logging and cleanup.
+The first unit run caught a field-count mistake in the decoder (fifteen instead
+of fourteen); it was corrected before integration/live validation. Final tests
+passed. Provider correlation/allowlist validation remains on the host, while
+freshness/goal admission occurs inside the guest. Stale proposals are forwarded
+with their original ticket, rejected without B execution, then followed by a new
+bounded request. A current decline records unfinished work; obsolete declines
+do not cancel newer goals. Other invalid proposals/errors stop without retry.
+
+The live debug run made two actual Muse Spark 1.3 calls: 2161 ms/462 total tokens
+and 1584 ms/491 total tokens as reported by the provider. Guest tasks completed
+notes@1 with 30 bytes/7 tokens and notes@2 with 44 bytes/9 tokens. Two duplicate
+observations produced no extra model call. One guest boot and explicit coord.stop
+were recorded; total duration was 12121 ms including twelve seconds of scheduled
+fixture time, plus boot/transport/cleanup. This run contained no stale response;
+delayed stale rejection was exercised separately with offline replay. The live
+capture and debug/release stale captures are retained under docs/evidence with
+2026-10-30-guest-meta names. No credential or raw HTTP body was logged or committed.
+
+Twenty-three Rust tests passed in debug and release. New real-QEMU offline tests
+passed in both profiles: revisions/duplicates, delayed guest-side stale rejection,
+current/obsolete decline, empty record, returning to a prior record, malformed/
+denied/injected proposals, wrong-key rejection by EL0, bounded scenario/replay
+input and exhaustion of four model calls. Handled failures explicitly stop the
+guest session. Independent Python auditing reconstructed guest tickets/goals,
+provider contexts, FIFO/IPC execution, exact fixture token counts, completion
+counters, single boot and cleanup. Altered contexts/final state/call counts/token
+counts were rejected. The live trace passed that same audit. Replay loaded no key
+and made no provider calls. Existing single-proposal and host-coordinator offline
+suites also passed in debug/release. Bridge formatting and all-target Clippy passed.
+No kernel or panel code changed, so their unrelated full suites were not repeated.
+
+Added per-checkout run instructions and explicitly separated the real provider
+run from replay evidence. Added DEMO_PLAN.md with a concrete delivery sequence:
+useful artifact plus independent checker on October 31, bounded workload/baseline
+and feature freeze November 1, evidence/presentation November 2, video/submission
+preparation November 3, submission November 4 before 18:00 Guatemala (official
+20:00). These are targets. The counting path closes integration but does not
+implement the full review-pack contract or demonstrate an AI performance win.
+The remaining useful workload/verifier/comparison/video requirements stay visible.

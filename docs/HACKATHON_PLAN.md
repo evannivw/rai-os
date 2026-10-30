@@ -177,3 +177,17 @@ new guest path still needs a host transport mode forwarding its pending goal to
 Meta and submitting the response. This is a separate integration task, not an
 additional claim of live Meta execution, autonomous optimization or demo completion.
 Keep the remaining workload/verifier/comparison/video tasks and deadline visible.
+
+## Current delivery sequence — October 30
+
+The explicit --guest transport mode now connects the EL0 coordinator's pending
+goal/ticket to the Meta provider, with guest-side stale rejection. The older host
+coordinator remains available as a distinct mode. Use [DEMO_PLAN.md](DEMO_PLAN.md)
+as the current sequence: close real integration on October 30; deliver a useful
+artifact/checker October 31; freeze the bounded workload/baseline November 1;
+review evidence and presentation November 2; prepare the three-minute submission
+November 3; submit November 4 before the 18:00 internal target.
+
+The tiny count workload verifies the integration boundary. It does not establish
+useful scheduling advantage or implement the full review-pack contract. Freeze
+additional kernel mechanisms unless an actual demo output requires a small change.

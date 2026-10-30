@@ -211,3 +211,12 @@ The [bounded event-driven coordinator](META_COORDINATOR.md) is now implemented
 for two immutable notes revisions. Next: a useful multi-step workload, with
 independent result verification and a fair deterministic baseline. The single
 choice here establishes the integration path, not the final hackathon demo.
+
+## Guest-owned coordinator mode
+
+For coordination inside RAI-OS, use `sh scripts/meta.sh --guest
+fixtures/guest_bridge/v1/observations.json` as one shell line. This mode transports
+actual guest pending goals to Meta, then returns typed proposals to the guest
+coordinator. The original single-proposal/replay modes documented above still
+use record.count batches. Credential setup is shared. See
+[GUEST_META_BRIDGE.md](GUEST_META_BRIDGE.md) for the new path and evidence.

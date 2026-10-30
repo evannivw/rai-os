@@ -6,11 +6,11 @@ immutable records. Each has a private writable stack page, and both exchange
 kernel-routed scalar IPC. The coordinator's policy/state executes in the guest,
 not in the host terminal or in an ordinary EL1 module.
 
-This increment prepares an explicit proposal boundary. Proposals are manual in
-this path; the existing live Meta bridge/coordinator still uses `record.count`
-batches. Connecting Meta to `coord.*` is the next integration step. HTTPS,
-credentials and JSON/provider parsing remain host responsibilities. No live API
-call or claim of AI-based optimization belongs to this increment.
+The initial kernel increment prepared and verified this boundary with manual
+proposals. The subsequent [guest Meta bridge](GUEST_META_BRIDGE.md) now connects
+real provider responses to `coord.*`; older bridge modes retain their batch path.
+HTTPS, credentials and JSON/provider parsing remain host responsibilities.
+The original kernel captures below use manual proposals, not model inference.
 
 ## Run a complete cycle
 
@@ -177,7 +177,8 @@ Full captures go to `target/verification/guest-coordinator-*`. Selected actual
 - `host/shared/model.rs`: safe request encoding used by the host terminal.
 
 This is an initial linked guest coordinator, not a complete microkernel, dynamic
-process loader, on-device inference engine or native graphical desktop. The next
-step is an explicit bridge mode that reads the guest's pending goal/ticket,
+process loader, on-device inference engine or native graphical desktop. Meta
+integration is now available as `--guest`: it reads the pending goal/ticket,
 asks Meta for a supported proposal and submits it through this boundary while
 keeping the guest authoritative over admission and observed completion.
+See [GUEST_META_BRIDGE.md](GUEST_META_BRIDGE.md) and the current [delivery plan](DEMO_PLAN.md).

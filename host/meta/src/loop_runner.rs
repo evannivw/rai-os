@@ -1,84 +1,17 @@
 //! Host event adapter and bounded coordination loop. One provider request at a time.
 use crate::{
-    config::{self, Secret},
+    config,
     coordinator::{self, Scenario, State},
-    domain::{self, Action, Proposal},
+    decision_source::{Pending, Source},
+    domain::{self, Action},
     model, provider, qemu,
 };
-use serde::Deserialize;
 use serde_json::json;
 use std::{
-    collections::VecDeque,
     path::Path,
-    sync::{
-        Arc,
-        mpsc::{self, Receiver, TryRecvError},
-    },
-    thread::{self, JoinHandle},
+    thread,
     time::{Duration, Instant},
 };
-#[derive(Deserialize)]
-#[serde(deny_unknown_fields)]
-struct Replay {
-    delay_ms: u64,
-    proposal: Proposal,
-}
-enum Source {
-    Meta(Arc<Secret>),
-    Replay(VecDeque<Replay>),
-}
-impl Source {
-    fn name(&self) -> &'static str {
-        match self {
-            Self::Meta(_) => "meta",
-            Self::Replay(_) => "replay",
-        }
-    }
-    fn start(&mut self, context: domain::DecisionContext) -> Result<Pending, String> {
-        let version = context.state_version;
-        let (sender, receiver) = mpsc::sync_channel(1);
-        let handle = match self {
-            Self::Meta(key) => {
-                let key = Arc::clone(key);
-                thread::spawn(move || {
-                    let _ =
-                        sender.send(provider::propose_context(&key, coordinator::GOAL, &context));
-                })
-            }
-            Self::Replay(entries) => {
-                let entry = entries.pop_front().ok_or("replay_exhausted")?;
-                thread::spawn(move || {
-                    let started = Instant::now();
-                    thread::sleep(Duration::from_millis(entry.delay_ms));
-                    let _ = sender.send(Ok(provider::Answer {
-                        proposal: entry.proposal,
-                        latency_ms: started.elapsed().as_millis(),
-                        usage: None,
-                    }));
-                })
-            }
-        };
-        Ok(Pending {
-            version,
-            receiver,
-            handle: Some(handle),
-        })
-    }
-}
-struct Pending {
-    version: u64,
-    receiver: Receiver<Result<provider::Answer, String>>,
-    handle: Option<JoinHandle<()>>,
-}
-impl Drop for Pending {
-    fn drop(&mut self) {
-        // Never abandon a provider thread/curl child. The adapter's 30-second
-        // timeout bounds this join; shutdown does not cancel in-flight inference.
-        if let Some(handle) = self.handle.take() {
-            let _ = handle.join();
-        }
-    }
-}
 fn apply_due(
     state: &mut State,
     scenario: &Scenario,
@@ -101,22 +34,10 @@ fn apply_due(
 }
 pub fn run(kernel: &str, path: &Path, replay: Option<&Path>) -> Result<(), String> {
     let scenario = Scenario::parse(&config::bounded_file(path, 8192)?)?;
-    let mut source = if let Some(path) = replay {
-        let entries: Vec<Replay> = serde_json::from_str(&config::bounded_file(path, 16384)?)
-            .map_err(|_| "invalid_replay_sequence")?;
-        if entries.is_empty()
-            || entries.len() > coordinator::MAX_CALLS
-            || entries.iter().any(|e| e.delay_ms > 2000)
-        {
-            return Err("invalid_replay_limits".into());
-        }
-        Source::Replay(entries.into())
-    } else {
-        Source::Meta(Arc::new(config::load()?))
-    };
+    let mut source = Source::load(replay, coordinator::MAX_CALLS)?;
     println!(
         "{}",
-        json!({"event":"coordinator_started","source":source.name(),"model":if matches!(source,Source::Meta(_)){Some(provider::MODEL)}else{None},"event_source":"scripted_release_fixture","goal":coordinator::GOAL,"max_model_calls":coordinator::MAX_CALLS})
+        json!({"event":"coordinator_started","source":source.name(),"model":if source.is_live(){Some(provider::MODEL)}else{None},"event_source":"scripted_release_fixture","goal":coordinator::GOAL,"max_model_calls":coordinator::MAX_CALLS})
     );
     let started = Instant::now();
     let mut state = State::default();
@@ -128,19 +49,12 @@ pub fn run(kernel: &str, path: &Path, replay: Option<&Path>) -> Result<(), Strin
     loop {
         apply_due(&mut state, &scenario, &mut cursor, started)?;
         let response = if let Some(waiting) = &pending {
-            match waiting.receiver.try_recv() {
-                Ok(answer) => Some((waiting.version, answer)),
-                Err(TryRecvError::Empty) => None,
-                Err(TryRecvError::Disconnected) => {
-                    return Err("provider_thread_disconnected".into());
-                }
-            }
+            waiting.poll()?.map(|answer| (waiting.version, answer))
         } else {
             None
         };
         if let Some((version, answer)) = response {
             drop(pending.take());
-            let answer = answer?;
             println!(
                 "{}",
                 json!({"event":"decision_response","source":source.name(),"call_id":calls,"snapshot_version":version,"latency_ms":answer.latency_ms,"usage":answer.usage})
@@ -207,12 +121,10 @@ pub fn run(kernel: &str, path: &Path, replay: Option<&Path>) -> Result<(), Strin
                 "{}",
                 json!({"event":"decision_requested","call_id":calls,"snapshot":snapshot,"elapsed_ms":started.elapsed().as_millis()})
             );
-            pending = Some(source.start(snapshot)?);
+            pending = Some(source.start(coordinator::GOAL, snapshot)?);
         }
         if cursor == scenario.events.len() && pending.is_none() && state.pending().is_none() {
-            if let Source::Replay(entries) = &source
-                && !entries.is_empty()
-            {
+            if source.has_unused() {
                 return Err("unused_replay_proposals".into());
             }
             println!(

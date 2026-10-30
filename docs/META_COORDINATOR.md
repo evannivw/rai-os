@@ -149,3 +149,11 @@ replace the full review-pack artifact verifier or establish semantic intent safe
 Next: expand from this small revision loop to a useful multi-step workload with
 explicit constraints, independent result verification and a comparable deterministic
 policy. Add new kernel mechanisms only when that workload needs them.
+
+## Subsequent guest-owned path
+
+The --coordinate mode documented here retains its host state machine and latest
+revision policy. The new [--guest mode](GUEST_META_BRIDGE.md) instead transports
+the goal/ticket reported by the persistent EL0 coordinator; proposals become
+coord.propose requests and stale admission happens in the guest. The two modes
+share provider transport but have distinct goal semantics and evidence logs.

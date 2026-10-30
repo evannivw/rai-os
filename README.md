@@ -3,7 +3,7 @@
 An educational AArch64 operating-system prototype in Rust, exploring how an
 AI coordinator could adapt work to goals, events, and resource limits.
 
-**Working today:** bare-metal boot in QEMU, fatal EL1 exception diagnostics, a checked EL1 context return, controlled EL1 timer interrupts, one EL0 Rust program with bounded syscalls and a timer-enforced deadline, a two-context scheduling diagnostic, bounded task completion and fault handling, task-private stack mappings, bounded scalar messages between two tasks, blocking receive with wakeup, a bounded EL0 record-count service, a persistent EL0 worker with protected session memory, a [guest EL0 coordinator](docs/GUEST_COORDINATOR.md) with versioned proposal admission, PL011 UART input/output, help/info/uptime/echo,
+**Working today:** bare-metal boot in QEMU, fatal EL1 exception diagnostics, a checked EL1 context return, controlled EL1 timer interrupts, one EL0 Rust program with bounded syscalls and a timer-enforced deadline, a two-context scheduling diagnostic, bounded task completion and fault handling, task-private stack mappings, bounded scalar messages between two tasks, blocking receive with wakeup, a bounded EL0 record-count service, a persistent EL0 worker with protected session memory, a [guest EL0 coordinator](docs/GUEST_COORDINATOR.md) with versioned proposal admission and a [Meta transport bridge](docs/GUEST_META_BRIDGE.md), PL011 UART input/output, help/info/uptime/echo,
 a bounded structured protocol, a physical-page pool with diagnostics, active EL1 memory permissions, a cooperative word-count task, a Rust host terminal
 console, a graphical host control panel, a bounded priority host coordinator, a
 [bounded event-driven Meta coordinator](docs/META_COORDINATOR.md), and a
@@ -23,6 +23,7 @@ sh scripts/panel.sh            # Native graphical host panel
 # After configuring a local key as described in docs/META_BRIDGE.md:
 sh scripts/meta.sh 'Count the words in the latest available revision of the notes.'
 sh scripts/meta.sh --coordinate fixtures/coordinator/v1/revisions.json
+sh scripts/meta.sh --guest fixtures/guest_bridge/v1/observations.json
 ```
 
 Each person supplies their own API key in the checkout-root `.env.local`; see
@@ -61,6 +62,8 @@ python3 scripts/verify_worker.py
 python3 scripts/verify_worker.py --release
 python3 scripts/verify_guest_coordinator.py
 python3 scripts/verify_guest_coordinator.py --release
+python3 scripts/verify_guest_bridge.py   # Offline proposals, real guest coordinator
+python3 scripts/verify_guest_bridge.py --release
 python3 scripts/verify_meta.py          # Offline; no provider calls
 python3 scripts/verify_meta.py --release
 python3 scripts/verify_coordinator.py   # Offline events/proposals, real QEMU
@@ -92,6 +95,8 @@ and 37 console/protocol cases, including the guest counter. See the guides for h
 - [Physical pages and memory diagnostics](docs/MEMORY.md)
 - [Event-driven Meta coordinator](docs/META_COORDINATOR.md)
 - [Meta bridge, local credentials and live evidence](docs/META_BRIDGE.md)
+- [Current delivery plan through November 4](docs/DEMO_PLAN.md)
+- [Meta transport for the guest coordinator](docs/GUEST_META_BRIDGE.md)
 - [Guest coordinator and proposal boundary](docs/GUEST_COORDINATOR.md)
 - [Persistent guest worker and memory ownership](docs/PERSISTENT_WORKER.md)
 - [First bounded guest record service](docs/RECORD_SERVICE.md)

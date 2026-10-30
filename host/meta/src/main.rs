@@ -1,7 +1,10 @@
-//! Single-proposal bridge and bounded event-driven host coordinator.
+//! Single-proposal, host-coordinated and guest-owned Meta bridge modes.
 mod config;
 mod coordinator;
+mod decision_source;
 mod domain;
+mod guest_bridge;
+mod guest_report;
 mod loop_runner;
 #[allow(dead_code)] // Share the established protocol without adding a second UART adapter.
 #[path = "../../shared/model.rs"]
@@ -15,7 +18,7 @@ fn run() -> Result<(), String> {
     let args: Vec<_> = std::env::args().skip(1).collect();
     if args.is_empty() {
         return Err(
-            "usage: rai-meta <kernel> <goal> | --replay <proposal.json> | --coordinate <events.json> | --coordinate-replay <events.json> <proposals.json>".into(),
+            "usage: rai-meta <kernel> <goal> | --replay <proposal.json> | --coordinate <events.json> | --coordinate-replay <events.json> <proposals.json> | --guest <events.json> | --guest-replay <events.json> <proposals.json>".into(),
         );
     }
     let kernel = &args[0];
@@ -24,6 +27,12 @@ fn run() -> Result<(), String> {
     }
     if args.len() == 4 && args[1] == "--coordinate-replay" {
         return loop_runner::run(kernel, Path::new(&args[2]), Some(Path::new(&args[3])));
+    }
+    if args.len() == 3 && args[1] == "--guest" {
+        return guest_bridge::run(kernel, Path::new(&args[2]), None);
+    }
+    if args.len() == 4 && args[1] == "--guest-replay" {
+        return guest_bridge::run(kernel, Path::new(&args[2]), Some(Path::new(&args[3])));
     }
     // Validate CLI shape before reading a credential or performing network I/O.
     let proposal = if args.len() == 3 && args[1] == "--replay" {
