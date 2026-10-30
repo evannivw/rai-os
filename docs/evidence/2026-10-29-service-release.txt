@@ -1,0 +1,182 @@
+PASS (release/normal): 12 bounded service invocations, permission/input/error checks and kernel continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	record=brief@1; bytes=56; tokens=9; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=4298637321; b_state=exited; b_slices=0; b_code=0; b_value=4298637321; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	3	ok	record=notes@1; bytes=30; tokens=7; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=8591900679; b_state=exited; b_slices=0; b_code=0; b_value=8591900679; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	4	ok	record=notes@2; bytes=44; tokens=9; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=12887785481; b_state=exited; b_slices=0; b_code=0; b_value=12887785481; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	5	ok	record=checklist@1; bytes=41; tokens=6; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=17182556166; b_state=exited; b_slices=0; b_code=0; b_value=17182556166; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	6	ok	record=empty@1; bytes=0; tokens=0; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=21474836480; b_state=exited; b_slices=0; b_code=0; b_value=21474836480; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	7	ok	record=appendix@1; bytes=108; tokens=17; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=25776881681; b_state=exited; b_slices=0; b_code=0; b_value=25776881681; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	8	err	record_denied
+@rai1	9	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	10	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	11	ok	tasks=2; slice_ms=20; max_slices=6; trace=AD,BS,AW,AS,BR,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=41; b_state=exited; b_slices=0; b_code=0; b_value=42; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	12	ok	record=brief@1; bytes=56; tokens=9; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=4298637321; b_state=exited; b_slices=0; b_code=0; b_value=4298637321; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	13	ok	record=notes@1; bytes=30; tokens=7; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=8591900679; b_state=exited; b_slices=0; b_code=0; b_value=8591900679; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	14	ok	record=notes@2; bytes=44; tokens=9; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=12887785481; b_state=exited; b_slices=0; b_code=0; b_value=12887785481; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	15	ok	record=checklist@1; bytes=41; tokens=6; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=17182556166; b_state=exited; b_slices=0; b_code=0; b_value=17182556166; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	16	ok	record=empty@1; bytes=0; tokens=0; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=21474836480; b_state=exited; b_slices=0; b_code=0; b_value=21474836480; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	17	ok	record=appendix@1; bytes=108; tokens=17; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=25776881681; b_state=exited; b_slices=0; b_code=0; b_value=25776881681; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	18	err	record_denied
+@rai1	19	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	20	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	21	ok	tasks=2; slice_ms=20; max_slices=6; trace=AD,BS,AW,AS,BR,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=41; b_state=exited; b_slices=0; b_code=0; b_value=42; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	22	err	bad_args
+@rai1	23	err	bad_args
+@rai1	24	err	bad_args
+@rai1	25	err	bad_args
+@rai1	26	err	unknown_record
+@rai1	27	err	unknown_record
+@rai1	28	err	unknown_record
+@rai1	29	err	unknown_operation
+record.count notes@1
+record=notes@1; bytes=30; tokens=7; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=8591900679; b_state=exited; b_slices=0; b_code=0; b_value=8591900679; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	30	ok	rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400a7530; ar_far=0x00000000400ab000; aw_esr=0x000000009200004f; aw_pc=0x00000000400a7544; aw_far=0x00000000400ab000; br_esr=0x000000009200000f; br_pc=0x00000000400a7530; br_far=0x00000000400aa000; bw_esr=0x000000009200004f; bw_pc=0x00000000400a7544; bw_far=0x00000000400aa000
+@rai1	31	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	32	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	33	ok	after service
+PASS (release/bad-request): 12 bounded service invocations, permission/input/error checks and kernel continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	err	service_request_rejected
+@rai1	3	err	service_request_rejected
+@rai1	4	err	service_request_rejected
+@rai1	5	err	service_request_rejected
+@rai1	6	err	service_request_rejected
+@rai1	7	err	service_request_rejected
+@rai1	8	err	record_denied
+@rai1	9	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	10	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	11	ok	tasks=2; slice_ms=20; max_slices=6; trace=AD,BS,AW,AS,BR,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=41; b_state=exited; b_slices=0; b_code=0; b_value=42; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	12	err	service_request_rejected
+@rai1	13	err	service_request_rejected
+@rai1	14	err	service_request_rejected
+@rai1	15	err	service_request_rejected
+@rai1	16	err	service_request_rejected
+@rai1	17	err	service_request_rejected
+@rai1	18	err	record_denied
+@rai1	19	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	20	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	21	ok	tasks=2; slice_ms=20; max_slices=6; trace=AD,BS,AW,AS,BR,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=41; b_state=exited; b_slices=0; b_code=0; b_value=42; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	22	err	bad_args
+@rai1	23	err	bad_args
+@rai1	24	err	bad_args
+@rai1	25	err	bad_args
+@rai1	26	err	unknown_record
+@rai1	27	err	unknown_record
+@rai1	28	err	unknown_record
+@rai1	29	err	unknown_operation
+@rai1	30	ok	rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400a7530; ar_far=0x00000000400ab000; aw_esr=0x000000009200004f; aw_pc=0x00000000400a7544; aw_far=0x00000000400ab000; br_esr=0x000000009200000f; br_pc=0x00000000400a7530; br_far=0x00000000400aa000; bw_esr=0x000000009200004f; bw_pc=0x00000000400a7544; bw_far=0x00000000400aa000
+@rai1	31	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	32	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	33	ok	after service
+PASS (release/wrong-kind): 12 bounded service invocations, permission/input/error checks and kernel continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	err	service_request_rejected
+@rai1	3	err	service_request_rejected
+@rai1	4	err	service_request_rejected
+@rai1	5	err	service_request_rejected
+@rai1	6	err	service_request_rejected
+@rai1	7	err	service_request_rejected
+@rai1	8	err	record_denied
+@rai1	9	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	10	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	11	ok	tasks=2; slice_ms=20; max_slices=6; trace=AD,BS,AW,AS,BR,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=41; b_state=exited; b_slices=0; b_code=0; b_value=42; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	12	err	service_request_rejected
+@rai1	13	err	service_request_rejected
+@rai1	14	err	service_request_rejected
+@rai1	15	err	service_request_rejected
+@rai1	16	err	service_request_rejected
+@rai1	17	err	service_request_rejected
+@rai1	18	err	record_denied
+@rai1	19	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	20	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	21	ok	tasks=2; slice_ms=20; max_slices=6; trace=AD,BS,AW,AS,BR,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=41; b_state=exited; b_slices=0; b_code=0; b_value=42; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	22	err	bad_args
+@rai1	23	err	bad_args
+@rai1	24	err	bad_args
+@rai1	25	err	bad_args
+@rai1	26	err	unknown_record
+@rai1	27	err	unknown_record
+@rai1	28	err	unknown_record
+@rai1	29	err	unknown_operation
+@rai1	30	ok	rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400a7530; ar_far=0x00000000400ab000; aw_esr=0x000000009200004f; aw_pc=0x00000000400a7544; aw_far=0x00000000400ab000; br_esr=0x000000009200000f; br_pc=0x00000000400a7530; br_far=0x00000000400aa000; bw_esr=0x000000009200004f; bw_pc=0x00000000400a7544; bw_far=0x00000000400aa000
+@rai1	31	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	32	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	33	ok	after service
+PASS (release/bad-reply): 12 bounded service invocations, permission/input/error checks and kernel continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	err	service_reply_rejected
+@rai1	3	err	service_reply_rejected
+@rai1	4	err	service_reply_rejected
+@rai1	5	err	service_reply_rejected
+@rai1	6	err	service_reply_rejected
+@rai1	7	err	service_reply_rejected
+@rai1	8	err	record_denied
+@rai1	9	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	10	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	11	ok	tasks=2; slice_ms=20; max_slices=6; trace=AD,BS,AW,AS,BR,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=41; b_state=exited; b_slices=0; b_code=0; b_value=42; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	12	err	service_reply_rejected
+@rai1	13	err	service_reply_rejected
+@rai1	14	err	service_reply_rejected
+@rai1	15	err	service_reply_rejected
+@rai1	16	err	service_reply_rejected
+@rai1	17	err	service_reply_rejected
+@rai1	18	err	record_denied
+@rai1	19	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	20	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	21	ok	tasks=2; slice_ms=20; max_slices=6; trace=AD,BS,AW,AS,BR,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=41; b_state=exited; b_slices=0; b_code=0; b_value=42; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	22	err	bad_args
+@rai1	23	err	bad_args
+@rai1	24	err	bad_args
+@rai1	25	err	bad_args
+@rai1	26	err	unknown_record
+@rai1	27	err	unknown_record
+@rai1	28	err	unknown_record
+@rai1	29	err	unknown_operation
+@rai1	30	ok	rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400a72e0; ar_far=0x00000000400ab000; aw_esr=0x000000009200004f; aw_pc=0x00000000400a72f4; aw_far=0x00000000400ab000; br_esr=0x000000009200000f; br_pc=0x00000000400a72e0; br_far=0x00000000400aa000; bw_esr=0x000000009200004f; bw_pc=0x00000000400a72f4; bw_far=0x00000000400aa000
+@rai1	31	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	32	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	33	ok	after service
+PASS (release/worker-fault): 12 bounded service invocations, permission/input/error checks and kernel continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	err	service_failed
+@rai1	3	err	service_failed
+@rai1	4	err	service_failed
+@rai1	5	err	service_failed
+@rai1	6	err	service_failed
+@rai1	7	err	service_failed
+@rai1	8	err	record_denied
+@rai1	9	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	10	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	11	ok	tasks=2; slice_ms=20; max_slices=6; trace=AD,BS,AW,AS,BR,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=41; b_state=exited; b_slices=0; b_code=0; b_value=42; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	12	err	service_failed
+@rai1	13	err	service_failed
+@rai1	14	err	service_failed
+@rai1	15	err	service_failed
+@rai1	16	err	service_failed
+@rai1	17	err	service_failed
+@rai1	18	err	record_denied
+@rai1	19	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	20	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	21	ok	tasks=2; slice_ms=20; max_slices=6; trace=AD,BS,AW,AS,BR,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=41; b_state=exited; b_slices=0; b_code=0; b_value=42; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+@rai1	22	err	bad_args
+@rai1	23	err	bad_args
+@rai1	24	err	bad_args
+@rai1	25	err	bad_args
+@rai1	26	err	unknown_record
+@rai1	27	err	unknown_record
+@rai1	28	err	unknown_record
+@rai1	29	err	unknown_operation
+@rai1	30	ok	rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400a7530; ar_far=0x00000000400ab000; aw_esr=0x000000009200004f; aw_pc=0x00000000400a7544; aw_far=0x00000000400ab000; br_esr=0x000000009200000f; br_pc=0x00000000400a7530; br_far=0x00000000400aa000; bw_esr=0x000000009200004f; bw_pc=0x00000000400a7544; bw_far=0x00000000400aa000
+@rai1	31	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	32	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400ad000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	33	ok	after service

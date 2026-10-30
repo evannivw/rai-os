@@ -3,7 +3,7 @@
 An educational AArch64 operating-system prototype in Rust, exploring how an
 AI coordinator could adapt work to goals, events, and resource limits.
 
-**Working today:** bare-metal boot in QEMU, fatal EL1 exception diagnostics, a checked EL1 context return, controlled EL1 timer interrupts, one EL0 Rust program with bounded syscalls and a timer-enforced deadline, a two-context scheduling diagnostic, bounded task completion and fault handling, task-private stack mappings, bounded scalar messages between two tasks, blocking receive with wakeup, PL011 UART input/output, help/info/uptime/echo,
+**Working today:** bare-metal boot in QEMU, fatal EL1 exception diagnostics, a checked EL1 context return, controlled EL1 timer interrupts, one EL0 Rust program with bounded syscalls and a timer-enforced deadline, a two-context scheduling diagnostic, bounded task completion and fault handling, task-private stack mappings, bounded scalar messages between two tasks, blocking receive with wakeup, a bounded EL0 record-count service, PL011 UART input/output, help/info/uptime/echo,
 a bounded structured protocol, a physical-page pool with diagnostics, active EL1 memory permissions, a cooperative word-count task, a Rust host terminal
 console, a graphical host control panel, and a bounded priority host coordinator.
 **Not implemented:** Meta integration, autonomous agents, a native guest desktop, general multi-task
@@ -46,6 +46,8 @@ python3 scripts/verify_ipc.py
 python3 scripts/verify_ipc.py --release
 python3 scripts/verify_wait.py
 python3 scripts/verify_wait.py --release
+python3 scripts/verify_service.py
+python3 scripts/verify_service.py --release
 python3 scripts/verify_user_timeout.py
 python3 scripts/verify_user_timeout.py --release
 python3 scripts/verify_user.py
@@ -71,6 +73,7 @@ and 37 console/protocol cases, including the guest counter. See the guides for h
 - [Kernel-to-service roadmap](docs/ROADMAP.md)
 - [MMU tables and permissions](docs/MMU.md)
 - [Physical pages and memory diagnostics](docs/MEMORY.md)
+- [First bounded guest record service](docs/RECORD_SERVICE.md)
 - [Waiting, wakeup and closed-batch deadlock handling](docs/IPC_WAIT.md)
 - [Bounded task messages and syscall ABI](docs/IPC.md)
 - [Private task stacks and hardware access checks](docs/TASK_MEMORY.md)

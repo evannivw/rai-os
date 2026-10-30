@@ -6,6 +6,10 @@ license = "Apache-2.0"
 description = "Educational AArch64 kernel for QEMU virt"
 
 [features]
+service-test-bad-request = []
+service-test-wrong-kind = []
+service-test-bad-reply = []
+service-test-worker-fault = []
 # Deliberately halts at boot; verification uses a separate target directory.
 exception-self-test = []
 wait-test-both = []

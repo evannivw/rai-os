@@ -1,9 +1,9 @@
 # From a booting kernel to guest services
 
-Status: October 28, 2026. Each step should produce a small, independently
+Status: October 29, 2026. Each step should produce a small, independently
 observable result before the next. The kernel supplies mechanisms and enforces
 access; a future coordinator chooses policy above it. Kernel Rust modules are
-not isolated processes. One built-in program now runs with lower privilege. The existing coordinator still runs on the host.
+not isolated processes. Fixed linked programs now run with lower privilege. The existing coordinator still runs on the host.
 
 | Step | Status | What it enables / how to observe it |
 | --- | --- | --- |
@@ -21,7 +21,7 @@ not isolated processes. One built-in program now runs with lower privilege. The 
 | Separate task memory | Done for two fixed stack pages | A/B task maps deny peer-stack reads/writes; shared code remains read-only. See [TASK_MEMORY.md](TASK_MEMORY.md). |
 | Bounded task messages | Done for two fixed tasks | Checked IDs/routes, two-slot FIFO inboxes, request/reply, closed/full/empty errors and a call cap. See [IPC.md](IPC.md). |
 | Waiting and wakeup | Done for the two-task batch | A receiver stops getting CPU turns and resumes with a message or Closed; mutual waiting is reported as deadlocked. See [IPC_WAIT.md](IPC_WAIT.md). |
-| One bounded guest service | Next small step | Define a small request/result contract and a worker that waits, validates, executes and replies; add external event delivery and persistent lifetime as separate increments. |
+| One bounded guest service | Done for immutable record token counts | Host request -> EL0 client/worker -> checked result, with private stacks and scalar IPC. See [RECORD_SERVICE.md](RECORD_SERVICE.md). Persistent lifetime remains separate. |
 | Guest coordinator and executors | Planned | Move decision/execution services into RAI-OS with enforced permissions. Adapt host std/storage assumptions. |
 | Meta-driven policy | Planned | Real model proposals go through validated operations and produce observed outcomes. |
 
@@ -51,8 +51,8 @@ on that service boundary instead of owning hardware or arbitrary memory access.
 | A small guest service | Turn these mechanisms into a request/operation/result behavior with explicit limits. |
 | Coordinator and Meta policy | Choose among allowed operations; keep enforcement and observed results in deterministic code. |
 
-The current implementation has completed the waiting/wakeup foundation for a
-closed, bounded two-task batch. The next service step should stay equally small.
+The current implementation uses the waiting/wakeup foundation for a closed,
+bounded two-task record-count service. The next integration should stay equally small.
 Long-lived sessions need external event delivery, cancellation/timeouts and
 explicit lifetime rules; C/D/E need additional records, maps and permissions.
 Neither is obtained simply by renaming a module. A native GUI, phone drivers,
@@ -86,3 +86,36 @@ Record model/network overhead and unsuccessful outcomes as well as successes.
 The visual panel can show that evidence; it does not manufacture it or establish
 that AI is superior. Retain dates and eligible contributions, then prepare the
 three-minute video and reproducible checkout instructions.
+
+## Complete project view — October 29 checkpoint
+
+This groups completed work for learning; the work log retains actual dates and
+individual increments. Done means the stated bounded behavior, not general OS support.
+
+| Order | Delivered piece | What it contributes |
+| --- | --- | --- |
+| 1 | Repository, Rust/Cargo, pinned target and QEMU setup | Repeatable build and preserved original history. |
+| 2 | Own no_std/no_main Rust kernel and assembly entry | Boot on the emulated AArch64 board. |
+| 3 | UART, shell and versioned structured protocol | Human and host requests, bounded parsing and real responses. |
+| 4 | Rules/provenance, demo contract and immutable fixtures | Submission constraints, desired outputs and reference data; full demo remains planned. |
+| 5 | Clock and host terminal | Measured guest uptime and a host-to-guest control path. |
+| 6 | Graphical host Device Lab | Visible real guest results; not a guest graphical desktop. |
+| 7 | Cooperative word-count job and cancellation | First observable bounded work in kernel context. |
+| 8 | Host coordinator, then high/normal/low priorities | Sequence jobs according to observed completion. |
+| 9 | Exception diagnostics | Identify controlled execution faults. |
+| 10 | Physical-page ownership | Reserve, zero, test and release memory safely under current assumptions. |
+| 11 | MMU tables and access permissions | Hardware-enforced executable/read-only/writable boundaries. |
+| 12 | Saved exception context | Resume register/stack state after a controlled exception. |
+| 13 | EL0 program and checked syscalls | Less-privileged code requests kernel operations. |
+| 14 | Timer interrupts and invocation deadline | Regain control even if a user program does not cooperate. |
+| 15 | Two resumable tasks and bounded lifecycle | Share one CPU; keep the peer progressing after completion/fault/limit. |
+| 16 | Private writable stacks | Deny each task access to its peer's stack. |
+| 17 | Bounded scalar IPC | Authorized task-to-task request/reply with FIFO inboxes. |
+| 18 | Blocking receive and wakeup | Waiting tasks receive no CPU turns until completion/closure. |
+| 19 | Bounded record service | Host chooses a record; an EL0 worker scans it and returns an independently checked count. |
+
+Remaining delivery path: a real Meta decision through the host bridge; useful
+multi-step workload and event handling; independent demo artifact verification;
+fair baseline/comparison including model overhead; presentation, reproducibility,
+three-minute video and submission. See the revised [schedule](HACKATHON_PLAN.md).
+Do not continue expanding kernel mechanisms without a concrete demo dependency.

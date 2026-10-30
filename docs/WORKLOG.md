@@ -826,3 +826,60 @@ increments. [IPC_WAIT.md](IPC_WAIT.md) documents the ABI, transitions, bounded
 failure policy and actual captures. Page ownership remains twelve tables and
 244 free pool pages. No receive timeout, WFI idle loop, SMP, dynamic task creation,
 guest coordinator, Meta integration or measured efficiency gain is claimed.
+
+## October 29, 2026 — first bounded guest record service
+
+Added record.count <key>: host/UART parsing validates a fixed immutable record
+identity, then an EL0 client sends a scalar request to an EL0 worker. The worker
+validates the sender, operation kind and numeric ID, scans read-only public
+fixture bytes, and returns packed record identity/byte length/ASCII token count.
+The client waits using existing IPC, validates the reply and exits. The service
+adapter requires both successful exits, matching values and valid result bounds.
+The normal trace observed AS,BR,AD,BS,AW,AE,BE. notes@1 returned 30 bytes/7 tokens,
+notes@2 44 bytes/9 tokens, and empty@1 zero bytes/tokens.
+
+Kept responsibilities separate: records.rs owns immutable data/count semantics;
+schedule/service_programs.rs owns linked user request/reply programs; service.rs
+owns validated execution/completion; existing runtime/MMU/mailboxes enforce the
+bounds. Only the client's scalar x0 input is initialized differently. No new
+user-pointer copy or unsafe memory access was added. The source table is shared
+user read-only data with a compile-time 128-byte maximum; denied source bytes
+are absent from the ELF. This does not establish per-record confidentiality.
+All six allowed revisions are immediately available; scenario events are pending.
+
+First debug bring-up exposed a core ASCII helper compiled into kernel text:
+nonempty records faulted while the empty record succeeded. Replaced that helper
+with an equivalent in-function byte pattern; retained all permissions. The
+fault remained contained and the console continued. This failed bring-up is not
+presented as a passing run. Final evidence is linked from RECORD_SERVICE.md.
+
+Final verification passed in debug and release: five real QEMU images per
+profile, covering normal work, invalid scalar ID, wrong service kind, wrong
+record identity in a reply, and worker forbidden read. Each image ran all six
+allowed requests twice, plus a normal direct-shell request: 61 service
+invocations per profile. The independent host regex checker reads trusted
+fixture bytes, validates catalog lengths/digests and checks exact counts, packed
+values, both task completions and scheduling/message transitions. Corrupted
+counts, identities, lengths and completion states were rejected. Its replay also
+accepted two synthetic valid timer interleavings, explicitly not QEMU evidence.
+Denied/unknown inputs, malformed/extra arguments, repeated fresh invocations and
+post-failure user/IPC/isolation/MMU/memory/echo continuity passed.
+
+Full existing regression suites passed in both profiles: boot/protocol,
+scheduling, lifecycle, IPC, waiting, private-stack isolation, timer, context,
+exceptions, MMU, memory, cooperative tasks, user and user-timeout. Host console
+integration now exercises record.count; all 16 panel tests passed, including the
+shared-model request validation test. Formatting, default plus all 42 individual
+fault-feature Clippy checks, host console/panel Clippy, release panel compilation
+and mixed-feature rejection passed. Fixture consistency and its six corruption
+checks also passed. GUI controls did not change. No benchmark or AI claim is made.
+
+Updated ROADMAP.md with the complete 19-step project journey and remaining demo
+path, as requested. HACKATHON_PLAN.md retains the original schedule and explicitly
+revises targets at the October 29 checkpoint: Meta integration has not yet been
+completed. The next increment is one real model proposal through the host bridge
+to a validated guest operation and observed result, then useful workload/event
+handling, full artifact verification and a fair baseline. This small service
+checker does not replace the full independent demo verifier. Persistent guest
+services, external wake sources, phone support and measured gains remain pending.
+All new artifacts/commit text are English; historical evidence/dates are preserved.

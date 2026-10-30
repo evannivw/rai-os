@@ -132,3 +132,11 @@ resumes the same receive call and sends its reply. The report adds blocked,
 woken, closed_wakes and deadlocked counters. ipc.check retains its earlier
 nonblocking behavior. See [IPC_WAIT.md](IPC_WAIT.md) and the dependency explanation
 in [ROADMAP.md](ROADMAP.md). No graphical controls changed.
+
+## Guest record service
+
+Use `record.count notes@1` or `record.count empty@1` to execute a bounded worker
+inside QEMU and display its actual result and task trace. The host accepts a
+1-32 character key using ASCII letters, digits, @ and hyphen; the guest validates
+the allowed catalog and revision. `record.count restricted@1` returns a denied
+result. See [RECORD_SERVICE.md](RECORD_SERVICE.md). No new GUI control was added.

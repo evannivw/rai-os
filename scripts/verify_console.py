@@ -9,9 +9,12 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     result = subprocess.run(
         ["sh", "scripts/console.sh"], cwd=ROOT,
-        input="ipc.wait\nipc.check\nschedule.isolate\nschedule.run\nschedule.fault\nschedule.check\nuser.spin\ntimer.check\nuser.run\ncontext.check\ninfo\nuptime\nmmu.info\nmemory.info\nmemory.check\ntask.start\ntask.status\ntask.cancel 1\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
+        input="record.count notes@1\nrecord.count empty@1\nrecord.count restricted@1\nrecord.count notes@1\tbad\nipc.wait\nipc.check\nschedule.isolate\nschedule.run\nschedule.fault\nschedule.check\nuser.spin\ntimer.check\nuser.run\ncontext.check\ninfo\nuptime\nmmu.info\nmemory.info\nmemory.check\ntask.start\ntask.status\ntask.cancel 1\necho bridge alive\necho no\tallowed\ninfo\nexit\n",
         text=True, capture_output=True, timeout=60,
     )
+    assert "[kernel / OK] record=notes@1; bytes=30; tokens=7; worker=EL0;" in result.stdout
+    assert "[kernel / OK] record=empty@1; bytes=0; tokens=0; worker=EL0;" in result.stdout
+    assert "[kernel / REJECTED] record_denied" in result.stdout
     assert "rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true" in result.stdout
     assert "a_value=42;" in result.stdout and "b_value=41;" in result.stdout
     assert "ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0;" in result.stdout

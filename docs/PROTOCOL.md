@@ -305,3 +305,17 @@ states in the mutual-wait fixture; inspect task states/codes before treating it
 as a successful application operation. ipc_wait_invariant is a command-level
 internal error; existing parser/scheduler/MMU/timer errors retain their meaning.
 [IPC_WAIT.md](IPC_WAIT.md) defines syscall 12, closure and deadlock limits.
+
+## Bounded guest record service
+
+`record.count` requires exactly four fields, with one immutable fixture key:
+`@rai1\t40\trecord.count\tnotes@1\n`. The matching response starts
+`@rai1\t40\tok\trecord=notes@1; bytes=30; tokens=7; worker=EL0; `
+followed by the existing task/message report. Record identity includes revision.
+The direct shell command is `record.count notes@1`.
+
+See [RECORD_SERVICE.md](RECORD_SERVICE.md) for allowed keys, exact token semantics,
+packed IPC result, validation errors and batch lifetime. `record.count` takes no
+source path or arbitrary content. Request IDs remain UART correlation IDs;
+internal task IDs and record IDs are separate namespaces. The operation does
+not implement scenario release/availability events or the full review-pack index.

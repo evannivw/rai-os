@@ -32,6 +32,10 @@ pub fn parse(line: &str) -> Result<Request<'_>, Error<'_>> {
         Some("info") => Operation::Info,
         Some("timer.check") => Operation::TimerCheck,
         Some("ipc.wait") => Operation::IpcWait,
+        Some("record.count") => Operation::RecordCount(
+            crate::records::RecordId::parse(fields.next().ok_or(error("bad_args"))?)
+                .map_err(error)?,
+        ),
         Some("ipc.check") => Operation::IpcCheck,
         Some("schedule.isolate") => Operation::ScheduleIsolate,
         Some("schedule.check") => Operation::ScheduleCheck,

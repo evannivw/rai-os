@@ -7,6 +7,7 @@ pub enum Operation<'a> {
     ContextCheck,
     TimerCheck,
     IpcWait,
+    RecordCount(&'a str),
     IpcCheck,
     ScheduleIsolate,
     ScheduleCheck,
@@ -33,6 +34,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         "info" => Ok(Operation::Info),
         "timer.check" => Ok(Operation::TimerCheck),
         "ipc.wait" => Ok(Operation::IpcWait),
+        _ if line.starts_with("record.count ") => Ok(Operation::RecordCount(&line[13..])),
         "ipc.check" => Ok(Operation::IpcCheck),
         "schedule.isolate" => Ok(Operation::ScheduleIsolate),
         "schedule.check" => Ok(Operation::ScheduleCheck),
@@ -63,7 +65,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
+            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, record.count <key>, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
     }
 }
 
@@ -76,6 +78,17 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
         Operation::Info => "info".to_owned(),
         Operation::TimerCheck => "timer.check".to_owned(),
         Operation::IpcWait => "ipc.wait".to_owned(),
+        Operation::RecordCount(key) => {
+            if key.is_empty()
+                || key.len() > 32
+                || !key
+                    .bytes()
+                    .all(|b| b.is_ascii_alphanumeric() || b == b'@' || b == b'-')
+            {
+                return Err("Record key requires 1-32 ASCII letters, digits, @ or -");
+            }
+            format!("record.count\t{key}")
+        }
         Operation::IpcCheck => "ipc.check".to_owned(),
         Operation::ScheduleIsolate => "schedule.isolate".to_owned(),
         Operation::ScheduleCheck => "schedule.check".to_owned(),
@@ -170,6 +183,18 @@ mod tests {
             assert!(parse_input(&format!("{name}\t")).is_err());
         }
         assert!(parse_input("memory.free 0x40080000").is_err());
+    }
+
+    #[test]
+    fn record_requests_preserve_identity_and_reject_frame_injection() {
+        assert_eq!(
+            encode(9, &parse_input("record.count notes@2").unwrap()).unwrap(),
+            "@rai1\t9\trecord.count\tnotes@2\n"
+        );
+        for key in ["", "notes@1\tbad", "a\n@rai1", "../notes", "a b", "ñ"] {
+            assert!(encode(9, &Operation::RecordCount(key)).is_err());
+        }
+        assert!(encode(9, &Operation::RecordCount(&"a".repeat(33))).is_err());
     }
 
     #[test]

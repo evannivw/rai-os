@@ -8,7 +8,9 @@ EL0 integer state on one CPU. A [bounded task lifecycle](TASK_LIFECYCLE.md) now
 lets one task finish or fault while its peer continues. There is no general task
 creation, heap or isolated agent execution. Two fixed tasks can now exchange
 [bounded scalar messages](IPC.md) through kernel-owned mailboxes and use
-[blocking receive](IPC_WAIT.md) with message/closure wakeup. EL1 stage-1 translation
+[blocking receive](IPC_WAIT.md) with message/closure wakeup. A first
+[record-count service](RECORD_SERVICE.md) now reuses those mechanisms to process
+immutable fixture records at EL0 and return results over UART. EL1 stage-1 translation
 now has a base map and two fixed task maps with private writable stack pages;
 user code/constants remain shared read-only. See [MMU.md](MMU.md) and
 [TASK_MEMORY.md](TASK_MEMORY.md).
@@ -79,6 +81,11 @@ assumptions and limits. Rust panic still prints and halts without recovery.
   blocked receivers. Lifecycle Waiting states are skipped until the runtime
   completes their pending result; a closed batch with no runnable task reports
   remaining waiters as Deadlocked. No user pointers are dereferenced.
+- records.rs: allowed immutable fixture IDs and bounded ASCII token counting;
+  source bytes are shared user read-only data, and counting executes in user text.
+- service.rs: validated input -> bounded guest execution -> completion/result checks.
+  schedule/service_programs.rs: fixed EL0 request/reply client and worker. This is
+  one closed batch per host request, without persistent lifetime or external wakes.
 - timer/: exclusive GICv2/CNTP adapter, controlled EL1 IRQ diagnostic and absolute
   EL0 budget or scheduling slice. IRQs are enabled in the diagnostic loop or EL0; successful handlers
   never use UART or allocate. User/schedule dispatch accesses only its paused session or observation. See [TIMER.md](TIMER.md).

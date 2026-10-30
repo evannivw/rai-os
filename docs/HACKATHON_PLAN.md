@@ -1,6 +1,6 @@
 # RAI-OS hackathon plan
 
-Updated October 28, 2026. Local times: America/Guatemala. This is a proposed
+Updated October 29, 2026. Local times: America/Guatemala. This is a proposed
 roadmap; completed foundations are identified below. AI and a general guest service runtime remain pending.
 
 ## Sources and eligibility
@@ -63,7 +63,9 @@ now prevent these tasks from reading/writing each other's stack. General service
 address-space ownership and task creation remain pending. Two fixed tasks now
 exchange [bounded scalar messages](IPC.md) and [wait for messages](IPC_WAIT.md)
 without being scheduled while blocked. External event delivery, persistent
-service lifetime and a general service runtime remain pending. See the [kernel-to-service roadmap](ROADMAP.md). A [graphical host control panel](PANEL.md) now exposes real
+service lifetime and a general service runtime remain pending. A first
+[bounded record service](RECORD_SERVICE.md) now accepts a host-selected record,
+executes counting at EL0 and returns an independently checked result. See the [kernel-to-service roadmap](ROADMAP.md). A [graphical host control panel](PANEL.md) now exposes real
 QEMU boot, info, uptime, echo, and a [cooperative word-count task](TASKS.md). This is a host UI, not a guest desktop. The
 correctness fixture is retained; verifier implementation resumes with demo jobs.
 
@@ -100,7 +102,7 @@ technical depth/execution 20%, and demo 25%. Show a concrete user task, substant
 Meta decisions, sound limits/tests, and a reproducible visible result. Do not
 expand scope merely to pursue every bonus award.
 
-## Proposed schedule
+## Original proposed schedule (superseded October 29)
 
 | Date | Deliverable | Completion condition |
 | --- | --- | --- |
@@ -117,6 +119,27 @@ expand scope merely to pursue every bonus award.
 Schedule is a target, not a claim of completion. Access and eligibility are external
 dependencies. If access is delayed, a mock may support transport development only;
 resolve an eligible real provider before calling the final demo integrated.
+
+## Revised delivery targets — October 29
+
+The kernel foundations and one useful protected service are implemented. The
+original October 29 target for a real Meta operation has not yet been met.
+The main delivery risk is extending infrastructure without completing the model
+and useful workload path. These are targets, not completed-work claims.
+
+| Date | Target | Exit condition |
+| --- | --- | --- |
+| Oct 29 | Bounded guest service; resolve Meta access | Guest service verified; operational eligible model access still to confirm. |
+| Oct 30 | First actual Meta decision | Proposal -> validated allowed operation -> observed guest result. |
+| Oct 31-Nov 1 | Useful workload, events and failures; feature freeze | Repeatable cases, independent result checks and fair baseline/comparison. |
+| Nov 2 | Corrections, evidence, reproducibility | Clean-checkout run and reviewed results/limitations. |
+| Nov 3 | Video and submission preparation | Three-minute video, contribution attribution and accessible links. |
+| Nov 4 | Final check and submission | Internal target 18:00 Guatemala; official deadline 20:00. |
+
+Protect the complete delivery path before adding GUI polish, persistent guest
+services, more cores or phone support. The small record-count checker is not the
+full independent review-pack verifier. Real Meta usage, useful adaptation and
+comparative benefit remain pending; do not infer them from passing kernel tests.
 
 ## Non-goals and teaching
 

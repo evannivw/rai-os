@@ -17,6 +17,7 @@ pub enum RunMode {
     Fault,
     Messages,
     WaitMessages,
+    RecordCount(crate::records::RecordId),
 }
 struct Record {
     frame: Frame,
@@ -62,6 +63,14 @@ pub struct RunReport {
     length: usize,
     ipc: Option<IpcStats>,
     waiting: bool,
+}
+impl RunReport {
+    /// Exit codes/values only when both tasks actually exited (not fault/limit).
+    pub fn exits(&self) -> Option<[(u64, u64); 2]> {
+        let [a, b] = &self.records;
+        (a.lifecycle.state == State::Exited && b.lifecycle.state == State::Exited)
+            .then_some([(a.code, a.value), (b.code, b.value)])
+    }
 }
 impl fmt::Display for RunReport {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -132,6 +141,8 @@ pub fn run(timer: &mut Timer, mmu: &Mmu, mode: RunMode) -> Result<RunReport, &'s
         static mut __user_stack_bottom: [u8; 8192];
         static __user_text_start: u8;
         static __user_text_end: u8;
+        fn record_client();
+        fn record_worker();
         fn wait_program_a();
         fn wait_program_b();
         fn ipc_program_a();
@@ -161,10 +172,17 @@ pub fn run(timer: &mut Timer, mmu: &Mmu, mode: RunMode) -> Result<RunReport, &'s
                 RunMode::Fault => lifecycle_fault as *const () as u64,
                 RunMode::Messages => ipc_program_a as *const () as u64,
                 RunMode::WaitMessages => wait_program_a as *const () as u64,
+                RunMode::RecordCount(_) => record_client as *const () as u64,
             }
         },
         if spin_b {
             user_spin as *const () as u64
+        } else if matches!(mode, RunMode::RecordCount(_)) {
+            if cfg!(feature = "service-test-worker-fault") {
+                lifecycle_fault as *const () as u64
+            } else {
+                record_worker as *const () as u64
+            }
         } else if matches!(mode, RunMode::WaitMessages) {
             if cfg!(feature = "wait-test-peer-fault") {
                 lifecycle_fault as *const () as u64
@@ -200,6 +218,14 @@ pub fn run(timer: &mut Timer, mmu: &Mmu, mode: RunMode) -> Result<RunReport, &'s
             calls: 0,
         }
     });
+    if let RunMode::RecordCount(record) = mode {
+        records[0].frame.registers[0] = record.raw();
+    }
+    let ipc_enabled = matches!(
+        mode,
+        RunMode::Messages | RunMode::WaitMessages | RunMode::RecordCount(_)
+    );
+    let wait_enabled = matches!(mode, RunMode::WaitMessages | RunMode::RecordCount(_));
     let mut trace = [0; MAX_EVENTS];
     let mut length = 0;
     // SAFETY: sole owner of the mapped user region, one masked EL1 CPU, no DMA or
@@ -221,7 +247,7 @@ pub fn run(timer: &mut Timer, mmu: &Mmu, mode: RunMode) -> Result<RunReport, &'s
         task.lifecycle.start()?;
         // SAFETY: valid_context checks EL0 mode/masks, executable user PC and this
         // task's assigned aligned stack. Stored frames are kernel-only; initial
-        // GPRs are zero. The input and interrupt Observation are separate objects.
+        // GPRs are zero except the validated scalar service ID in client x0. The input and interrupt Observation are separate objects.
         let observation = unsafe { run_turn(timer, mmu, TaskSpace::from_index(id)?, &task.frame) }?;
         task.frame = observation.frame;
         let mut ipc_event = None;
@@ -235,9 +261,9 @@ pub fn run(timer: &mut Timer, mmu: &Mmu, mode: RunMode) -> Result<RunReport, &'s
                 task.code = task.frame.registers[0];
                 task.value = task.frame.registers[1];
                 Event::Exit
-            } else if matches!(mode, RunMode::Messages | RunMode::WaitMessages)
+            } else if ipc_enabled
                 && (matches!(task.frame.registers[8], 10 | 11)
-                    || (matches!(mode, RunMode::WaitMessages) && task.frame.registers[8] == 12))
+                    || (wait_enabled && task.frame.registers[8] == 12))
             {
                 task.calls += 1;
                 stats.calls[id] = task.calls;
@@ -340,8 +366,8 @@ pub fn run(timer: &mut Timer, mmu: &Mmu, mode: RunMode) -> Result<RunReport, &'s
         }),
         trace,
         length,
-        ipc: matches!(mode, RunMode::Messages | RunMode::WaitMessages).then_some(stats),
-        waiting: matches!(mode, RunMode::WaitMessages),
+        ipc: ipc_enabled.then_some(stats),
+        waiting: wait_enabled,
     })
 }
 fn valid_context(frame: &Frame, stack: (u64, u64), text: (u64, u64)) -> bool {
