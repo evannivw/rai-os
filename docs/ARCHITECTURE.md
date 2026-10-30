@@ -12,7 +12,9 @@ creation, heap or isolated agent execution. Two fixed tasks can now exchange
 [record-count service](RECORD_SERVICE.md) now reuses those mechanisms to process
 immutable fixture records at EL0 and return results over UART. A separate
 [persistent worker](PERSISTENT_WORKER.md) now retains its EL0 continuation and
-private stack between console requests. EL1 stage-1 translation
+private stack between console requests. An initial [guest coordinator](GUEST_COORDINATOR.md)
+now runs at EL0 alongside that worker, admitting versioned manual proposals and
+retaining results. Its Meta transport integration remains pending. EL1 stage-1 translation
 now has a base map and two fixed task maps with private writable stack pages;
 user code/constants remain shared read-only. See [MMU.md](MMU.md) and
 [TASK_MEMORY.md](TASK_MEMORY.md).
@@ -94,6 +96,11 @@ assumptions and limits. Rust panic still prints and halts without recovery.
   ingress/reply validation and explicit stop/failure cleanup. Endpoint 1 is kernel
   host ingress; worker_program.rs executes at EL0 as endpoint 2. The console owns
   the session. This is not a general daemon scheduler or guest AI coordinator.
+- schedule/coordinator_program.rs: persistent EL0 goal/proposal policy; scalar
+  host input, duplicate/stale rejection, IPC dispatch and result retention.
+  schedule/coordinator.rs: kernel-owned two-context session, coordinator-only
+  host gateway, bounded turns, report checks and pair cleanup. It shares the
+  worker entry/IPC and exclusive RAM lease, not host Meta state or credentials.
 - timer/: exclusive GICv2/CNTP adapter, controlled EL1 IRQ diagnostic and absolute
   EL0 budget or scheduling slice. IRQs are enabled in the diagnostic loop or EL0; successful handlers
   never use UART or allocate. User/schedule dispatch accesses only its paused session or observation. See [TIMER.md](TIMER.md).

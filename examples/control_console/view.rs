@@ -12,7 +12,7 @@ pub fn connected() {
     println!("Connection: kernel boot and UART console confirmed.");
     println!("Tasks: task.start <text> | task.status | task.cancel <id>");
     println!(
-        "Commands: help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | worker.start | worker.count <key> | worker.status | worker.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <ASCII text> | exit\n"
+        "Commands: help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start | coord.observe <key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <ASCII text> | exit\n"
     );
 }
 

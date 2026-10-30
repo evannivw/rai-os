@@ -150,3 +150,10 @@ multiple persistent workers, background event dispatch, a guest coordinator,
 permissions for AI-generated code, or a demonstrated advantage over other OSes.
 The next scoped step can be guest-side coordination over this lifetime boundary;
 credentials and HTTPS should remain on the host for the hackathon.
+
+## Subsequent guest coordinator increment
+
+The [guest coordinator](GUEST_COORDINATOR.md) now reuses this EL0 worker entry
+alongside a persistent coordinator at EL0. `worker.*` remains its standalone mode;
+`coord.*` owns both stack pages as a separate session, so the two modes cannot run
+simultaneously. The Meta bridge still uses its original batch path.

@@ -5,6 +5,13 @@ pub const MAX_BYTES: usize = 128;
 #[derive(Clone, Copy)]
 pub struct RecordId(u64);
 impl RecordId {
+    pub fn from_raw(raw: u64) -> Result<Self, &'static str> {
+        if (1..=6).contains(&raw) {
+            Ok(Self(raw))
+        } else {
+            Err("unknown_record")
+        }
+    }
     pub fn parse(key: &str) -> Result<Self, &'static str> {
         let id = match key {
             "brief@1" => 1,

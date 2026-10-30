@@ -70,6 +70,14 @@ until stop or worker failure releases the shared user RAM. See
 [PERSISTENT_WORKER.md](PERSISTENT_WORKER.md) for limits and verification.
 No API key is required; the Meta bridge remains a separate host program.
 
+## Guest coordinator
+
+In a fresh console boot, enter `coord.start`, `coord.observe notes@1`,
+`coord.propose 1:notes@1`, `coord.status`, then `coord.stop`. The coordinator
+and worker both run at EL0 inside RAI-OS. This path uses manual proposals; the
+existing Meta bridge still uses its separate batch path. See
+[GUEST_COORDINATOR.md](GUEST_COORDINATOR.md) for versioned admission and recovery.
+
 ## Original host example
 
 ```sh

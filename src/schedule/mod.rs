@@ -3,12 +3,27 @@ mod ipc_programs;
 mod isolation;
 mod lifecycle;
 pub use isolation::{IsolationReport, check as isolate};
+pub mod coordinator;
+mod coordinator_program;
 mod programs;
 mod runtime;
 mod service_programs;
 mod wait_programs;
 pub mod worker;
 mod worker_program;
+/// Fixed console-owned sessions; the shared RAM lease permits only one at a time.
+pub struct Sessions {
+    pub worker: worker::Worker,
+    pub coordinator: coordinator::Coordinator,
+}
+impl Sessions {
+    pub fn new() -> Self {
+        Self {
+            worker: worker::Worker::new(),
+            coordinator: coordinator::Coordinator::new(),
+        }
+    }
+}
 use crate::{
     clock,
     context::Frame,

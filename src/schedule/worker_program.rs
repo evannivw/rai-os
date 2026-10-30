@@ -11,6 +11,9 @@ pub extern "C" fn persistent_worker() -> ! {
         if request.0 != 0 || request.1 != 1 || request.2 != 20 {
             finish(1, 0);
         }
+        if cfg!(feature = "coord-test-worker-gateway") {
+            let _ = call(13, 0, 0, 0);
+        }
         if cfg!(feature = "worker-test-fault") {
             // SAFETY: deliberate EL0 permission fault at the fixed kernel entry.
             // The runtime must retire this task and regain the shell.

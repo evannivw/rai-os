@@ -1044,3 +1044,68 @@ service lifetime; it does not provide multiple persistent workers, dynamic
 process loading, a guest AI coordinator, persistent storage or a finished OS.
 The useful demo workload, full independent artifact verifier, fair comparison
 and three-minute video remain pending against the unchanged November 4 deadline.
+
+
+## 2026-10-30 — Guest EL0 coordinator and versioned proposal admission
+
+Implemented the next requested guest-service boundary: retained coordinator A
+and counting worker B at EL0. Each uses its existing private stack map. A owns
+the current goal, compares proposal tickets/record identity, rejects completed
+or superseded work, sends allowed work to B, and retains the observed result.
+The kernel runtime owns frames, mailboxes, per-command budgets, the exclusive
+RAM lease, host gateway and publication validation. These are linked programs,
+not dynamically loaded processes or a complete microkernel.
+
+Added coord.start/observe/propose/status/stop to UART, the direct shell and host
+console. Proposal arguments are bounded ticket:key pairs. A coordinator-only
+host-wait syscall transports validated scalars; a separate publication syscall
+returns typed state. B cannot use that host gateway. IPC routes remain 1->2 and
+2->1 with two-slot inboxes. Both programs must be waiting again before success
+is exposed to the host. New completion reports must match result and sequence
+messages actually sent by B. A non-executing event can only repeat an already
+confirmed completion, preventing fabricated results disguised as duplicates.
+
+Tickets are issued monotonically across stop/start within one boot, including
+admitted duplicate observations. Duplicates preserve A's existing goal ticket;
+new goals receive the newly issued ticket. Counters do not wrap. A reboot still
+requires a fresh host transport session. A failure retires the pair, clears RAM
+and releases ownership, while preserving the last confirmed goal/count and the
+failure trace. The standalone worker and all legacy EL0 batches remain mutually
+exclusive with this session; stopping an inactive owner cannot erase live memory.
+
+Actual QEMU debug/release results: twelve images and 740 structured requests plus
+one direct-shell status request per profile. Normal runs completed nineteen jobs
+across all six public records, retaining state across EL1 timer/context checks,
+then restarted, rejected an old ticket and completed another job from count one.
+Independent regex tokenization and IPC trace replay verified results, FIFO
+movement, ready-task order, blocking/wakeup and final waiting states. Mutating
+counts, identities, completion counters or traces was rejected by the audit.
+Old/future tickets, wrong keys, duplicate observations/proposals, malformed
+framing, denied records, overlap and stop/recovery were exercised.
+
+Eleven injected cases covered A's forbidden read/spin/syscall flood/bad report/
+forged completion, B accessing A's host gateway, and B's forbidden read/spin/
+syscall flood/bad result ID/bad sequence. All were contained; legacy EL0 execution
+worked after ownership release. The forged-completion fixture initially also
+published a second report and hit the separate extra-report guard; it was
+corrected to wait after the forged report, then passed the intended bad-report
+check in both profiles. Selected final real captures are retained under
+docs/evidence/2026-10-30-guest-coordinator-{debug,release}.txt.
+
+Existing boot/protocol, schedule/lifecycle, IPC/wait, isolation, timer/context/
+exceptions, MMU/memory, cooperative job, user/timeout, record-service and
+persistent-worker suites passed in debug and release. Offline host Meta bridge
+and coordinator suites passed in both profiles without provider calls. Host
+console integration (including coord.*) passed, as did five console Rust tests,
+seventeen panel tests, root/panel formatting, default and all 53 individual
+fault-feature kernel Clippy checks, host console/panel Clippy, panel release
+build and mixed-feature rejection. After tightening publication validation,
+the entire new guest-coordinator suite was rerun in both profiles. Versions
+remain macOS ARM64, Rust 1.90.0 and QEMU 11.1.2 with fixed virt-9.2/TCG/Cortex-A53.
+
+Documentation now distinguishes guest policy, kernel enforcement and host
+transport. This new path uses manual typed proposals. The existing live Meta
+bridge/coordinator still uses record.count; no credentials were changed or
+provider call made in this increment. Next connect that provider to the guest's
+pending goal/ticket through an explicit host mode. Full workload, independent
+demo artifact verifier, comparative benefit, video and submission remain pending.

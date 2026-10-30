@@ -167,3 +167,13 @@ uses closed record batches. This is a concrete service-lifetime foundation, not
 completion of the kernel or of the submission demo. The remaining useful workload,
 independent artifact verifier, fair comparison and three-minute video remain
 pending; the November 4 deadline and internal target are unchanged.
+
+## Guest coordinator increment — October 30
+
+Implemented a persistent EL0 coordinator plus worker, with typed/versioned manual
+proposal admission and result retention. This fulfills the next guest-service
+boundary requested by the user. The existing live Meta path is unchanged; the
+new guest path still needs a host transport mode forwarding its pending goal to
+Meta and submitting the response. This is a separate integration task, not an
+additional claim of live Meta execution, autonomous optimization or demo completion.
+Keep the remaining workload/verifier/comparison/video tasks and deadline visible.

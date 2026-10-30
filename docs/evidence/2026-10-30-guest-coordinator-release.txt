@@ -1,0 +1,61 @@
+RAI-OS guest coordinator verification — October 30, 2026
+macOS ARM64; Rust 1.90.0; QEMU 11.1.2; virt-9.2 / Cortex-A53 / TCG / one CPU.
+Selected actual responses; omitted lines are not shown; line endings normalized to LF.
+Regenerate complete captures with scripts/verify_guest_coordinator.py --release.
+
+target/verification/guest-coordinator-normal-release.log
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	12	ok	coordinator=EL0; worker=EL0; state=idle; event=started; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=1; a_slices=0; b_slices=0; trace=AO,BD,AH
+@rai1	43	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=1; record=notes@1; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH
+@rai1	45	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=3; record=notes@2; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH
+@rai1	47	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=stale_proposal; ticket=3; record=notes@2; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH
+@rai1	51	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=wrong_record; ticket=3; record=notes@2; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH
+@rai1	52	ok	coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=3; record=notes@2; bytes=44; tokens=9; completed=1; a_calls=5; b_calls=3; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BD,AO,AH
+@rai1	54	ok	coordinator=EL0; worker=EL0; state=completed; event=duplicate; ticket=3; record=notes@2; bytes=44; tokens=9; completed=1; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH
+@rai1	126	ok	coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=22; record=appendix@1; bytes=108; tokens=17; completed=19; a_calls=5; b_calls=3; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BD,AO,AH
+@rai1	133	ok	coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=23; record=appendix@1; bytes=108; tokens=17; completed=1; a_calls=5; b_calls=3; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BD,AO,AH
+
+target/verification/guest-coordinator-coord-test-forged-completion-release.log
+@rai1	43	ok	coordinator=EL0; worker=EL0; state=failed; event=coord_bad_report; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH
+@rai1	46	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+
+target/verification/guest-coordinator-coord-test-fault-release.log
+@rai1	43	ok	coordinator=EL0; worker=EL0; state=failed; event=coord_task_fault; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=0; b_slices=0; trace=AF
+@rai1	46	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+
+target/verification/guest-coordinator-coord-test-spin-release.log
+@rai1	43	ok	coordinator=EL0; worker=EL0; state=failed; event=coord_slice_limit; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=6; b_slices=0; trace=AP,AP,AP,AP,AP,AP
+@rai1	46	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+
+target/verification/guest-coordinator-coord-test-flood-release.log
+@rai1	43	ok	coordinator=EL0; worker=EL0; state=failed; event=coord_call_limit; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=16; b_calls=0; a_slices=0; b_slices=0; trace=AS,AS,AS,AS,AS,AS,AS,AS,AS,AS,AS,AS,AS,AS,AS,AL
+@rai1	46	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+
+target/verification/guest-coordinator-coord-test-bad-report-release.log
+@rai1	43	ok	coordinator=EL0; worker=EL0; state=failed; event=coord_bad_report; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH
+@rai1	46	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+
+target/verification/guest-coordinator-coord-test-worker-gateway-release.log
+@rai1	44	ok	coordinator=EL0; worker=EL0; state=failed; event=coord_bad_syscall; ticket=1; record=notes@1; bytes=0; tokens=0; completed=0; a_calls=1; b_calls=1; a_slices=0; b_slices=0; trace=AS,BW,BF
+@rai1	47	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+
+target/verification/guest-coordinator-worker-test-fault-release.log
+@rai1	44	ok	coordinator=EL0; worker=EL0; state=failed; event=coord_task_fault; ticket=1; record=notes@1; bytes=0; tokens=0; completed=0; a_calls=1; b_calls=0; a_slices=0; b_slices=0; trace=AS,BW,BF
+@rai1	47	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+
+target/verification/guest-coordinator-worker-test-spin-release.log
+@rai1	44	ok	coordinator=EL0; worker=EL0; state=failed; event=coord_slice_limit; ticket=1; record=notes@1; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=6; trace=AS,BW,BP,AD,BP,BP,BP,BP,BP
+@rai1	47	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+
+target/verification/guest-coordinator-worker-test-flood-release.log
+@rai1	44	ok	coordinator=EL0; worker=EL0; state=failed; event=coord_call_limit; ticket=1; record=notes@1; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=16; a_slices=0; b_slices=0; trace=AS,BW,BS,AD,BS,BS,BS,BS,BS,BS,BS,BS,BS,BS,BS,BS,BS,BS,BL
+@rai1	47	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+
+target/verification/guest-coordinator-worker-test-bad-reply-release.log
+@rai1	44	ok	coordinator=EL0; worker=EL0; state=failed; event=coord_bad_syscall; ticket=1; record=notes@1; bytes=0; tokens=0; completed=0; a_calls=4; b_calls=3; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BD,AF
+@rai1	47	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+
+target/verification/guest-coordinator-worker-test-bad-sequence-release.log
+@rai1	44	ok	coordinator=EL0; worker=EL0; state=failed; event=coord_bad_syscall; ticket=1; record=notes@1; bytes=0; tokens=0; completed=0; a_calls=4; b_calls=3; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BD,AF
+@rai1	47	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0

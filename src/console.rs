@@ -23,7 +23,7 @@ fn dispatch(
     memory: &mut Memory,
     mmu: &Mmu,
     timer: &mut Timer,
-    worker: &mut crate::schedule::worker::Worker,
+    sessions: &mut crate::schedule::Sessions,
 ) {
     if line.starts_with('@') {
         match protocol::parse(line) {
@@ -35,7 +35,7 @@ fn dispatch(
                     memory,
                     mmu,
                     timer,
-                    worker,
+                    sessions,
                 ) {
                     Ok(reply) => response(request.id, "ok", reply),
                     Err(code) => response(request.id, "err", code),
@@ -44,9 +44,9 @@ fn dispatch(
             Err(error) => response(error.id, "err", error.code),
         }
     } else if !line.is_empty() {
-        match command::parse_shell(line)
-            .and_then(|op| command::execute(op, clock.snapshot(), task, memory, mmu, timer, worker))
-        {
+        match command::parse_shell(line).and_then(|op| {
+            command::execute(op, clock.snapshot(), task, memory, mmu, timer, sessions)
+        }) {
             Ok(reply) => uart::write_display(reply),
             Err(code) => {
                 uart::write("error: ");
@@ -59,7 +59,7 @@ fn dispatch(
 
 pub fn run(clock: &Clock, memory: &mut Memory, mmu: &Mmu, timer: &mut Timer) -> ! {
     let mut task = Task::new();
-    let mut worker = crate::schedule::worker::Worker::new();
+    let mut sessions = crate::schedule::Sessions::new();
     let mut buffer = [0u8; CAPACITY];
     let mut length = 0;
     let mut rejected = None;
@@ -95,7 +95,7 @@ pub fn run(clock: &Clock, memory: &mut Memory, mmu: &Mmu, timer: &mut Timer) -> 
             } else {
                 // Input was restricted to ASCII; keep a checked conversion anyway.
                 match core::str::from_utf8(&buffer[..length]) {
-                    Ok(line) => dispatch(line, clock, &mut task, memory, mmu, timer, &mut worker),
+                    Ok(line) => dispatch(line, clock, &mut task, memory, mmu, timer, &mut sessions),
                     Err(_) => response("0", "err", "invalid_byte"),
                 }
             }

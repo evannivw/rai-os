@@ -32,6 +32,17 @@ pub fn parse(line: &str) -> Result<Request<'_>, Error<'_>> {
         Some("info") => Operation::Info,
         Some("timer.check") => Operation::TimerCheck,
         Some("ipc.wait") => Operation::IpcWait,
+        Some("coord.start") => Operation::CoordStart,
+        Some("coord.status") => Operation::CoordStatus,
+        Some("coord.stop") => Operation::CoordStop,
+        Some("coord.observe") => Operation::CoordObserve(
+            crate::records::RecordId::parse(fields.next().ok_or(error("bad_args"))?)
+                .map_err(error)?,
+        ),
+        Some("coord.propose") => Operation::CoordPropose(
+            crate::command::parse_proposal(fields.next().ok_or(error("bad_args"))?)
+                .map_err(error)?,
+        ),
         Some("worker.start") => Operation::WorkerStart,
         Some("worker.status") => Operation::WorkerStatus,
         Some("worker.stop") => Operation::WorkerStop,

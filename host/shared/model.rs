@@ -8,6 +8,11 @@ pub enum Operation<'a> {
     TimerCheck,
     IpcWait,
     RecordCount(&'a str),
+    CoordStart,
+    CoordObserve(&'a str),
+    CoordPropose(u32, &'a str),
+    CoordStatus,
+    CoordStop,
     WorkerStart,
     WorkerCount(&'a str),
     WorkerStatus,
@@ -38,6 +43,16 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         "info" => Ok(Operation::Info),
         "timer.check" => Ok(Operation::TimerCheck),
         "ipc.wait" => Ok(Operation::IpcWait),
+        "coord.start" => Ok(Operation::CoordStart),
+        "coord.status" => Ok(Operation::CoordStatus),
+        "coord.stop" => Ok(Operation::CoordStop),
+        _ if line.starts_with("coord.observe ") => Ok(Operation::CoordObserve(&line[14..])),
+        _ if line.starts_with("coord.propose ") => {
+            let (ticket, key) = line[14..].split_once(':').ok_or("Use <ticket>:<key>")?;
+            if ticket.is_empty() || !ticket.bytes().all(|b| b.is_ascii_digit()) { return Err("Invalid proposal ticket"); }
+            let ticket = ticket.parse::<u32>().ok().filter(|n| *n != 0).ok_or("Invalid proposal ticket")?;
+            Ok(Operation::CoordPropose(ticket, key))
+        }
         "worker.start" => Ok(Operation::WorkerStart),
         "worker.status" => Ok(Operation::WorkerStatus),
         "worker.stop" => Ok(Operation::WorkerStop),
@@ -73,7 +88,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, record.count <key>, worker.start, worker.count <key>, worker.status, worker.stop, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
+            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, record.count <key>, worker.start, worker.count <key>, worker.status, worker.stop, coord.start, coord.observe <key>, coord.propose <ticket>:<key>, coord.status, coord.stop, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
     }
 }
 
@@ -86,10 +101,16 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
         Operation::Info => "info".to_owned(),
         Operation::TimerCheck => "timer.check".to_owned(),
         Operation::IpcWait => "ipc.wait".to_owned(),
+        Operation::CoordStart => "coord.start".to_owned(),
+        Operation::CoordStatus => "coord.status".to_owned(),
+        Operation::CoordStop => "coord.stop".to_owned(),
         Operation::WorkerStart => "worker.start".to_owned(),
         Operation::WorkerStatus => "worker.status".to_owned(),
         Operation::WorkerStop => "worker.stop".to_owned(),
-        Operation::RecordCount(key) | Operation::WorkerCount(key) => {
+        Operation::RecordCount(key)
+        | Operation::WorkerCount(key)
+        | Operation::CoordObserve(key)
+        | Operation::CoordPropose(_, key) => {
             if key.is_empty()
                 || key.len() > 32
                 || !key
@@ -98,12 +119,13 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
             {
                 return Err("Record key requires 1-32 ASCII letters, digits, @ or -");
             }
-            let command = if matches!(operation, Operation::WorkerCount(_)) {
-                "worker.count"
-            } else {
-                "record.count"
-            };
-            format!("{command}\t{key}")
+            match operation {
+                Operation::CoordPropose(0, _) => return Err("Invalid proposal ticket"),
+                Operation::CoordPropose(ticket, _) => format!("coord.propose\t{ticket}:{key}"),
+                Operation::CoordObserve(_) => format!("coord.observe\t{key}"),
+                Operation::WorkerCount(_) => format!("worker.count\t{key}"),
+                _ => format!("record.count\t{key}"),
+            }
         }
         Operation::IpcCheck => "ipc.check".to_owned(),
         Operation::ScheduleIsolate => "schedule.isolate".to_owned(),
@@ -179,6 +201,9 @@ mod tests {
             ("timer.check", Operation::TimerCheck),
             ("ipc.wait", Operation::IpcWait),
             ("worker.start", Operation::WorkerStart),
+            ("coord.start", Operation::CoordStart),
+            ("coord.status", Operation::CoordStatus),
+            ("coord.stop", Operation::CoordStop),
             ("worker.status", Operation::WorkerStatus),
             ("worker.stop", Operation::WorkerStop),
             ("ipc.check", Operation::IpcCheck),
@@ -202,6 +227,39 @@ mod tests {
             assert!(parse_input(&format!("{name}\t")).is_err());
         }
         assert!(parse_input("memory.free 0x40080000").is_err());
+    }
+
+    #[test]
+    fn coordinator_proposals_require_bounded_tickets_and_safe_keys() {
+        assert_eq!(
+            encode(3, &parse_input("coord.observe notes@1").unwrap()).unwrap(),
+            "@rai1\t3\tcoord.observe\tnotes@1\n"
+        );
+        assert_eq!(
+            encode(4, &parse_input("coord.propose 7:notes@2").unwrap()).unwrap(),
+            "@rai1\t4\tcoord.propose\t7:notes@2\n"
+        );
+        for text in [
+            "coord.propose 0:notes@1",
+            "coord.propose -1:notes@1",
+            "coord.propose +1:notes@1",
+            "coord.propose 4294967296:notes@1",
+            "coord.propose notes@1",
+        ] {
+            assert!(parse_input(text).is_err());
+        }
+        assert!(encode(4, &Operation::CoordPropose(0, "notes@1")).is_err());
+        for key in [
+            "",
+            "notes@1\ncoord.stop",
+            "notes@1\textra",
+            "notes@1\r",
+            "é",
+            &"a".repeat(33),
+        ] {
+            assert!(encode(4, &Operation::CoordObserve(key)).is_err());
+            assert!(encode(4, &Operation::CoordPropose(1, key)).is_err());
+        }
     }
 
     #[test]

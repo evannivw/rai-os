@@ -23,7 +23,7 @@ not isolated processes. Fixed linked programs now run with lower privilege. The 
 | Waiting and wakeup | Done for the two-task batch | A receiver stops getting CPU turns and resumes with a message or Closed; mutual waiting is reported as deadlocked. See [IPC_WAIT.md](IPC_WAIT.md). |
 | One bounded guest service | Done for immutable record token counts | Host request -> EL0 client/worker -> checked result, with private stacks and scalar IPC. See [RECORD_SERVICE.md](RECORD_SERVICE.md). Persistent lifetime remains separate. |
 | One persistent guest worker | Done for one fixed EL0 service | Retains private stack/register state between host requests, with exclusive RAM ownership and explicit stop/failure cleanup. See [PERSISTENT_WORKER.md](PERSISTENT_WORKER.md). |
-| Guest coordinator and executors | Planned | Move decision/execution services into RAI-OS with enforced permissions. Adapt host std/storage assumptions. |
+| Guest coordinator and executor | Initial EL0 pair implemented | Retains a goal, rejects stale/manual proposals, dispatches by IPC and remembers the result. Host Meta transport into this path remains pending. See [GUEST_COORDINATOR.md](GUEST_COORDINATOR.md). |
 | Meta-driven policy | First single proposal verified on the host | Muse Spark 1.3 selects a permitted operation; host/guest validation precedes execution. A bounded two-revision event loop now retains observations and rejects stale/duplicate work. See [META_COORDINATOR.md](META_COORDINATOR.md). |
 
 This is a dependency roadmap, not a promise to finish every row before the
@@ -131,3 +131,12 @@ requests, and every EL0 entry now respects an exclusive fixed-RAM lease. This
 provides a lifetime boundary for a later guest service/coordinator; it does not
 move the current host coordinator or complete a general kernel. Keep the remaining
 demo/verifier/baseline/video work visible when deciding the next increment.
+
+## October 30 guest coordinator boundary
+
+Step 23 now runs coordinator A and worker B as retained EL0 programs. A owns the
+current goal and proposal admission policy; the kernel supplies transport,
+private context switching, limits and cleanup. This first path uses manual typed
+proposals. Next connect the existing host Meta provider to the guest's pending
+goal/ticket, without duplicating goal authority in the host. Full workload,
+independent demo artifact verification and comparative evidence remain pending.

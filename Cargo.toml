@@ -6,6 +6,13 @@ license = "Apache-2.0"
 description = "Educational AArch64 kernel for QEMU virt"
 
 [features]
+coord-test-forged-completion = []
+coord-test-worker-gateway = []
+coord-test-fault = []
+coord-test-spin = []
+coord-test-flood = []
+coord-test-bad-report = []
+
 worker-test-bad-sequence = []
 worker-test-fault = []
 worker-test-spin = []

@@ -4,7 +4,7 @@ use crate::mmu::Snapshot as MmuSnapshot;
 use crate::task::{Snapshot, Task};
 use core::fmt;
 
-pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | worker.start | worker.count <key> | worker.status | worker.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
+pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start | coord.observe <key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
 pub const INFO: &str =
     "RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected";
 
@@ -16,6 +16,11 @@ pub enum Operation<'a> {
     ContextCheck,
     TimerCheck,
     IpcWait,
+    CoordStart,
+    CoordObserve(crate::records::RecordId),
+    CoordPropose(crate::schedule::coordinator::Proposal),
+    CoordStatus,
+    CoordStop,
     WorkerStart,
     WorkerCount(crate::records::RecordId),
     WorkerStatus,
@@ -42,6 +47,16 @@ pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
         "info" => Ok(Operation::Info),
         "timer.check" => Ok(Operation::TimerCheck),
         "ipc.wait" => Ok(Operation::IpcWait),
+        "coord.start" => Ok(Operation::CoordStart),
+        "coord.status" => Ok(Operation::CoordStatus),
+        "coord.stop" => Ok(Operation::CoordStop),
+        "coord.observe" | "coord.propose" => Err("bad_args"),
+        _ if line.starts_with("coord.observe ") => Ok(Operation::CoordObserve(
+            crate::records::RecordId::parse(&line[14..])?,
+        )),
+        _ if line.starts_with("coord.propose ") => {
+            Ok(Operation::CoordPropose(parse_proposal(&line[14..])?))
+        }
         "worker.start" => Ok(Operation::WorkerStart),
         "worker.status" => Ok(Operation::WorkerStatus),
         "worker.stop" => Ok(Operation::WorkerStop),
@@ -79,6 +94,14 @@ pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
     }
 }
 
+pub fn parse_proposal(text: &str) -> Result<crate::schedule::coordinator::Proposal, &'static str> {
+    let (ticket, key) = text.split_once(':').ok_or("bad_args")?;
+    Ok(crate::schedule::coordinator::Proposal {
+        ticket: parse_task_id(ticket)?,
+        id: crate::records::RecordId::parse(key)?,
+    })
+}
+
 pub fn parse_task_id(text: &str) -> Result<u32, &'static str> {
     if text.is_empty() || !text.bytes().all(|b| b.is_ascii_digit()) {
         return Err("bad_args");
@@ -97,6 +120,7 @@ pub struct Uptime {
 }
 
 pub enum Reply<'a> {
+    Coordinator(crate::schedule::coordinator::Report),
     Worker(crate::schedule::worker::Status),
     WorkerCount(crate::schedule::worker::Count),
     Text(&'a str),
@@ -116,6 +140,7 @@ pub enum Reply<'a> {
 impl fmt::Display for Reply<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::Coordinator(report) => write!(f, "{report}"),
             Self::Worker(report) => write!(f, "{report}"),
             Self::WorkerCount(report) => write!(f, "{report}"),
             Self::Service(report) => write!(f, "{report}"),
@@ -145,13 +170,22 @@ pub fn execute<'a>(
     memory: &mut Memory,
     mmu: &crate::mmu::Mmu,
     timer: &mut crate::timer::Timer,
-    worker: &mut crate::schedule::worker::Worker,
+    sessions: &mut crate::schedule::Sessions,
 ) -> Result<Reply<'a>, &'static str> {
     Ok(match operation {
-        Operation::WorkerStart => Reply::Worker(worker.start(timer, mmu)?),
-        Operation::WorkerCount(id) => Reply::WorkerCount(worker.count(id, timer, mmu)?),
-        Operation::WorkerStatus => Reply::Worker(worker.status()),
-        Operation::WorkerStop => Reply::Worker(worker.stop()),
+        Operation::CoordStart => Reply::Coordinator(sessions.coordinator.start(timer, mmu)?),
+        Operation::CoordObserve(id) => {
+            Reply::Coordinator(sessions.coordinator.observe(id, timer, mmu)?)
+        }
+        Operation::CoordPropose(proposal) => {
+            Reply::Coordinator(sessions.coordinator.propose(proposal, timer, mmu)?)
+        }
+        Operation::CoordStatus => Reply::Coordinator(sessions.coordinator.status()),
+        Operation::CoordStop => Reply::Coordinator(sessions.coordinator.stop()),
+        Operation::WorkerStart => Reply::Worker(sessions.worker.start(timer, mmu)?),
+        Operation::WorkerCount(id) => Reply::WorkerCount(sessions.worker.count(id, timer, mmu)?),
+        Operation::WorkerStatus => Reply::Worker(sessions.worker.status()),
+        Operation::WorkerStop => Reply::Worker(sessions.worker.stop()),
         Operation::RecordCount(id) => Reply::Service(crate::service::count(id, timer, mmu)?),
         Operation::IpcWait => Reply::ScheduleRun(crate::schedule::run(
             timer,

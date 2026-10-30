@@ -331,3 +331,15 @@ running a new batch. See [PERSISTENT_WORKER.md](PERSISTENT_WORKER.md) for exact
 status/count fields, syscall protocol, per-request budgets and failure behavior.
 While the worker owns user RAM, other EL0-entry commands return `user_memory_busy`.
 `worker.stop` releases ownership; status and unrelated EL1 diagnostics still work.
+
+## Guest coordinator operations
+
+`coord.start`, `coord.status`, `coord.stop` require exactly three fields.
+`coord.observe` takes one allowed key; `coord.propose` takes one
+`<nonzero-u32-ticket>:<key>` argument (exactly four fields). Goal tickets are
+separate from UART request IDs. Example: `@rai1\t51\tcoord.propose\t2:notes@2\n`.
+The guest EL0 coordinator checks whether the proposal still matches its current
+pending goal before sending any work. [GUEST_COORDINATOR.md](GUEST_COORDINATOR.md)
+defines status fields, traces, errors, gateway syscalls and the manual-first scope.
+Its session and the standalone worker session are mutually exclusive through
+user-RAM ownership. This is not yet the endpoint used by the live Meta bridge.
