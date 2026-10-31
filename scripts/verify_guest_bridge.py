@@ -11,6 +11,8 @@ import tempfile
 sys.dont_write_bytecode = True
 from verify_service import CATALOG
 from verify_guest_coordinator import audit_execution, fields
+from verify_coord_index import audit as audit_index
+from check_record_index import check as check_index
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -19,20 +21,26 @@ def snapshot(report):
     if result['record'] == 'none': result['record'] = None
     for key in ['ticket','bytes','tokens','completed','a_calls','b_calls','a_slices','b_slices']:
         result[key] = int(report[key])
+    if report.get('operation') == 'record.index':
+        result['index'] = {k:int(report[k]) for k in ['cached_records','cache_hits','output_bytes']}
     return result
 
 
-def audit(items, scenario, source):
+def audit(items, scenario, source, index=False):
     first = items[0]
     assert first['event'] == 'guest_bridge_started' and first['source'] == source
     assert first['state_owner'] == 'guest_EL0' and first['event_source'] == 'scripted_observations'
     assert first['max_model_calls'] == 4 and first['model'] == ('muse-spark-1.3' if source == 'meta' else None)
+    cache = {}; hits = 0; artifact_due = False; fetched = None
+    if index: assert first['operation'] == 'record.index'
     state = 'stopped'; key = None; ticket = 0; completed = 0; issued = 0; count = (0,0)
     due = None; cursor = 0; boots = 0; request_id = 0; calls = 0; stale = 0; executed = []
     pending = None; answered = False; forwarded = None; report = None; final_snapshot = None; declined = False
     expected_event = 'none'; stopped = False
     for item in items[1:]:
         event = item['event']
+        if artifact_due:
+            assert event == 'guest_index' or (event == 'guest_exchange' and item['operation'] == 'coord.result')
         if event == 'guest_boot_confirmed':
             boots += 1; assert boots == 1
         elif event == 'observation_due':
@@ -45,6 +53,15 @@ def audit(items, scenario, source):
             assert boots == 1 and not stopped
             request_id += 1; assert item['request_id'] == request_id
             op = item['operation']; argument = item['argument']
+            if op == 'coord.result':
+                assert index and artifact_due and fetched is None and argument is None and item['success']
+                fetched = item['payload']
+                audit_index(previous_report, fetched, key, completed, len(cache) + (expected_event == 'executed'), hits, expected_event == 'reused')
+                if expected_event == 'reused': assert fetched == cache[key]
+                else:
+                    assert key not in cache
+                    cache[key] = fetched
+                continue
             if op == 'coord.propose':
                 assert forwarded is not None and pending is not None and answered
                 assert argument == f"{forwarded['state_version']}:{forwarded['record']}"
@@ -61,14 +78,16 @@ def audit(items, scenario, source):
                 assert item['success'] and state == 'awaiting_proposal'
                 completed += 1; state = 'completed'; expected_event = 'executed'
                 record = next(r for r in CATALOG if r['key'] == key)
-                report = fields(item['payload']); audit_execution(report, record, completed)
+                report = fields(item['payload'])
+                if index: artifact_due = True
+                else: audit_execution(report, record, completed)
                 count = (int(report['bytes']), int(report['tokens'])); executed.append(key)
                 pending = None; forwarded = None; answered = False
             else:
                 assert item['success'], item
                 report = fields(item['payload'])
                 if op == 'coord.start':
-                    assert request_id == 1 and state == 'stopped' and argument is None
+                    assert request_id == 1 and state == 'stopped' and argument == ('index' if index else None)
                     state = 'idle'; expected_event = 'started'
                     assert report['a_calls'] == '2' and report['b_calls'] == '1'
                 elif op == 'coord.observe':
@@ -77,6 +96,9 @@ def audit(items, scenario, source):
                     if key == due: expected_event = 'duplicate'
                     else:
                         key = due; ticket = issued; state = 'awaiting_proposal'; count = (0,0); expected_event = 'observed'
+                        if index and key in cache:
+                            state = 'completed'; expected_event = 'reused'; hits += 1; artifact_due = True
+                            count = (next(r['byte_length'] for r in CATALOG if r['key'] == key), sum(check_index(cache[key], key).values()))
                     due = None
                     assert report['a_calls'] == '2' and report['b_calls'] == '0' and report['b_slices'] == '0'
                 elif op == 'coord.status':
@@ -90,6 +112,11 @@ def audit(items, scenario, source):
             assert report['state'] == state and report['event'] == expected_event
             assert report['record'] == (key or 'none') and int(report['ticket']) == ticket
             assert int(report['completed']) == completed and (int(report['bytes']), int(report['tokens'])) == count
+            if index and not stopped:
+                assert report['operation'] == 'record.index'
+                assert int(report['cache_hits']) == hits
+                assert int(report['cached_records']) == len(cache) + (expected_event == 'executed' and artifact_due)
+                if state != 'completed': assert report['output_bytes'] == '0'
             previous_report = report
         elif event == 'decision_requested':
             assert state == 'awaiting_proposal' and pending is None and not stopped
@@ -97,6 +124,7 @@ def audit(items, scenario, source):
             metadata = next(r for r in CATALOG if r['key'] == key)
             context = dict(state_version=ticket, authorized_records=[[key, metadata['byte_length']]],
                            completed_results=[], required_record=key)
+            if index: context['operation'] = 'record.index'
             assert item['snapshot'] == context
             pending = dict(ticket=ticket, key=key); answered = False
         elif event == 'decision_response':
@@ -108,8 +136,12 @@ def audit(items, scenario, source):
             assert pending and answered and forwarded is None
             forwarded = item['proposal']
             assert item['call_id'] == calls and forwarded['state_version'] == pending['ticket']
-            assert forwarded['operation'] == 'record.count'
+            assert forwarded['operation'] == ('record.index' if index else 'record.count')
             assert any(r['key'] == forwarded['record'] and r['read_allowed'] for r in CATALOG)
+        elif event == 'guest_index':
+            assert index and artifact_due and fetched is not None
+            assert item == dict(event='guest_index', ticket=ticket, record=key, origin=expected_event, payload=fetched)
+            artifact_due = False; fetched = None
         elif event == 'proposal_declined':
             assert pending and answered and item['call_id'] == calls
             assert item['proposal']['state_version'] == pending['ticket']
@@ -118,7 +150,7 @@ def audit(items, scenario, source):
             declined = not item['obsolete']; pending = None; answered = False
         else:
             assert event == 'guest_bridge_finished' and item is items[-1]
-            assert stopped and pending is None and item['snapshot'] == final_snapshot
+            assert stopped and pending is None and not artifact_due and item['snapshot'] == final_snapshot
             assert item['model_calls'] == calls and item['remaining_events'] == len(scenario['events'])-cursor
             if declined: assert item['status'] == 'declined' and final_snapshot['state'] == 'awaiting_proposal'
             else:

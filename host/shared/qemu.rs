@@ -13,10 +13,22 @@ pub struct Connection {
 
 impl Connection {
     pub fn start(kernel: &str) -> Result<Self, String> {
-        let mut child = Command::new("sh")
+        Self::start_mode(kernel, false)
+    }
+    #[allow(dead_code)] // Only the Meta index bridge currently opts into native guest graphics.
+    pub fn start_graphics(kernel: &str) -> Result<Self, String> {
+        Self::start_mode(kernel, true)
+    }
+    fn start_mode(kernel: &str, graphics: bool) -> Result<Self, String> {
+        let mut command = Command::new("sh");
+        command
             .env_remove("MODEL_API_KEY")
             .arg("scripts/qemu.sh")
-            .arg(kernel)
+            .arg(kernel);
+        if graphics {
+            command.arg("--graphics");
+        }
+        let mut child = command
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .stderr(Stdio::inherit())
@@ -41,12 +53,19 @@ impl Connection {
         };
         let deadline = Instant::now() + Duration::from_secs(10);
         let mut boot_seen = false;
+        let mut display_seen = false;
         loop {
             let line = connection.receive(deadline)?;
             if line == "RAI-OS: boot OK | AArch64 EL1 | UART PL011" {
                 boot_seen = true;
             }
+            if boot_seen && line == "Display ready: 480x800 guest framebuffer" {
+                display_seen = true;
+            }
             if boot_seen && line == "Console ready: type help for commands" {
+                if graphics && !display_seen {
+                    return Err("guest_display_not_ready".into());
+                }
                 return Ok(connection);
             }
         }

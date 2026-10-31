@@ -1,0 +1,8 @@
+{
+  "events": [
+    {"at_ms": 0, "record": "notes@1"},
+    {"at_ms": 8000, "record": "notes@2"},
+    {"at_ms": 16000, "record": "notes@1"},
+    {"at_ms": 20000, "record": "notes@1"}
+  ]
+}

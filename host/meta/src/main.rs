@@ -4,6 +4,7 @@ mod coordinator;
 mod decision_source;
 mod domain;
 mod guest_bridge;
+mod guest_index;
 mod guest_report;
 mod loop_runner;
 #[allow(dead_code)] // Share the established protocol without adding a second UART adapter.
@@ -15,13 +16,42 @@ mod qemu;
 use serde_json::json;
 use std::{path::Path, time::Instant};
 fn run() -> Result<(), String> {
-    let args: Vec<_> = std::env::args().skip(1).collect();
+    let mut args: Vec<_> = std::env::args().skip(1).collect();
     if args.is_empty() {
         return Err(
-            "usage: rai-meta <kernel> <goal> | --replay <proposal.json> | --coordinate <events.json> | --coordinate-replay <events.json> <proposals.json> | --guest <events.json> | --guest-replay <events.json> <proposals.json>".into(),
+            "usage: rai-meta <kernel> <goal> | --replay <proposal.json> | --coordinate <events.json> | --coordinate-replay <events.json> <proposals.json> | [--graphics] --guest-index <events.json> | [--graphics] --guest-index-replay <events.json> <proposals.json> | --guest <events.json> | --guest-replay <events.json> <proposals.json>".into(),
         );
     }
+    let graphics = args.get(1).is_some_and(|s| s == "--graphics");
+    if graphics {
+        args.remove(1);
+    }
+    if graphics
+        && !args
+            .get(1)
+            .is_some_and(|s| matches!(s.as_str(), "--guest-index" | "--guest-index-replay"))
+    {
+        return Err("graphics_requires_guest_index_mode".into());
+    }
     let kernel = &args[0];
+    if args.len() == 3 && args[1] == "--guest-index" {
+        return guest_bridge::run(
+            kernel,
+            Path::new(&args[2]),
+            None,
+            domain::Work::Index,
+            graphics,
+        );
+    }
+    if args.len() == 4 && args[1] == "--guest-index-replay" {
+        return guest_bridge::run(
+            kernel,
+            Path::new(&args[2]),
+            Some(Path::new(&args[3])),
+            domain::Work::Index,
+            graphics,
+        );
+    }
     if args.len() == 3 && args[1] == "--coordinate" {
         return loop_runner::run(kernel, Path::new(&args[2]), None);
     }
@@ -29,10 +59,22 @@ fn run() -> Result<(), String> {
         return loop_runner::run(kernel, Path::new(&args[2]), Some(Path::new(&args[3])));
     }
     if args.len() == 3 && args[1] == "--guest" {
-        return guest_bridge::run(kernel, Path::new(&args[2]), None);
+        return guest_bridge::run(
+            kernel,
+            Path::new(&args[2]),
+            None,
+            domain::Work::Count,
+            false,
+        );
     }
     if args.len() == 4 && args[1] == "--guest-replay" {
-        return guest_bridge::run(kernel, Path::new(&args[2]), Some(Path::new(&args[3])));
+        return guest_bridge::run(
+            kernel,
+            Path::new(&args[2]),
+            Some(Path::new(&args[3])),
+            domain::Work::Count,
+            false,
+        );
     }
     // Validate CLI shape before reading a credential or performing network I/O.
     let proposal = if args.len() == 3 && args[1] == "--replay" {

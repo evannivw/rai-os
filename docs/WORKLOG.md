@@ -1356,3 +1356,66 @@ increment is to connect the existing Meta proposal transport to these useful
 index artifacts. Combined multi-record outputs, fair baseline comparison, the
 three-minute video and final submission remain pending. The hackathon dates and
 November 4 deadline are unchanged.
+
+
+## 2026-10-30 — Meta proposals produce retained guest index artifacts
+
+Added explicit --guest-index / --guest-index-replay modes to the existing host
+bridge. A typed work selection narrows provider JSON schema and proposal admission
+to record.index or decline; legacy single/host-coordinated/guest count modes remain
+count-only. Only the current guest-required record's metadata and original ticket
+reach Meta. No future schedule, source bytes, index payload, local path or
+credential is included in model context. The kernel and its EL0 programs are
+unchanged in this increment.
+
+The bridge decodes the index report's cache metadata and budgets, validates
+observed transitions, requests coord.result after execution or reuse, and emits
+the exact artifact as guest_index evidence. Bounded artifact checks enforce
+identity, completion, size and canonical shape/accounting. A host evidence history
+requires a reused artifact to equal a previously observed one; it never supplies
+a replacement result or chooses a cache hit. Semantic correctness remains the
+independent fixture/checker responsibility. An existing in-flight inference is
+joined and its stale proposal reaches guest admission; cache reuse avoids new
+inference rather than cancelling one already running.
+
+The optional leading --graphics flag builds the existing display-enabled kernel
+and opens QEMU Cocoa. The shared child adapter confirms the guest framebuffer-ready
+message before accepting graphical boot. Existing headless callers retain their
+path. The bridge closes its owned child at completion; the renderer is unchanged
+and displays actual coord.* outcomes. A timed public fixture leaves a reused
+result visible until the final duplicate observation at 20 seconds.
+
+Debug/release validation passed 28 host unit tests and 15 offline real-QEMU bridge
+cases per profile: exact artifacts and reuse, duplicates, stale replies, reuse
+during inference, obsolete/current decline, empty/larger records, invalid version,
+denied/injected/wrong records, mode confusion, unsupported operations, legacy
+permission preservation, four-call exhaustion and truncated guest-stream cleanup.
+The independent audit checks source hashes/exact token counts, kernel IPC traces,
+tickets, cache hits, model-call accounting, original artifact retrieval and final
+state. Mutation checks reject fabricated or missing artifacts and changed metadata.
+Native debug/release bridge runs also passed against the actual Cocoa window;
+a headless kernel supplied with the graphics flag is explicitly rejected before
+inference. Clippy initially requested two conditional cleanups; those were fixed
+and final all-target host Clippy plus formatting passed.
+
+Existing offline guest-count bridge, one-shot Meta and host-coordinator suites
+passed in both profiles. Host console integration passed and the existing host
+panel compiled. No full kernel regression rerun was necessary: kernel source was
+unchanged and the new integration tests exercise its current retained-index path.
+
+A separate live release run opened the native QEMU screen and made exactly two
+real Muse Spark 1.3 requests. It constructed notes@1 and notes@2 inside RAI-OS and
+retrieved notes@1 again from the guest cache with no third model call or B turn.
+The final duplicate preserved completed=2, cached_records=2 and cache_hits=1.
+Actual API latencies were 3350/1606 ms and reported total tokens were 438/399.
+The session took 20274 ms, including the intentional 20-second scenario schedule.
+Explicit cleanup completed and the independent log/content/IPC audit passed.
+No credential was changed, displayed or committed. Live and separately labeled
+replay stale/reuse-in-flight evidence are stored under docs/evidence/2026-10-30-meta-index-*.
+
+This establishes useful artifact integration, not a model performance advantage:
+the current single-action proposal and deterministic cache remain solvable without
+AI. Next combine revision-aware records into a complete useful result with explicit
+invalidation and independent acceptance, then compare meaningful policies fairly.
+The final three-minute video/submission and original event dates remain pending
+and unchanged. Run/setup/limits are documented in META_INDEX_BRIDGE.md.

@@ -19,7 +19,29 @@ pub struct Proposal {
     pub record: String,
     pub reason: String,
 }
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+pub enum Work {
+    #[serde(rename = "record.count")]
+    Count,
+    #[serde(rename = "record.index")]
+    Index,
+}
+impl Work {
+    pub fn name(self) -> &'static str {
+        match self {
+            Self::Count => "record.count",
+            Self::Index => "record.index",
+        }
+    }
+    pub fn is_count(&self) -> bool {
+        *self == Self::Count
+    }
+}
 pub enum Action {
+    Index {
+        key: &'static str,
+        bytes: u64,
+    },
     Count {
         key: &'static str,
         id: u64,
@@ -43,6 +65,9 @@ pub fn validate(proposal: &Proposal) -> Result<Action, &'static str> {
     validate_at(proposal, STATE_VERSION)
 }
 pub fn validate_at(proposal: &Proposal, version: u64) -> Result<Action, &'static str> {
+    validate_for(proposal, version, Work::Count)
+}
+pub fn validate_for(proposal: &Proposal, version: u64, work: Work) -> Result<Action, &'static str> {
     if proposal.state_version != version {
         return Err("stale_proposal");
     }
@@ -54,16 +79,19 @@ pub fn validate_at(proposal: &Proposal, version: u64) -> Result<Action, &'static
     }
     match proposal.operation.as_str() {
         "decline" if proposal.record.is_empty() => Ok(Action::Decline),
-        "record.count" => {
+        operation if operation == work.name() => {
             let (index, &(key, bytes)) = RECORDS
                 .iter()
                 .enumerate()
                 .find(|(_, (key, _))| *key == proposal.record)
                 .ok_or("record_not_allowed")?;
-            Ok(Action::Count {
-                key,
-                id: index as u64 + 1,
-                bytes,
+            Ok(match work {
+                Work::Count => Action::Count {
+                    key,
+                    id: index as u64 + 1,
+                    bytes,
+                },
+                Work::Index => Action::Index { key, bytes },
             })
         }
         _ => Err("operation_not_allowed"),
@@ -130,6 +158,22 @@ pub fn observe(action: &Action, payload: &str) -> Result<Observed, &'static str>
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn index_permission_is_explicit_and_does_not_expand_legacy_modes() {
+        let mut p = proposal();
+        p.operation = "record.index".into();
+        assert!(validate(&p).is_err());
+        assert!(matches!(
+            validate_for(&p, 1, Work::Index).unwrap(),
+            Action::Index { key: "notes@2", .. }
+        ));
+        assert!(validate_for(&p, 2, Work::Index).is_err());
+        p.operation = "record.count".into();
+        assert!(validate_for(&p, 1, Work::Index).is_err());
+        p.operation = "record.index".into();
+        p.record = "restricted@1".into();
+        assert!(validate_for(&p, 1, Work::Index).is_err());
+    }
     fn proposal() -> Proposal {
         Proposal {
             state_version: 1,
@@ -234,6 +278,8 @@ mod tests {
 /// A bounded, already-observed snapshot; never includes future scenario events.
 #[derive(Clone, Serialize)]
 pub struct DecisionContext {
+    #[serde(skip_serializing_if = "Work::is_count")]
+    pub operation: Work,
     pub state_version: u64,
     pub authorized_records: Vec<(&'static str, u64)>,
     pub completed_results: Vec<Observed>,
@@ -242,6 +288,7 @@ pub struct DecisionContext {
 impl DecisionContext {
     pub fn single() -> Self {
         Self {
+            operation: Work::Count,
             state_version: STATE_VERSION,
             authorized_records: RECORDS.to_vec(),
             completed_results: Vec::new(),

@@ -1,0 +1,4 @@
+[
+  {"delay_ms": 10, "proposal": {"state_version": 1, "operation": "record.index", "record": "notes@1", "reason": "Offline index transport fixture; not a model decision."}},
+  {"delay_ms": 10, "proposal": {"state_version": 2, "operation": "record.index", "record": "notes@2", "reason": "Offline index transport fixture; not a model decision."}}
+]

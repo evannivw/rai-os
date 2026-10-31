@@ -70,6 +70,7 @@ impl State {
     }
     pub fn snapshot(&self) -> DecisionContext {
         DecisionContext {
+            operation: crate::domain::Work::Count,
             state_version: self.version,
             authorized_records: domain::RECORDS
                 .iter()

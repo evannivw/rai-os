@@ -150,3 +150,12 @@ reuse label. Errors replace the visible result; successful status restores the
 retained state. Stop returns to the standalone ready screen. The coordinator
 and worker remain at EL0; the renderer still runs at EL1. See
 [RETAINED_INDEX.md](RETAINED_INDEX.md).
+
+## Meta-driven index session
+
+`sh scripts/meta.sh --graphics --guest-index fixtures/guest_index/v1/observations.json`
+now opens this same native screen while the host transports Meta proposals and
+scripted observations. The kernel renderer is unchanged; only actual coord.*
+outcomes drive its states. Use `--guest-index-replay` and the replay file for an
+offline walkthrough. The owned window closes at session cleanup. See
+[META_INDEX_BRIDGE.md](META_INDEX_BRIDGE.md).

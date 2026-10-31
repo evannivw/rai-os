@@ -2,7 +2,7 @@
 use crate::{
     config,
     decision_source::{Pending, Source},
-    domain::{self, Action},
+    domain::{self, Action, Work},
     guest_report::Snapshot,
     model::{Operation, Reply},
     provider, qemu,
@@ -15,6 +15,7 @@ use std::{
     time::{Duration, Instant},
 };
 const MAX_CALLS: usize = 4;
+const INDEX_GOAL: &str = "Ask the RAI-OS worker to build an exact token-frequency index for required_record. Propose record.index with the supplied state_version, or decline if unsupported.";
 const GOAL: &str = "Complete the current immutable record task requested by RAI-OS. Propose record.count for required_record with the supplied state_version, or decline if unsupported.";
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -50,6 +51,8 @@ struct Transport {
     connection: qemu::Connection,
     request_id: u32,
     started: Instant,
+    work: Work,
+    artifacts: crate::guest_index::History,
 }
 impl Transport {
     fn exchange(
@@ -70,6 +73,22 @@ impl Transport {
         );
         Ok(reply)
     }
+    fn artifact(&mut self, snapshot: &Snapshot) -> Result<(), String> {
+        if self.work != Work::Index {
+            return Ok(());
+        }
+        let reply = self.exchange(&Operation::CoordResult, "coord.result", None)?;
+        if !reply.success {
+            return Err("guest_artifact_unavailable".into());
+        }
+        self.artifacts.observe(&reply.payload, snapshot)?;
+        println!(
+            "{}",
+            json!({"event":"guest_index","ticket":snapshot.ticket,
+            "record":snapshot.record,"origin":snapshot.event,"payload":reply.payload})
+        );
+        Ok(())
+    }
     fn snapshot(
         &mut self,
         operation: &Operation<'_>,
@@ -80,7 +99,11 @@ impl Transport {
         if !reply.success {
             return Err("guest_rejected_control_operation".into());
         }
-        Snapshot::parse(&reply.payload).map_err(str::to_owned)
+        let snapshot = Snapshot::parse(&reply.payload)?;
+        if name != "coord.stop" && snapshot.work() != self.work {
+            return Err("unexpected_guest_operation".into());
+        }
+        Ok(snapshot)
     }
 }
 fn apply_due(
@@ -106,6 +129,9 @@ fn apply_due(
             Some(&event.record),
         )?;
         next.check_observation(current, &event.record)?;
+        if next.event == "reused" {
+            transport.artifact(&next)?;
+        }
         *current = next;
         *cursor += 1;
     }
@@ -122,7 +148,16 @@ fn session(
     scenario: &Scenario,
     source: &mut Source,
 ) -> Result<Outcome, String> {
-    let mut current = transport.snapshot(&Operation::CoordStart, "coord.start", None)?;
+    let index = transport.work == Work::Index;
+    let mut current = transport.snapshot(
+        &if index {
+            Operation::CoordIndexStart
+        } else {
+            Operation::CoordStart
+        },
+        "coord.start",
+        if index { Some("index") } else { None },
+    )?;
     if current.state != "idle" {
         return Err("guest_not_idle_after_start".into());
     }
@@ -146,7 +181,7 @@ fn session(
             );
             // Validate shape/capabilities AND correlation to the original request.
             // Current-goal freshness is still decided by the guest, not by a host cache.
-            let action = domain::validate_at(&answer.proposal, ticket)?;
+            let action = domain::validate_for(&answer.proposal, ticket, transport.work)?;
             let ticket = u32::try_from(ticket)
                 .ok()
                 .filter(|t| *t != 0)
@@ -168,8 +203,9 @@ fn session(
                 }
                 continue;
             }
-            let Action::Count { key, .. } = &action else {
-                unreachable!()
+            let key = match &action {
+                Action::Count { key, .. } | Action::Index { key, .. } => key,
+                Action::Decline => unreachable!(),
             };
             let argument = format!("{ticket}:{key}");
             println!(
@@ -184,6 +220,7 @@ fn session(
             if reply.success {
                 let next = Snapshot::parse(&reply.payload)?;
                 next.check_completion(&current, &action, ticket)?;
+                transport.artifact(&next)?;
                 current = next;
             } else {
                 let next = transport.snapshot(&Operation::CoordStatus, "coord.status", None)?;
@@ -225,7 +262,7 @@ fn session(
                 json!({"event":"decision_requested","call_id":calls,"snapshot":context,
                 "elapsed_ms":transport.started.elapsed().as_millis()})
             );
-            pending = Some(source.start(GOAL, context)?);
+            pending = Some(source.start(if index { INDEX_GOAL } else { GOAL }, context)?);
         }
         if cursor == scenario.events.len() && pending.is_none() && current.state == "completed" {
             if source.has_unused() {
@@ -241,16 +278,26 @@ fn session(
         thread::sleep(Duration::from_millis(10));
     }
 }
-pub fn run(kernel: &str, path: &Path, replay: Option<&Path>) -> Result<(), String> {
+pub fn run(
+    kernel: &str,
+    path: &Path,
+    replay: Option<&Path>,
+    work: Work,
+    graphics: bool,
+) -> Result<(), String> {
     let scenario = Scenario::parse(&config::bounded_file(path, 8192)?)?;
     let mut source = Source::load(replay, MAX_CALLS)?;
     println!(
         "{}",
         json!({"event":"guest_bridge_started","source":source.name(),"model":if source.is_live(){Some(provider::MODEL)}else{None},
-        "event_source":"scripted_observations","goal":GOAL,"max_model_calls":MAX_CALLS,"state_owner":"guest_EL0"})
+        "operation":work.name(),"graphics":graphics,"event_source":"scripted_observations","goal":if work == Work::Index { INDEX_GOAL } else { GOAL },"max_model_calls":MAX_CALLS,"state_owner":"guest_EL0"})
     );
     let started = Instant::now();
-    let connection = qemu::Connection::start(kernel)?;
+    let connection = if graphics {
+        qemu::Connection::start_graphics(kernel)?
+    } else {
+        qemu::Connection::start(kernel)?
+    };
     println!(
         "{}",
         json!({"event":"guest_boot_confirmed","elapsed_ms":started.elapsed().as_millis()})
@@ -259,6 +306,8 @@ pub fn run(kernel: &str, path: &Path, replay: Option<&Path>) -> Result<(), Strin
         connection,
         request_id: 0,
         started,
+        work,
+        artifacts: crate::guest_index::History::default(),
     };
     let result = session(&mut transport, &scenario, &mut source);
     let cleanup = transport

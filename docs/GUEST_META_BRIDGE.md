@@ -6,6 +6,10 @@ host supplies timed observations, forwards the guest's pending ticket/record to
 Meta, validates the provider response format, and submits a typed proposal.
 This mode does not modify the kernel or the earlier --coordinate host mode.
 
+The newer [Meta index mode](META_INDEX_BRIDGE.md) selects `record.index`, retrieves
+exact artifacts, observes guest cache reuse and optionally opens the native
+screen. This page describes the original **count** mode and its historical evidence.
+
 ## Run from a checkout
 
 Follow [the per-clone key setup](META_BRIDGE.md#each-clone-needs-its-own-key).

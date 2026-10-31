@@ -13,6 +13,8 @@ scheduling, dynamically created process address spaces, persistent storage, or m
 
 A [retained index mode](docs/RETAINED_INDEX.md) now transfers exact EL0 results
 and reuses completed immutable revisions, with native created/reused views.
+The [Meta index bridge](docs/META_INDEX_BRIDGE.md) now drives this path with
+model proposals and independently auditable guest artifacts.
 
 ## Run
 
@@ -29,6 +31,7 @@ sh scripts/index.sh notes@1 target/notes-v1.index  # New output path; real guest
 sh scripts/meta.sh 'Count the words in the latest available revision of the notes.'
 sh scripts/meta.sh --coordinate fixtures/coordinator/v1/revisions.json
 sh scripts/meta.sh --guest fixtures/guest_bridge/v1/observations.json
+sh scripts/meta.sh --graphics --guest-index fixtures/guest_index/v1/observations.json
 ```
 
 Each person supplies their own API key in the checkout-root `.env.local`; see
@@ -74,6 +77,8 @@ python3 scripts/verify_worker.py
 python3 scripts/verify_worker.py --release
 python3 scripts/verify_guest_coordinator.py
 python3 scripts/verify_guest_coordinator.py --release
+python3 scripts/verify_guest_index_bridge.py
+python3 scripts/verify_guest_index_bridge.py --release
 python3 scripts/verify_guest_bridge.py   # Offline proposals, real guest coordinator
 python3 scripts/verify_guest_bridge.py --release
 python3 scripts/verify_meta.py          # Offline; no provider calls

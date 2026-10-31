@@ -92,3 +92,13 @@ The [retained index](RETAINED_INDEX.md) supplies a reproducible notes@1 -> notes
 created/reused views. This manual deterministic example is not an AI advantage
 benchmark. Meta-selected indexing, combined outputs, the fair baseline, final
 three-minute video and submission remain outstanding.
+
+## October 30: Meta index proposal path
+
+The [Meta index bridge](META_INDEX_BRIDGE.md) now connects the model to retained
+EL0 indexes, returns independently checkable artifacts and observes guest reuse
+without another inference request. It optionally drives the native QEMU screen.
+This remains a single-action integration, not an AI-performance comparison.
+Next build a combined revision-aware artifact with explicit completeness and
+invalidation rules, then evaluate useful model choices against a fair baseline.
+The final video/submission and original event dates/deadline remain unchanged.

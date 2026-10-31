@@ -224,3 +224,13 @@ created and reused states. The Meta bridge continues to count; extend it to this
 useful artifact next, then combine revision-aware results and measure a fair
 comparison. This increment makes no AI-performance claim and does not change
 the stated event dates or deadline. See [RETAINED_INDEX.md](RETAINED_INDEX.md).
+
+## October 30: Meta index proposal path
+
+The [Meta index bridge](META_INDEX_BRIDGE.md) now connects the model to retained
+EL0 indexes, returns independently checkable artifacts and observes guest reuse
+without another inference request. It optionally drives the native QEMU screen.
+This remains a single-action integration, not an AI-performance comparison.
+Next build a combined revision-aware artifact with explicit completeness and
+invalidation rules, then evaluate useful model choices against a fair baseline.
+The final video/submission and original event dates/deadline remain unchanged.

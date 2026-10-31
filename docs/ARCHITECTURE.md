@@ -179,3 +179,7 @@ scalar IPC, and the kernel holds six committed 384-byte result slots after
 stream/publication validation. No task receives another task's writable pointer.
 The native view renders pending/created/reused outcomes. See
 [RETAINED_INDEX.md](RETAINED_INDEX.md); count-mode Meta transport is unchanged.
+The [Meta index bridge](META_INDEX_BRIDGE.md) selects this mode explicitly. Its
+artifact history validates observed reuse but never supplies guest results or
+chooses cache hits. Only the provider boundary selects the allowed operation
+schema; count-only modes retain their narrower permission.

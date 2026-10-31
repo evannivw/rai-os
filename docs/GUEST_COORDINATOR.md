@@ -190,5 +190,6 @@ now selects exact indexing, bounded scalar output transfer and six immutable
 revision slots. `coord.result` retrieves the active completed artifact, and
 observing a previously completed revision produces `event=reused` without a
 worker turn. See [RETAINED_INDEX.md](RETAINED_INDEX.md) for the different mode
-budgets, metadata ABI, ownership, native views and verification. The Meta bridge
-still uses count mode.
+budgets, metadata ABI, ownership, native views and verification. The default
+Meta bridge remains count-only; [`--guest-index`](META_INDEX_BRIDGE.md) selects
+this new path.

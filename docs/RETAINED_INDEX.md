@@ -38,9 +38,9 @@ assume a fresh boot and exactly the displayed sequence.
 
 `coord.start` without an argument retains the previous counting behavior and
 14-field report. `coord.start index` selects indexing for that session. Stop
-before changing modes. The existing Meta `--guest` bridge still selects **count**;
-it has not yet been extended to request indexes. This walkthrough uses manual
-proposals and makes no model-performance claim.
+before changing modes. The existing Meta `--guest` bridge still selects **count**; the new
+[`--guest-index` mode](META_INDEX_BRIDGE.md) connects proposals to this index path.
+This walkthrough uses manual proposals and makes no model-performance claim.
 
 ## Responsibilities and memory
 
@@ -137,7 +137,7 @@ padding, length/capacity boundaries and canonical format.
 
 This is evidence that completed work can be reused correctly. It does not prove
 AI superiority, lower battery consumption or performance against Android. The
-next increment can connect the existing Meta proposal path to this index mode;
+[Meta index bridge](META_INDEX_BRIDGE.md) now connects proposals to this mode;
 combined multi-record artifacts and fair baseline comparisons remain pending.
 
 Actual [debug UART](evidence/2026-10-30-coord-index-debug.txt),
