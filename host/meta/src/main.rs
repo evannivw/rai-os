@@ -13,13 +13,15 @@ mod model;
 mod provider;
 #[path = "../../shared/qemu.rs"]
 mod qemu;
+mod set_bridge;
+mod set_report;
 use serde_json::json;
 use std::{path::Path, time::Instant};
 fn run() -> Result<(), String> {
     let mut args: Vec<_> = std::env::args().skip(1).collect();
     if args.is_empty() {
         return Err(
-            "usage: rai-meta <kernel> <goal> | --replay <proposal.json> | --coordinate <events.json> | --coordinate-replay <events.json> <proposals.json> | [--graphics] --guest-index <events.json> | [--graphics] --guest-index-replay <events.json> <proposals.json> | --guest <events.json> | --guest-replay <events.json> <proposals.json>".into(),
+            "usage: rai-meta <kernel> [--graphics] --guest-set <events.json> | [--graphics] --guest-set-replay <events.json> <proposals.json> | <kernel> <goal> | --replay <proposal.json> | --coordinate <events.json> | --coordinate-replay <events.json> <proposals.json> | [--graphics] --guest-index <events.json> | [--graphics] --guest-index-replay <events.json> <proposals.json> | --guest <events.json> | --guest-replay <events.json> <proposals.json>".into(),
         );
     }
     let graphics = args.get(1).is_some_and(|s| s == "--graphics");
@@ -27,13 +29,27 @@ fn run() -> Result<(), String> {
         args.remove(1);
     }
     if graphics
-        && !args
-            .get(1)
-            .is_some_and(|s| matches!(s.as_str(), "--guest-index" | "--guest-index-replay"))
+        && !args.get(1).is_some_and(|s| {
+            matches!(
+                s.as_str(),
+                "--guest-index" | "--guest-index-replay" | "--guest-set" | "--guest-set-replay"
+            )
+        })
     {
         return Err("graphics_requires_guest_index_mode".into());
     }
     let kernel = &args[0];
+    if args.len() == 3 && args[1] == "--guest-set" {
+        return set_bridge::run(kernel, Path::new(&args[2]), None, graphics);
+    }
+    if args.len() == 4 && args[1] == "--guest-set-replay" {
+        return set_bridge::run(
+            kernel,
+            Path::new(&args[2]),
+            Some(Path::new(&args[3])),
+            graphics,
+        );
+    }
     if args.len() == 3 && args[1] == "--guest-index" {
         return guest_bridge::run(
             kernel,

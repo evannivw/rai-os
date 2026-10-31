@@ -194,3 +194,26 @@ from those slots plus read-only public source bytes. Serialization remains at EL
 See [INDEX_SETS.md](INDEX_SETS.md) for ownership, versioning and the independent
 content checker. The host walkthrough uses the guest's missing list; whole-set
 Meta planning and full review-pack budget/release semantics remain pending.
+
+
+## October 30: whole-set model proposals
+
+The [whole-set Meta bridge](META_SET_BRIDGE.md) now exposes the current complete
+requirement and guest-reported missing list to the model. The explicit set mode
+binds proposals to a goal generation; `coord.select` rejects obsolete authority
+before issuing a per-record ticket. Existing EL0 admission/execution, exact cache
+and complete-set publication remain the guest's responsibility. This permits
+choices of missing-job order, not a demonstrated AI performance advantage.
+Next establish a useful constrained choice and fair comparison; full review-pack
+budget/release semantics, final video and submission remain pending. Original
+event dates and the November 4 deadline are unchanged.
+
+The native debug integration exposed excessive stack temporaries in the command
+dispatcher. An isolated pre-fix image changed the idle timer ACTIVE pointer from
+zero to 2 while entering coord.goal; the corrected image retained zero and
+completed the same request. The measured debug dispatcher frame fell from 27,552
+to 20,608 bytes by grouping coordinator report arms in one helper (1,104-byte
+frame). This fixes the reproduced stack corruption without enlarging the 64 KiB
+kernel stack or weakening timer checks. It is not a whole-program stack bound:
+a kernel-stack guard/high-water diagnostic remains future hardening. Native
+set tests cover the previously failing path in both build profiles.

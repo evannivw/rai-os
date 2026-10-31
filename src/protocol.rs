@@ -50,6 +50,10 @@ pub fn parse(line: &str) -> Result<Request<'_>, Error<'_>> {
             crate::records::RecordId::parse(fields.next().ok_or(error("bad_args"))?)
                 .map_err(error)?,
         ),
+        Some("coord.select") => Operation::CoordSelect(
+            crate::command::parse_proposal(fields.next().ok_or(error("bad_args"))?)
+                .map_err(error)?,
+        ),
         Some("coord.propose") => Operation::CoordPropose(
             crate::command::parse_proposal(fields.next().ok_or(error("bad_args"))?)
                 .map_err(error)?,

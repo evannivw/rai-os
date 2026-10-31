@@ -47,15 +47,15 @@ impl Scenario {
         Ok(scenario)
     }
 }
-struct Transport {
-    connection: qemu::Connection,
-    request_id: u32,
-    started: Instant,
-    work: Work,
-    artifacts: crate::guest_index::History,
+pub(super) struct Transport {
+    pub(super) connection: qemu::Connection,
+    pub(super) request_id: u32,
+    pub(super) started: Instant,
+    pub(super) work: Work,
+    pub(super) artifacts: crate::guest_index::History,
 }
 impl Transport {
-    fn exchange(
+    pub(super) fn exchange(
         &mut self,
         operation: &Operation<'_>,
         name: &str,
@@ -73,7 +73,7 @@ impl Transport {
         );
         Ok(reply)
     }
-    fn artifact(&mut self, snapshot: &Snapshot) -> Result<(), String> {
+    pub(super) fn artifact(&mut self, snapshot: &Snapshot) -> Result<(), String> {
         if self.work != Work::Index {
             return Ok(());
         }
@@ -89,7 +89,7 @@ impl Transport {
         );
         Ok(())
     }
-    fn snapshot(
+    pub(super) fn snapshot(
         &mut self,
         operation: &Operation<'_>,
         name: &str,

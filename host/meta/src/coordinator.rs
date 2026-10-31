@@ -78,6 +78,7 @@ impl State {
                 .filter(|(key, _)| revision(key).is_ok_and(|rev| self.released[rev - 1]))
                 .collect(),
             completed_results: self.completed.clone(),
+            index_set: None,
             required_record: match self.latest {
                 1 => Some("notes@1"),
                 2 => Some("notes@2"),

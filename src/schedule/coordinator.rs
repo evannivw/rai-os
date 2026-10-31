@@ -363,6 +363,29 @@ impl Coordinator {
         }
         Ok(report)
     }
+    /// Bind a model-selected record to the exact required-set generation before
+    /// issuing a per-record ticket. No host ingress interleaves this synchronous
+    /// gate and observe turn. EL0 still admits the subsequent ticketed proposal.
+    pub fn select(
+        &mut self,
+        selection: Proposal,
+        timer: &mut Timer,
+        mmu: &Mmu,
+    ) -> Result<Report, &'static str> {
+        self.require_waiting()?;
+        let status = self.bundle_status()?;
+        if selection.ticket != status.generation {
+            return Err("coord_stale_goal");
+        }
+        let bit = 1_u64 << selection.id.raw();
+        if status.required.mask() & bit == 0 {
+            return Err("coord_not_required");
+        }
+        if status.ready_mask & bit != 0 {
+            return Err("coord_already_completed");
+        }
+        self.observe(selection.id, timer, mmu)
+    }
     pub fn propose(
         &mut self,
         proposal: Proposal,

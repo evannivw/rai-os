@@ -383,3 +383,18 @@ hex encoded. Existing response framing and request IDs are unchanged. New errors
 include duplicate_required_record, conflicting_revisions, required_set_limit,
 coord_no_required_set, coord_bundle_incomplete, coord_not_required and coord_bad_goal.
 See [INDEX_SETS.md](INDEX_SETS.md) for schema, generation/ticket semantics and checks.
+
+
+## Whole-set proposal selection
+
+`coord.select <goal_version>:<key>` (one tab-separated argument in `@rai1`)
+requires an active index session and a committed required set. Before any
+observation or worker dispatch it checks the supplied nonzero u32 generation,
+required membership and missing status. Errors are `coord_stale_goal`,
+`coord_not_required`, or `coord_already_completed`; rejected selection leaves the
+coordinator report, cache and issue counter unchanged. Existing not-running,
+not-indexing/no-required-set and parse/record permission errors also apply.
+Successful selection returns the existing observed per-record report; use its
+returned ticket for `coord.propose`. A later goal change invalidates that ticket.
+See [the whole-set bridge](META_SET_BRIDGE.md) for the two-stage correlation and
+explicit model modes. Legacy commands remain available to the trusted console.

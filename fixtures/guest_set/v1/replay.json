@@ -1,0 +1,7 @@
+[
+ {"delay_ms":10,"proposal":{"state_version":1,"operation":"record.index","record":"notes@1","reason":"Offline fixture: choose notes first from the missing set."}},
+ {"delay_ms":10,"proposal":{"state_version":1,"operation":"record.index","record":"brief@1","reason":"Offline fixture: index the remaining brief."}},
+ {"delay_ms":10,"proposal":{"state_version":1,"operation":"record.index","record":"empty@1","reason":"Offline fixture: preserve the required empty record."}},
+ {"delay_ms":10,"proposal":{"state_version":5,"operation":"record.index","record":"checklist@1","reason":"Offline fixture: only the added checklist is missing."}},
+ {"delay_ms":10,"proposal":{"state_version":7,"operation":"record.index","record":"notes@2","reason":"Offline fixture: only the revised notes need work."}}
+]

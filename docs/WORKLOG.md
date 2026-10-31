@@ -1490,3 +1490,73 @@ next. Timed release/outage behavior, simulated resource/deadline enforcement,
 optional previews, the complete review-pack contract, fair comparison, final video
 and submission remain pending. Original dates/deadline remain unchanged. Commands,
 format, boundaries and reproduction are documented in INDEX_SETS.md.
+
+## 2026-10-30 — Whole-set Meta choices with guest generation admission
+
+Added explicit --guest-set / --guest-set-replay modes, optionally driving the
+existing native framebuffer. They transport scripted complete requirements,
+decode current guest membership/missing entries, and ask Meta to choose one
+missing revision. The model receives current metadata only, not future events,
+source bodies, indexes or local paths. Existing per-record/count modes retain
+their schema permissions and four-request cap; set mode has one pending request
+and eight calls for the five-job reference case plus bounded obsolete responses.
+Requirements are limited to eight events over 30 seconds and four revisions per
+set. A current decline, invalid action, exhausted budget or guest failure stops
+explicitly; there is no deterministic fallback or hidden retry.
+
+New coord.select <goal_version>:<key> checks the committed set generation,
+required membership and missing status before issuing a per-record ticket. The
+EL1 gate uses previously EL0-attested requirement metadata; EL0 still receives
+the observation and admits the subsequent ticketed proposal. Rejections leave
+state and the issue counter unchanged. A goal change between select/propose
+invalidates the ticket as before. Source proposals are checked against their
+original missing list, and late valid proposals reach the guest with their
+original generation. This avoids refreshing obsolete authority on the host.
+No new syscall, user pointer, memory map or agent process was introduced.
+
+The bridge shares transport, bounded provider threads and retained-index audit
+history with the existing index mode. New pure decoders validate set reports and
+artifact structure; the independent Python audit reconstructs goal generations,
+model snapshots, selection tickets, exact jobs and publications. It independently
+checks source bytes/token frequencies and existing scalar IPC traces. The host
+prints exact guest bundle bytes rather than assembling substitute output. Native
+views use observed set progress, including selection errors and status recovery.
+
+A new coordinator command arm exposed a reproducible unoptimized native stack
+corruption. An isolated diagnostic build showed the timer ACTIVE pointer change
+from zero to 2 while entering coord.goal, before the timer_busy rejection. Grouping
+coordinator report arms into one helper reduced the measured dispatcher frame
+from 27,552 to 20,608 bytes (helper: 1,104 bytes). The corrected image kept that
+pointer zero and completed the same sequence. The 64 KiB kernel stack, timer
+checks and mappings were unchanged. Full stack bounds/guard hardening remain
+pending; this is a correction of the reproduced path, not a global safety proof.
+Initial timed replay tests also assumed very short UART/render delays; margins
+were widened, and graphical auditing permits superseded historical publications
+to be absent while requiring an exact final set. Final native debug/release runs
+both actually published all three reference goals.
+
+Verification passed: root and Meta formatting; default/display kernel and all-
+target Meta Clippy; 32 Meta unit tests in both profiles. New real-QEMU debug and
+release checks include 43 framed requests plus shell selection for the generation
+boundary, five successful replay scenarios, invalid/missing/cached proposals,
+current/obsolete declines, an eight-call limit, invalid pre-boot requirements and
+a truncated stream. Native Cocoa replay passed both profiles. Existing boot/UART,
+complete-set normal/fault/native tests, old guest index/count bridge suites and
+host console integration passed. All checks used real QEMU where stated; replay
+and live provider results remain labeled separately.
+
+A real release/Cocoa run used five Muse Spark 1.3 calls. The selected order was
+brief@1, empty@1, notes@1, checklist@1, notes@2. Generations 1, 5 and 7 published
+with completed-worker totals 3, 4 and 5; all three exact outputs passed independent
+verification. Latencies were 1965/2092/1466/1995/1870 ms, with 2442 total reported
+tokens. No stale response occurred live; separate debug/release delayed fixtures
+prove rejection for a key still present in the replacement goal. Evidence and
+exact guest JSON are saved under docs/evidence/2026-10-30-meta-set-*.
+Credentials were neither changed nor included. Instructions are in META_SET_BRIDGE.md.
+
+The model now chooses among missing jobs, but this small independent workload is
+also straightforward for fixed code. No AI efficiency or OS security superiority
+is claimed. Next define useful constrained choices and a fair baseline using the
+same engine and acceptance checks. Full review-pack events/budgets, final video,
+eligibility confirmation and submission remain pending; original dates and the
+November 4 deadline remain unchanged.

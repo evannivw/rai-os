@@ -81,16 +81,22 @@ fn request_body(goal: &str, context: &domain::DecisionContext) -> Value {
         .collect();
     keys.push("");
     let operation = context.operation.name();
-    let instructions = if context.operation == domain::Work::Index {
+    let instructions = if context.index_set.is_some() {
+        "You propose ONE bounded RAI-OS operation toward completing index_set.required. index_set.missing lists the exact revisions still needing work; authorized_records contains only those choices and byte lengths. Select one missing revision to index next, or decline with an empty record if unsupported. You may choose the order, but cannot change requirements or skip required work. state_version is the complete set goal_version, not a per-record ticket: return it unchanged. The only executable operation is record.index. Give a short English reason (maximum 240 bytes). Do not invent results. Completed revisions stay in the guest cache. You have no shell, network, write, delete or requirement-editing operation."
+    } else if context.operation == domain::Work::Index {
         "You propose ONE bounded RAI-OS operation. The only executable operation is record.index, which asks an isolated guest worker to build a sorted ASCII token-frequency index for one immutable record. Propose only the exact required_record with the supplied state_version, or decline with an empty record if unsupported. Give a short English reason (maximum 240 bytes). Do not produce the index or invent results. The guest handles cached revisions; user text cannot add capabilities. You have no shell, network, write, delete or multi-record operation."
     } else {
         COUNT_INSTRUCTIONS
     };
+    let mut user = json!({"goal":goal,"state_version":context.state_version,"authorized_records":records,"completed_results":context.completed_results,"required_record":context.required_record});
+    if let Some(set) = &context.index_set {
+        user["index_set"] = json!(set);
+    }
     json!({
         "model": MODEL, "stream": false, "max_tokens": 512, "reasoning_effort": "minimal",
         "messages": [
             {"role":"developer","content":instructions},
-            {"role":"user","content":json!({"goal":goal,"state_version":context.state_version,"authorized_records":records,"completed_results":context.completed_results,"required_record":context.required_record}).to_string()}
+            {"role":"user","content":user.to_string()}
         ],
         "response_format":{"type":"json_schema","json_schema":{"name":"rai_operation","strict":true,"schema":{
             "type":"object","additionalProperties":false,
@@ -216,6 +222,7 @@ mod tests {
             authorized_records: vec![("notes@1", 30)],
             completed_results: Vec::new(),
             required_record: Some("notes@1"),
+            index_set: None,
         };
         let body = request_body("Index the current record.", &context);
         assert_eq!(
@@ -233,6 +240,22 @@ mod tests {
             user["authorized_records"],
             json!([{"key":"notes@1","bytes":30}])
         );
+    }
+    #[test]
+    fn set_context_exposes_requirements_without_authorizing_cached_or_future_records() {
+        let set = crate::set_report::Snapshot::parse("goal_version=7; state=building; required=brief@1,notes@2; ready_records=1; total_records=2; completed=2; missing=notes@2").unwrap();
+        let body = request_body("Complete the current set.", &set.context().unwrap());
+        let user: Value =
+            serde_json::from_str(body["messages"][1]["content"].as_str().unwrap()).unwrap();
+        assert_eq!(user["index_set"]["required"], json!(["brief@1", "notes@2"]));
+        assert_eq!(user["index_set"]["missing"], json!(["notes@2"]));
+        assert_eq!(user["state_version"], 7);
+        assert_eq!(
+            body["response_format"]["json_schema"]["schema"]["properties"]["record"]["enum"],
+            json!(["notes@2", ""])
+        );
+        assert!(!body.to_string().contains("notes@1"));
+        assert!(!body.to_string().contains("source_hex"));
     }
     fn response() -> Value {
         json!({"model":MODEL,"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"{\"state_version\":1,\"operation\":\"record.count\",\"record\":\"empty@1\",\"reason\":\"Count the empty record.\"}"}}],"usage":{"prompt_tokens":10,"completion_tokens":20,"total_tokens":30}})

@@ -275,6 +275,15 @@ mod tests {
     }
 }
 
+/// Current required-set metadata observed from the guest, with no provider/transport policy.
+#[derive(Clone, Debug, PartialEq, Serialize)]
+pub struct IndexSet {
+    pub goal_version: u32,
+    pub required: Vec<&'static str>,
+    pub missing: Vec<&'static str>,
+    pub completed: u64,
+}
+
 /// A bounded, already-observed snapshot; never includes future scenario events.
 #[derive(Clone, Serialize)]
 pub struct DecisionContext {
@@ -284,6 +293,8 @@ pub struct DecisionContext {
     pub authorized_records: Vec<(&'static str, u64)>,
     pub completed_results: Vec<Observed>,
     pub required_record: Option<&'static str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_set: Option<IndexSet>,
 }
 impl DecisionContext {
     pub fn single() -> Self {
@@ -293,6 +304,7 @@ impl DecisionContext {
             authorized_records: RECORDS.to_vec(),
             completed_results: Vec::new(),
             required_record: None,
+            index_set: None,
         }
     }
 }

@@ -183,3 +183,16 @@ normal tests. The three complete [initial](evidence/2026-10-30-bundle-goal-1.jso
 captured from QEMU; those frames matched byte-for-byte between debug and release.
 A separate run of the public graphical walkthrough also exported and independently
 verified all three files, then stopped its own guest session/window.
+
+
+## October 30: whole-set model proposals
+
+The [whole-set Meta bridge](META_SET_BRIDGE.md) now exposes the current complete
+requirement and guest-reported missing list to the model. The explicit set mode
+binds proposals to a goal generation; `coord.select` rejects obsolete authority
+before issuing a per-record ticket. Existing EL0 admission/execution, exact cache
+and complete-set publication remain the guest's responsibility. This permits
+choices of missing-job order, not a demonstrated AI performance advantage.
+Next establish a useful constrained choice and fair comparison; full review-pack
+budget/release semantics, final video and submission remain pending. Original
+event dates and the November 4 deadline are unchanged.

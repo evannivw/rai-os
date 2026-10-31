@@ -17,6 +17,8 @@ The [Meta index bridge](docs/META_INDEX_BRIDGE.md) now drives this path with
 model proposals and independently auditable guest artifacts.
 [Complete index sets](docs/INDEX_SETS.md) now combine required revisions and
 source bytes, gate incomplete publication and reuse unchanged work.
+The [whole-set Meta bridge](docs/META_SET_BRIDGE.md) now chooses among missing
+revisions with guest-validated goal generations.
 
 ## Run
 
@@ -35,6 +37,7 @@ sh scripts/meta.sh 'Count the words in the latest available revision of the note
 sh scripts/meta.sh --coordinate fixtures/coordinator/v1/revisions.json
 sh scripts/meta.sh --guest fixtures/guest_bridge/v1/observations.json
 sh scripts/meta.sh --graphics --guest-index fixtures/guest_index/v1/observations.json
+sh scripts/meta.sh --graphics --guest-set fixtures/guest_set/v1/goals.json
 ```
 
 Each person supplies their own API key in the checkout-root `.env.local`; see
@@ -69,6 +72,8 @@ python3 scripts/verify_wait.py
 python3 scripts/verify_wait.py --release
 python3 scripts/verify_display.py
 python3 scripts/verify_display.py --release
+python3 scripts/verify_set_bridge.py
+python3 scripts/verify_set_bridge.py --release
 python3 scripts/verify_bundle.py
 python3 scripts/verify_bundle.py --release
 python3 scripts/verify_coord_index.py

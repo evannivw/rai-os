@@ -45,6 +45,7 @@ impl Console<'_> {
             && matches!(
                 operation,
                 command::Operation::CoordObserve(_)
+                    | command::Operation::CoordSelect(_)
                     | command::Operation::CoordPropose(_)
                     | command::Operation::CoordStatus
                     | command::Operation::CoordStop

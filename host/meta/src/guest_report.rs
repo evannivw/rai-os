@@ -178,6 +178,7 @@ impl Snapshot {
             authorized_records: vec![metadata],
             completed_results: Vec::new(),
             required_record: Some(record),
+            index_set: None,
         })
     }
     pub fn same_goal_result(&self, other: &Self) -> bool {

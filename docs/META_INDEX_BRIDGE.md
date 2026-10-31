@@ -34,7 +34,7 @@ sh scripts/meta.sh --graphics --guest-index-replay fixtures/guest_index/v1/obser
 Replay proposals are explicitly labeled `source=replay`, with no provider usage.
 They exercise real QEMU execution but are not evidence of Meta inference. Omit
 `--graphics` for UART-only automation. The graphical flag must come first and is
-supported only for these two index modes. The wrapper builds the display-enabled
+supported for these two index modes and the explicit whole-set modes. The wrapper builds the display-enabled
 kernel separately; the bridge confirms its framebuffer-ready boot message and
 fails visibly if given a non-display kernel. It closes its own QEMU instance
 when the scripted session finishes. No new touch/input system is introduced.
@@ -151,3 +151,16 @@ scripted bundle walkthrough validates those mechanisms without new Meta calls.
 This bridge still proposes one record at a time in an unrestricted index session;
 binding model proposals to the entire set's generation and missing list is the
 next integration step. Existing live evidence above remains a per-record run.
+
+
+## October 30: whole-set model proposals
+
+The [whole-set Meta bridge](META_SET_BRIDGE.md) now exposes the current complete
+requirement and guest-reported missing list to the model. The explicit set mode
+binds proposals to a goal generation; `coord.select` rejects obsolete authority
+before issuing a per-record ticket. Existing EL0 admission/execution, exact cache
+and complete-set publication remain the guest's responsibility. This permits
+choices of missing-job order, not a demonstrated AI performance advantage.
+Next establish a useful constrained choice and fair comparison; full review-pack
+budget/release semantics, final video and submission remain pending. Original
+event dates and the November 4 deadline are unchanged.

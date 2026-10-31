@@ -17,6 +17,7 @@ pub enum Operation<'a> {
     CoordBundle,
     CoordObserve(&'a str),
     CoordPropose(u32, &'a str),
+    CoordSelect(u32, &'a str),
     CoordStatus,
     CoordStop,
     WorkerStart,
@@ -58,6 +59,12 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         "coord.status" => Ok(Operation::CoordStatus),
         "coord.stop" => Ok(Operation::CoordStop),
         _ if line.starts_with("coord.observe ") => Ok(Operation::CoordObserve(&line[14..])),
+        _ if line.starts_with("coord.select ") => {
+            let (version, key) = line[13..].split_once(':').ok_or("Use <goal_version>:<key>")?;
+            if version.is_empty() || !version.bytes().all(|b| b.is_ascii_digit()) { return Err("Invalid goal version"); }
+            let version = version.parse::<u32>().ok().filter(|n| *n != 0).ok_or("Invalid goal version")?;
+            Ok(Operation::CoordSelect(version, key))
+        }
         _ if line.starts_with("coord.propose ") => {
             let (ticket, key) = line[14..].split_once(':').ok_or("Use <ticket>:<key>")?;
             if ticket.is_empty() || !ticket.bytes().all(|b| b.is_ascii_digit()) { return Err("Invalid proposal ticket"); }
@@ -100,7 +107,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, record.count <key>, record.index <key>, worker.start, worker.count <key>, worker.status, worker.stop, coord.start [index], coord.result, coord.goal <keys>, coord.bundle.status, coord.bundle, coord.observe <key>, coord.propose <ticket>:<key>, coord.status, coord.stop, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
+            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, record.count <key>, record.index <key>, worker.start, worker.count <key>, worker.status, worker.stop, coord.start [index], coord.result, coord.goal <keys>, coord.bundle.status, coord.bundle, coord.observe <key>, coord.select <goal_version>:<key>, coord.propose <ticket>:<key>, coord.status, coord.stop, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
     }
 }
 
@@ -138,7 +145,8 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
         | Operation::RecordIndex(key)
         | Operation::WorkerCount(key)
         | Operation::CoordObserve(key)
-        | Operation::CoordPropose(_, key) => {
+        | Operation::CoordPropose(_, key)
+        | Operation::CoordSelect(_, key) => {
             if key.is_empty()
                 || key.len() > 32
                 || !key
@@ -148,6 +156,8 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
                 return Err("Record key requires 1-32 ASCII letters, digits, @ or -");
             }
             match operation {
+                Operation::CoordSelect(0, _) => return Err("Invalid goal version"),
+                Operation::CoordSelect(version, _) => format!("coord.select\t{version}:{key}"),
                 Operation::CoordPropose(0, _) => return Err("Invalid proposal ticket"),
                 Operation::CoordPropose(ticket, _) => format!("coord.propose\t{ticket}:{key}"),
                 Operation::CoordObserve(_) => format!("coord.observe\t{key}"),
@@ -268,6 +278,11 @@ mod tests {
             encode(4, &parse_input("coord.propose 7:notes@2").unwrap()).unwrap(),
             "@rai1\t4\tcoord.propose\t7:notes@2\n"
         );
+        assert_eq!(
+            encode(5, &parse_input("coord.select 7:notes@2").unwrap()).unwrap(),
+            "@rai1\t5\tcoord.select\t7:notes@2\n"
+        );
+        assert!(encode(5, &Operation::CoordSelect(0, "notes@1")).is_err());
         for text in [
             "coord.propose 0:notes@1",
             "coord.propose -1:notes@1",
@@ -276,6 +291,7 @@ mod tests {
             "coord.propose notes@1",
         ] {
             assert!(parse_input(text).is_err());
+            assert!(parse_input(&text.replace("coord.propose", "coord.select")).is_err());
         }
         assert!(encode(4, &Operation::CoordPropose(0, "notes@1")).is_err());
         for key in [
@@ -288,6 +304,7 @@ mod tests {
         ] {
             assert!(encode(4, &Operation::CoordObserve(key)).is_err());
             assert!(encode(4, &Operation::CoordPropose(1, key)).is_err());
+            assert!(encode(4, &Operation::CoordSelect(1, key)).is_err());
         }
     }
 
