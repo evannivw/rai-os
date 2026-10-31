@@ -4,7 +4,7 @@ use crate::mmu::Snapshot as MmuSnapshot;
 use crate::task::{Snapshot, Task};
 use core::fmt;
 
-pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | record.index <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start [index] | coord.result | coord.observe <key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
+pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | record.index <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start [index] | coord.result | coord.goal <keys> | coord.bundle.status | coord.bundle | coord.observe <key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
 pub const INFO: &str =
     "RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected";
 
@@ -19,6 +19,9 @@ pub enum Operation<'a> {
     CoordStart,
     CoordIndexStart,
     CoordResult,
+    CoordGoal(crate::bundle::Required),
+    CoordBundleStatus,
+    CoordBundle,
     CoordObserve(crate::records::RecordId),
     CoordPropose(crate::schedule::coordinator::Proposal),
     CoordStatus,
@@ -53,6 +56,12 @@ pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
         "coord.start" => Ok(Operation::CoordStart),
         "coord.start index" => Ok(Operation::CoordIndexStart),
         "coord.result" => Ok(Operation::CoordResult),
+        "coord.bundle" => Ok(Operation::CoordBundle),
+        "coord.bundle.status" => Ok(Operation::CoordBundleStatus),
+        "coord.goal" => Err("bad_args"),
+        _ if line.starts_with("coord.goal ") => Ok(Operation::CoordGoal(
+            crate::bundle::Required::parse(&line[11..])?,
+        )),
         "coord.status" => Ok(Operation::CoordStatus),
         "coord.stop" => Ok(Operation::CoordStop),
         "coord.observe" | "coord.propose" => Err("bad_args"),
@@ -128,7 +137,12 @@ pub struct Uptime {
     pub counter_hz: u32,
 }
 
+// A complete four-record snapshot is copied before UART rendering. Heap allocation
+// is unavailable; the fixed bundle owns its bytes instead of borrowing session RAM.
+#[allow(clippy::large_enum_variant)]
 pub enum Reply<'a> {
+    Bundle(crate::bundle::Artifact),
+    BundleStatus(crate::bundle::Status),
     Coordinator(crate::schedule::coordinator::Report),
     CoordIndex(crate::schedule::coordinator::Artifact),
     Worker(crate::schedule::worker::Status),
@@ -151,6 +165,8 @@ pub enum Reply<'a> {
 impl fmt::Display for Reply<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::Bundle(report) => write!(f, "{report}"),
+            Self::BundleStatus(report) => write!(f, "{report}"),
             Self::CoordIndex(report) => write!(f, "{report}"),
             Self::Coordinator(report) => write!(f, "{report}"),
             Self::Worker(report) => write!(f, "{report}"),
@@ -186,6 +202,11 @@ pub fn execute<'a>(
     sessions: &mut crate::schedule::Sessions,
 ) -> Result<Reply<'a>, &'static str> {
     Ok(match operation {
+        Operation::CoordGoal(required) => {
+            Reply::BundleStatus(sessions.coordinator.set_goal(required, timer, mmu)?)
+        }
+        Operation::CoordBundleStatus => Reply::BundleStatus(sessions.coordinator.bundle_status()?),
+        Operation::CoordBundle => Reply::Bundle(sessions.coordinator.bundle()?),
         Operation::CoordIndexStart => {
             Reply::Coordinator(sessions.coordinator.start_index(timer, mmu)?)
         }

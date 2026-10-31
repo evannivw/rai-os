@@ -6,6 +6,7 @@ license = "Apache-2.0"
 description = "Educational AArch64 kernel for QEMU virt"
 
 [features]
+coord-test-bad-goal = []
 index-stream-test-order = []
 index-stream-test-length = []
 index-stream-test-truncated = []

@@ -36,7 +36,11 @@ impl Console<'_> {
         #[cfg(feature = "guest-display")]
         let is_coordinator_index = matches!(
             operation,
-            command::Operation::CoordIndexStart | command::Operation::CoordResult
+            command::Operation::CoordIndexStart
+                | command::Operation::CoordResult
+                | command::Operation::CoordGoal(_)
+                | command::Operation::CoordBundle
+                | command::Operation::CoordBundleStatus
         ) || (self.sessions.coordinator.status().index_mode()
             && matches!(
                 operation,
@@ -72,7 +76,9 @@ impl Console<'_> {
                 Err(code) => view::render(display, View::Error(code)),
                 Ok(_) => {
                     let report = self.sessions.coordinator.status();
-                    if let Ok(artifact) = self.sessions.coordinator.artifact() {
+                    if let Ok(status) = self.sessions.coordinator.bundle_status() {
+                        view::render(display, View::Bundle(status));
+                    } else if let Ok(artifact) = self.sessions.coordinator.artifact() {
                         let value = if report.reused() {
                             View::Reused(artifact.id(), artifact.text())
                         } else {

@@ -12,6 +12,9 @@ pub enum Operation<'a> {
     CoordStart,
     CoordIndexStart,
     CoordResult,
+    CoordGoal(&'a str),
+    CoordBundleStatus,
+    CoordBundle,
     CoordObserve(&'a str),
     CoordPropose(u32, &'a str),
     CoordStatus,
@@ -49,6 +52,9 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         "coord.start" => Ok(Operation::CoordStart),
         "coord.start index" => Ok(Operation::CoordIndexStart),
         "coord.result" => Ok(Operation::CoordResult),
+        "coord.bundle" => Ok(Operation::CoordBundle),
+        "coord.bundle.status" => Ok(Operation::CoordBundleStatus),
+        _ if line.starts_with("coord.goal ") => Ok(Operation::CoordGoal(&line[11..])),
         "coord.status" => Ok(Operation::CoordStatus),
         "coord.stop" => Ok(Operation::CoordStop),
         _ if line.starts_with("coord.observe ") => Ok(Operation::CoordObserve(&line[14..])),
@@ -94,7 +100,7 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         _ => line
             .strip_prefix("echo ")
             .map(Operation::Echo)
-            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, record.count <key>, record.index <key>, worker.start, worker.count <key>, worker.status, worker.stop, coord.start [index], coord.result, coord.observe <key>, coord.propose <ticket>:<key>, coord.status, coord.stop, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
+            .ok_or("Use help, info, uptime, mmu.info, context.check, timer.check, schedule.check, schedule.isolate, ipc.check, ipc.wait, record.count <key>, record.index <key>, worker.start, worker.count <key>, worker.status, worker.stop, coord.start [index], coord.result, coord.goal <keys>, coord.bundle.status, coord.bundle, coord.observe <key>, coord.propose <ticket>:<key>, coord.status, coord.stop, schedule.run, schedule.fault, user.run, user.spin, memory.info, memory.check, echo, task.start, task.status, task.cancel, or exit"),
     }
 }
 
@@ -109,6 +115,19 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
         Operation::IpcWait => "ipc.wait".to_owned(),
         Operation::CoordIndexStart => "coord.start\tindex".to_owned(),
         Operation::CoordResult => "coord.result".to_owned(),
+        Operation::CoordBundle => "coord.bundle".to_owned(),
+        Operation::CoordBundleStatus => "coord.bundle.status".to_owned(),
+        Operation::CoordGoal(keys) => {
+            if keys.is_empty()
+                || keys.len() > 80
+                || !keys
+                    .bytes()
+                    .all(|b| b.is_ascii_alphanumeric() || matches!(b, b'@' | b','))
+            {
+                return Err("Invalid required record set");
+            }
+            format!("coord.goal\t{keys}")
+        }
         Operation::CoordStart => "coord.start".to_owned(),
         Operation::CoordStatus => "coord.status".to_owned(),
         Operation::CoordStop => "coord.stop".to_owned(),

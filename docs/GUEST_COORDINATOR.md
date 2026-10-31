@@ -193,3 +193,12 @@ worker turn. See [RETAINED_INDEX.md](RETAINED_INDEX.md) for the different mode
 budgets, metadata ABI, ownership, native views and verification. The default
 Meta bridge remains count-only; [`--guest-index`](META_INDEX_BRIDGE.md) selects
 this new path.
+
+## Explicit required sets
+
+Index sessions can now accept `coord.goal <keys>`, retaining the required revisions
+at EL0 and attesting them to the kernel. `coord.bundle.status` identifies missing
+entries and `coord.bundle` only exposes the complete current set. Goal changes
+clear the active single-record ticket but retain valid cache slots; out-of-set
+record actions are rejected. See [INDEX_SETS.md](INDEX_SETS.md) for the additive
+ABI/events, commands and exact publication contract. Default count mode is unchanged.

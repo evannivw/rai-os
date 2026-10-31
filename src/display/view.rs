@@ -17,6 +17,7 @@ pub enum View<'a> {
     Index(RecordId, &'a str),
     Reused(RecordId, &'a str),
     Pending(RecordId, u64),
+    Bundle(crate::bundle::Status),
     Error(&'a str),
 }
 struct Label {
@@ -218,6 +219,46 @@ pub fn render(s: &mut Display, view: View<'_>) {
             let mut label = Label::new();
             let _ = write!(label, "coord.propose {ticket}:{id}");
             text(s, label.text(), 40, 667, Size::Small, GREEN);
+        }
+        View::Bundle(status) => {
+            text(
+                s,
+                if status.ready() {
+                    "SET COMPLETE"
+                } else {
+                    "BUILDING SET"
+                },
+                336,
+                558,
+                Size::Small,
+                if status.ready() { GREEN } else { MUTED },
+            );
+            text(s, "A project, together.", 40, 580, Size::Body, INK);
+            let mut label = Label::new();
+            let _ = write!(
+                label,
+                "Goal {} / {} of {} indexed / {} worker jobs",
+                status.generation,
+                status.ready_count(),
+                status.required.mask().count_ones(),
+                status.completed
+            );
+            text(s, label.text(), 40, 613, Size::Small, MUTED);
+            for (n, id) in status.required.ids().enumerate() {
+                let mut label = Label::new();
+                let _ = write!(label, "{id}");
+                let y = 644 + n as i32 * 24;
+                text(s, label.text(), 40, y, Size::Small, INK);
+                let ready = status.ready_mask & (1 << id.raw()) != 0;
+                text(
+                    s,
+                    if ready { "INDEXED" } else { "WAITING" },
+                    367,
+                    y,
+                    Size::Small,
+                    if ready { GREEN } else { MUTED },
+                );
+            }
         }
         View::Error(code) => {
             text(s, "NOT COMPLETED", 323, 558, Size::Small, 0x98644c);

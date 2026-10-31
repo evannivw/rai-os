@@ -15,6 +15,8 @@ A [retained index mode](docs/RETAINED_INDEX.md) now transfers exact EL0 results
 and reuses completed immutable revisions, with native created/reused views.
 The [Meta index bridge](docs/META_INDEX_BRIDGE.md) now drives this path with
 model proposals and independently auditable guest artifacts.
+[Complete index sets](docs/INDEX_SETS.md) now combine required revisions and
+source bytes, gate incomplete publication and reuse unchanged work.
 
 ## Run
 
@@ -26,6 +28,7 @@ cargo run --locked             # Direct kernel UART console
 sh scripts/console.sh          # Rust host terminal controlling QEMU
 sh scripts/panel.sh            # Native graphical host panel
 sh scripts/desktop.sh          # RAI-OS draws its own screen inside QEMU
+sh scripts/bundle.sh --graphics # Three exact multi-record sets, independent checks
 sh scripts/index.sh notes@1 target/notes-v1.index  # New output path; real guest index + checker
 # After configuring a local key as described in docs/META_BRIDGE.md:
 sh scripts/meta.sh 'Count the words in the latest available revision of the notes.'
@@ -66,6 +69,8 @@ python3 scripts/verify_wait.py
 python3 scripts/verify_wait.py --release
 python3 scripts/verify_display.py
 python3 scripts/verify_display.py --release
+python3 scripts/verify_bundle.py
+python3 scripts/verify_bundle.py --release
 python3 scripts/verify_coord_index.py
 python3 scripts/verify_coord_index.py --release
 python3 scripts/verify_record_index.py

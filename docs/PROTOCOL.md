@@ -371,3 +371,15 @@ returns the current completed index in the `record.index` artifact format.
 Index-mode reports append operation, cached_records, cache_hits and output_bytes.
 Observe/propose use the existing record and ticket syntax. See
 [RETAINED_INDEX.md](RETAINED_INDEX.md) for fields, errors and a reproducible cycle.
+
+## Complete index sets
+
+`coord.goal` requires exactly one comma-separated key argument (one to four unique
+allowed document revisions); `coord.bundle.status` and `coord.bundle` take none.
+These apply to a retained index session. Goal/status replies contain goal_version,
+state, required, ready_records, total_records, completed and missing (`-` if empty).
+The complete bundle reply is single-line printable-ASCII JSON; source bytes are
+hex encoded. Existing response framing and request IDs are unchanged. New errors
+include duplicate_required_record, conflicting_revisions, required_set_limit,
+coord_no_required_set, coord_bundle_incomplete, coord_not_required and coord_bad_goal.
+See [INDEX_SETS.md](INDEX_SETS.md) for schema, generation/ticket semantics and checks.

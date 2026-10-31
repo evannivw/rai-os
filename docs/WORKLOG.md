@@ -1419,3 +1419,74 @@ AI. Next combine revision-aware records into a complete useful result with expli
 invalidation and independent acceptance, then compare meaningful policies fairly.
 The final three-minute video/submission and original event dates remain pending
 and unchanged. Run/setup/limits are documented in META_INDEX_BRIDGE.md.
+
+
+## 2026-10-30 — Complete versioned index sets and selective revision work
+
+Added coord.goal, coord.bundle.status and coord.bundle to retained index sessions.
+The typed required set accepts one to four public document revisions, normalizes
+key order and rejects duplicates, conflicting revisions, unknown/denied records
+and extra arguments before mutation. EL0 coordinator A retains the required bitset,
+clears the active single-record goal on changes and rejects out-of-set record
+inputs. Coordinator-only scalar SVC 15 attests the new generation, requirement and
+completed-revision mask against the kernel's pending input/cache before metadata
+is committed. A normal change has three A calls and no B dispatch. The kernel also
+checks required membership before worker dispatch. No user pointer/mapping changed.
+
+The required-set generation shares the monotonic issue counter with observations;
+stale pre-change proposals cannot execute, including when the same record remains
+required. Existing completed revisions remain cached. The kernel derives the
+missing set from committed slots and rejects incomplete bundle reads instead of
+returning an earlier snapshot. A complete owned artifact serializes exact required
+keys, runtime goal generation, public source bytes as lowercase hex and original
+EL0-generated indexes. Serialization runs at EL1; this is not a new isolated pack
+service. Its four bounded index copies use the existing kernel stack without a
+heap; the large reply variant has a documented Clippy allowance. No stack-peak or
+whole-OS efficiency claim is made. Stop/failure clears requirements and cache;
+the issue counter still survives stop/start.
+
+The native content view now shows goal generation, indexed/required counts,
+completed worker jobs and per-revision INDEXED/WAITING states. Incomplete-output
+errors replace old content, status restores current progress, and stop restores
+the original ready screen. SET COMPLETE is the guest's committed-membership gate,
+not an independent semantic verdict or full review-pack R1-R6 acceptance.
+
+A Rust host walkthrough requests the guest's missing list, submits individual
+proposals only for those entries, saves exact guest JSON into a fresh timestamped
+directory and runs the independent checker on each output. The public graphical
+script completed the three reference requirements with total jobs 3, 4 and 5.
+Only checklist@1 and then notes@2 added work; unchanged records retained identical
+bytes/indexes. The checker independently verifies source hashes/bytes, required
+membership, generation and complete token frequencies. Its optional host-side
+lookup found safety once in checklist@1 and once in notes@2 in the final artifact.
+The guest generated those indexes; the host only verifies/queries the result.
+
+Debug and release passed three headless bundle images per profile (316 protocol
+requests), plus native view captures. Tests check the three reference goal indexes,
+all 45 valid bounded revision sets, empty-record preservation, unchanged entries,
+no incomplete/stale publication, malformed requirements, out-of-set actions, stale
+proposals across changed sets, stop/restart and memory ownership. Dedicated fault
+images reject forged EL0 goal attestation and a truncated notes@2 stream after
+an earlier completed set, clear prior cache/requirements and regain the console.
+Artifact mutations reject missing/duplicate/stale/changed source/index data and
+duplicate JSON fields. The first truncated-stream harness stopped before reaching
+the injected revision; its traversal was corrected, and the complete fault path
+then passed. Native tests were extended to show all three successive requirements;
+pending/final debug and release PNGs matched byte-for-byte.
+
+Existing boot/protocol, retained-index, guest coordinator, persistent worker,
+standalone index, private-stack isolation, user timeout, full native display and
+both guest Meta bridge modes passed in debug and release. All 29 Meta host unit
+tests passed in both profiles after decoding the new idle-with-cache/goal trace
+state. Host console integration passed; the old host panel compiled. Root/host
+formatting, kernel default/display/new-fault Clippy, the Rust demo and all-target
+Meta Clippy passed. Actual UART, three JSON artifacts and native screenshots are
+retained under docs/evidence/2026-10-30-bundle-*. No live API call or credential
+change was required for this increment.
+
+This is a deterministic multi-record correctness foundation. The existing Meta
+bridge still operates per record without a required set; whole-set planning is
+next. Timed release/outage behavior, simulated resource/deadline enforcement,
+optional previews, the complete review-pack contract, fair comparison, final video
+and submission remain pending. Original dates/deadline remain unchanged. Commands,
+format, boundaries and reproduction are documented in INDEX_SETS.md.

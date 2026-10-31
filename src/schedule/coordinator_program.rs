@@ -17,6 +17,7 @@ fn publish(state: u64, ticket: u64, result: u64, completed: u64, event: u64) {
 #[unsafe(link_section = ".user.text")]
 pub extern "C" fn guest_coordinator(mode: u64) -> ! {
     let mut cached = 0_u64;
+    let mut required = 0_u64;
     let mut state = 0_u64;
     let mut ticket = 0_u64;
     let mut result = 0_u64;
@@ -24,6 +25,22 @@ pub extern "C" fn guest_coordinator(mode: u64) -> ! {
     publish(state, ticket, result, completed, 0);
     loop {
         let input = call(13, 0, 0, 0);
+        if mode == 1 && input.1 == 32 {
+            // The gateway has validated a bounded set. Retain the requirement at EL0,
+            // invalidate the active per-record goal, and attest the cached revision set.
+            required = input.3;
+            let attested = if cfg!(feature = "coord-test-bad-goal") {
+                required ^ 2
+            } else {
+                required
+            };
+            expect(call(15, input.2, attested, cached), 0);
+            state = 0;
+            ticket = 0;
+            result = 0;
+            publish(state, ticket, result, completed, 9);
+            continue;
+        }
         let id = if mode == 1 { input.3 >> 32 } else { input.3 };
         if input.0 != 0 || id == 0 || id > 6 {
             finish(1, 0);
@@ -50,6 +67,10 @@ pub extern "C" fn guest_coordinator(mode: u64) -> ! {
             publish(2, input.2, 5_u64 << 32, completed, 8);
             let _ = call(13, 0, 0, 0);
             finish(4, 0);
+        }
+        if mode == 1 && required != 0 && required & (1 << id) == 0 {
+            publish(state, ticket, result, completed, 10);
+            continue;
         }
         let event;
         if input.1 == 30 {

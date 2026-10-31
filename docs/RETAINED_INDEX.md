@@ -146,3 +146,11 @@ Actual [debug UART](evidence/2026-10-30-coord-index-debug.txt),
 [reused screen](evidence/2026-10-30-coord-index-reused.png) are retained in Git.
 These are real QEMU outputs, not mockups. Pending/reused PNGs matched byte for
 byte between debug and release. Complete captures remain under target/verification.
+
+## Complete required sets
+
+The new [index-set extension](INDEX_SETS.md) combines up to four committed revision
+indexes with their exact public source bytes. An optional EL0-retained requirement
+scopes record actions; changing it invalidates old publication eligibility while
+retaining unchanged cache entries. The per-record Meta bridge remains available;
+its existing mode does not yet set or plan a multi-record requirement.

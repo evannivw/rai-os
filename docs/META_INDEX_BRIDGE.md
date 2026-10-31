@@ -142,3 +142,12 @@ and [release](evidence/2026-10-30-meta-index-stale-release.jsonl). A separate
 [release replay](evidence/2026-10-30-meta-index-reuse-inflight-release.jsonl) shows
 reuse while another inference is pending, followed by rejection of its obsolete
 proposal. Replay evidence is not described as a live model decision.
+
+## Subsequent multi-record foundation
+
+[Complete index sets](INDEX_SETS.md) now provide guest-retained requirements,
+missing-entry reports and a publication gate across several revisions. The
+scripted bundle walkthrough validates those mechanisms without new Meta calls.
+This bridge still proposes one record at a time in an unrestricted index session;
+binding model proposals to the entire set's generation and missing list is the
+next integration step. Existing live evidence above remains a per-record run.

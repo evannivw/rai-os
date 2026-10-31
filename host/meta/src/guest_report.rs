@@ -122,7 +122,7 @@ impl Snapshot {
             || events.iter().any(|e| {
                 e.len() != 2
                     || !matches!(e.as_bytes()[0], b'A' | b'B')
-                    || !b"SRDWHOPFL".contains(&e.as_bytes()[1])
+                    || !b"SRDWHOPFLG".contains(&e.as_bytes()[1])
             })
         {
             return Err("invalid_guest_trace");
@@ -133,7 +133,8 @@ impl Snapshot {
                     && snapshot.ticket == 0
                     && snapshot.bytes == 0
                     && snapshot.tokens == 0
-                    && snapshot.completed == 0 => {}
+                    && (snapshot.completed == 0
+                        || (snapshot.state == "idle" && snapshot.index.is_some())) => {}
             "awaiting_proposal"
                 if snapshot.record.is_some()
                     && snapshot.ticket != 0
@@ -153,8 +154,10 @@ impl Snapshot {
                 || index.cached_records > 6
                 || index.output_bytes > 384
                 || (snapshot.state == "completed") != (index.output_bytes > 0)
-                || index.cache_hits > u64::from(snapshot.ticket)
-                || (snapshot.state == "idle" && index.cache_hits != 0))
+                || index.cache_hits > u64::from(u32::MAX)
+                || (snapshot.state == "idle"
+                    && snapshot.event == "started"
+                    && (index.cache_hits != 0 || snapshot.completed != 0)))
         {
             return Err("inconsistent_guest_index");
         }
@@ -312,6 +315,12 @@ mod tests {
                     .is_err()
             );
         }
+    }
+    #[test]
+    fn required_set_change_can_idle_with_retained_indexes_and_hits() {
+        let report = Snapshot::parse("coordinator=EL0; worker=EL0; state=idle; event=goal_changed; ticket=0; record=none; bytes=0; tokens=0; completed=1; a_calls=3; b_calls=0; a_slices=0; b_slices=0; trace=AG,AO,AH; operation=record.index; cached_records=1; cache_hits=1; output_bytes=0").unwrap();
+        assert!(report.context().is_err());
+        assert_eq!(report.completed, 1);
     }
     const WAITING: &str = "coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=3; record=notes@2; bytes=0; tokens=0; completed=1; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH";
     #[test]

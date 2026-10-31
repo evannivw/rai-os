@@ -2,6 +2,7 @@
 //! Transport, bounded dispatch and report validation; goal policy lives at EL0.
 use super::{run_turn, runtime::valid_context};
 use crate::{
+    bundle::{self, Required},
     context::Frame,
     index_stream::{Stream, Text},
     ipc::{self, Mailboxes, Message, TaskId},
@@ -168,6 +169,8 @@ pub struct Coordinator {
     issued: u32,
     cache: [Option<Cached>; 6],
     input: Option<(u64, u32, RecordId)>,
+    goal_input: Option<(u32, Required)>,
+    goal: Option<(u32, Required)>,
 }
 fn endpoint(id: usize) -> TaskId {
     TaskId::from_raw(id as u64 + 1).expect("fixed task")
@@ -197,10 +200,69 @@ impl Coordinator {
             issued: 0,
             cache: [None; 6],
             input: None,
+            goal_input: None,
+            goal: None,
         }
     }
     pub fn status(&self) -> Report {
         self.report
+    }
+    fn cache_mask(&self) -> u64 {
+        self.cache.iter().enumerate().fold(0, |mask, (n, entry)| {
+            mask | (u64::from(entry.is_some()) << (n + 1))
+        })
+    }
+    pub fn bundle_status(&self) -> Result<bundle::Status, &'static str> {
+        if !self.report.index_mode {
+            return Err("coord_not_indexing");
+        }
+        if self.lease.is_none() {
+            return Err("coord_not_running");
+        }
+        let (generation, required) = self.goal.ok_or("coord_no_required_set")?;
+        Ok(bundle::Status {
+            generation,
+            required,
+            ready_mask: required.mask() & self.cache_mask(),
+            completed: self.report.completed,
+        })
+    }
+    pub fn bundle(&self) -> Result<bundle::Artifact, &'static str> {
+        let status = self.bundle_status()?;
+        if !status.ready() {
+            return Err("coord_bundle_incomplete");
+        }
+        let mut indexes = [Text::EMPTY; bundle::MAX_RECORDS];
+        for (n, id) in status.required.ids().enumerate() {
+            indexes[n] = self.cache[id.raw() as usize - 1]
+                .ok_or("coord_bundle_incomplete")?
+                .text;
+        }
+        Ok(bundle::Artifact { status, indexes })
+    }
+    pub fn set_goal(
+        &mut self,
+        required: Required,
+        timer: &mut Timer,
+        mmu: &Mmu,
+    ) -> Result<bundle::Status, &'static str> {
+        self.require_waiting()?;
+        if !self.report.index_mode {
+            return Err("coord_not_indexing");
+        }
+        let generation = self.issued.checked_add(1).ok_or("coord_ticket_limit")?;
+        self.issued = generation;
+        self.input = None;
+        self.goal_input = Some((generation, required));
+        self.tasks[0].frame.registers[..4].copy_from_slice(&[
+            0,
+            32,
+            u64::from(generation),
+            required.mask(),
+        ]);
+        self.tasks[0].wait = Wait::Ready;
+        self.finish_turn(timer, mmu)?;
+        self.bundle_status()
     }
     pub fn artifact(&self) -> Result<Artifact, &'static str> {
         if !self.report.index_mode {
@@ -222,6 +284,8 @@ impl Coordinator {
     fn retire(&mut self) {
         self.cache = [None; 6];
         self.input = None;
+        self.goal_input = None;
+        self.goal = None;
         if self.lease.is_some() {
             // SAFETY: exclusive lease over both stack pages; tasks suspended, base map
             // restored by run_turn; single masked CPU, no DMA or live user references.
@@ -293,7 +357,11 @@ impl Coordinator {
         let ticket = self.issued.checked_add(1).ok_or("coord_ticket_limit")?;
         self.issued = ticket;
         self.input(30, ticket, id);
-        self.finish_turn(timer, mmu)
+        let report = self.finish_turn(timer, mmu)?;
+        if report.event == "not_required" {
+            return Err("coord_not_required");
+        }
+        Ok(report)
     }
     pub fn propose(
         &mut self,
@@ -309,6 +377,7 @@ impl Coordinator {
             "wrong_record" => Err("coord_wrong_record"),
             "already_completed" => Err("coord_already_completed"),
             "no_goal" => Err("coord_no_goal"),
+            "not_required" => Err("coord_not_required"),
             _ => Ok(report),
         }
     }
@@ -324,6 +393,7 @@ impl Coordinator {
     }
     fn input(&mut self, kind: u64, ticket: u32, id: RecordId) {
         self.input = Some((kind, ticket, id));
+        self.goal_input = None;
         // EL0 owns cache-use policy; the gateway supplies only attested metadata.
         let value = if self.report.index_mode {
             self.cache[id.raw() as usize - 1].map_or(id.raw() << 32, |entry| entry.result)
@@ -378,6 +448,7 @@ impl Coordinator {
         self.report.length = 0;
         let mut cursor = 0;
         let mut publication = None;
+        let mut goal_publication = None;
         let mut worker_result = None;
         let mut worker_sequence = None;
         let mut stream = Stream::new();
@@ -448,6 +519,9 @@ impl Coordinator {
                                             || u64::from(ticket) != self.report.ticket
                                             || record.raw() != self.report.result >> 32
                                             || args[2] != record.raw()
+                                            || self.goal.is_some_and(|(_, required)| {
+                                                required.mask() & (1 << record.raw()) == 0
+                                            })
                                         {
                                             return Err("coord_index_request");
                                         }
@@ -501,6 +575,18 @@ impl Coordinator {
                         self.tasks[id].wait = Wait::Host;
                         self.trace(id, b'H')?;
                     }
+                    15 if id == 0 && self.report.index_mode => {
+                        let (generation, required) = self.goal_input.ok_or("coord_bad_goal")?;
+                        if goal_publication.is_some()
+                            || args[0] != u64::from(generation)
+                            || args[1] != required.mask()
+                            || args[2] != self.cache_mask()
+                        {
+                            return Err("coord_bad_goal");
+                        }
+                        goal_publication = Some((generation, required));
+                        self.trace(id, b'G')?;
+                    }
                     14 if id == 0 => {
                         if publication.is_some() {
                             return Err("coord_extra_report");
@@ -534,14 +620,14 @@ impl Coordinator {
         let [state, ticket, result, completed, event] =
             publication.ok_or("coord_missing_report")?;
         if state > 2
-            || event > (if self.report.index_mode { 8 } else { 7 })
+            || event > (if self.report.index_mode { 10 } else { 7 })
             || ticket > self.issued as u64
             || completed > self.issued as u64
         {
             return Err("coord_bad_report");
         }
         if state == 0 {
-            if ticket != 0 || result != 0 || completed != 0 {
+            if ticket != 0 || result != 0 || (!self.report.index_mode && completed != 0) {
                 return Err("coord_bad_report");
             }
         } else {
@@ -553,6 +639,14 @@ impl Coordinator {
             {
                 return Err("coord_bad_report");
             }
+        }
+        if self.goal_input.is_some() {
+            if event != 9 || state != 0 || ticket != 0 || result != 0 || goal_publication.is_none()
+            {
+                return Err("coord_bad_goal");
+            }
+        } else if event == 9 || goal_publication.is_some() {
+            return Err("coord_bad_goal");
         }
         if event == 3 {
             if state != 2
@@ -613,7 +707,10 @@ impl Coordinator {
                 }
                 self.report.hits = self.report.hits.checked_add(1).ok_or("coord_cache_limit")?;
             }
-            if event == 1 || event == 3 {
+            if let Some(goal) = goal_publication {
+                self.goal = Some(goal);
+            }
+            if event == 1 || event == 3 || event == 9 {
                 self.report.active_reused = false;
             } else if event == 8 {
                 self.report.active_reused = true;
@@ -639,6 +736,8 @@ impl Coordinator {
             "already_completed",
             "no_goal",
             "reused",
+            "goal_changed",
+            "not_required",
         ][event as usize];
         self.report.ticket = ticket;
         self.report.result = result;

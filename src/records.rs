@@ -30,6 +30,10 @@ impl RecordId {
     pub fn raw(self) -> u64 {
         self.0
     }
+    pub fn source(self) -> &'static [u8] {
+        let data = &RECORDS[self.0 as usize - 1];
+        &data.bytes[..data.length]
+    }
     pub fn bytes(self) -> u64 {
         RECORDS[self.0 as usize - 1].length as u64
     }

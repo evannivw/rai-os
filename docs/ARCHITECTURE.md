@@ -183,3 +183,14 @@ The [Meta index bridge](META_INDEX_BRIDGE.md) selects this mode explicitly. Its
 artifact history validates observed reuse but never supplies guest results or
 chooses cache hits. Only the provider boundary selects the allowed operation
 schema; count-only modes retain their narrower permission.
+
+## Required multi-record sets
+
+The optional index-session goal bitset is now retained by coordinator A at EL0.
+A set change is attested through scalar SVC 15 before the kernel commits requirement
+metadata; it invalidates the active per-record ticket while retaining exact revision
+slots. The kernel derives missing entries and serializes a bounded complete set
+from those slots plus read-only public source bytes. Serialization remains at EL1.
+See [INDEX_SETS.md](INDEX_SETS.md) for ownership, versioning and the independent
+content checker. The host walkthrough uses the guest's missing list; whole-set
+Meta planning and full review-pack budget/release semantics remain pending.

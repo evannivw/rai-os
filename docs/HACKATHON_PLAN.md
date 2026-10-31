@@ -234,3 +234,13 @@ This remains a single-action integration, not an AI-performance comparison.
 Next build a combined revision-aware artifact with explicit completeness and
 invalidation rules, then evaluate useful model choices against a fair baseline.
 The final video/submission and original event dates/deadline remain unchanged.
+
+## October 30: complete index-set foundation
+
+The [index-set increment](INDEX_SETS.md) now binds up to four required revisions
+in the guest and publishes their exact source bytes/indexes only when complete.
+The three reference requirements need 3, then 1, then 1 new worker jobs; the native
+view exposes missing/current entries. The Rust walkthrough and independent checker
+make this reproducible without model calls. Next bind Meta planning to the full
+set generation and missing list; full review-pack event/budget semantics, fair
+comparison, video and submission remain pending. Original dates are unchanged.

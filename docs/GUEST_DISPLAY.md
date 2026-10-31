@@ -159,3 +159,13 @@ scripted observations. The kernel renderer is unchanged; only actual coord.*
 outcomes drive its states. Use `--guest-index-replay` and the replay file for an
 offline walkthrough. The owned window closes at session cleanup. See
 [META_INDEX_BRIDGE.md](META_INDEX_BRIDGE.md).
+
+## Required-set progress
+
+An active `coord.goal` now selects a native set view, showing the validated goal
+generation, ready/required entry counts, total worker jobs and each exact revision
+as INDEXED or WAITING. SET COMPLETE means all required cache entries exist, not
+that an external verifier or the entire review-pack contract has passed. Changing
+a revision immediately changes the view; failures replace it and status can
+restore the retained state. The original visual identity and framebuffer path
+are unchanged. Run `sh scripts/bundle.sh --graphics`; see [INDEX_SETS.md](INDEX_SETS.md).

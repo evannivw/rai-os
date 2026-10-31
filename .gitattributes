@@ -2,3 +2,4 @@
 docs/evidence/2026-10-30-record-index-*.txt -text whitespace=cr-at-eol
 docs/evidence/2026-10-30-display-*.txt -text whitespace=cr-at-eol
 docs/evidence/2026-10-30-coord-index-*.txt -text whitespace=cr-at-eol
+docs/evidence/2026-10-30-bundle-*.txt -text whitespace=cr-at-eol

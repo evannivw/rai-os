@@ -1,6 +1,7 @@
 #![no_std]
 #![no_main]
 
+mod bundle;
 mod clock;
 mod command;
 mod console;
@@ -80,6 +81,7 @@ fn panic(_info: &PanicInfo) -> ! {
 // Fault-injection builds run one intentional exception at a time.
 const _: () = assert!(
     cfg!(feature = "exception-self-test") as usize
+        + cfg!(feature = "coord-test-bad-goal") as usize
         + cfg!(feature = "index-stream-test-order") as usize
         + cfg!(feature = "index-stream-test-length") as usize
         + cfg!(feature = "index-stream-test-truncated") as usize

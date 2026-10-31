@@ -142,3 +142,13 @@ host reference verifier. Test rejection of a missing record, wrong revision,
 changed byte, incorrect index, dangling reference, and incomplete publication.
 That establishes an objective definition of success before either policy runs.
 The host pilot is not a substitute for later real-QEMU integration evidence.
+
+## October 30 implementation note
+
+[Complete index sets](INDEX_SETS.md) now provide exact required membership, inline
+source bytes, per-record indexes, runtime goal generations and a completeness
+gate in QEMU. Their independent checker compares bytes and the full index with
+the fixture. This is a narrower format/correctness slice: a separate pack-version
+reference format, timed release/outage behavior, simulated resource transitions,
+optional outputs and full R1-R6 acceptance remain unimplemented. The original
+contract above is preserved; these results do not declare that contract complete.
