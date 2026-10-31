@@ -99,6 +99,7 @@ impl Snapshot {
             completed_results: Vec::new(),
             required_record: None,
             index_set: Some(self.clone()),
+            pilot: None,
         })
     }
     /// Structural gate only. Independent Python checks exact source bytes/indexes.

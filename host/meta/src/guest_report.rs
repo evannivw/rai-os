@@ -179,6 +179,7 @@ impl Snapshot {
             completed_results: Vec::new(),
             required_record: Some(record),
             index_set: None,
+            pilot: None,
         })
     }
     pub fn same_goal_result(&self, other: &Self) -> bool {

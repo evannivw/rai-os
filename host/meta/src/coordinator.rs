@@ -79,6 +79,7 @@ impl State {
                 .collect(),
             completed_results: self.completed.clone(),
             index_set: None,
+            pilot: None,
             required_record: match self.latest {
                 1 => Some("notes@1"),
                 2 => Some("notes@2"),

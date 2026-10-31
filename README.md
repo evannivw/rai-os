@@ -19,6 +19,8 @@ model proposals and independently auditable guest artifacts.
 source bytes, gate incomplete publication and reuse unchanged work.
 The [whole-set Meta bridge](docs/META_SET_BRIDGE.md) now chooses among missing
 revisions with guest-validated goal generations.
+A [policy comparison pilot](docs/POLICY_PILOT.md) now runs two fixed policies and
+Meta through the same guest, with measured deadlines and explicitly simulated quotas.
 
 ## Run
 
@@ -72,6 +74,8 @@ python3 scripts/verify_wait.py
 python3 scripts/verify_wait.py --release
 python3 scripts/verify_display.py
 python3 scripts/verify_display.py --release
+python3 scripts/verify_pilot.py
+python3 scripts/verify_pilot.py --release
 python3 scripts/verify_set_bridge.py
 python3 scripts/verify_set_bridge.py --release
 python3 scripts/verify_bundle.py

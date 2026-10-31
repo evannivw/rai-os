@@ -1,0 +1,16 @@
+{
+  "id": "priority-change",
+  "deadline_ms": 14000,
+  "events": [
+    {"at_ms": 0, "credit_cap": 4, "jobs": [
+      {"record": "brief@1", "due_ms": 9000, "weight": 4},
+      {"record": "empty@1", "due_ms": 10000, "weight": 1},
+      {"record": "notes@1", "due_ms": 7000, "weight": 8}
+    ]},
+    {"at_ms": 2500, "credit_cap": 4, "jobs": [
+      {"record": "brief@1", "due_ms": 11000, "weight": 2},
+      {"record": "empty@1", "due_ms": 4000, "weight": 12},
+      {"record": "notes@1", "due_ms": 12000, "weight": 2}
+    ]}
+  ]
+}

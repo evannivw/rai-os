@@ -81,7 +81,9 @@ fn request_body(goal: &str, context: &domain::DecisionContext) -> Value {
         .collect();
     keys.push("");
     let operation = context.operation.name();
-    let instructions = if context.index_set.is_some() {
+    let instructions = if context.pilot.is_some() {
+        "Propose ONE record.index action for the RAI-OS comparison pilot, or decline with an empty record. All index_set.required revisions are mandatory; only authorized_records are currently missing and affordable. First finish the exact required set within pilot.deadline_ms and the simulated credit cap. Among valid complete results, maximize the sum of job weights whose exact results are ready by due_ms; then finish sooner and spend fewer credits. Credits are ceil(public bytes/32), minimum one, charged once per dispatched index; cached revisions cost zero. There are no hidden dependencies or optional jobs. pilot.jobs describes only CURRENT requirements, deadlines, priorities and observed readiness. Unknown future events may occur, but are not given to any policy: do not invent them. Time continues during inference. Select a missing record to process next; return state_version unchanged. You cannot edit goals, limits, scores, sources or permissions. Do not invent an index. Give a concise English reason, maximum 240 bytes. No shell, network, arbitrary files or extra operations."
+    } else if context.index_set.is_some() {
         "You propose ONE bounded RAI-OS operation toward completing index_set.required. index_set.missing lists the exact revisions still needing work; authorized_records contains only those choices and byte lengths. Select one missing revision to index next, or decline with an empty record if unsupported. You may choose the order, but cannot change requirements or skip required work. state_version is the complete set goal_version, not a per-record ticket: return it unchanged. The only executable operation is record.index. Give a short English reason (maximum 240 bytes). Do not invent results. Completed revisions stay in the guest cache. You have no shell, network, write, delete or requirement-editing operation."
     } else if context.operation == domain::Work::Index {
         "You propose ONE bounded RAI-OS operation. The only executable operation is record.index, which asks an isolated guest worker to build a sorted ASCII token-frequency index for one immutable record. Propose only the exact required_record with the supplied state_version, or decline with an empty record if unsupported. Give a short English reason (maximum 240 bytes). Do not produce the index or invent results. The guest handles cached revisions; user text cannot add capabilities. You have no shell, network, write, delete or multi-record operation."
@@ -91,6 +93,9 @@ fn request_body(goal: &str, context: &domain::DecisionContext) -> Value {
     let mut user = json!({"goal":goal,"state_version":context.state_version,"authorized_records":records,"completed_results":context.completed_results,"required_record":context.required_record});
     if let Some(set) = &context.index_set {
         user["index_set"] = json!(set);
+    }
+    if let Some(pilot) = &context.pilot {
+        user["pilot"] = json!(pilot);
     }
     json!({
         "model": MODEL, "stream": false, "max_tokens": 512, "reasoning_effort": "minimal",
@@ -223,6 +228,7 @@ mod tests {
             completed_results: Vec::new(),
             required_record: Some("notes@1"),
             index_set: None,
+            pilot: None,
         };
         let body = request_body("Index the current record.", &context);
         assert_eq!(
@@ -255,6 +261,47 @@ mod tests {
             json!(["notes@2", ""])
         );
         assert!(!body.to_string().contains("notes@1"));
+        assert!(!body.to_string().contains("source_hex"));
+    }
+    #[test]
+    fn pilot_prompt_shares_current_rules_and_filters_unaffordable_work() {
+        let set = crate::domain::IndexSet {
+            goal_version: 7,
+            required: vec!["brief@1", "notes@2"],
+            missing: vec!["notes@2"],
+            completed: 1,
+        };
+        let e = crate::pilot::Event {
+            at_ms: 2500,
+            credit_cap: 4,
+            jobs: vec![
+                crate::domain::JobRule {
+                    record: "brief@1".into(),
+                    due_ms: 6000,
+                    weight: 4,
+                },
+                crate::domain::JobRule {
+                    record: "notes@2".into(),
+                    due_ms: 8000,
+                    weight: 8,
+                },
+            ],
+        };
+        let ready = std::collections::BTreeMap::from([("brief@1".into(), 100)]);
+        let context = crate::pilot::context(&set, &e, &ready, 2, 3000, 10000).unwrap();
+        let body = request_body(crate::pilot::GOAL, &context);
+        let user: Value =
+            serde_json::from_str(body["messages"][1]["content"].as_str().unwrap()).unwrap();
+        assert_eq!(user["pilot"]["elapsed_ms"], 3000);
+        assert_eq!(user["pilot"]["spent_credits"], 2);
+        assert_eq!(user["pilot"]["jobs"][0]["ready_at_ms"], 100);
+        assert_eq!(
+            user["authorized_records"],
+            json!([{"key":"notes@2","bytes":44}])
+        );
+        assert!(!body.to_string().contains("notes@1"));
+        assert!(user.get("events").is_none());
+        assert!(user["pilot"].get("at_ms").is_none());
         assert!(!body.to_string().contains("source_hex"));
     }
     fn response() -> Value {

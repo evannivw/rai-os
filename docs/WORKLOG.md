@@ -1560,3 +1560,56 @@ is claimed. Next define useful constrained choices and a fair baseline using the
 same engine and acceptance checks. Full review-pack events/budgets, final video,
 eligibility confirmation and submission remain pending; original dates and the
 November 4 deadline remain unchanged.
+
+## 2026-10-30 — Freeze the first shared policy comparison pilot
+
+Implemented a host experiment controller that sends the existing real guest index
+operations for EDF, weighted value/credit ordering, Meta or labeled offline replay.
+All policies share current metadata, generation admission, exact cache, source/index
+checking and the same QEMU executor. Scenario clock begins before boot; inference,
+transport and independent publication checking count toward completion. Per-record
+priority targets produce a weighted early-readiness score only after the final
+required set passes. Fixed rules re-evaluate after events and reuse the same cache;
+neither fixed nor model policies receive future events.
+
+Cumulative simulated credits are max(1, ceil(public bytes / 32)), nonrefundable per
+admitted worker attempt. Caps are enforced by the common host controller, not a new
+kernel service or physical battery measurement. Admission logs include an event
+cutoff, current cap and debit; future reductions preserve prior legal spending.
+Priority-only events commit a new guest generation to invalidate old model context.
+Eight decision attempts bound every policy. Invalid choices, declines, exhausted
+budgets, errors and deadline failures are retained without a hidden fallback.
+Provider work remaining after a deadline or already-verified final result is drained
+only for usage and cleanup. Its late answer cannot execute or retroactively move
+a qualifying publication time; a replay test verifies this cached-goal rollback.
+
+pilot.rs contains deterministic rules; pilot_run.rs owns clocks/processes/UART and
+shares the established transport/decoder. The provider adds optional current pilot
+metadata without changing legacy contexts or permissions. The independent Python
+audit reconstructs exact snapshots, fixed-policy choices, credits, tickets, IPC,
+source bytes/indexes, readiness and scores. A common independent artifact check
+runs inside every trial's timing. The separate comparison command runs fresh QEMU
+instances sequentially, rotates policy order, records code/binary/scenario hashes,
+retains all logs/failures and generates per-trial and per-scenario reports. It
+requires a clean committed checkout and kills its owned process group on timeout
+or interruption, retaining partial output.
+
+Three development fixtures and their rules are frozen in POLICY_PILOT.md before
+live model measurements: steady, priority-change and revision-quota. The revision
+cap allows eager fixed-policy work plus the final revision, rather than making
+early execution artificially infeasible. Planned measurement: two repetitions of
+EDF, value and Meta on each fixture, 18 runs. No measurements or superiority result
+are claimed by this pre-live entry. The larger held-out evaluation, full review
+pack, final video and submission remain pending; original event dates are intact.
+
+Verification before freezing: root/host formatting, all-target Meta Clippy and
+36 host unit tests passed in debug and release. Fourteen offline real-QEMU pilot
+runs passed per profile: declared baseline order, original/shared snapshots,
+source/index correctness, stale revision and priority authority, insufficient and
+reduced caps, grandfathered spending, eight-choice exhaustion, late-response drain,
+verified rollback, forbidden/wrong-mode/unoffered/declined actions and cleanup.
+Independent log mutations reject altered scores, credits, context and artifacts.
+An initially inconsistent rollback-test target exceeded its own hard deadline;
+the fixture was corrected and both full profiles passed. Existing whole-set bridge
+suites passed in debug/release, and the previous count bridge passed in release.
+No kernel, timer, MMU or display implementation changed in this increment.

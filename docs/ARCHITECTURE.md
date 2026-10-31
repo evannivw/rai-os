@@ -217,3 +217,16 @@ frame). This fixes the reproduced stack corruption without enlarging the 64 KiB
 kernel stack or weakening timer checks. It is not a whole-program stack bound:
 a kernel-stack guard/high-water diagnostic remains future hardening. Native
 set tests cover the previously failing path in both build profiles.
+
+
+## October 30: frozen development policy pilot
+
+The [policy pilot](POLICY_PILOT.md) adds a shared host experiment controller for
+EDF, weighted value/credit ordering and Meta, using the same existing EL0 index
+worker, exact cache and guest generation gate. Priorities, real deadlines and
+simulated credit admissions now have declared rules and an independent log/output
+audit. The simulation is on the host; this does not add kernel power management
+or complete the full review-pack contract. Three development scenarios and two
+repetitions per policy are frozen before live measurement. Report all outcomes
+and model overhead; no efficiency claim follows from implementing the experiment.
+The larger held-out study, final presentation and submission remain pending.

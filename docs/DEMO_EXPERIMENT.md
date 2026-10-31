@@ -139,3 +139,16 @@ retain low-level execution control. Those are different claims and experiments.
 Required/optional outputs now have a design contract in DEMO_ACCEPTANCE.md.
 Next: freeze a small fixture and trace, then implement an independent verifier
 and baseline rules. Do not build an elaborate dashboard around an assumed result.
+
+
+## October 30: frozen development policy pilot
+
+The [policy pilot](POLICY_PILOT.md) adds a shared host experiment controller for
+EDF, weighted value/credit ordering and Meta, using the same existing EL0 index
+worker, exact cache and guest generation gate. Priorities, real deadlines and
+simulated credit admissions now have declared rules and an independent log/output
+audit. The simulation is on the host; this does not add kernel power management
+or complete the full review-pack contract. Three development scenarios and two
+repetitions per policy are frozen before live measurement. Report all outcomes
+and model overhead; no efficiency claim follows from implementing the experiment.
+The larger held-out study, final presentation and submission remain pending.

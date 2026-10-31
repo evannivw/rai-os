@@ -284,6 +284,31 @@ pub struct IndexSet {
     pub completed: u64,
 }
 
+/// Shared scheduling metadata for the bounded comparison pilot, not hardware telemetry.
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
+pub struct JobRule {
+    pub record: String,
+    pub due_ms: u64,
+    pub weight: u32,
+}
+#[derive(Clone, Debug, Serialize)]
+pub struct PilotJob {
+    pub record: String,
+    pub due_ms: u64,
+    pub weight: u32,
+    pub credits: u64,
+    pub ready_at_ms: Option<u64>,
+}
+#[derive(Clone, Debug, Serialize)]
+pub struct PilotView {
+    pub elapsed_ms: u64,
+    pub deadline_ms: u64,
+    pub credit_cap: u64,
+    pub spent_credits: u64,
+    pub jobs: Vec<PilotJob>,
+}
+
 /// A bounded, already-observed snapshot; never includes future scenario events.
 #[derive(Clone, Serialize)]
 pub struct DecisionContext {
@@ -295,6 +320,8 @@ pub struct DecisionContext {
     pub required_record: Option<&'static str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index_set: Option<IndexSet>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pilot: Option<PilotView>,
 }
 impl DecisionContext {
     pub fn single() -> Self {
@@ -305,6 +332,7 @@ impl DecisionContext {
             completed_results: Vec::new(),
             required_record: None,
             index_set: None,
+            pilot: None,
         }
     }
 }

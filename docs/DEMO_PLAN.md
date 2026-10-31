@@ -125,3 +125,16 @@ choices of missing-job order, not a demonstrated AI performance advantage.
 Next establish a useful constrained choice and fair comparison; full review-pack
 budget/release semantics, final video and submission remain pending. Original
 event dates and the November 4 deadline are unchanged.
+
+
+## October 30: frozen development policy pilot
+
+The [policy pilot](POLICY_PILOT.md) adds a shared host experiment controller for
+EDF, weighted value/credit ordering and Meta, using the same existing EL0 index
+worker, exact cache and guest generation gate. Priorities, real deadlines and
+simulated credit admissions now have declared rules and an independent log/output
+audit. The simulation is on the host; this does not add kernel power management
+or complete the full review-pack contract. Three development scenarios and two
+repetitions per policy are frozen before live measurement. Report all outcomes
+and model overhead; no efficiency claim follows from implementing the experiment.
+The larger held-out study, final presentation and submission remain pending.
