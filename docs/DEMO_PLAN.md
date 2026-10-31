@@ -1,5 +1,11 @@
 # Delivery plan — October 30, 2026
 
+**Current next increment:** [persistent goals](PERSISTENT_GOALS.md), agreed after
+the measured pilot. Build current-versus-historical publication and recovery
+first, then bounded semantic/batch planning. This supersedes earlier next-step
+suggestions about optimizing per-record AI ordering. Historical status below
+and the delivery dates are preserved.
+
 This is the current delivery sequence. Earlier design contracts and evidence keep
 their original dates. Deadline: November 4, 20:00 Guatemala; internal submission
 target: 18:00. The guide's October 26 kickoff versus October 27 build start remains

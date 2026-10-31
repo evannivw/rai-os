@@ -24,6 +24,11 @@ Meta through the same guest, with measured deadlines and explicitly simulated qu
 [First measured results](docs/POLICY_PILOT_RESULTS.md): both fixed rules passed 6/6;
 the current per-action Meta configuration passed 1/6. No AI efficiency gain is claimed.
 
+**Next direction (design):** [persistent goals](docs/PERSISTENT_GOALS.md): maintain a
+verified review pack across changes, distinguish historical from current results,
+and use Meta for bounded interpretation/planning rather than each tiny job. The
+new lifecycle and semantic-planning experiment are not yet implemented.
+
 ## Run
 
 Install Rustup and QEMU (9.2 or newer with virt-9.2), then:

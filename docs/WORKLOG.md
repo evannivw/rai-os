@@ -1656,3 +1656,24 @@ in this configuration. Next diagnose rejection categories and test higher-level
 or batched planning with equally capable fixed execution, using a new frozen
 protocol rather than tuning this one toward a win. Full review-pack acceptance,
 held-out evaluation, presentation/video and submission remain pending.
+
+## 2026-10-30 — Persistent-goal direction after the scheduling pilot
+
+Defined the user-agreed direction around maintaining a useful result as inputs
+change. PERSISTENT_GOALS.md specifies an existing-fixture walkthrough, current
+versus historical publication, failed-update/stale-answer checks, ownership gaps,
+separate semantic-planning work and fair evaluation gates. README and the
+delivery/architecture guides point to it.
+
+Official Apple App Schemas, Android AppFunctions and AndroidWorld sources identify
+adjacent capabilities; this limited review does not establish novelty or absence
+of similar work. No competitor limitation is inferred. The next implementation
+gate is a checked publication lifecycle, followed by observed native states,
+provider diagnostics/batching and separately frozen semantic evaluation.
+
+This increment changes documentation only: no new kernel behavior, model request,
+QEMU execution or efficiency result. Prior evidence and failures are unchanged.
+Verification: consistency review against index-set ownership/checks, local
+Markdown target checks and git diff --check. No executable code changed, so
+compilation/QEMU suites were not repeated. The November 1 feature-freeze and
+November 4 delivery targets remain; demo/video/submission are not complete.

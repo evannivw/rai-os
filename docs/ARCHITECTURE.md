@@ -230,3 +230,13 @@ or complete the full review-pack contract. Three development scenarios and two
 repetitions per policy are frozen before live measurement. Report all outcomes
 and model overhead; no efficiency claim follows from implementing the experiment.
 The larger held-out study, final presentation and submission remain pending.
+
+## Planned persistent-goal lifecycle — October 30
+
+The [persistent-goal contract](PERSISTENT_GOALS.md) separates the current target
+from the last verified publication. Existing cache and generation gates remain
+the execution foundation; publication retention/commit and semantic batch plans
+are planned, not working features. The guest will own admission/publication
+identity; the host carries events and provider calls, and the independent checker
+supplies a trusted validation acknowledgment. Document ownership and storage
+bounds at implementation; exported host files are not guest persistence.
