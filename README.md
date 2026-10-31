@@ -29,7 +29,9 @@ verified review pack across changes, distinguish historical from current results
 and use Meta for bounded interpretation/planning rather than each tiny job. The
 [publication lifecycle](docs/PUBLICATION.md) now retains the last verified output
 in guest memory during updates and failures, with fresh commit acknowledgments.
-Its dedicated native view and semantic-planning experiment remain pending.
+The [native publication view](docs/PUBLICATION_DISPLAY.md) now shows current,
+updating, verifying and blocked states with previous-result availability.
+Semantic planning remains pending.
 
 ## Run
 
@@ -42,6 +44,7 @@ sh scripts/console.sh          # Rust host terminal controlling QEMU
 sh scripts/panel.sh            # Native graphical host panel
 sh scripts/desktop.sh          # RAI-OS draws its own screen inside QEMU
 sh scripts/bundle.sh --graphics # Three exact multi-record sets, independent checks
+sh scripts/publication.sh       # Native publication walkthrough; Enter advances each state
 sh scripts/index.sh notes@1 target/notes-v1.index  # New output path; real guest index + checker
 # After configuring a local key as described in docs/META_BRIDGE.md:
 sh scripts/meta.sh 'Count the words in the latest available revision of the notes.'
@@ -87,6 +90,8 @@ python3 scripts/verify_pilot.py
 python3 scripts/verify_pilot.py --release
 python3 scripts/verify_set_bridge.py
 python3 scripts/verify_set_bridge.py --release
+python3 scripts/verify_publication_display.py
+python3 scripts/verify_publication_display.py --release
 python3 scripts/verify_publication.py
 python3 scripts/verify_publication.py --release
 python3 scripts/verify_bundle.py

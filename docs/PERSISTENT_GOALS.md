@@ -153,3 +153,10 @@ fresh prepare/commit/reject tickets, failed-update retention and QEMU verificati
 Storage runs in EL1 alongside the existing coordinator adapter; the checker is
 trusted host code. Native lifecycle rendering and semantic batch planning remain
 pending. The design above keeps its original date and broader planned scope.
+
+## October 31: native lifecycle slice implemented
+
+The [native publication view](PUBLICATION_DISPLAY.md) now renders real lifecycle
+state and earlier-result availability. A Rust walkthrough exercises changes,
+independent checks and a clearly labeled rejected check. Semantic planning and
+comparative AI benefit remain pending; the design above is not a novelty claim.

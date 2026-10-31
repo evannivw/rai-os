@@ -1708,3 +1708,45 @@ Existing bundle suites (45 valid subsets, fault cases and native views) and boot
 protocol suites passed in both profiles. No Meta calls or performance comparison
 were made. Raw new traces and exact artifacts are preserved in
 evidence/2026-10-31-publication; earlier pilot evidence remains unchanged.
+
+## 2026-10-31 — Native publication states and checked visual walkthrough
+
+The native guest view now renders the actual publication lifecycle: not started,
+preparing, updating, verifying, current and blocked. Previous-result availability
+is separate from the active target; complete cached indexes cannot appear CURRENT
+without acknowledgment. Target/progress and failure notices come from observed
+guest state. Read-only Status accessors and a post-execution rendering method
+keep presentation separate from admission. No model, syscall or unsafe change.
+
+Added a Rust public walkthrough with typed shared transport operations, independent
+artifact validation, interactive terminal pauses or automatic/headless modes.
+It opens real QEMU, publishes the first pack, replaces notes@1 with notes@2,
+intentionally rejects an invalid host checker input, shows preserved prior output,
+rejects a stale confirmation and commits the valid replacement. Four worker jobs
+complete the two requirements. Scripted changes, deliberate failure and pauses
+are explicit; no Meta calls or comparative performance claim were made.
+
+The first native debug attempt failed with timer_busy at coordinator startup.
+Extracting render_result reduced Console::execute's compiled frame from 5296 to
+656 bytes; the render helper uses 3088 bytes. The failing sequence then passed
+without increasing the 64 KiB stack or weakening timer admission. Compiled
+prologues are retained with evidence; global stack bounds/guards remain pending.
+
+Verification: default/debug, display/debug and display/release kernel Clippy,
+formatting, host-example Clippy and six host protocol tests in both profiles
+passed. New native publication scenarios passed in debug and release, including
+a truncated-worker build, unchanged retained bytes, malformed/stale notices,
+retries, unverified completeness, progress and stop. Thirty-five matching captures
+were byte-identical across profiles. Existing bundle, publication and base-display
+suites passed in both profiles, including display mapping fault containment.
+The public walkthrough completed in headless and native automatic modes. Its
+archived initial/updated artifacts passed independent re-checking; its deliberately
+invalid input was rejected. Local documentation links and diff whitespace passed.
+
+Evidence is in evidence/2026-10-31-publication-display, including nine actual PNGs,
+four raw UART traces, walkthrough outputs/artifacts and stack prologue excerpts.
+Earlier evidence remains intact. Legacy bundle exports now say they are exports,
+not acknowledged publications. Documentation identifies host validation trust,
+in-memory retention and the next scope: provider rejection diagnostics/batched
+planning. Semantic benefit, final video and submission remain pending; delivery
+dates and the kickoff/build-period discrepancy are unchanged.

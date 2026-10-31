@@ -15,6 +15,11 @@ pub enum Operation<'a> {
     CoordGoal(&'a str),
     CoordBundleStatus,
     CoordBundle,
+    PublicationStatus,
+    PublicationRead,
+    PublicationPrepare,
+    PublicationCommit(u32),
+    PublicationReject(u32),
     CoordObserve(&'a str),
     CoordPropose(u32, &'a str),
     CoordSelect(u32, &'a str),
@@ -54,6 +59,16 @@ pub fn parse_input(line: &str) -> Result<Operation<'_>, &'static str> {
         "coord.start index" => Ok(Operation::CoordIndexStart),
         "coord.result" => Ok(Operation::CoordResult),
         "coord.bundle" => Ok(Operation::CoordBundle),
+        "coord.publish.status" => Ok(Operation::PublicationStatus),
+        "coord.publish.read" => Ok(Operation::PublicationRead),
+        "coord.publish.prepare" => Ok(Operation::PublicationPrepare),
+        _ if line.starts_with("coord.publish.commit ") || line.starts_with("coord.publish.reject ") => {
+            let value = &line[21..];
+            if value.is_empty() || !value.bytes().all(|b| b.is_ascii_digit()) { return Err("Invalid publication ticket"); }
+            let ticket = value.parse::<u32>().ok().filter(|n| *n != 0).ok_or("Invalid publication ticket")?;
+            if line.starts_with("coord.publish.commit ") { Ok(Operation::PublicationCommit(ticket)) }
+            else { Ok(Operation::PublicationReject(ticket)) }
+        },
         "coord.bundle.status" => Ok(Operation::CoordBundleStatus),
         _ if line.starts_with("coord.goal ") => Ok(Operation::CoordGoal(&line[11..])),
         "coord.status" => Ok(Operation::CoordStatus),
@@ -123,6 +138,20 @@ pub fn encode(id: u32, operation: &Operation<'_>) -> Result<String, &'static str
         Operation::CoordIndexStart => "coord.start\tindex".to_owned(),
         Operation::CoordResult => "coord.result".to_owned(),
         Operation::CoordBundle => "coord.bundle".to_owned(),
+        Operation::PublicationStatus => "coord.publish.status".to_owned(),
+        Operation::PublicationRead => "coord.publish.read".to_owned(),
+        Operation::PublicationPrepare => "coord.publish.prepare".to_owned(),
+        Operation::PublicationCommit(ticket) | Operation::PublicationReject(ticket) => {
+            if *ticket == 0 {
+                return Err("Invalid publication ticket");
+            }
+            let name = if matches!(operation, Operation::PublicationCommit(_)) {
+                "commit"
+            } else {
+                "reject"
+            };
+            format!("coord.publish.{name}\t{ticket}")
+        }
         Operation::CoordBundleStatus => "coord.bundle.status".to_owned(),
         Operation::CoordGoal(keys) => {
             if keys.is_empty()
@@ -332,6 +361,42 @@ mod tests {
             assert!(encode(9, &Operation::RecordCount(key)).is_err());
         }
         assert!(encode(9, &Operation::RecordCount(&"a".repeat(33))).is_err());
+    }
+
+    #[test]
+    fn publication_acknowledgments_are_bounded_and_cannot_inject_frames() {
+        for name in ["status", "read", "prepare"] {
+            let input = format!("coord.publish.{name}");
+            assert_eq!(
+                encode(1, &parse_input(&input).unwrap()).unwrap(),
+                format!("@rai1\t1\t{input}\n")
+            );
+            assert!(parse_input(&(input + " extra")).is_err());
+        }
+        for name in ["commit", "reject"] {
+            assert_eq!(
+                encode(
+                    2,
+                    &parse_input(&format!("coord.publish.{name} 42")).unwrap()
+                )
+                .unwrap(),
+                format!("@rai1\t2\tcoord.publish.{name}\t42\n")
+            );
+            for ticket in [
+                "0",
+                "-1",
+                "+1",
+                "4294967296",
+                "",
+                "1 extra",
+                "1\t2",
+                "1\ncoord.stop",
+            ] {
+                assert!(parse_input(&format!("coord.publish.{name} {ticket}")).is_err());
+            }
+        }
+        assert!(encode(1, &Operation::PublicationCommit(0)).is_err());
+        assert!(encode(1, &Operation::PublicationReject(0)).is_err());
     }
 
     #[test]

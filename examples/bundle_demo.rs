@@ -87,7 +87,10 @@ impl Demo {
             if !checked.success() {
                 return Err("Independent artifact verification failed".into());
             }
-            println!("Published: {} | {status}", path.display());
+            println!(
+                "Exported complete set (publication not acknowledged): {} | {status}",
+                path.display()
+            );
             self.pause();
         }
         println!(

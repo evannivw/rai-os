@@ -18,6 +18,11 @@ pub enum View<'a> {
     Reused(RecordId, &'a str),
     Pending(RecordId, u64),
     Bundle(crate::bundle::Status),
+    Publication(
+        crate::publication::Status,
+        Option<crate::bundle::Status>,
+        Option<&'a str>,
+    ),
     Error(&'a str),
 }
 struct Label {
@@ -115,7 +120,18 @@ pub fn render(s: &mut Display, view: View<'_>) {
     text(s, "with intention.", 43, 243, Size::Body, MUTED);
     constellation(s);
     line(s, 538);
-    text(s, "01 / CONTENT", 40, 554, Size::Small, MUTED);
+    text(
+        s,
+        if matches!(view, View::Publication(..)) {
+            "01 / REVIEW PACK"
+        } else {
+            "01 / CONTENT"
+        },
+        40,
+        554,
+        Size::Small,
+        MUTED,
+    );
     match view {
         View::Ready | View::CoordinatorReady => {
             circle(s, 430, 563, 4, GREEN);
@@ -260,6 +276,7 @@ pub fn render(s: &mut Display, view: View<'_>) {
                 );
             }
         }
+        View::Publication(status, progress, error) => publication(s, status, progress, error),
         View::Error(code) => {
             text(s, "NOT COMPLETED", 323, 558, Size::Small, 0x98644c);
             text(s, "That request needs a look.", 40, 580, Size::Body, INK);
@@ -278,4 +295,109 @@ pub fn render(s: &mut Display, view: View<'_>) {
     text(s, "RAI-OS", 40, 765, Size::Small, INK);
     text(s, "Native display / QEMU", 306, 765, Size::Small, MUTED);
     s.present();
+}
+
+fn publication(
+    s: &mut Display,
+    status: crate::publication::Status,
+    progress: Option<crate::bundle::Status>,
+    error: Option<&str>,
+) {
+    let historical = status.availability() == "historical";
+    let (badge, title, color) = match status.state() {
+        "current" => ("CURRENT", "Your project is ready.", GREEN),
+        "validating" => ("VERIFYING", "Checking the next version.", MUTED),
+        "building" if historical => ("UPDATING", "Updating your project.", MUTED),
+        "building" => ("PREPARING", "Preparing your project.", MUTED),
+        "blocked" => ("BLOCKED", "Your update needs a look.", 0x98644c),
+        _ => ("NOT STARTED", "A place for your project.", MUTED),
+    };
+    text(
+        s,
+        badge,
+        440 - font::width(badge, Size::Small),
+        554,
+        Size::Small,
+        color,
+    );
+    text(s, title, 40, 580, Size::Body, INK);
+    let mut label = Label::new();
+    match status.availability() {
+        "current" => {
+            let _ = write!(
+                label,
+                "Version {} is current and verified.",
+                status.published()
+            );
+        }
+        "historical" => {
+            let _ = write!(
+                label,
+                "Version {} is available as the previous result.",
+                status.published()
+            );
+        }
+        _ => {
+            let _ = write!(label, "No verified result available yet.");
+        }
+    }
+    text(s, label.text(), 40, 616, Size::Small, INK);
+    let mut label = Label::new();
+    if let Some(progress) = progress {
+        let _ = write!(
+            label,
+            "Target {} / {} of {} records indexed",
+            status.target(),
+            progress.ready_count(),
+            progress.required.mask().count_ones()
+        );
+    } else if status.target() != 0 {
+        let _ = write!(
+            label,
+            "Target {} / preparation unavailable",
+            status.target()
+        );
+    } else {
+        let _ = write!(label, "Waiting for a project goal.");
+    }
+    text(s, label.text(), 40, 644, Size::Small, MUTED);
+    let detail = match status.state() {
+        "current" => "Original documents preserved.",
+        "validating" => "Independent verification is awaiting confirmation.",
+        "blocked" if status.reason() == "validation_rejected" => "Verification did not pass.",
+        "blocked" => "The worker could not finish this update.",
+        "building" if progress.is_some_and(|p| p.ready()) => {
+            "All records indexed. Verification is next."
+        }
+        "building" => "Preparing the remaining records.",
+        _ => "A verified result will appear here.",
+    };
+    text(s, detail, 40, 674, Size::Small, color);
+    let notice = if let Some(code) = error {
+        match code {
+            "publication_stale_candidate"
+            | "publication_no_candidate"
+            | "publication_stale_goal"
+            | "coord_stale_goal"
+            | "coord_stale_proposal" => "An outdated request was not applied.",
+            "coord_deadlocked" | "coord_fault" => "The previous result has not been replaced.",
+            _ => "Request not accepted. Published result unchanged.",
+        }
+    } else if historical {
+        "Previous result kept until a replacement is verified."
+    } else if status.state() == "validating" {
+        "Nothing published until confirmation."
+    } else if status.state() == "current" {
+        "Ready for the current goal."
+    } else {
+        "Only a verified result becomes current."
+    };
+    text(
+        s,
+        notice,
+        40,
+        712,
+        Size::Small,
+        if error.is_some() { 0x98644c } else { MUTED },
+    );
 }

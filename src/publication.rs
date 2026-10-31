@@ -121,3 +121,23 @@ impl Store {
         }
     }
 }
+
+// Read-only presentation access. UI consumers cannot alter lifecycle authority.
+#[cfg(feature = "guest-display")]
+impl Status {
+    pub fn target(self) -> u32 {
+        self.target
+    }
+    pub fn published(self) -> u32 {
+        self.published
+    }
+    pub fn state(self) -> &'static str {
+        self.state
+    }
+    pub fn availability(self) -> &'static str {
+        self.availability
+    }
+    pub fn reason(self) -> &'static str {
+        self.reason
+    }
+}

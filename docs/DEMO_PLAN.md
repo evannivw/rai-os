@@ -1,10 +1,10 @@
 # Delivery plan — October 30, 2026
 
-**Current next increment:** expose the implemented [publication lifecycle](PUBLICATION.md)
-in the native guest view, then add bounded semantic/batch planning. The first
-[persistent-goal](PERSISTENT_GOALS.md) slice now retains guest output across updates
-and failures with checked commit freshness. This supersedes earlier suggestions
-about per-record AI ordering. Historical status and delivery dates are preserved.
+**Current next increment:** provider rejection diagnostics and bounded batch
+proposals, followed by separately specified semantic planning. The implemented
+[publication lifecycle](PUBLICATION.md) and [native view](PUBLICATION_DISPLAY.md)
+now expose retained output, current versus historical state and failed updates.
+Historical plans and submission dates below are preserved.
 
 This is the current delivery sequence. Earlier design contracts and evidence keep
 their original dates. Deadline: November 4, 20:00 Guatemala; internal submission

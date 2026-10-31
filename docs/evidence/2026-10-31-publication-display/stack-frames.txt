@@ -1,0 +1,30 @@
+Development native debug images, October 31, 2026.
+Before: reproduced timer_busy. After: render_result extracted; same tests passed.
+Compiled AArch64 prologue excerpts; not a whole-kernel stack bound.
+
+before
+0000000040094180 <rai_os::console::Console::execute::hf3fdc72e7b15a644>:
+40094180: a9bf7bfd     	stp	x29, x30, [sp, #-0x10]!
+40094184: d14007ff     	sub	sp, sp, #0x1, lsl #12   // =0x1000
+40094188: f90003ff     	str	xzr, [sp]
+4009418c: d11283ff     	sub	sp, sp, #0x4a0
+40094190: f90003ff     	str	xzr, [sp]
+40094194: 914007e9     	add	x9, sp, #0x1, lsl #12   // =0x1000
+
+after
+0000000040094180 <rai_os::console::Console::execute::hf3fdc72e7b15a644>:
+40094180: a9bf7bfd     	stp	x29, x30, [sp, #-0x10]!
+40094184: d10a03ff     	sub	sp, sp, #0x280
+40094188: f9001fe1     	str	x1, [sp, #0x38]
+4009418c: f9000fe0     	str	x0, [sp, #0x18]
+40094190: f90013e8     	str	x8, [sp, #0x20]
+40094194: f9013be0     	str	x0, [sp, #0x270]
+
+after
+000000004009431c <rai_os::console::Console::render_result::h3487ea811c6ba41c>:
+4009431c: a9bf7bfd     	stp	x29, x30, [sp, #-0x10]!
+40094320: d13003ff     	sub	sp, sp, #0xc00
+40094324: f90003ff     	str	xzr, [sp]
+40094328: f90047e1     	str	x1, [sp, #0x88]
+4009432c: f9004be0     	str	x0, [sp, #0x90]
+40094330: 2a0503e8     	mov	w8, w5

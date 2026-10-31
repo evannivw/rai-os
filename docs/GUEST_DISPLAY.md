@@ -169,3 +169,11 @@ that an external verifier or the entire review-pack contract has passed. Changin
 a revision immediately changes the view; failures replace it and status can
 restore the retained state. The original visual identity and framebuffer path
 are unchanged. Run `sh scripts/bundle.sh --graphics`; see [INDEX_SETS.md](INDEX_SETS.md).
+
+## October 31: publication states
+
+The [native publication view](PUBLICATION_DISPLAY.md) now shows actual current,
+updating, verifying and blocked states, together with earlier-result availability.
+Run sh scripts/publication.sh for a checked, stepwise native walkthrough. Active
+set goals use this view; standalone index screens retain their original behavior.
+No model, timing or battery claim follows from these graphics.

@@ -34,6 +34,17 @@ impl Console<'_> {
         #[cfg(feature = "guest-display")]
         let is_index = matches!(operation, command::Operation::RecordIndex(_));
         #[cfg(feature = "guest-display")]
+        let publication_before = self.sessions.coordinator.publication_status().target() != 0;
+        #[cfg(feature = "guest-display")]
+        let is_publication = matches!(
+            operation,
+            command::Operation::PublicationStatus
+                | command::Operation::PublicationRead
+                | command::Operation::PublicationPrepare
+                | command::Operation::PublicationCommit(_)
+                | command::Operation::PublicationReject(_)
+        );
+        #[cfg(feature = "guest-display")]
         let is_coordinator_index = matches!(
             operation,
             command::Operation::CoordIndexStart
@@ -60,9 +71,30 @@ impl Console<'_> {
             &mut self.sessions,
         );
         #[cfg(feature = "guest-display")]
+        self.render_result(
+            &result,
+            is_index,
+            is_coordinator_index,
+            is_publication,
+            publication_before,
+        );
+        result
+    }
+    // Keep rendering temporaries out of the command execution frame. In debug
+    // builds the retained session and large replies already occupy stack space.
+    #[cfg(feature = "guest-display")]
+    fn render_result(
+        &mut self,
+        result: &Result<command::Reply<'_>, &'static str>,
+        is_index: bool,
+        is_coordinator_index: bool,
+        is_publication: bool,
+        publication_before: bool,
+    ) {
+        #[cfg(feature = "guest-display")]
         if is_index && let Some(display) = &mut self.display {
             use crate::display::view::{self, View};
-            match &result {
+            match result {
                 Ok(command::Reply::Index(report)) => {
                     view::render(display, View::Index(report.id(), report.output()))
                 }
@@ -71,9 +103,23 @@ impl Console<'_> {
             }
         }
         #[cfg(feature = "guest-display")]
-        if is_coordinator_index && let Some(display) = &mut self.display {
+        if (is_coordinator_index || is_publication)
+            && let Some(display) = &mut self.display
+        {
             use crate::display::view::{self, View};
-            match &result {
+            let publication = self.sessions.coordinator.publication_status();
+            if is_publication || publication_before || publication.target() != 0 {
+                view::render(
+                    display,
+                    View::Publication(
+                        publication,
+                        self.sessions.coordinator.bundle_status().ok(),
+                        result.as_ref().err().copied(),
+                    ),
+                );
+                return;
+            }
+            match result {
                 Err(code) => view::render(display, View::Error(code)),
                 Ok(_) => {
                     let report = self.sessions.coordinator.status();
@@ -103,11 +149,15 @@ impl Console<'_> {
                 }
             }
         }
-        result
     }
     fn parse_error(&mut self, line: &str, code: &str) {
         #[cfg(feature = "guest-display")]
-        if (line.starts_with("record.index")
+        if (line.starts_with("coord.publish.")
+            || line
+                .split('\t')
+                .nth(2)
+                .is_some_and(|op| op.starts_with("coord.publish."))
+            || line.starts_with("record.index")
             || line.split('\t').nth(2) == Some("record.index")
             || (self.sessions.coordinator.status().index_mode()
                 && (line.starts_with("coord.")
@@ -117,7 +167,27 @@ impl Console<'_> {
                         .is_some_and(|op| op.starts_with("coord.")))))
             && let Some(display) = &mut self.display
         {
-            crate::display::view::render(display, crate::display::view::View::Error(code));
+            use crate::display::view::{self, View};
+            let publication = self.sessions.coordinator.publication_status();
+            let operation = if line.starts_with('@') {
+                line.split('\t').nth(2).unwrap_or("")
+            } else {
+                line
+            };
+            if operation.starts_with("coord.")
+                && (publication.target() != 0 || operation.starts_with("coord.publish."))
+            {
+                view::render(
+                    display,
+                    View::Publication(
+                        publication,
+                        self.sessions.coordinator.bundle_status().ok(),
+                        Some(code),
+                    ),
+                );
+            } else {
+                view::render(display, View::Error(code));
+            }
         }
         #[cfg(not(feature = "guest-display"))]
         let _ = (line, code);

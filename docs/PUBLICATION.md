@@ -44,9 +44,10 @@ The model must not receive or control this acknowledgment path. Current Meta
 adapters are unchanged and do not invoke these commands yet.
 
 Existing coord.bundle still exports a structurally complete set without committing
-this new publication. Existing SET COMPLETE graphics describe that completeness,
-not a publication acknowledgment. The new lifecycle is exposed through UART;
-a native current/historical/blocked publication view is the next increment.
+this new publication. The [native publication view](PUBLICATION_DISPLAY.md) now
+shows that distinction: complete indexes remain PREPARING/UPDATING until a checked
+commit. Earlier SET COMPLETE captures predate this view and describe completeness
+only. Use sh scripts/publication.sh for the new public walkthrough.
 
 ## Observable states
 
@@ -102,8 +103,9 @@ Each command runs normal, deliberately truncated-worker and native-display QEMU
 builds. The script uses independent check_bundle.py validation before each
 successful commit. It also mutates a checker input to demonstrate rejection;
 that mutation is on the host, not a claim of spontaneous guest corruption.
-No credentials or Meta API access are needed. The native display is exercised
-for integration safety, not a new graphical publication demonstration.
+No credentials or Meta API access are needed. This suite exercises the native
+build for integration safety; verify_publication_display.py supplies dedicated
+visual assertions and captures.
 
 Verified cases include the first publication; one-job notes@1 -> notes@2 update
 with two unchanged indexes reused; old proposal rejection; corrupted checker

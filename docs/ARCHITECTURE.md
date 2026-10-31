@@ -252,3 +252,14 @@ before retaining it. Fatal service cleanup preserves this owned snapshot, while
 explicit stop clears publication access. Source bytes are immutable linked data.
 No new syscall, mapping or unsafe code; no disk/reboot persistence. The native
 publication-specific view and batch model planning remain future work.
+
+## Native publication presentation — October 31
+
+Read-only publication::Status accessors supply the [native view](PUBLICATION_DISPLAY.md).
+Console executes first, then renders the resulting lifecycle, bundle progress and
+request notice. Presentation does not own admission or verdicts. Moving rendering
+temporaries into a separate method reduced the debug execution frame from 5296 to
+656 bytes and corrected the reproduced timer_busy startup path without changing
+stack capacity or timer admission. Kernel-wide stack bounds remain unproven.
+The Rust public walkthrough uses existing host transport and the independent
+checker; its scripted failure and pauses are explicit, with no model calls.

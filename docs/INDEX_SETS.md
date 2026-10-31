@@ -196,3 +196,11 @@ choices of missing-job order, not a demonstrated AI performance advantage.
 Next establish a useful constrained choice and fair comparison; full review-pack
 budget/release semantics, final video and submission remain pending. Original
 event dates and the November 4 deadline are unchanged.
+
+## October 31: native publication distinction
+
+Active required sets now use the [publication view](PUBLICATION_DISPLAY.md).
+Completeness by itself does not display CURRENT; only an acknowledged publication
+does. The original captures and bundle exports above retain their actual meaning.
+Use the new publication walkthrough for prepare/check/commit, historical output
+and failed-update presentation.

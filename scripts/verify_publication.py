@@ -212,7 +212,7 @@ def main():
     from verify_display import build as graphics_build, guest as graphics_guest
     with graphics_guest(graphics_build(profile), f'publication-{profile}') as (request, _):
         exercise(request, f'graphics-{profile}')
-    print('Native-display build exercised for stack/integration safety; no new publication UI claimed.')
+    print('Native-display lifecycle exercised; dedicated visual checks use verify_publication_display.py.')
 
 
 if __name__ == '__main__': main()

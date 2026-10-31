@@ -1,0 +1,17 @@
+    Finished `release` profile [optimized] target(s) in 0.04s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s
+     Running `target/aarch64-apple-darwin/debug/examples/publication_demo target/display/aarch64-unknown-none-softfloat/release/rai-os target/publication-demo-20261031-095733-282 --auto`
+RAI-OS publication walkthrough: scripted changes, real QEMU execution.
+No Meta calls or performance comparison. One verification failure is deliberately injected.
+NOT STARTED / No result has been published.
+PREPARING / The first requirement is active.
+VERIFYING / Complete indexes are not yet a published result.
+VERIFIED: goal_version=1; records=3; distinct_tokens=13
+CURRENT / The independently checked result is now published.
+UPDATING / Two indexes reused; the previous result remains available.
+REJECTED: Unexpected artifact fields
+BLOCKED / Deliberate failed verification. Previous result is still readable.
+VERIFYING / An outdated confirmation was rejected without replacing the result.
+VERIFIED: goal_version=6; records=3; distinct_tokens=16
+CURRENT / Updated result verified. Four total jobs; only one for the revision change.
+Artifacts: target/publication-demo-20261031-095733-282
