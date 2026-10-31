@@ -171,6 +171,7 @@ pub struct Coordinator {
     input: Option<(u64, u32, RecordId)>,
     goal_input: Option<(u32, Required)>,
     goal: Option<(u32, Required)>,
+    publication: crate::publication::Store,
 }
 fn endpoint(id: usize) -> TaskId {
     TaskId::from_raw(id as u64 + 1).expect("fixed task")
@@ -202,6 +203,7 @@ impl Coordinator {
             input: None,
             goal_input: None,
             goal: None,
+            publication: crate::publication::Store::new(),
         }
     }
     pub fn status(&self) -> Report {
@@ -240,6 +242,36 @@ impl Coordinator {
         }
         Ok(bundle::Artifact { status, indexes })
     }
+    pub fn publication_status(&self) -> crate::publication::Status {
+        self.publication.status()
+    }
+    pub fn publication_read(&self) -> Result<bundle::Artifact, &'static str> {
+        self.publication.read()
+    }
+    pub fn publication_prepare(&mut self) -> Result<bundle::Artifact, &'static str> {
+        let artifact = self.bundle()?;
+        self.publication.can_prepare(artifact.status.generation)?;
+        let ticket = self.issued.checked_add(1).ok_or("coord_ticket_limit")?;
+        self.issued = ticket;
+        self.publication.prepare(ticket);
+        Ok(artifact)
+    }
+    pub fn publication_commit(
+        &mut self,
+        ticket: u32,
+    ) -> Result<crate::publication::Status, &'static str> {
+        self.publication.check_ticket(ticket)?;
+        // Re-read guest completeness/generation after the host's independent check.
+        // Single masked console owner: no event can interleave this commit.
+        let artifact = self.bundle()?;
+        self.publication.commit(ticket, artifact)
+    }
+    pub fn publication_reject(
+        &mut self,
+        ticket: u32,
+    ) -> Result<crate::publication::Status, &'static str> {
+        self.publication.reject(ticket)
+    }
     pub fn set_goal(
         &mut self,
         required: Required,
@@ -262,7 +294,9 @@ impl Coordinator {
         ]);
         self.tasks[0].wait = Wait::Ready;
         self.finish_turn(timer, mmu)?;
-        self.bundle_status()
+        let status = self.bundle_status()?;
+        self.publication.begin(status.generation);
+        Ok(status)
     }
     pub fn artifact(&self) -> Result<Artifact, &'static str> {
         if !self.report.index_mode {
@@ -299,10 +333,12 @@ impl Coordinator {
     }
     pub fn stop(&mut self) -> Report {
         self.retire();
+        self.publication = crate::publication::Store::new();
         self.report = Report::stopped();
         self.report
     }
     fn fail(&mut self, error: &'static str) -> &'static str {
+        self.publication.fail(error);
         self.retire();
         self.report.cached = 0;
         self.report.output_bytes = 0;

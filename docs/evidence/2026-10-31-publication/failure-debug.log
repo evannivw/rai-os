@@ -1,0 +1,83 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400de000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	target_version=0; published_version=0; candidate_ticket=0; state=empty; availability=none; reason=-
+@rai1	3	err	publication_unavailable
+@rai1	4	err	coord_not_indexing
+@rai1	5	err	publication_no_candidate
+@rai1	6	ok	coordinator=EL0; worker=EL0; state=idle; event=started; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=1; a_slices=0; b_slices=0; trace=AO,BD,AH
+@rai1	7	err	coord_not_indexing
+@rai1	8	ok	coordinator=EL0; worker=EL0; state=stopped; event=none; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=0; b_slices=0; trace=
+@rai1	9	ok	coordinator=EL0; worker=EL0; state=idle; event=started; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=1; a_slices=0; b_slices=0; trace=AO,BD,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0
+@rai1	10	err	coord_no_required_set
+@rai1	11	ok	goal_version=1; state=building; required=brief@1,empty@1,notes@1; ready_records=0; total_records=3; completed=0; missing=brief@1,empty@1,notes@1
+@rai1	12	ok	target_version=1; published_version=0; candidate_ticket=0; state=building; availability=none; reason=-
+@rai1	13	ok	target_version=1; published_version=0; candidate_ticket=0; state=building; availability=none; reason=-
+@rai1	14	err	coord_bundle_incomplete
+@rai1	15	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=2; record=brief@1; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0
+@rai1	16	ok	coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=2; record=brief@1; bytes=56; tokens=9; completed=1; a_calls=15; b_calls=13; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=70
+@rai1	17	ok	record=brief@1; bytes=56; worker=EL0; state=completed; index=a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1
+@rai1	18	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=3; record=empty@1; bytes=0; tokens=0; completed=1; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=0
+@rai1	19	ok	coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=3; record=empty@1; bytes=0; tokens=0; completed=2; a_calls=6; b_calls=4; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=2; cache_hits=0; output_bytes=1
+@rai1	20	ok	record=empty@1; bytes=0; worker=EL0; state=completed; index=-
+@rai1	21	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=4; record=notes@1; bytes=0; tokens=0; completed=2; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=2; cache_hits=0; output_bytes=0
+@rai1	22	ok	coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=4; record=notes@1; bytes=30; tokens=7; completed=3; a_calls=10; b_calls=8; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=3; cache_hits=0; output_bytes=33
+@rai1	23	ok	record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1
+@rai1	24	ok	{"format":"rai-index-set-v1","goal_version":1,"required":["brief@1","empty@1","notes@1"],"records":[{"record":"brief@1","bytes":56,"source_hex":"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a","index":"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1"},{"record":"empty@1","bytes":0,"source_hex":"","index":"-"},{"record":"notes@1","bytes":30,"source_hex":"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a","index":"10:1,7:1,a:1,at:1,pump:2,review:1"}]}
+@rai1	25	err	publication_unavailable
+@rai1	26	ok	{"format":"rai-index-set-v1","goal_version":1,"required":["brief@1","empty@1","notes@1"],"records":[{"record":"brief@1","bytes":56,"source_hex":"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a","index":"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1"},{"record":"empty@1","bytes":0,"source_hex":"","index":"-"},{"record":"notes@1","bytes":30,"source_hex":"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a","index":"10:1,7:1,a:1,at:1,pump:2,review:1"}]}
+@rai1	27	ok	target_version=1; published_version=0; candidate_ticket=5; state=validating; availability=none; reason=-
+@rai1	28	ok	target_version=1; published_version=0; candidate_ticket=5; state=validating; availability=none; reason=-
+@rai1	29	err	publication_unavailable
+@rai1	30	ok	target_version=1; published_version=0; candidate_ticket=5; state=validating; availability=none; reason=-
+@rai1	31	err	publication_stale_candidate
+@rai1	32	ok	target_version=1; published_version=0; candidate_ticket=5; state=validating; availability=none; reason=-
+@rai1	33	ok	target_version=1; published_version=1; candidate_ticket=0; state=current; availability=current; reason=-
+@rai1	34	ok	{"format":"rai-index-set-v1","goal_version":1,"required":["brief@1","empty@1","notes@1"],"records":[{"record":"brief@1","bytes":56,"source_hex":"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a","index":"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1"},{"record":"empty@1","bytes":0,"source_hex":"","index":"-"},{"record":"notes@1","bytes":30,"source_hex":"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a","index":"10:1,7:1,a:1,at:1,pump:2,review:1"}]}
+@rai1	35	err	publication_no_candidate
+@rai1	36	err	publication_already_current
+@rai1	37	err	conflicting_revisions
+@rai1	38	ok	target_version=1; published_version=1; candidate_ticket=0; state=current; availability=current; reason=-
+@rai1	39	ok	{"format":"rai-index-set-v1","goal_version":1,"required":["brief@1","empty@1","notes@1"],"records":[{"record":"brief@1","bytes":56,"source_hex":"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a","index":"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1"},{"record":"empty@1","bytes":0,"source_hex":"","index":"-"},{"record":"notes@1","bytes":30,"source_hex":"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a","index":"10:1,7:1,a:1,at:1,pump:2,review:1"}]}
+@rai1	40	err	record_denied
+@rai1	41	ok	target_version=1; published_version=1; candidate_ticket=0; state=current; availability=current; reason=-
+@rai1	42	ok	{"format":"rai-index-set-v1","goal_version":1,"required":["brief@1","empty@1","notes@1"],"records":[{"record":"brief@1","bytes":56,"source_hex":"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a","index":"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1"},{"record":"empty@1","bytes":0,"source_hex":"","index":"-"},{"record":"notes@1","bytes":30,"source_hex":"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a","index":"10:1,7:1,a:1,at:1,pump:2,review:1"}]}
+@rai1	43	ok	goal_version=6; state=building; required=brief@1,empty@1,notes@2; ready_records=2; total_records=3; completed=3; missing=notes@2
+@rai1	44	ok	target_version=6; published_version=1; candidate_ticket=0; state=building; availability=historical; reason=-
+@rai1	45	ok	target_version=6; published_version=1; candidate_ticket=0; state=building; availability=historical; reason=-
+@rai1	46	ok	{"format":"rai-index-set-v1","goal_version":1,"required":["brief@1","empty@1","notes@1"],"records":[{"record":"brief@1","bytes":56,"source_hex":"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a","index":"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1"},{"record":"empty@1","bytes":0,"source_hex":"","index":"-"},{"record":"notes@1","bytes":30,"source_hex":"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a","index":"10:1,7:1,a:1,at:1,pump:2,review:1"}]}
+@rai1	47	err	coord_bundle_incomplete
+@rai1	48	ok	coordinator=EL0; worker=EL0; state=idle; event=goal_changed; ticket=0; record=none; bytes=0; tokens=0; completed=3; a_calls=3; b_calls=0; a_slices=0; b_slices=0; trace=AG,AO,AH; operation=record.index; cached_records=3; cache_hits=0; output_bytes=0
+@rai1	49	err	coord_stale_goal
+@rai1	50	ok	coordinator=EL0; worker=EL0; state=idle; event=goal_changed; ticket=0; record=none; bytes=0; tokens=0; completed=3; a_calls=3; b_calls=0; a_slices=0; b_slices=0; trace=AG,AO,AH; operation=record.index; cached_records=3; cache_hits=0; output_bytes=0
+@rai1	51	ok	{"format":"rai-index-set-v1","goal_version":1,"required":["brief@1","empty@1","notes@1"],"records":[{"record":"brief@1","bytes":56,"source_hex":"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a","index":"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1"},{"record":"empty@1","bytes":0,"source_hex":"","index":"-"},{"record":"notes@1","bytes":30,"source_hex":"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a","index":"10:1,7:1,a:1,at:1,pump:2,review:1"}]}
+@rai1	52	ok	coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=7; record=notes@2; bytes=0; tokens=0; completed=3; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=3; cache_hits=0; output_bytes=0
+@rai1	53	err	coord_deadlocked
+@rai1	54	ok	coordinator=EL0; worker=EL0; state=failed; event=coord_deadlocked; ticket=7; record=notes@2; bytes=0; tokens=0; completed=3; a_calls=4; b_calls=3; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BD,AD; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0
+@rai1	55	ok	target_version=6; published_version=1; candidate_ticket=0; state=blocked; availability=historical; reason=coord_deadlocked
+@rai1	56	ok	target_version=6; published_version=1; candidate_ticket=0; state=blocked; availability=historical; reason=coord_deadlocked
+@rai1	57	ok	target_version=6; published_version=1; candidate_ticket=0; state=blocked; availability=historical; reason=coord_deadlocked
+@rai1	58	ok	{"format":"rai-index-set-v1","goal_version":1,"required":["brief@1","empty@1","notes@1"],"records":[{"record":"brief@1","bytes":56,"source_hex":"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a","index":"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1"},{"record":"empty@1","bytes":0,"source_hex":"","index":"-"},{"record":"notes@1","bytes":30,"source_hex":"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a","index":"10:1,7:1,a:1,at:1,pump:2,review:1"}]}
+@rai1	59	ok	{"format":"rai-index-set-v1","goal_version":1,"required":["brief@1","empty@1","notes@1"],"records":[{"record":"brief@1","bytes":56,"source_hex":"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a","index":"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1"},{"record":"empty@1","bytes":0,"source_hex":"","index":"-"},{"record":"notes@1","bytes":30,"source_hex":"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a","index":"10:1,7:1,a:1,at:1,pump:2,review:1"}]}
+@rai1	60	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	61	ok	{"format":"rai-index-set-v1","goal_version":1,"required":["brief@1","empty@1","notes@1"],"records":[{"record":"brief@1","bytes":56,"source_hex":"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a","index":"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1"},{"record":"empty@1","bytes":0,"source_hex":"","index":"-"},{"record":"notes@1","bytes":30,"source_hex":"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a","index":"10:1,7:1,a:1,at:1,pump:2,review:1"}]}
+@rai1	62	err	coord_not_running
+@rai1	63	err	publication_no_candidate
+@rai1	64	ok	{"format":"rai-index-set-v1","goal_version":1,"required":["brief@1","empty@1","notes@1"],"records":[{"record":"brief@1","bytes":56,"source_hex":"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a","index":"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1"},{"record":"empty@1","bytes":0,"source_hex":"","index":"-"},{"record":"notes@1","bytes":30,"source_hex":"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a","index":"10:1,7:1,a:1,at:1,pump:2,review:1"}]}
+@rai1	65	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=73
+@rai1	66	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	67	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400de000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	68	ok	coordinator=EL0; worker=EL0; state=stopped; event=none; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=0; b_slices=0; trace=
+@rai1	69	ok	target_version=0; published_version=0; candidate_ticket=0; state=empty; availability=none; reason=-
+@rai1	70	ok	target_version=0; published_version=0; candidate_ticket=0; state=empty; availability=none; reason=-
+@rai1	71	err	publication_unavailable
+@rai1	72	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	73	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+coord.publish.status
+target_version=0; published_version=0; candidate_ticket=0; state=empty; availability=none; reason=-
+coord.publish.commit 0
+error: bad_args
+coord.publish.commit 1
+error: publication_no_candidate
+coord.publish.reject 1
+error: publication_no_candidate

@@ -240,3 +240,15 @@ are planned, not working features. The guest will own admission/publication
 identity; the host carries events and provider calls, and the independent checker
 supplies a trusted validation acknowledgment. Document ownership and storage
 bounds at implementation; exported host files are not guest persistence.
+
+## Retained publication lifecycle — 2026-10-31
+
+[Publication](PUBLICATION.md) now separates the active target from one committed
+Artifact in the kernel-owned Coordinator. Pure publication.rs rules manage target,
+candidate authority, status and last output. EL0 attestation still establishes
+requirements; the worker still builds indexes. The trusted host checks an exported
+candidate and acknowledges a fresh ticket; EL1 rechecks identity/completeness
+before retaining it. Fatal service cleanup preserves this owned snapshot, while
+explicit stop clears publication access. Source bytes are immutable linked data.
+No new syscall, mapping or unsafe code; no disk/reboot persistence. The native
+publication-specific view and batch model planning remain future work.

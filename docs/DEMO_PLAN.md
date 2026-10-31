@@ -1,10 +1,10 @@
 # Delivery plan — October 30, 2026
 
-**Current next increment:** [persistent goals](PERSISTENT_GOALS.md), agreed after
-the measured pilot. Build current-versus-historical publication and recovery
-first, then bounded semantic/batch planning. This supersedes earlier next-step
-suggestions about optimizing per-record AI ordering. Historical status below
-and the delivery dates are preserved.
+**Current next increment:** expose the implemented [publication lifecycle](PUBLICATION.md)
+in the native guest view, then add bounded semantic/batch planning. The first
+[persistent-goal](PERSISTENT_GOALS.md) slice now retains guest output across updates
+and failures with checked commit freshness. This supersedes earlier suggestions
+about per-record AI ordering. Historical status and delivery dates are preserved.
 
 This is the current delivery sequence. Earlier design contracts and evidence keep
 their original dates. Deadline: November 4, 20:00 Guatemala; internal submission

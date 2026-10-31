@@ -39,6 +39,17 @@ pub fn parse(line: &str) -> Result<Request<'_>, Error<'_>> {
         },
         Some("coord.result") => Operation::CoordResult,
         Some("coord.bundle") => Operation::CoordBundle,
+        Some("coord.publish.status") => Operation::PublicationStatus,
+        Some("coord.publish.read") => Operation::PublicationRead,
+        Some("coord.publish.prepare") => Operation::PublicationPrepare,
+        Some("coord.publish.commit") => Operation::PublicationCommit(
+            crate::command::parse_task_id(fields.next().ok_or(error("bad_args"))?)
+                .map_err(error)?,
+        ),
+        Some("coord.publish.reject") => Operation::PublicationReject(
+            crate::command::parse_task_id(fields.next().ok_or(error("bad_args"))?)
+                .map_err(error)?,
+        ),
         Some("coord.bundle.status") => Operation::CoordBundleStatus,
         Some("coord.goal") => Operation::CoordGoal(
             crate::bundle::Required::parse(fields.next().ok_or(error("bad_args"))?)

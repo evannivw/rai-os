@@ -4,7 +4,7 @@ use crate::mmu::Snapshot as MmuSnapshot;
 use crate::task::{Snapshot, Task};
 use core::fmt;
 
-pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | record.index <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start [index] | coord.result | coord.goal <keys> | coord.bundle.status | coord.bundle | coord.observe <key> | coord.select <goal_version>:<key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
+pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | record.index <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start [index] | coord.result | coord.goal <keys> | coord.bundle.status | coord.bundle | coord.publish.status | coord.publish.read | coord.publish.prepare | coord.publish.commit <ticket> | coord.publish.reject <ticket> | coord.observe <key> | coord.select <goal_version>:<key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
 pub const INFO: &str =
     "RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected";
 
@@ -22,6 +22,11 @@ pub enum Operation<'a> {
     CoordGoal(crate::bundle::Required),
     CoordBundleStatus,
     CoordBundle,
+    PublicationStatus,
+    PublicationRead,
+    PublicationPrepare,
+    PublicationCommit(u32),
+    PublicationReject(u32),
     CoordObserve(crate::records::RecordId),
     CoordPropose(crate::schedule::coordinator::Proposal),
     CoordSelect(crate::schedule::coordinator::Proposal),
@@ -58,6 +63,16 @@ pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
         "coord.start index" => Ok(Operation::CoordIndexStart),
         "coord.result" => Ok(Operation::CoordResult),
         "coord.bundle" => Ok(Operation::CoordBundle),
+        "coord.publish.status" => Ok(Operation::PublicationStatus),
+        "coord.publish.read" => Ok(Operation::PublicationRead),
+        "coord.publish.prepare" => Ok(Operation::PublicationPrepare),
+        "coord.publish.commit" | "coord.publish.reject" => Err("bad_args"),
+        _ if line.starts_with("coord.publish.commit ") => {
+            Ok(Operation::PublicationCommit(parse_task_id(&line[21..])?))
+        }
+        _ if line.starts_with("coord.publish.reject ") => {
+            Ok(Operation::PublicationReject(parse_task_id(&line[21..])?))
+        }
         "coord.bundle.status" => Ok(Operation::CoordBundleStatus),
         "coord.goal" => Err("bad_args"),
         _ if line.starts_with("coord.goal ") => Ok(Operation::CoordGoal(
@@ -147,6 +162,7 @@ pub struct Uptime {
 pub enum Reply<'a> {
     Bundle(crate::bundle::Artifact),
     BundleStatus(crate::bundle::Status),
+    PublicationStatus(crate::publication::Status),
     Coordinator(crate::schedule::coordinator::Report),
     CoordIndex(crate::schedule::coordinator::Artifact),
     Worker(crate::schedule::worker::Status),
@@ -171,6 +187,7 @@ impl fmt::Display for Reply<'_> {
         match self {
             Self::Bundle(report) => write!(f, "{report}"),
             Self::BundleStatus(report) => write!(f, "{report}"),
+            Self::PublicationStatus(report) => write!(f, "{report}"),
             Self::CoordIndex(report) => write!(f, "{report}"),
             Self::Coordinator(report) => write!(f, "{report}"),
             Self::Worker(report) => write!(f, "{report}"),
@@ -210,7 +227,14 @@ pub fn execute<'a>(
             Reply::BundleStatus(sessions.coordinator.set_goal(required, timer, mmu)?)
         }
         Operation::CoordBundleStatus => Reply::BundleStatus(sessions.coordinator.bundle_status()?),
-        Operation::CoordBundle => Reply::Bundle(sessions.coordinator.bundle()?),
+        Operation::CoordBundle | Operation::PublicationRead | Operation::PublicationPrepare => {
+            Reply::Bundle(bundle_command(operation, &mut sessions.coordinator)?)
+        }
+        Operation::PublicationStatus
+        | Operation::PublicationCommit(_)
+        | Operation::PublicationReject(_) => {
+            Reply::PublicationStatus(publication_command(operation, &mut sessions.coordinator)?)
+        }
         Operation::CoordResult => Reply::CoordIndex(sessions.coordinator.artifact()?),
         Operation::CoordIndexStart
         | Operation::CoordStart
@@ -286,6 +310,30 @@ fn coordinator_command(
         Operation::CoordPropose(proposal) => coordinator.propose(proposal, timer, mmu),
         Operation::CoordStatus => Ok(coordinator.status()),
         Operation::CoordStop => Ok(coordinator.stop()),
+        _ => Err("unknown_command"),
+    }
+}
+
+// Share large reply temporaries to keep the debug dispatcher stack bounded.
+fn bundle_command(
+    operation: Operation<'_>,
+    coordinator: &mut crate::schedule::coordinator::Coordinator,
+) -> Result<crate::bundle::Artifact, &'static str> {
+    match operation {
+        Operation::CoordBundle => coordinator.bundle(),
+        Operation::PublicationRead => coordinator.publication_read(),
+        Operation::PublicationPrepare => coordinator.publication_prepare(),
+        _ => Err("unknown_command"),
+    }
+}
+fn publication_command(
+    operation: Operation<'_>,
+    coordinator: &mut crate::schedule::coordinator::Coordinator,
+) -> Result<crate::publication::Status, &'static str> {
+    match operation {
+        Operation::PublicationStatus => Ok(coordinator.publication_status()),
+        Operation::PublicationCommit(ticket) => coordinator.publication_commit(ticket),
+        Operation::PublicationReject(ticket) => coordinator.publication_reject(ticket),
         _ => Err("unknown_command"),
     }
 }

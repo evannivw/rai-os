@@ -145,3 +145,11 @@ at freeze, present the narrower recovery prototype and its actual Meta role;
 do not claim the intended innovation is delivered. No phone drivers, additional
 cores or generic agent framework are needed. Video, held-out evidence, organizer
 clarification and submission remain pending.
+
+## 2026-10-31: first lifecycle slice implemented
+
+[Retained publication](PUBLICATION.md) now supplies guest-owned historical output,
+fresh prepare/commit/reject tickets, failed-update retention and QEMU verification.
+Storage runs in EL1 alongside the existing coordinator adapter; the checker is
+trusted host code. Native lifecycle rendering and semantic batch planning remain
+pending. The design above keeps its original date and broader planned scope.

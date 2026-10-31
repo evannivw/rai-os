@@ -1677,3 +1677,34 @@ Verification: consistency review against index-set ownership/checks, local
 Markdown target checks and git diff --check. No executable code changed, so
 compilation/QEMU suites were not repeated. The November 1 feature-freeze and
 November 4 delivery targets remain; demo/video/submission are not complete.
+
+## 2026-10-31 — Retain the last publication during updates and failures
+
+Implemented the first persistent-goal slice: a pure Rust publication lifecycle
+and one owned Artifact in the guest EL1 coordinator adapter. Five console/protocol
+operations expose status, prepare, commit, reject and read. Unique candidate
+tickets share the monotonic boot counter; re-preparation, goal changes, verdicts
+and session failure invalidate pending authority. Commit rechecks the live guest
+goal/completeness after trusted host validation. No proof against a malicious
+host is implied. The model and existing Meta modes do not own this handshake.
+
+The previous publication remains readable while building or after fatal worker
+cleanup, even when a subsequent user program reuses the released EL0 RAM. Explicit
+stop clears access; restart and reboot have no publication persistence. The copy
+holds up to four exact indexes and metadata, with source bytes supplied by linked
+immutable public fixtures. No new mapping, syscall, heap or unsafe code. Native
+publication UI, dynamic permissions and semantic planning remain pending.
+
+Verification: formatting and Clippy passed (default/debug, display/debug and
+default/release). New real-QEMU publication tests passed in debug and release,
+including native-display builds and a deliberately truncated worker. Covered
+independent exact checking, corrupted checker input and rejected verdict, stale
+proposal/commit, changed goal during checking, re-prepare/retry/duplicate tokens,
+four-record bounds, cached rollback, malformed arguments and stop/start freshness.
+The two unchanged entries were reused: first pack took three jobs, revision
+update took one additional job. Fatal-failure output remained byte-identical.
+The strengthened post-failure user-RAM reuse check also passed in both profiles.
+Existing bundle suites (45 valid subsets, fault cases and native views) and boot/
+protocol suites passed in both profiles. No Meta calls or performance comparison
+were made. Raw new traces and exact artifacts are preserved in
+evidence/2026-10-31-publication; earlier pilot evidence remains unchanged.

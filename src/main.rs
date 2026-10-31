@@ -15,6 +15,7 @@ mod ipc;
 mod memory;
 mod mmu;
 mod protocol;
+mod publication;
 mod record_index;
 mod records;
 mod schedule;

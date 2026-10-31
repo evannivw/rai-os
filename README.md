@@ -27,7 +27,9 @@ the current per-action Meta configuration passed 1/6. No AI efficiency gain is c
 **Next direction (design):** [persistent goals](docs/PERSISTENT_GOALS.md): maintain a
 verified review pack across changes, distinguish historical from current results,
 and use Meta for bounded interpretation/planning rather than each tiny job. The
-new lifecycle and semantic-planning experiment are not yet implemented.
+[publication lifecycle](docs/PUBLICATION.md) now retains the last verified output
+in guest memory during updates and failures, with fresh commit acknowledgments.
+Its dedicated native view and semantic-planning experiment remain pending.
 
 ## Run
 
@@ -85,6 +87,8 @@ python3 scripts/verify_pilot.py
 python3 scripts/verify_pilot.py --release
 python3 scripts/verify_set_bridge.py
 python3 scripts/verify_set_bridge.py --release
+python3 scripts/verify_publication.py
+python3 scripts/verify_publication.py --release
 python3 scripts/verify_bundle.py
 python3 scripts/verify_bundle.py --release
 python3 scripts/verify_coord_index.py

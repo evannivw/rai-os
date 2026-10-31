@@ -96,6 +96,7 @@ impl fmt::Display for Status {
 }
 /// An owned immutable copy, constructed only when every required cache slot exists.
 /// Its text indexes came from EL0; source bytes are the linked public read-only fixtures.
+#[derive(Clone, Copy)]
 pub struct Artifact {
     pub status: Status,
     pub indexes: [Text; MAX_RECORDS],
