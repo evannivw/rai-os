@@ -1613,3 +1613,46 @@ An initially inconsistent rollback-test target exceeded its own hard deadline;
 the fixture was corrected and both full profiles passed. Existing whole-set bridge
 suites passed in debug/release, and the previous count bridge passed in release.
 No kernel, timer, MMU or display implementation changed in this increment.
+
+## 2026-10-30 — Measured policy pilot; no AI advantage observed
+
+After pushing frozen source c649e592040a643ee3a00e5f8fa0b95f13b59713, ran the
+planned 18 sequential release/QEMU trials: two repetitions of three scenarios
+for EDF, value and real Meta, with rotated policy order and fresh guests. The
+comparison command and independent re-audit completed successfully; all traces,
+including failed outcomes, were auditable. No prompt, policy, scenario, scoring
+rule or provider setting changed after outcomes were observed.
+
+Both fixed policies passed 6/6. Meta passed 1/6; five trials terminated with the
+adapter's meta_incomplete_or_refused category. That category combines several
+provider envelope conditions; exact finish/refusal causes and usage for those
+failed responses were not retained, so do not claim a particular root cause or
+treat the outcomes as a pure model-intelligence test. No failure was retried or
+replaced. No incomplete final bundle earned success or a nonzero score.
+
+In the successful steady Meta trial, the order matched EDF (notes, brief, empty).
+Readiness was 2952/6661/8514 ms, with independent final publication at 8591 ms and
+9/13 on-time points. Fixed steady runs completed in 152-163 ms with 13/13 points.
+The successful Meta trial's available provider latency totaled 8433 ms; observed
+request/response boundaries totaled 8448 ms. All successful steady policies spent
+four simulated credits. Lower spend in failed partial runs is not an efficiency
+win. Priority/revision fixed-run times include waiting for scheduled events.
+
+Fourteen Meta calls produced nine usable usage records totaling 8267 reported
+tokens; rejected-response usage is unknown. Across all calls, request-to-response
+or drain boundaries total 39,998 ms of observed waiting. results.json inference_ms
+sums available provider latencies only and is incomplete for failed calls;
+end-to-end timing includes those waits. This limitation is explicit in the analysis.
+
+Preserved all 60 generated evidence files, including the raw 18 JSONL/stderr pairs,
+exact publications, metrics/timelines, source/binary/input hashes and commands in
+docs/evidence/2026-10-30-policy-pilot. The manifest's October 31 UTC timestamp is
+October 30 in Guatemala; no date was rewritten. POLICY_PILOT_RESULTS.md explains
+outcomes, limits, reproduction and the next hypothesis. Credentials were unchanged
+and absent from the evidence.
+
+The measured result argues against remote model calls for each tiny index job
+in this configuration. Next diagnose rejection categories and test higher-level
+or batched planning with equally capable fixed execution, using a new frozen
+protocol rather than tuning this one toward a win. Full review-pack acceptance,
+held-out evaluation, presentation/video and submission remain pending.

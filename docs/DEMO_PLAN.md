@@ -138,3 +138,14 @@ or complete the full review-pack contract. Three development scenarios and two
 repetitions per policy are frozen before live measurement. Report all outcomes
 and model overhead; no efficiency claim follows from implementing the experiment.
 The larger held-out study, final presentation and submission remain pending.
+
+
+## October 30 measurement decision
+
+The [first frozen policy pilot](POLICY_PILOT_RESULTS.md) found no AI advantage:
+EDF and value each passed six trials; per-action Meta passed one of six, with
+five rejected provider responses. Preserve all evidence. Do not present this as
+an AI efficiency win in the video. Next diagnose provider rejection categories
+and evaluate a separately frozen higher-level/batched-planning hypothesis,
+keeping deterministic guest execution and equally capable baselines. This does
+not change the submission dates or establish general model/OS superiority.

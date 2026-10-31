@@ -1,0 +1,1145 @@
+[
+  {
+    "scenario": "steady",
+    "policy": "edf",
+    "passed": true,
+    "reason": null,
+    "completion_ms": 163,
+    "weighted_on_time": 13,
+    "spent_credits": 4,
+    "worker_jobs": 3,
+    "decisions": 3,
+    "stale": 0,
+    "inference_ms": 0,
+    "reported_tokens": 0,
+    "usage_responses": 0,
+    "total_elapsed_ms": 164,
+    "trace": [
+      {
+        "at_ms": 58,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 61,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 67,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 75,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 78,
+        "event": "ready",
+        "detail": "brief@1"
+      },
+      {
+        "at_ms": 85,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 4
+      },
+      {
+        "at_ms": 87,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 163,
+        "event": "verified",
+        "detail": "1"
+      }
+    ],
+    "trial": "1-steady-edf",
+    "repetition": 0
+  },
+  {
+    "scenario": "steady",
+    "policy": "value",
+    "passed": true,
+    "reason": null,
+    "completion_ms": 152,
+    "weighted_on_time": 13,
+    "spent_credits": 4,
+    "worker_jobs": 3,
+    "decisions": 3,
+    "stale": 0,
+    "inference_ms": 0,
+    "reported_tokens": 0,
+    "usage_responses": 0,
+    "total_elapsed_ms": 153,
+    "trace": [
+      {
+        "at_ms": 42,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 47,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 53,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 62,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 66,
+        "event": "ready",
+        "detail": "brief@1"
+      },
+      {
+        "at_ms": 75,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 4
+      },
+      {
+        "at_ms": 78,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 152,
+        "event": "verified",
+        "detail": "1"
+      }
+    ],
+    "trial": "1-steady-value",
+    "repetition": 0
+  },
+  {
+    "scenario": "steady",
+    "policy": "meta",
+    "passed": false,
+    "reason": "meta_incomplete_or_refused",
+    "completion_ms": null,
+    "weighted_on_time": 0,
+    "spent_credits": 1,
+    "worker_jobs": 1,
+    "decisions": 2,
+    "stale": 0,
+    "inference_ms": 2096,
+    "reported_tokens": 815,
+    "usage_responses": 1,
+    "total_elapsed_ms": 7079,
+    "trace": [
+      {
+        "at_ms": 48,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 2155,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 2162,
+        "event": "ready",
+        "detail": "notes@1"
+      }
+    ],
+    "trial": "1-steady-meta",
+    "repetition": 0
+  },
+  {
+    "scenario": "priority-change",
+    "policy": "value",
+    "passed": true,
+    "reason": null,
+    "completion_ms": 2573,
+    "weighted_on_time": 16,
+    "spent_credits": 4,
+    "worker_jobs": 3,
+    "decisions": 3,
+    "stale": 0,
+    "inference_ms": 0,
+    "reported_tokens": 0,
+    "usage_responses": 0,
+    "total_elapsed_ms": 2574,
+    "trace": [
+      {
+        "at_ms": 50,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 55,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 61,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 71,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 75,
+        "event": "ready",
+        "detail": "brief@1"
+      },
+      {
+        "at_ms": 84,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 4
+      },
+      {
+        "at_ms": 87,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 165,
+        "event": "verified",
+        "detail": "1"
+      },
+      {
+        "at_ms": 2500,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 2573,
+        "event": "verified",
+        "detail": "5"
+      }
+    ],
+    "trial": "1-priority-change-value",
+    "repetition": 0
+  },
+  {
+    "scenario": "priority-change",
+    "policy": "meta",
+    "passed": false,
+    "reason": "meta_incomplete_or_refused",
+    "completion_ms": null,
+    "weighted_on_time": 0,
+    "spent_credits": 3,
+    "worker_jobs": 2,
+    "decisions": 4,
+    "stale": 1,
+    "inference_ms": 8589,
+    "reported_tokens": 2600,
+    "usage_responses": 3,
+    "total_elapsed_ms": 12503,
+    "trace": [
+      {
+        "at_ms": 47,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 2515,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 5445,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 5449,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 8816,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 8821,
+        "event": "ready",
+        "detail": "brief@1"
+      }
+    ],
+    "trial": "1-priority-change-meta",
+    "repetition": 0
+  },
+  {
+    "scenario": "priority-change",
+    "policy": "edf",
+    "passed": true,
+    "reason": null,
+    "completion_ms": 2576,
+    "weighted_on_time": 16,
+    "spent_credits": 4,
+    "worker_jobs": 3,
+    "decisions": 3,
+    "stale": 0,
+    "inference_ms": 0,
+    "reported_tokens": 0,
+    "usage_responses": 0,
+    "total_elapsed_ms": 2578,
+    "trace": [
+      {
+        "at_ms": 45,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 50,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 56,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 65,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 69,
+        "event": "ready",
+        "detail": "brief@1"
+      },
+      {
+        "at_ms": 79,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 4
+      },
+      {
+        "at_ms": 82,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 155,
+        "event": "verified",
+        "detail": "1"
+      },
+      {
+        "at_ms": 2504,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 2576,
+        "event": "verified",
+        "detail": "5"
+      }
+    ],
+    "trial": "1-priority-change-edf",
+    "repetition": 0
+  },
+  {
+    "scenario": "revision-quota",
+    "policy": "meta",
+    "passed": false,
+    "reason": "meta_incomplete_or_refused",
+    "completion_ms": null,
+    "weighted_on_time": 0,
+    "spent_credits": 0,
+    "worker_jobs": 0,
+    "decisions": 1,
+    "stale": 0,
+    "inference_ms": 0,
+    "reported_tokens": 0,
+    "usage_responses": 0,
+    "total_elapsed_ms": 3649,
+    "trace": [
+      {
+        "at_ms": 45,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 3504,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@2"
+      }
+    ],
+    "trial": "1-revision-quota-meta",
+    "repetition": 0
+  },
+  {
+    "scenario": "revision-quota",
+    "policy": "edf",
+    "passed": true,
+    "reason": null,
+    "completion_ms": 3586,
+    "weighted_on_time": 13,
+    "spent_credits": 6,
+    "worker_jobs": 4,
+    "decisions": 4,
+    "stale": 0,
+    "inference_ms": 0,
+    "reported_tokens": 0,
+    "usage_responses": 0,
+    "total_elapsed_ms": 3587,
+    "trace": [
+      {
+        "at_ms": 47,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 52,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 2
+      },
+      {
+        "at_ms": 58,
+        "event": "ready",
+        "detail": "brief@1"
+      },
+      {
+        "at_ms": 67,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 70,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 79,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 4
+      },
+      {
+        "at_ms": 82,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 158,
+        "event": "verified",
+        "detail": "1"
+      },
+      {
+        "at_ms": 3503,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@2"
+      },
+      {
+        "at_ms": 3506,
+        "event": "dispatch",
+        "detail": "notes@2",
+        "credits": 6
+      },
+      {
+        "at_ms": 3510,
+        "event": "ready",
+        "detail": "notes@2"
+      },
+      {
+        "at_ms": 3586,
+        "event": "verified",
+        "detail": "5"
+      }
+    ],
+    "trial": "1-revision-quota-edf",
+    "repetition": 0
+  },
+  {
+    "scenario": "revision-quota",
+    "policy": "value",
+    "passed": true,
+    "reason": null,
+    "completion_ms": 3589,
+    "weighted_on_time": 13,
+    "spent_credits": 6,
+    "worker_jobs": 4,
+    "decisions": 4,
+    "stale": 0,
+    "inference_ms": 0,
+    "reported_tokens": 0,
+    "usage_responses": 0,
+    "total_elapsed_ms": 3591,
+    "trace": [
+      {
+        "at_ms": 47,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 52,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 58,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 67,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 71,
+        "event": "ready",
+        "detail": "brief@1"
+      },
+      {
+        "at_ms": 80,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 4
+      },
+      {
+        "at_ms": 83,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 157,
+        "event": "verified",
+        "detail": "1"
+      },
+      {
+        "at_ms": 3503,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@2"
+      },
+      {
+        "at_ms": 3507,
+        "event": "dispatch",
+        "detail": "notes@2",
+        "credits": 6
+      },
+      {
+        "at_ms": 3510,
+        "event": "ready",
+        "detail": "notes@2"
+      },
+      {
+        "at_ms": 3589,
+        "event": "verified",
+        "detail": "5"
+      }
+    ],
+    "trial": "1-revision-quota-value",
+    "repetition": 0
+  },
+  {
+    "scenario": "steady",
+    "policy": "value",
+    "passed": true,
+    "reason": null,
+    "completion_ms": 159,
+    "weighted_on_time": 13,
+    "spent_credits": 4,
+    "worker_jobs": 3,
+    "decisions": 3,
+    "stale": 0,
+    "inference_ms": 0,
+    "reported_tokens": 0,
+    "usage_responses": 0,
+    "total_elapsed_ms": 160,
+    "trace": [
+      {
+        "at_ms": 46,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 52,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 59,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 69,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 76,
+        "event": "ready",
+        "detail": "brief@1"
+      },
+      {
+        "at_ms": 84,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 4
+      },
+      {
+        "at_ms": 88,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 159,
+        "event": "verified",
+        "detail": "1"
+      }
+    ],
+    "trial": "2-steady-value",
+    "repetition": 1
+  },
+  {
+    "scenario": "steady",
+    "policy": "meta",
+    "passed": true,
+    "reason": null,
+    "completion_ms": 8591,
+    "weighted_on_time": 9,
+    "spent_credits": 4,
+    "worker_jobs": 3,
+    "decisions": 3,
+    "stale": 0,
+    "inference_ms": 8433,
+    "reported_tokens": 2845,
+    "usage_responses": 3,
+    "total_elapsed_ms": 8592,
+    "trace": [
+      {
+        "at_ms": 42,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 2947,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 2952,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 6657,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 6661,
+        "event": "ready",
+        "detail": "brief@1"
+      },
+      {
+        "at_ms": 8511,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 4
+      },
+      {
+        "at_ms": 8514,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 8591,
+        "event": "verified",
+        "detail": "1"
+      }
+    ],
+    "trial": "2-steady-meta",
+    "repetition": 1
+  },
+  {
+    "scenario": "steady",
+    "policy": "edf",
+    "passed": true,
+    "reason": null,
+    "completion_ms": 156,
+    "weighted_on_time": 13,
+    "spent_credits": 4,
+    "worker_jobs": 3,
+    "decisions": 3,
+    "stale": 0,
+    "inference_ms": 0,
+    "reported_tokens": 0,
+    "usage_responses": 0,
+    "total_elapsed_ms": 157,
+    "trace": [
+      {
+        "at_ms": 50,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 55,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 61,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 70,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 73,
+        "event": "ready",
+        "detail": "brief@1"
+      },
+      {
+        "at_ms": 83,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 4
+      },
+      {
+        "at_ms": 86,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 156,
+        "event": "verified",
+        "detail": "1"
+      }
+    ],
+    "trial": "2-steady-edf",
+    "repetition": 1
+  },
+  {
+    "scenario": "priority-change",
+    "policy": "meta",
+    "passed": false,
+    "reason": "meta_incomplete_or_refused",
+    "completion_ms": null,
+    "weighted_on_time": 0,
+    "spent_credits": 1,
+    "worker_jobs": 1,
+    "decisions": 2,
+    "stale": 0,
+    "inference_ms": 1703,
+    "reported_tokens": 958,
+    "usage_responses": 1,
+    "total_elapsed_ms": 4149,
+    "trace": [
+      {
+        "at_ms": 42,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 1755,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 1761,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 2502,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      }
+    ],
+    "trial": "2-priority-change-meta",
+    "repetition": 1
+  },
+  {
+    "scenario": "priority-change",
+    "policy": "edf",
+    "passed": true,
+    "reason": null,
+    "completion_ms": 2575,
+    "weighted_on_time": 16,
+    "spent_credits": 4,
+    "worker_jobs": 3,
+    "decisions": 3,
+    "stale": 0,
+    "inference_ms": 0,
+    "reported_tokens": 0,
+    "usage_responses": 0,
+    "total_elapsed_ms": 2576,
+    "trace": [
+      {
+        "at_ms": 46,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 50,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 56,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 66,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 69,
+        "event": "ready",
+        "detail": "brief@1"
+      },
+      {
+        "at_ms": 78,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 4
+      },
+      {
+        "at_ms": 80,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 155,
+        "event": "verified",
+        "detail": "1"
+      },
+      {
+        "at_ms": 2503,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 2575,
+        "event": "verified",
+        "detail": "5"
+      }
+    ],
+    "trial": "2-priority-change-edf",
+    "repetition": 1
+  },
+  {
+    "scenario": "priority-change",
+    "policy": "value",
+    "passed": true,
+    "reason": null,
+    "completion_ms": 2571,
+    "weighted_on_time": 16,
+    "spent_credits": 4,
+    "worker_jobs": 3,
+    "decisions": 3,
+    "stale": 0,
+    "inference_ms": 0,
+    "reported_tokens": 0,
+    "usage_responses": 0,
+    "total_elapsed_ms": 2573,
+    "trace": [
+      {
+        "at_ms": 48,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 52,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 57,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 64,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 67,
+        "event": "ready",
+        "detail": "brief@1"
+      },
+      {
+        "at_ms": 76,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 4
+      },
+      {
+        "at_ms": 79,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 148,
+        "event": "verified",
+        "detail": "1"
+      },
+      {
+        "at_ms": 2501,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 2571,
+        "event": "verified",
+        "detail": "5"
+      }
+    ],
+    "trial": "2-priority-change-value",
+    "repetition": 1
+  },
+  {
+    "scenario": "revision-quota",
+    "policy": "edf",
+    "passed": true,
+    "reason": null,
+    "completion_ms": 3583,
+    "weighted_on_time": 13,
+    "spent_credits": 6,
+    "worker_jobs": 4,
+    "decisions": 4,
+    "stale": 0,
+    "inference_ms": 0,
+    "reported_tokens": 0,
+    "usage_responses": 0,
+    "total_elapsed_ms": 3585,
+    "trace": [
+      {
+        "at_ms": 45,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 50,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 2
+      },
+      {
+        "at_ms": 56,
+        "event": "ready",
+        "detail": "brief@1"
+      },
+      {
+        "at_ms": 66,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 69,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 79,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 4
+      },
+      {
+        "at_ms": 84,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 159,
+        "event": "verified",
+        "detail": "1"
+      },
+      {
+        "at_ms": 3501,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@2"
+      },
+      {
+        "at_ms": 3505,
+        "event": "dispatch",
+        "detail": "notes@2",
+        "credits": 6
+      },
+      {
+        "at_ms": 3508,
+        "event": "ready",
+        "detail": "notes@2"
+      },
+      {
+        "at_ms": 3583,
+        "event": "verified",
+        "detail": "5"
+      }
+    ],
+    "trial": "2-revision-quota-edf",
+    "repetition": 1
+  },
+  {
+    "scenario": "revision-quota",
+    "policy": "value",
+    "passed": true,
+    "reason": null,
+    "completion_ms": 3585,
+    "weighted_on_time": 13,
+    "spent_credits": 6,
+    "worker_jobs": 4,
+    "decisions": 4,
+    "stale": 0,
+    "inference_ms": 0,
+    "reported_tokens": 0,
+    "usage_responses": 0,
+    "total_elapsed_ms": 3587,
+    "trace": [
+      {
+        "at_ms": 46,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 51,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 57,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 65,
+        "event": "dispatch",
+        "detail": "brief@1",
+        "credits": 3
+      },
+      {
+        "at_ms": 69,
+        "event": "ready",
+        "detail": "brief@1"
+      },
+      {
+        "at_ms": 79,
+        "event": "dispatch",
+        "detail": "empty@1",
+        "credits": 4
+      },
+      {
+        "at_ms": 82,
+        "event": "ready",
+        "detail": "empty@1"
+      },
+      {
+        "at_ms": 152,
+        "event": "verified",
+        "detail": "1"
+      },
+      {
+        "at_ms": 3500,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@2"
+      },
+      {
+        "at_ms": 3504,
+        "event": "dispatch",
+        "detail": "notes@2",
+        "credits": 6
+      },
+      {
+        "at_ms": 3507,
+        "event": "ready",
+        "detail": "notes@2"
+      },
+      {
+        "at_ms": 3585,
+        "event": "verified",
+        "detail": "5"
+      }
+    ],
+    "trial": "2-revision-quota-value",
+    "repetition": 1
+  },
+  {
+    "scenario": "revision-quota",
+    "policy": "meta",
+    "passed": false,
+    "reason": "meta_incomplete_or_refused",
+    "completion_ms": null,
+    "weighted_on_time": 0,
+    "spent_credits": 1,
+    "worker_jobs": 1,
+    "decisions": 2,
+    "stale": 0,
+    "inference_ms": 2249,
+    "reported_tokens": 1049,
+    "usage_responses": 1,
+    "total_elapsed_ms": 4621,
+    "trace": [
+      {
+        "at_ms": 46,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@1"
+      },
+      {
+        "at_ms": 2303,
+        "event": "dispatch",
+        "detail": "notes@1",
+        "credits": 1
+      },
+      {
+        "at_ms": 2309,
+        "event": "ready",
+        "detail": "notes@1"
+      },
+      {
+        "at_ms": 3505,
+        "event": "goal",
+        "detail": "brief@1,empty@1,notes@2"
+      }
+    ],
+    "trial": "2-revision-quota-meta",
+    "repetition": 1
+  }
+]

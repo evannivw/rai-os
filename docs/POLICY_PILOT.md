@@ -150,3 +150,14 @@ must be delivered first; arrivals after that boundary apply to the next admissio
 Hosted inference energy and monetary cost are not measured by the guest credit
 counter. Report available response token usage separately; do not treat remote
 compute as free energy or infer a phone battery saving from this experiment.
+
+
+## First measured results
+
+The [October 30 results and interpretation](POLICY_PILOT_RESULTS.md) retain all
+18 trials from the frozen source. Both fixed policies passed 6/6; the current
+Meta configuration passed 1/6, with five provider responses rejected by the
+adapter. No rule/prompt/fixture was changed in response to these outcomes.
+This is evidence against the current per-microtask remote-model boundary in this
+small workload, not a general verdict on AI planning. See the report's diagnostic
+and partial-usage limits before interpreting model scores or timing totals.

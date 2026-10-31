@@ -21,6 +21,8 @@ The [whole-set Meta bridge](docs/META_SET_BRIDGE.md) now chooses among missing
 revisions with guest-validated goal generations.
 A [policy comparison pilot](docs/POLICY_PILOT.md) now runs two fixed policies and
 Meta through the same guest, with measured deadlines and explicitly simulated quotas.
+[First measured results](docs/POLICY_PILOT_RESULTS.md): both fixed rules passed 6/6;
+the current per-action Meta configuration passed 1/6. No AI efficiency gain is claimed.
 
 ## Run
 

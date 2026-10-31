@@ -1,0 +1,230 @@
+{
+  "format": "rai-policy-pilot-v1",
+  "started_utc": "2026-10-31T03:57:00.871771+00:00",
+  "commit": "c649e592040a643ee3a00e5f8fa0b95f13b59713",
+  "host": "macOS-26.3.1-arm64-arm-64bit",
+  "qemu": "QEMU emulator version 11.1.2",
+  "policies": [
+    "edf",
+    "value",
+    "meta"
+  ],
+  "repetitions": 2,
+  "kernel_sha256": "16005d703bfb52aae2e8bf8007c98cb2c22ad7af3647cfeb468b008499acc1f8",
+  "bridge_sha256": "e6a055dbcf34f0e1a61cb3bc6cbee9206cf491f81c829db72c0b9349198cf24c",
+  "provider_source_sha256": "31c511ec08bfab9b7fc58893aea721bbbc2eebdaa9ce2c9693ad63125a0bcc9a",
+  "scenarios": [
+    {
+      "path": "fixtures/policy_pilot/v1/steady.json",
+      "sha256": "f617e64fdcca6b1e75abeb5c688771ad1031c464a640f81ab72cd2523a9e9b98"
+    },
+    {
+      "path": "fixtures/policy_pilot/v1/priority-change.json",
+      "sha256": "242e699df0a6b2bbebcfdd1f19063e333a8bbb0ebc809a022fbd1f3fab067981"
+    },
+    {
+      "path": "fixtures/policy_pilot/v1/revision-quota.json",
+      "sha256": "cb411e82cf81e5337ba8bb6bd67370ad74f3a1f2fb9b813c181d8b7792339dfc"
+    }
+  ],
+  "trials": [
+    {
+      "trial": "1-steady-edf",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "edf",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/steady.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "1-steady-value",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "value",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/steady.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "1-steady-meta",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "meta",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/steady.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "1-priority-change-value",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "value",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/priority-change.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "1-priority-change-meta",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "meta",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/priority-change.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "1-priority-change-edf",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "edf",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/priority-change.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "1-revision-quota-meta",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "meta",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/revision-quota.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "1-revision-quota-edf",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "edf",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/revision-quota.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "1-revision-quota-value",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "value",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/revision-quota.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "2-steady-value",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "value",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/steady.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "2-steady-meta",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "meta",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/steady.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "2-steady-edf",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "edf",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/steady.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "2-priority-change-meta",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "meta",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/priority-change.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "2-priority-change-edf",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "edf",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/priority-change.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "2-priority-change-value",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "value",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/priority-change.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "2-revision-quota-edf",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "edf",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/revision-quota.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "2-revision-quota-value",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "value",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/revision-quota.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "trial": "2-revision-quota-meta",
+      "command": [
+        "/Users/jv/Development/Rust/rai-os/target/host-meta/aarch64-apple-darwin/release/rai-meta",
+        "/Users/jv/Development/Rust/rai-os/target/aarch64-unknown-none-softfloat/release/rai-os",
+        "--pilot",
+        "meta",
+        "/Users/jv/Development/Rust/rai-os/fixtures/policy_pilot/v1/revision-quota.json"
+      ],
+      "exit_code": 0
+    }
+  ]
+}
