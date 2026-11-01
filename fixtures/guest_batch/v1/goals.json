@@ -1,0 +1,12 @@
+{
+  "events": [
+    {
+      "at_ms": 0,
+      "required": [
+        "brief@1",
+        "empty@1",
+        "notes@1"
+      ]
+    }
+  ]
+}

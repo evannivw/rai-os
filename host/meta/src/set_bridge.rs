@@ -26,11 +26,14 @@ struct Event {
 }
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
-struct Scenario {
+pub(super) struct Scenario {
     events: Vec<Event>,
 }
 impl Scenario {
-    fn parse(text: &str) -> Result<Self, &'static str> {
+    pub(super) fn len(&self) -> usize {
+        self.events.len()
+    }
+    pub(super) fn parse(text: &str) -> Result<Self, &'static str> {
         let s: Self = serde_json::from_str(text).map_err(|_| "invalid_set_scenario")?;
         if s.events.is_empty() || s.events.len() > 8 {
             return Err("scenario_requires_1_to_8_events");
@@ -46,14 +49,14 @@ impl Scenario {
         Ok(s)
     }
 }
-fn status(t: &mut Transport) -> Result<Snapshot, String> {
+pub(super) fn status(t: &mut Transport) -> Result<Snapshot, String> {
     let reply = t.exchange(&Operation::CoordBundleStatus, "coord.bundle.status", None)?;
     if !reply.success {
         return Err(reply.payload);
     }
     Ok(Snapshot::parse(&reply.payload)?)
 }
-fn apply_due(
+pub(super) fn apply_due(
     t: &mut Transport,
     scenario: &Scenario,
     cursor: &mut usize,

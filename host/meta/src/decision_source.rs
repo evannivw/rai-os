@@ -18,26 +18,51 @@ use std::{
 };
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct Replay {
+pub struct Replay<P = Proposal> {
     delay_ms: u64,
-    proposal: Proposal,
+    proposal: P,
 }
-pub enum Source {
+pub enum Source<P = Proposal> {
     Meta(Arc<Secret>),
-    Replay(VecDeque<Replay>),
+    Replay(VecDeque<Replay<P>>),
 }
-impl Source {
+impl<P> Source<P> {
     pub fn name(&self) -> &'static str {
         match self {
             Self::Meta(_) => "meta",
             Self::Replay(_) => "replay",
         }
     }
+}
+impl Source {
     pub fn start(
         &mut self,
         goal: &str,
         context: domain::DecisionContext,
     ) -> Result<Pending, String> {
+        self.start_with(goal, context, provider::propose_context)
+    }
+}
+impl Source<crate::batch::Plan> {
+    pub fn start_batch(
+        &mut self,
+        goal: &str,
+        context: domain::DecisionContext,
+    ) -> Result<Pending<crate::batch::Plan>, String> {
+        self.start_with(goal, context, provider::propose_batch)
+    }
+}
+impl<P: Send + 'static> Source<P> {
+    fn start_with(
+        &mut self,
+        goal: &str,
+        context: domain::DecisionContext,
+        propose: fn(
+            &Secret,
+            &str,
+            &domain::DecisionContext,
+        ) -> Result<provider::Answer<P>, provider::Failure>,
+    ) -> Result<Pending<P>, String> {
         let version = context.state_version;
         let goal = goal.to_owned();
         let (sender, receiver) = mpsc::sync_channel(1);
@@ -45,7 +70,7 @@ impl Source {
             Self::Meta(key) => {
                 let key = Arc::clone(key);
                 thread::spawn(move || {
-                    let _ = sender.send(provider::propose_context(&key, &goal, &context));
+                    let _ = sender.send(propose(&key, &goal, &context));
                 })
             }
             Self::Replay(entries) => {
@@ -69,12 +94,12 @@ impl Source {
         })
     }
 }
-pub struct Pending {
+pub struct Pending<P = Proposal> {
     pub version: u64,
-    receiver: Receiver<Result<provider::Answer, provider::Failure>>,
+    receiver: Receiver<Result<provider::Answer<P>, provider::Failure>>,
     handle: Option<JoinHandle<()>>,
 }
-impl Drop for Pending {
+impl<P> Drop for Pending<P> {
     fn drop(&mut self) {
         // Never abandon a provider thread/curl child. The adapter's 30-second
         // timeout bounds this join; shutdown does not cancel in-flight inference.
@@ -83,10 +108,10 @@ impl Drop for Pending {
         }
     }
 }
-impl Source {
+impl<P: serde::de::DeserializeOwned> Source<P> {
     pub fn load(replay: Option<&Path>, max_calls: usize) -> Result<Self, String> {
         if let Some(path) = replay {
-            let entries: Vec<Replay> = serde_json::from_str(&config::bounded_file(path, 16384)?)
+            let entries: Vec<Replay<P>> = serde_json::from_str(&config::bounded_file(path, 16384)?)
                 .map_err(|_| "invalid_replay_sequence")?;
             if entries.is_empty()
                 || entries.len() > max_calls
@@ -106,8 +131,8 @@ impl Source {
         matches!(self, Self::Replay(entries) if !entries.is_empty())
     }
 }
-impl Pending {
-    pub fn poll(&self) -> Result<Option<provider::Answer>, String> {
+impl<P> Pending<P> {
+    pub fn poll(&self) -> Result<Option<provider::Answer<P>>, String> {
         match self.receiver.try_recv() {
             Ok(answer) => report(answer, self.version).map(Some),
             Err(TryRecvError::Empty) => Ok(None),
@@ -118,10 +143,10 @@ impl Pending {
 
 /// One redacted diagnostic per consumed live provider outcome. Legacy response
 /// events remain summaries of that same call; replay never fabricates diagnostics.
-pub fn report(
-    result: Result<provider::Answer, provider::Failure>,
+pub fn report<P>(
+    result: Result<provider::Answer<P>, provider::Failure>,
     version: u64,
-) -> Result<provider::Answer, String> {
+) -> Result<provider::Answer<P>, String> {
     match result {
         Ok(answer) => {
             if let Some(diagnostic) = &answer.diagnostic {

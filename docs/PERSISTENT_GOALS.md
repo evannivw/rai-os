@@ -160,3 +160,24 @@ The [native publication view](PUBLICATION_DISPLAY.md) now renders real lifecycle
 state and earlier-result availability. A Rust walkthrough exercises changes,
 independent checks and a clearly labeled rejected check. Semantic planning and
 comparative AI benefit remain pending; the design above is not a novelty claim.
+
+
+## November 1: bounded batch integration
+
+[Batch proposals](META_BATCH.md) now cover all 1–4 currently missing operations
+in one response. Pure all-before-dispatch admission, original-generation checks,
+per-job guest tickets and the independent publication handshake constrain the
+plan. Events during inference, between jobs and during validation supersede old
+authority. Current catalog/permissions remain immutable fixtures. The host holds
+the pending plan; the guest retains goals, execution admission and publication.
+No new kernel mechanism or GUI scope is added. Single-operation modes and the
+original pilot remain separate and unchanged in policy/settings.
+
+This is a delivery gate, not completion of semantic planning or a new efficiency
+comparison. November 1 was the feature-freeze target; the independently authored
+semantic workload/fair baseline, final video and submission are still pending.
+Prioritize one bounded demonstrable case, evidence and rehearsal over additional
+infrastructure. If no semantic advantage is established, present the measured
+recovery prototype with its actual Meta role. November 4 remains the deadline
+(18:00 internal target, 20:00 official Guatemala); preserve contribution dates and
+the unresolved October 26 kickoff / October 27 build-period eligibility question.

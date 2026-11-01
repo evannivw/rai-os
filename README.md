@@ -32,8 +32,10 @@ in guest memory during updates and failures, with fresh commit acknowledgments.
 The [native publication view](docs/PUBLICATION_DISPLAY.md) now shows current,
 updating, verifying and blocked states with previous-result availability.
 The bridge now records [redacted provider diagnostics](docs/META_DIAGNOSTICS.md),
-including available usage on rejected responses. Batch and semantic planning
-remain pending.
+including available usage on rejected responses. [Bounded batch proposals](docs/META_BATCH.md)
+now cover up to four missing operations per request, with fresh per-job admission
+and independent checks before publication. Semantic planning and a new fair
+comparison remain pending.
 
 ## Run
 

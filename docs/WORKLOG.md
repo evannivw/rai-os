@@ -1794,3 +1794,42 @@ Preserved stdout/stderr and manifest with source/binary hashes under
 observing the outcome. This is a diagnostic smoke test, not evidence of speedup,
 not the semantic workload, and not an explanation of the five historical failures.
 Batch planning is still the next implementation increment.
+
+
+## 2026-11-01 — Bounded batch proposals and verified guest publication
+
+Added a separate --guest-batch / --guest-batch-replay mode with strict typed plans
+covering all 1–4 missing revisions. Whole-plan validation precedes any execution;
+invalid suffixes, duplicates, omitted/cached/unlisted work, operations and wrong
+versions fail closed. Valid stale answers and unexecuted obsolete suffixes are
+discarded. Existing event ingestion, generic typed async lifetime, HTTPS transport
+and redacted diagnostics are shared with legacy modes. Original single-action
+prompts/settings remain unchanged; batch alone uses its own schema/prompt and a
+1024-token cap. There is no retry, fallback or model-controlled checking.
+
+Each action rechecks observed missing work and passes the original generation to
+the guest, then its fresh per-record ticket. Completion prepares an exact guest
+artifact, runs the independent checker via bounded stdin and reconciles events
+before committing. Read-back must equal the checked bytes. Native CURRENT now
+follows this handshake in the batch path. All queues/plans/checking remain host
+code; no kernel, syscall, unsafe or graphical implementation changed. Static
+fixture permissions/catalog do not implement dynamic revocation/versioning.
+
+Verification: 45 host unit tests, formatting and all-target Clippy passed in both
+profiles. Twenty offline real-QEMU batch cases per profile covered four-record
+plans, selective revisions/cached rollback, coalesced stale responses, invalid
+suffixes/declines/limits, changes between jobs and during validation, checker
+failure, provider decoding and truncated EL0 output. Two native cases per profile
+passed. Independent trace/artifact audits rejected deliberately corrupted reports.
+All 25 previous provider diagnostics per profile and release whole-set/single-call
+regressions passed. A delay-wrapper process leak found in the test harness was
+corrected by explicitly recording/terminating its child; no production adapter
+change was needed. New raw traces are under evidence/2026-11-01-batch.
+
+No live batch request or comparative efficiency measurement has occurred in this
+source increment. Exactly one frozen-settings three-record live probe is planned
+after commit, preserving all outcomes. Semantic interpretation, a separately
+frozen fair comparison, final video and submission remain pending. November 1
+was the freeze target: do not expand kernel/GUI scope. Original pilot failures,
+actual contribution dates and the unresolved kickoff/build-period discrepancy
+remain intact; deadline November 4 at 20:00 Guatemala, internal target 18:00.

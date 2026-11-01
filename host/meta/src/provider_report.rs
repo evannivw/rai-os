@@ -1,4 +1,5 @@
 //! Safe provider diagnostics and envelope decoding; never retain response prose.
+#[cfg(test)]
 use crate::domain::{self, Proposal};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -109,12 +110,28 @@ fn inspect(value: &Value, expected_model: &str, d: &mut Diagnostic) {
         }
     }
 }
+#[cfg(test)]
 pub fn decode(
     bytes: &[u8],
     expected_model: &str,
     max_response: usize,
     d: &mut Diagnostic,
 ) -> Result<Proposal, &'static str> {
+    decode_with(
+        bytes,
+        expected_model,
+        max_response,
+        d,
+        domain::parse_proposal,
+    )
+}
+pub fn decode_with<T>(
+    bytes: &[u8],
+    expected_model: &str,
+    max_response: usize,
+    d: &mut Diagnostic,
+    parse: impl FnOnce(&str) -> Result<T, &'static str>,
+) -> Result<T, &'static str> {
     d.stage = "envelope";
     if bytes.len() > max_response {
         return Err("meta_response_too_large");
@@ -154,7 +171,7 @@ pub fn decode(
         .as_deref()
         .ok_or("missing_meta_content")?;
     d.stage = "proposal";
-    domain::parse_proposal(content)
+    parse(content)
 }
 
 #[cfg(test)]

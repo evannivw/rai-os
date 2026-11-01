@@ -1,0 +1,68 @@
+{
+  "debug": [
+    "CASE offline-provider-truncated",
+    "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s",
+    "CASE truncated-worker",
+    "PASS debug: 20 offline real-QEMU batch cases; independent artifact and trace audit"
+  ],
+  "release": [
+    "CASE offline-provider-truncated",
+    "    Finished `release` profile [optimized] target(s) in 0.00s",
+    "CASE truncated-worker",
+    "PASS release: 20 offline real-QEMU batch cases; independent artifact and trace audit"
+  ],
+  "unit-debug": [
+    "test provider_report::tests::categories_keep_usage_and_all_observed_flags_on_rejected_answers ... ok",
+    "",
+    "test result: ok. 45 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    ""
+  ],
+  "unit-release": [
+    "test provider_report::tests::malformed_and_duplicate_envelopes_remain_rejected ... ok",
+    "",
+    "test result: ok. 45 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    ""
+  ],
+  "clippy-debug": [
+    "    Checking rai-meta v0.1.0 (/Users/jv/Development/Rust/rai-os/host/meta)",
+    "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.04s"
+  ],
+  "clippy-release": [
+    "    Checking rai-meta v0.1.0 (/Users/jv/Development/Rust/rai-os/host/meta)",
+    "    Finished `release` profile [optimized] target(s) in 1.00s"
+  ],
+  "provider-debug": [
+    "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.00s",
+    "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.07s",
+    "PASS debug: 25 OFFLINE provider cases; safe diagnostics, no retries, real-QEMU admission/cleanup"
+  ],
+  "provider-release": [
+    "    Finished `release` profile [optimized] target(s) in 0.00s",
+    "   Compiling rai-meta v0.1.0 (/Users/jv/Development/Rust/rai-os/host/meta)",
+    "    Finished `release` profile [optimized] target(s) in 3.98s",
+    "PASS release: 25 OFFLINE provider cases; safe diagnostics, no retries, real-QEMU admission/cleanup"
+  ],
+  "native-debug": [
+    "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s",
+    "CASE four-record-plan",
+    "CASE native-revision",
+    "PASS debug graphics: 2 offline real-QEMU batch cases; independent artifact and trace audit"
+  ],
+  "native-release": [
+    "    Finished `release` profile [optimized] target(s) in 0.01s",
+    "CASE four-record-plan",
+    "CASE native-revision",
+    "PASS release graphics: 2 offline real-QEMU batch cases; independent artifact and trace audit"
+  ],
+  "set-regression": [
+    "    Finished `release` profile [optimized] target(s) in 0.01s",
+    "    Finished `release` profile [optimized] target(s) in 0.04s",
+    "PASS release: generation/membership/cache gate, unchanged rejected state, intervening goal, restart and cleanup (43 requests)",
+    "PASS release: set planning, exact artifacts, selective revisions, stale/invalid choices and cleanup"
+  ],
+  "meta-regression": [
+    "    Finished `release` profile [optimized] target(s) in 0.01s",
+    "    Finished `release` profile [optimized] target(s) in 0.04s",
+    "PASS (release): six real-QEMU records independently checked; denied/stale/injected proposals blocked; decline without boot; no provider calls; credentials absent from QEMU environment."
+  ]
+}

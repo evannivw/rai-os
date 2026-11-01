@@ -61,7 +61,9 @@ def main():
     p.add_argument('--find',help='Complete ASCII token lookup after independent verification')
     args=p.parse_args()
     try:
-        with args.artifact.open('rb') as f: data=f.read(MAX_BYTES+2)
+        if str(args.artifact) == '-': data=sys.stdin.buffer.read(MAX_BYTES+2)
+        else:
+            with args.artifact.open('rb') as f: data=f.read(MAX_BYTES+2)
         if not data.endswith(b'\n') or len(data)>MAX_BYTES+1: raise ValueError('Expected bounded newline-terminated artifact')
         index=check(data[:-1].decode('ascii'),args.required.split(','),args.goal_version)
         if args.find is not None and re.fullmatch(r'[A-Za-z0-9]+',args.find) is None: raise ValueError('Search requires a complete ASCII alphanumeric token')

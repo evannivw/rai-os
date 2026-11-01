@@ -1,4 +1,7 @@
 //! Single-proposal, host-coordinated and guest-owned Meta bridge modes.
+mod batch;
+mod batch_bridge;
+mod batch_publication;
 mod config;
 mod coordinator;
 mod decision_source;
@@ -24,7 +27,7 @@ fn run() -> Result<(), String> {
     let mut args: Vec<_> = std::env::args().skip(1).collect();
     if args.is_empty() {
         return Err(
-            "usage: rai-meta <kernel> --pilot <edf|value|meta|replay> <scenario.json> [replay.json] | <kernel> [--graphics] --guest-set <events.json> | [--graphics] --guest-set-replay <events.json> <proposals.json> | <kernel> <goal> | --replay <proposal.json> | --coordinate <events.json> | --coordinate-replay <events.json> <proposals.json> | [--graphics] --guest-index <events.json> | [--graphics] --guest-index-replay <events.json> <proposals.json> | --guest <events.json> | --guest-replay <events.json> <proposals.json>".into(),
+            "usage: rai-meta <kernel> [--graphics] --guest-batch <events.json> | [--graphics] --guest-batch-replay <events.json> <plans.json> | <kernel> --pilot <edf|value|meta|replay> <scenario.json> [replay.json] | <kernel> [--graphics] --guest-set <events.json> | [--graphics] --guest-set-replay <events.json> <proposals.json> | <kernel> <goal> | --replay <proposal.json> | --coordinate <events.json> | --coordinate-replay <events.json> <proposals.json> | [--graphics] --guest-index <events.json> | [--graphics] --guest-index-replay <events.json> <proposals.json> | --guest <events.json> | --guest-replay <events.json> <proposals.json>".into(),
         );
     }
     let graphics = args.get(1).is_some_and(|s| s == "--graphics");
@@ -35,7 +38,12 @@ fn run() -> Result<(), String> {
         && !args.get(1).is_some_and(|s| {
             matches!(
                 s.as_str(),
-                "--guest-index" | "--guest-index-replay" | "--guest-set" | "--guest-set-replay"
+                "--guest-index"
+                    | "--guest-index-replay"
+                    | "--guest-set"
+                    | "--guest-set-replay"
+                    | "--guest-batch"
+                    | "--guest-batch-replay"
             )
         })
     {
@@ -48,6 +56,17 @@ fn run() -> Result<(), String> {
             &args[2],
             Path::new(&args[3]),
             args.get(4).map(Path::new),
+        );
+    }
+    if args.len() == 3 && args[1] == "--guest-batch" {
+        return batch_bridge::run(kernel, Path::new(&args[2]), None, graphics);
+    }
+    if args.len() == 4 && args[1] == "--guest-batch-replay" {
+        return batch_bridge::run(
+            kernel,
+            Path::new(&args[2]),
+            Some(Path::new(&args[3])),
+            graphics,
         );
     }
     if args.len() == 3 && args[1] == "--guest-set" {

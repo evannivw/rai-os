@@ -1,0 +1,24 @@
+[
+  {
+    "delay_ms": 10,
+    "proposal": {
+      "state_version": 1,
+      "decision": "execute",
+      "operations": [
+        {
+          "operation": "record.index",
+          "record": "notes@1"
+        },
+        {
+          "operation": "record.index",
+          "record": "brief@1"
+        },
+        {
+          "operation": "record.index",
+          "record": "empty@1"
+        }
+      ],
+      "reason": "Explicit offline fixture; not model inference."
+    }
+  }
+]

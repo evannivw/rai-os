@@ -1,0 +1,1042 @@
+[
+  {
+    "case": "four-record-plan",
+    "transport": "replay",
+    "scenario": {
+      "events": [
+        {
+          "at_ms": 0,
+          "required": [
+            "brief@1",
+            "empty@1",
+            "notes@1",
+            "checklist@1"
+          ]
+        }
+      ]
+    },
+    "stdout": [
+      {
+        "event": "batch_started",
+        "event_source": "scripted_required_sets",
+        "goal": "Complete the current required index set with one plan containing every missing record.index operation. Preserve the supplied state_version; decline if unsupported.",
+        "graphics": true,
+        "max_model_calls": 8,
+        "max_operations": 4,
+        "model": null,
+        "source": "replay"
+      },
+      {
+        "event": "guest_boot_confirmed"
+      },
+      {
+        "argument": "index",
+        "elapsed_ms": 268,
+        "event": "guest_exchange",
+        "operation": "coord.start",
+        "payload": "coordinator=EL0; worker=EL0; state=idle; event=started; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=1; a_slices=0; b_slices=0; trace=AO,BD,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0",
+        "request_id": 1,
+        "success": true
+      },
+      {
+        "event": "set_due",
+        "index": 0,
+        "required": [
+          "brief@1",
+          "checklist@1",
+          "empty@1",
+          "notes@1"
+        ],
+        "schedule_elapsed_ms": 0,
+        "scheduled_ms": 0
+      },
+      {
+        "argument": "brief@1,checklist@1,empty@1,notes@1",
+        "elapsed_ms": 274,
+        "event": "guest_exchange",
+        "operation": "coord.goal",
+        "payload": "goal_version=1; state=building; required=brief@1,checklist@1,empty@1,notes@1; ready_records=0; total_records=4; completed=0; missing=brief@1,checklist@1,empty@1,notes@1",
+        "request_id": 2,
+        "success": true
+      },
+      {
+        "call_id": 1,
+        "elapsed_ms": 274,
+        "event": "batch_requested",
+        "snapshot": {
+          "authorized_records": [
+            [
+              "brief@1",
+              56
+            ],
+            [
+              "checklist@1",
+              41
+            ],
+            [
+              "empty@1",
+              0
+            ],
+            [
+              "notes@1",
+              30
+            ]
+          ],
+          "completed_results": [],
+          "index_set": {
+            "completed": 0,
+            "goal_version": 1,
+            "missing": [
+              "brief@1",
+              "checklist@1",
+              "empty@1",
+              "notes@1"
+            ],
+            "required": [
+              "brief@1",
+              "checklist@1",
+              "empty@1",
+              "notes@1"
+            ]
+          },
+          "operation": "record.index",
+          "required_record": null,
+          "state_version": 1
+        }
+      },
+      {
+        "call_id": 1,
+        "event": "batch_response",
+        "latency_ms": 12,
+        "snapshot_goal": 1,
+        "source": "replay",
+        "usage": null
+      },
+      {
+        "call_id": 1,
+        "event": "batch_validated",
+        "plan": {
+          "decision": "execute",
+          "operations": [
+            {
+              "operation": "record.index",
+              "record": "brief@1"
+            },
+            {
+              "operation": "record.index",
+              "record": "empty@1"
+            },
+            {
+              "operation": "record.index",
+              "record": "notes@1"
+            },
+            {
+              "operation": "record.index",
+              "record": "checklist@1"
+            }
+          ],
+          "reason": "Offline batch fixture; not model inference.",
+          "state_version": 1
+        }
+      },
+      {
+        "event": "batch_step",
+        "record": "brief@1",
+        "remaining": 3,
+        "state_version": 1
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 303,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=building; required=brief@1,checklist@1,empty@1,notes@1; ready_records=0; total_records=4; completed=0; missing=brief@1,checklist@1,empty@1,notes@1",
+        "request_id": 3,
+        "success": true
+      },
+      {
+        "argument": "1:brief@1",
+        "elapsed_ms": 307,
+        "event": "guest_exchange",
+        "operation": "coord.select",
+        "payload": "coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=2; record=brief@1; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0",
+        "request_id": 4,
+        "success": true
+      },
+      {
+        "argument": "2:brief@1",
+        "elapsed_ms": 321,
+        "event": "guest_exchange",
+        "operation": "coord.propose",
+        "payload": "coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=2; record=brief@1; bytes=56; tokens=9; completed=1; a_calls=15; b_calls=13; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=70",
+        "request_id": 5,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 324,
+        "event": "guest_exchange",
+        "operation": "coord.result",
+        "payload": "record=brief@1; bytes=56; worker=EL0; state=completed; index=a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1",
+        "request_id": 6,
+        "success": true
+      },
+      {
+        "event": "guest_index",
+        "origin": "executed",
+        "payload": "record=brief@1; bytes=56; worker=EL0; state=completed; index=a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1",
+        "record": "brief@1",
+        "ticket": 2
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 327,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=building; required=brief@1,checklist@1,empty@1,notes@1; ready_records=1; total_records=4; completed=1; missing=checklist@1,empty@1,notes@1",
+        "request_id": 7,
+        "success": true
+      },
+      {
+        "event": "batch_step",
+        "record": "empty@1",
+        "remaining": 2,
+        "state_version": 1
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 341,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=building; required=brief@1,checklist@1,empty@1,notes@1; ready_records=1; total_records=4; completed=1; missing=checklist@1,empty@1,notes@1",
+        "request_id": 8,
+        "success": true
+      },
+      {
+        "argument": "1:empty@1",
+        "elapsed_ms": 344,
+        "event": "guest_exchange",
+        "operation": "coord.select",
+        "payload": "coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=3; record=empty@1; bytes=0; tokens=0; completed=1; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=0",
+        "request_id": 9,
+        "success": true
+      },
+      {
+        "argument": "3:empty@1",
+        "elapsed_ms": 352,
+        "event": "guest_exchange",
+        "operation": "coord.propose",
+        "payload": "coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=3; record=empty@1; bytes=0; tokens=0; completed=2; a_calls=6; b_calls=4; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=2; cache_hits=0; output_bytes=1",
+        "request_id": 10,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 355,
+        "event": "guest_exchange",
+        "operation": "coord.result",
+        "payload": "record=empty@1; bytes=0; worker=EL0; state=completed; index=-",
+        "request_id": 11,
+        "success": true
+      },
+      {
+        "event": "guest_index",
+        "origin": "executed",
+        "payload": "record=empty@1; bytes=0; worker=EL0; state=completed; index=-",
+        "record": "empty@1",
+        "ticket": 3
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 359,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=building; required=brief@1,checklist@1,empty@1,notes@1; ready_records=2; total_records=4; completed=2; missing=checklist@1,notes@1",
+        "request_id": 12,
+        "success": true
+      },
+      {
+        "event": "batch_step",
+        "record": "notes@1",
+        "remaining": 1,
+        "state_version": 1
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 373,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=building; required=brief@1,checklist@1,empty@1,notes@1; ready_records=2; total_records=4; completed=2; missing=checklist@1,notes@1",
+        "request_id": 13,
+        "success": true
+      },
+      {
+        "argument": "1:notes@1",
+        "elapsed_ms": 376,
+        "event": "guest_exchange",
+        "operation": "coord.select",
+        "payload": "coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=4; record=notes@1; bytes=0; tokens=0; completed=2; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=2; cache_hits=0; output_bytes=0",
+        "request_id": 14,
+        "success": true
+      },
+      {
+        "argument": "4:notes@1",
+        "elapsed_ms": 381,
+        "event": "guest_exchange",
+        "operation": "coord.propose",
+        "payload": "coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=4; record=notes@1; bytes=30; tokens=7; completed=3; a_calls=10; b_calls=8; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=3; cache_hits=0; output_bytes=33",
+        "request_id": 15,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 385,
+        "event": "guest_exchange",
+        "operation": "coord.result",
+        "payload": "record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1",
+        "request_id": 16,
+        "success": true
+      },
+      {
+        "event": "guest_index",
+        "origin": "executed",
+        "payload": "record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1",
+        "record": "notes@1",
+        "ticket": 4
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 388,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=building; required=brief@1,checklist@1,empty@1,notes@1; ready_records=3; total_records=4; completed=3; missing=checklist@1",
+        "request_id": 17,
+        "success": true
+      },
+      {
+        "event": "batch_step",
+        "record": "checklist@1",
+        "remaining": 0,
+        "state_version": 1
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 405,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=building; required=brief@1,checklist@1,empty@1,notes@1; ready_records=3; total_records=4; completed=3; missing=checklist@1",
+        "request_id": 18,
+        "success": true
+      },
+      {
+        "argument": "1:checklist@1",
+        "elapsed_ms": 408,
+        "event": "guest_exchange",
+        "operation": "coord.select",
+        "payload": "coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=5; record=checklist@1; bytes=0; tokens=0; completed=3; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=3; cache_hits=0; output_bytes=0",
+        "request_id": 19,
+        "success": true
+      },
+      {
+        "argument": "5:checklist@1",
+        "elapsed_ms": 412,
+        "event": "guest_exchange",
+        "operation": "coord.propose",
+        "payload": "coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=5; record=checklist@1; bytes=41; tokens=6; completed=4; a_calls=11; b_calls=9; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=4; cache_hits=0; output_bytes=41",
+        "request_id": 20,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 417,
+        "event": "guest_exchange",
+        "operation": "coord.result",
+        "payload": "record=checklist@1; bytes=41; worker=EL0; state=completed; index=cables:1,check:2,first:1,safety:1,seals:1",
+        "request_id": 21,
+        "success": true
+      },
+      {
+        "event": "guest_index",
+        "origin": "executed",
+        "payload": "record=checklist@1; bytes=41; worker=EL0; state=completed; index=cables:1,check:2,first:1,safety:1,seals:1",
+        "record": "checklist@1",
+        "ticket": 5
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 421,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=complete; required=brief@1,checklist@1,empty@1,notes@1; ready_records=4; total_records=4; completed=4; missing=-",
+        "request_id": 22,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 426,
+        "event": "guest_exchange",
+        "operation": "coord.publish.prepare",
+        "payload": "{\"format\":\"rai-index-set-v1\",\"goal_version\":1,\"required\":[\"brief@1\",\"checklist@1\",\"empty@1\",\"notes@1\"],\"records\":[{\"record\":\"brief@1\",\"bytes\":56,\"source_hex\":\"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a\",\"index\":\"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1\"},{\"record\":\"checklist@1\",\"bytes\":41,\"source_hex\":\"436865636b207365616c733b20434845434b206361626c65732e0a536166657479206669727374210a\",\"index\":\"cables:1,check:2,first:1,safety:1,seals:1\"},{\"record\":\"empty@1\",\"bytes\":0,\"source_hex\":\"\",\"index\":\"-\"},{\"record\":\"notes@1\",\"bytes\":30,\"source_hex\":\"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a\",\"index\":\"10:1,7:1,a:1,at:1,pump:2,review:1\"}]}",
+        "request_id": 23,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 433,
+        "event": "guest_exchange",
+        "operation": "coord.publish.status",
+        "payload": "target_version=1; published_version=0; candidate_ticket=6; state=validating; availability=none; reason=-",
+        "request_id": 24,
+        "success": true
+      },
+      {
+        "candidate_ticket": 6,
+        "event": "independent_check",
+        "goal_version": 1,
+        "passed": true
+      },
+      {
+        "argument": "6",
+        "elapsed_ms": 478,
+        "event": "guest_exchange",
+        "operation": "coord.publish.commit",
+        "payload": "target_version=1; published_version=1; candidate_ticket=0; state=current; availability=current; reason=-",
+        "request_id": 25,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 484,
+        "event": "guest_exchange",
+        "operation": "coord.publish.read",
+        "payload": "{\"format\":\"rai-index-set-v1\",\"goal_version\":1,\"required\":[\"brief@1\",\"checklist@1\",\"empty@1\",\"notes@1\"],\"records\":[{\"record\":\"brief@1\",\"bytes\":56,\"source_hex\":\"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a\",\"index\":\"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1\"},{\"record\":\"checklist@1\",\"bytes\":41,\"source_hex\":\"436865636b207365616c733b20434845434b206361626c65732e0a536166657479206669727374210a\",\"index\":\"cables:1,check:2,first:1,safety:1,seals:1\"},{\"record\":\"empty@1\",\"bytes\":0,\"source_hex\":\"\",\"index\":\"-\"},{\"record\":\"notes@1\",\"bytes\":30,\"source_hex\":\"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a\",\"index\":\"10:1,7:1,a:1,at:1,pump:2,review:1\"}]}",
+        "request_id": 26,
+        "success": true
+      },
+      {
+        "event": "batch_publication",
+        "payload": "{\"format\":\"rai-index-set-v1\",\"goal_version\":1,\"required\":[\"brief@1\",\"checklist@1\",\"empty@1\",\"notes@1\"],\"records\":[{\"record\":\"brief@1\",\"bytes\":56,\"source_hex\":\"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a\",\"index\":\"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1\"},{\"record\":\"checklist@1\",\"bytes\":41,\"source_hex\":\"436865636b207365616c733b20434845434b206361626c65732e0a536166657479206669727374210a\",\"index\":\"cables:1,check:2,first:1,safety:1,seals:1\"},{\"record\":\"empty@1\",\"bytes\":0,\"source_hex\":\"\",\"index\":\"-\"},{\"record\":\"notes@1\",\"bytes\":30,\"source_hex\":\"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a\",\"index\":\"10:1,7:1,a:1,at:1,pump:2,review:1\"}]}",
+        "snapshot": {
+          "completed": 4,
+          "goal_version": 1,
+          "missing": [],
+          "required": [
+            "brief@1",
+            "checklist@1",
+            "empty@1",
+            "notes@1"
+          ]
+        }
+      },
+      {
+        "elapsed_ms": 484,
+        "event": "batch_finished",
+        "model_calls": 1,
+        "snapshot": {
+          "completed": 4,
+          "goal_version": 1,
+          "missing": [],
+          "required": [
+            "brief@1",
+            "checklist@1",
+            "empty@1",
+            "notes@1"
+          ]
+        },
+        "status": "verified_current_publication"
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 488,
+        "event": "guest_exchange",
+        "operation": "coord.stop",
+        "payload": "coordinator=EL0; worker=EL0; state=stopped; event=none; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=0; b_slices=0; trace=",
+        "request_id": 27,
+        "success": true
+      }
+    ],
+    "stderr": "",
+    "exit_code": 0
+  },
+  {
+    "case": "native-revision",
+    "transport": "replay",
+    "scenario": {
+      "events": [
+        {
+          "at_ms": 0,
+          "required": [
+            "brief@1",
+            "empty@1",
+            "notes@1"
+          ]
+        },
+        {
+          "at_ms": 12000,
+          "required": [
+            "brief@1",
+            "empty@1",
+            "notes@2"
+          ]
+        }
+      ]
+    },
+    "stdout": [
+      {
+        "event": "batch_started",
+        "event_source": "scripted_required_sets",
+        "goal": "Complete the current required index set with one plan containing every missing record.index operation. Preserve the supplied state_version; decline if unsupported.",
+        "graphics": true,
+        "max_model_calls": 8,
+        "max_operations": 4,
+        "model": null,
+        "source": "replay"
+      },
+      {
+        "event": "guest_boot_confirmed"
+      },
+      {
+        "argument": "index",
+        "elapsed_ms": 314,
+        "event": "guest_exchange",
+        "operation": "coord.start",
+        "payload": "coordinator=EL0; worker=EL0; state=idle; event=started; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=1; a_slices=0; b_slices=0; trace=AO,BD,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0",
+        "request_id": 1,
+        "success": true
+      },
+      {
+        "event": "set_due",
+        "index": 0,
+        "required": [
+          "brief@1",
+          "empty@1",
+          "notes@1"
+        ],
+        "schedule_elapsed_ms": 0,
+        "scheduled_ms": 0
+      },
+      {
+        "argument": "brief@1,empty@1,notes@1",
+        "elapsed_ms": 319,
+        "event": "guest_exchange",
+        "operation": "coord.goal",
+        "payload": "goal_version=1; state=building; required=brief@1,empty@1,notes@1; ready_records=0; total_records=3; completed=0; missing=brief@1,empty@1,notes@1",
+        "request_id": 2,
+        "success": true
+      },
+      {
+        "call_id": 1,
+        "elapsed_ms": 320,
+        "event": "batch_requested",
+        "snapshot": {
+          "authorized_records": [
+            [
+              "brief@1",
+              56
+            ],
+            [
+              "empty@1",
+              0
+            ],
+            [
+              "notes@1",
+              30
+            ]
+          ],
+          "completed_results": [],
+          "index_set": {
+            "completed": 0,
+            "goal_version": 1,
+            "missing": [
+              "brief@1",
+              "empty@1",
+              "notes@1"
+            ],
+            "required": [
+              "brief@1",
+              "empty@1",
+              "notes@1"
+            ]
+          },
+          "operation": "record.index",
+          "required_record": null,
+          "state_version": 1
+        }
+      },
+      {
+        "call_id": 1,
+        "event": "batch_response",
+        "latency_ms": 12,
+        "snapshot_goal": 1,
+        "source": "replay",
+        "usage": null
+      },
+      {
+        "call_id": 1,
+        "event": "batch_validated",
+        "plan": {
+          "decision": "execute",
+          "operations": [
+            {
+              "operation": "record.index",
+              "record": "brief@1"
+            },
+            {
+              "operation": "record.index",
+              "record": "empty@1"
+            },
+            {
+              "operation": "record.index",
+              "record": "notes@1"
+            }
+          ],
+          "reason": "Offline batch fixture; not model inference.",
+          "state_version": 1
+        }
+      },
+      {
+        "event": "batch_step",
+        "record": "brief@1",
+        "remaining": 2,
+        "state_version": 1
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 350,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=building; required=brief@1,empty@1,notes@1; ready_records=0; total_records=3; completed=0; missing=brief@1,empty@1,notes@1",
+        "request_id": 3,
+        "success": true
+      },
+      {
+        "argument": "1:brief@1",
+        "elapsed_ms": 355,
+        "event": "guest_exchange",
+        "operation": "coord.select",
+        "payload": "coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=2; record=brief@1; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0",
+        "request_id": 4,
+        "success": true
+      },
+      {
+        "argument": "2:brief@1",
+        "elapsed_ms": 369,
+        "event": "guest_exchange",
+        "operation": "coord.propose",
+        "payload": "coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=2; record=brief@1; bytes=56; tokens=9; completed=1; a_calls=15; b_calls=13; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=70",
+        "request_id": 5,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 372,
+        "event": "guest_exchange",
+        "operation": "coord.result",
+        "payload": "record=brief@1; bytes=56; worker=EL0; state=completed; index=a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1",
+        "request_id": 6,
+        "success": true
+      },
+      {
+        "event": "guest_index",
+        "origin": "executed",
+        "payload": "record=brief@1; bytes=56; worker=EL0; state=completed; index=a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1",
+        "record": "brief@1",
+        "ticket": 2
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 375,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=building; required=brief@1,empty@1,notes@1; ready_records=1; total_records=3; completed=1; missing=empty@1,notes@1",
+        "request_id": 7,
+        "success": true
+      },
+      {
+        "event": "batch_step",
+        "record": "empty@1",
+        "remaining": 1,
+        "state_version": 1
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 391,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=building; required=brief@1,empty@1,notes@1; ready_records=1; total_records=3; completed=1; missing=empty@1,notes@1",
+        "request_id": 8,
+        "success": true
+      },
+      {
+        "argument": "1:empty@1",
+        "elapsed_ms": 398,
+        "event": "guest_exchange",
+        "operation": "coord.select",
+        "payload": "coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=3; record=empty@1; bytes=0; tokens=0; completed=1; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=0",
+        "request_id": 9,
+        "success": true
+      },
+      {
+        "argument": "3:empty@1",
+        "elapsed_ms": 403,
+        "event": "guest_exchange",
+        "operation": "coord.propose",
+        "payload": "coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=3; record=empty@1; bytes=0; tokens=0; completed=2; a_calls=6; b_calls=4; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=2; cache_hits=0; output_bytes=1",
+        "request_id": 10,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 407,
+        "event": "guest_exchange",
+        "operation": "coord.result",
+        "payload": "record=empty@1; bytes=0; worker=EL0; state=completed; index=-",
+        "request_id": 11,
+        "success": true
+      },
+      {
+        "event": "guest_index",
+        "origin": "executed",
+        "payload": "record=empty@1; bytes=0; worker=EL0; state=completed; index=-",
+        "record": "empty@1",
+        "ticket": 3
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 411,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=building; required=brief@1,empty@1,notes@1; ready_records=2; total_records=3; completed=2; missing=notes@1",
+        "request_id": 12,
+        "success": true
+      },
+      {
+        "event": "batch_step",
+        "record": "notes@1",
+        "remaining": 0,
+        "state_version": 1
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 425,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=building; required=brief@1,empty@1,notes@1; ready_records=2; total_records=3; completed=2; missing=notes@1",
+        "request_id": 13,
+        "success": true
+      },
+      {
+        "argument": "1:notes@1",
+        "elapsed_ms": 430,
+        "event": "guest_exchange",
+        "operation": "coord.select",
+        "payload": "coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=4; record=notes@1; bytes=0; tokens=0; completed=2; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=2; cache_hits=0; output_bytes=0",
+        "request_id": 14,
+        "success": true
+      },
+      {
+        "argument": "4:notes@1",
+        "elapsed_ms": 435,
+        "event": "guest_exchange",
+        "operation": "coord.propose",
+        "payload": "coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=4; record=notes@1; bytes=30; tokens=7; completed=3; a_calls=10; b_calls=8; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=3; cache_hits=0; output_bytes=33",
+        "request_id": 15,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 438,
+        "event": "guest_exchange",
+        "operation": "coord.result",
+        "payload": "record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1",
+        "request_id": 16,
+        "success": true
+      },
+      {
+        "event": "guest_index",
+        "origin": "executed",
+        "payload": "record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1",
+        "record": "notes@1",
+        "ticket": 4
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 443,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=complete; required=brief@1,empty@1,notes@1; ready_records=3; total_records=3; completed=3; missing=-",
+        "request_id": 17,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 449,
+        "event": "guest_exchange",
+        "operation": "coord.publish.prepare",
+        "payload": "{\"format\":\"rai-index-set-v1\",\"goal_version\":1,\"required\":[\"brief@1\",\"empty@1\",\"notes@1\"],\"records\":[{\"record\":\"brief@1\",\"bytes\":56,\"source_hex\":\"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a\",\"index\":\"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1\"},{\"record\":\"empty@1\",\"bytes\":0,\"source_hex\":\"\",\"index\":\"-\"},{\"record\":\"notes@1\",\"bytes\":30,\"source_hex\":\"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a\",\"index\":\"10:1,7:1,a:1,at:1,pump:2,review:1\"}]}",
+        "request_id": 18,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 453,
+        "event": "guest_exchange",
+        "operation": "coord.publish.status",
+        "payload": "target_version=1; published_version=0; candidate_ticket=5; state=validating; availability=none; reason=-",
+        "request_id": 19,
+        "success": true
+      },
+      {
+        "candidate_ticket": 5,
+        "event": "independent_check",
+        "goal_version": 1,
+        "passed": true
+      },
+      {
+        "argument": "5",
+        "elapsed_ms": 498,
+        "event": "guest_exchange",
+        "operation": "coord.publish.commit",
+        "payload": "target_version=1; published_version=1; candidate_ticket=0; state=current; availability=current; reason=-",
+        "request_id": 20,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 501,
+        "event": "guest_exchange",
+        "operation": "coord.publish.read",
+        "payload": "{\"format\":\"rai-index-set-v1\",\"goal_version\":1,\"required\":[\"brief@1\",\"empty@1\",\"notes@1\"],\"records\":[{\"record\":\"brief@1\",\"bytes\":56,\"source_hex\":\"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a\",\"index\":\"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1\"},{\"record\":\"empty@1\",\"bytes\":0,\"source_hex\":\"\",\"index\":\"-\"},{\"record\":\"notes@1\",\"bytes\":30,\"source_hex\":\"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a\",\"index\":\"10:1,7:1,a:1,at:1,pump:2,review:1\"}]}",
+        "request_id": 21,
+        "success": true
+      },
+      {
+        "event": "batch_publication",
+        "payload": "{\"format\":\"rai-index-set-v1\",\"goal_version\":1,\"required\":[\"brief@1\",\"empty@1\",\"notes@1\"],\"records\":[{\"record\":\"brief@1\",\"bytes\":56,\"source_hex\":\"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a\",\"index\":\"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1\"},{\"record\":\"empty@1\",\"bytes\":0,\"source_hex\":\"\",\"index\":\"-\"},{\"record\":\"notes@1\",\"bytes\":30,\"source_hex\":\"50756d7020413a2070756d7020372e0a5265766965772061742031302e0a\",\"index\":\"10:1,7:1,a:1,at:1,pump:2,review:1\"}]}",
+        "snapshot": {
+          "completed": 3,
+          "goal_version": 1,
+          "missing": [],
+          "required": [
+            "brief@1",
+            "empty@1",
+            "notes@1"
+          ]
+        }
+      },
+      {
+        "event": "set_due",
+        "index": 1,
+        "required": [
+          "brief@1",
+          "empty@1",
+          "notes@2"
+        ],
+        "schedule_elapsed_ms": 12007,
+        "scheduled_ms": 12000
+      },
+      {
+        "argument": "brief@1,empty@1,notes@2",
+        "elapsed_ms": 12328,
+        "event": "guest_exchange",
+        "operation": "coord.goal",
+        "payload": "goal_version=6; state=building; required=brief@1,empty@1,notes@2; ready_records=2; total_records=3; completed=3; missing=notes@2",
+        "request_id": 22,
+        "success": true
+      },
+      {
+        "call_id": 2,
+        "elapsed_ms": 12328,
+        "event": "batch_requested",
+        "snapshot": {
+          "authorized_records": [
+            [
+              "notes@2",
+              44
+            ]
+          ],
+          "completed_results": [],
+          "index_set": {
+            "completed": 3,
+            "goal_version": 6,
+            "missing": [
+              "notes@2"
+            ],
+            "required": [
+              "brief@1",
+              "empty@1",
+              "notes@2"
+            ]
+          },
+          "operation": "record.index",
+          "required_record": null,
+          "state_version": 6
+        }
+      },
+      {
+        "call_id": 2,
+        "event": "batch_response",
+        "latency_ms": 12,
+        "snapshot_goal": 6,
+        "source": "replay",
+        "usage": null
+      },
+      {
+        "call_id": 2,
+        "event": "batch_validated",
+        "plan": {
+          "decision": "execute",
+          "operations": [
+            {
+              "operation": "record.index",
+              "record": "notes@2"
+            }
+          ],
+          "reason": "Offline batch fixture; not model inference.",
+          "state_version": 6
+        }
+      },
+      {
+        "event": "batch_step",
+        "record": "notes@2",
+        "remaining": 0,
+        "state_version": 6
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 12357,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=6; state=building; required=brief@1,empty@1,notes@2; ready_records=2; total_records=3; completed=3; missing=notes@2",
+        "request_id": 23,
+        "success": true
+      },
+      {
+        "argument": "6:notes@2",
+        "elapsed_ms": 12362,
+        "event": "guest_exchange",
+        "operation": "coord.select",
+        "payload": "coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=7; record=notes@2; bytes=0; tokens=0; completed=3; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=3; cache_hits=0; output_bytes=0",
+        "request_id": 24,
+        "success": true
+      },
+      {
+        "argument": "7:notes@2",
+        "elapsed_ms": 12368,
+        "event": "guest_exchange",
+        "operation": "coord.propose",
+        "payload": "coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=7; record=notes@2; bytes=44; tokens=9; completed=4; a_calls=13; b_calls=11; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=4; cache_hits=0; output_bytes=50",
+        "request_id": 25,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 12371,
+        "event": "guest_exchange",
+        "operation": "coord.result",
+        "payload": "record=notes@2; bytes=44; worker=EL0; state=completed; index=11:1,8:1,at:1,b:1,first:1,pump:2,review:1,safety:1",
+        "request_id": 26,
+        "success": true
+      },
+      {
+        "event": "guest_index",
+        "origin": "executed",
+        "payload": "record=notes@2; bytes=44; worker=EL0; state=completed; index=11:1,8:1,at:1,b:1,first:1,pump:2,review:1,safety:1",
+        "record": "notes@2",
+        "ticket": 7
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 12375,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=6; state=complete; required=brief@1,empty@1,notes@2; ready_records=3; total_records=3; completed=4; missing=-",
+        "request_id": 27,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 12381,
+        "event": "guest_exchange",
+        "operation": "coord.publish.prepare",
+        "payload": "{\"format\":\"rai-index-set-v1\",\"goal_version\":6,\"required\":[\"brief@1\",\"empty@1\",\"notes@2\"],\"records\":[{\"record\":\"brief@1\",\"bytes\":56,\"source_hex\":\"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a\",\"index\":\"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1\"},{\"record\":\"empty@1\",\"bytes\":0,\"source_hex\":\"\",\"index\":\"-\"},{\"record\":\"notes@2\",\"bytes\":44,\"source_hex\":\"50756d7020423a2070756d7020382e0a5265766965772061742031312e205361666574792066697273742e0a\",\"index\":\"11:1,8:1,at:1,b:1,first:1,pump:2,review:1,safety:1\"}]}",
+        "request_id": 28,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 12385,
+        "event": "guest_exchange",
+        "operation": "coord.publish.status",
+        "payload": "target_version=6; published_version=1; candidate_ticket=8; state=validating; availability=historical; reason=-",
+        "request_id": 29,
+        "success": true
+      },
+      {
+        "candidate_ticket": 8,
+        "event": "independent_check",
+        "goal_version": 6,
+        "passed": true
+      },
+      {
+        "argument": "8",
+        "elapsed_ms": 12452,
+        "event": "guest_exchange",
+        "operation": "coord.publish.commit",
+        "payload": "target_version=6; published_version=6; candidate_ticket=0; state=current; availability=current; reason=-",
+        "request_id": 30,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 12455,
+        "event": "guest_exchange",
+        "operation": "coord.publish.read",
+        "payload": "{\"format\":\"rai-index-set-v1\",\"goal_version\":6,\"required\":[\"brief@1\",\"empty@1\",\"notes@2\"],\"records\":[{\"record\":\"brief@1\",\"bytes\":56,\"source_hex\":\"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a\",\"index\":\"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1\"},{\"record\":\"empty@1\",\"bytes\":0,\"source_hex\":\"\",\"index\":\"-\"},{\"record\":\"notes@2\",\"bytes\":44,\"source_hex\":\"50756d7020423a2070756d7020382e0a5265766965772061742031312e205361666574792066697273742e0a\",\"index\":\"11:1,8:1,at:1,b:1,first:1,pump:2,review:1,safety:1\"}]}",
+        "request_id": 31,
+        "success": true
+      },
+      {
+        "event": "batch_publication",
+        "payload": "{\"format\":\"rai-index-set-v1\",\"goal_version\":6,\"required\":[\"brief@1\",\"empty@1\",\"notes@2\"],\"records\":[{\"record\":\"brief@1\",\"bytes\":56,\"source_hex\":\"50726f6a656374204175726f72612e0a4b65657020736f757263652062797465732e204275696c64206120726576696577207061636b2e0a\",\"index\":\"a:1,aurora:1,build:1,bytes:1,keep:1,pack:1,project:1,review:1,source:1\"},{\"record\":\"empty@1\",\"bytes\":0,\"source_hex\":\"\",\"index\":\"-\"},{\"record\":\"notes@2\",\"bytes\":44,\"source_hex\":\"50756d7020423a2070756d7020382e0a5265766965772061742031312e205361666574792066697273742e0a\",\"index\":\"11:1,8:1,at:1,b:1,first:1,pump:2,review:1,safety:1\"}]}",
+        "snapshot": {
+          "completed": 4,
+          "goal_version": 6,
+          "missing": [],
+          "required": [
+            "brief@1",
+            "empty@1",
+            "notes@2"
+          ]
+        }
+      },
+      {
+        "elapsed_ms": 12456,
+        "event": "batch_finished",
+        "model_calls": 2,
+        "snapshot": {
+          "completed": 4,
+          "goal_version": 6,
+          "missing": [],
+          "required": [
+            "brief@1",
+            "empty@1",
+            "notes@2"
+          ]
+        },
+        "status": "verified_current_publication"
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 12463,
+        "event": "guest_exchange",
+        "operation": "coord.stop",
+        "payload": "coordinator=EL0; worker=EL0; state=stopped; event=none; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=0; b_slices=0; trace=",
+        "request_id": 32,
+        "success": true
+      }
+    ],
+    "stderr": "",
+    "exit_code": 0
+  }
+]
