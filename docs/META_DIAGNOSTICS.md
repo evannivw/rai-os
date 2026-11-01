@@ -109,3 +109,23 @@ notes count, with the unchanged settings and no retry or fallback. Preserve its
 outcome, diagnostic and exact code/binary identity separately. This is a diagnostic
 smoke test, not a repeat of the pilot or evidence about its five historical failures.
 No live result is claimed by this pre-probe document section.
+
+## October 31 live probe: normal completion, no historical diagnosis
+
+After committing and pushing 95bd62810929d41562a61f3e1a068db5f96fe9ff, made the
+single planned request with unchanged model/settings and no retry. Meta returned
+HTTP 200, finish_reason=stop, one assistant choice, matching model, no refusal or
+tool calls. Provider-method elapsed time was 1592 ms. Reported usage: 376 prompt,
+153 completion, 529 total tokens. The CLI wall time was 1702 ms.
+
+The admitted proposal selected notes@2. Real QEMU returned 44 bytes and 9 tokens;
+its boot-plus-operation segment was 103 ms. The existing independent record
+checker accepted the captured result. The diagnostic and legacy response summary
+agree on usage/latency and describe the same single call, not two calls.
+
+[Raw outcome](evidence/2026-10-31-provider-diagnostics/live/stdout.jsonl) and
+[code/binary identities](evidence/2026-10-31-provider-diagnostics/live/manifest.json)
+are preserved. This small single-record request differs from the earlier
+multi-record scheduling trials; its time is not a measured speedup. The original
+five failures remain undiagnosed because their detailed response metadata was not
+retained. This probe validates instrumentation, not batch or semantic planning.

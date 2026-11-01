@@ -1778,3 +1778,19 @@ this increment. One unchanged-settings, no-retry live diagnostic probe is planne
 after commit; no new scheduling/performance comparison or AI advantage is claimed.
 Next implement bounded batch proposals, then independently specified semantic
 workloads and a separately frozen fair comparison. Submission dates are unchanged.
+
+## 2026-10-31 — One live provider diagnostic probe
+
+After publishing diagnostic source 95bd62810929d41562a61f3e1a068db5f96fe9ff, ran
+exactly one planned latest-notes request with the existing model/settings and no
+retry/fallback. HTTP 200, matching model, one assistant choice, finish_reason=stop,
+no refusal/tools; provider-method latency 1592 ms and reported usage 376 prompt +
+153 completion = 529 tokens. CLI wall time was 1702 ms. QEMU boot/operation took
+103 ms and returned notes@2, 44 bytes, 9 tokens. Independent capture/service checks
+passed, including agreement between the diagnostic and same-call legacy summary.
+
+Preserved stdout/stderr and manifest with source/binary hashes under
+2026-10-31-provider-diagnostics/live. No request parameters were changed after
+observing the outcome. This is a diagnostic smoke test, not evidence of speedup,
+not the semantic workload, and not an explanation of the five historical failures.
+Batch planning is still the next implementation increment.
