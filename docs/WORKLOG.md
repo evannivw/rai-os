@@ -1833,3 +1833,23 @@ frozen fair comparison, final video and submission remain pending. November 1
 was the freeze target: do not expand kernel/GUI scope. Original pilot failures,
 actual contribution dates and the unresolved kickoff/build-period discrepancy
 remain intact; deadline November 4 at 20:00 Guatemala, internal target 18:00.
+
+
+## 2026-11-01 — One live batch with verified guest publication
+
+After source commit 0b84ed9ea886565fd05592e9fa32626c3408f80f was pushed, the planned
+single release-mode request succeeded without retry or fallback. Meta returned
+one plan for brief@1, empty@1 and notes@1. All three jobs executed in real QEMU;
+the independent checker, fresh commit/read-back and independent trace audit passed.
+HTTP 200, matching model, one assistant choice, finish_reason=stop, no refusal or
+tool calls. Provider-method latency: 2075 ms. CLI wall time: 2292 ms. Reported usage:
+395 prompt + 184 completion = 579 tokens. The diagnostic and batch response are
+summaries of this same call; usage/latency agreed.
+
+Exact stdout/stderr and the manifest with source, binary/kernel/fixture hashes
+and UTC observation timestamp are preserved in evidence/2026-11-01-batch/live.
+This is one successful integration probe on an explicit three-record requirement,
+not a repeated benchmark, evidence of semantic intelligence or proof of advantage
+over fixed batching. It is not directly comparable to the earlier multi-call
+pilot or the different single-count probe. No settings were changed after seeing
+the outcome. Independent semantic cases and the fair comparison remain next.

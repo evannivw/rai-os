@@ -160,3 +160,23 @@ source commit, binary/kernel hashes, UTC observation timestamp, stdout, stderr,
 latency, usage and independent audit whether it succeeds or fails. This is an
 integration probe, not a before/after benchmark or a reason to discard old failures.
 The observed result will be appended separately.
+
+
+## November 1: observed single live batch probe
+
+After source commit 0b84ed9ea886565fd05592e9fa32626c3408f80f was pushed, the planned
+single release-mode request succeeded without retry or fallback. Meta returned
+one plan for brief@1, empty@1 and notes@1. All three jobs executed in real QEMU;
+the independent checker, fresh commit/read-back and independent trace audit passed.
+HTTP 200, matching model, one assistant choice, finish_reason=stop, no refusal or
+tool calls. Provider-method latency: 2075 ms. CLI wall time: 2292 ms. Reported usage:
+395 prompt + 184 completion = 579 tokens. The diagnostic and batch response are
+summaries of this same call; usage/latency agreed.
+
+Exact stdout/stderr and the manifest with source, binary/kernel/fixture hashes
+and UTC observation timestamp are preserved in evidence/2026-11-01-batch/live.
+This is one successful integration probe on an explicit three-record requirement,
+not a repeated benchmark, evidence of semantic intelligence or proof of advantage
+over fixed batching. It is not directly comparable to the earlier multi-call
+pilot or the different single-count probe. No settings were changed after seeing
+the outcome. Independent semantic cases and the fair comparison remain next.

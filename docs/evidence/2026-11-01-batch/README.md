@@ -12,3 +12,12 @@ The source commit containing these files defines the implementation. One live
 three-record smoke probe is planned after committing, without retry or fallback;
 its evidence will be stored separately and will not replace these records or the
 original policy pilot. This fixture establishes integration, not semantic benefit.
+
+
+## Live follow-up
+
+`live/` preserves the one planned real Meta probe after source commit 0b84ed9.
+One call, three actual EL0 jobs, verified publication; 2075 ms provider-method time,
+2292 ms CLI wall time, 579 reported tokens. The manifest identifies exact source
+and binaries. No retry/fallback or performance comparison. See the observed-result
+addendum in [META_BATCH.md](../../META_BATCH.md).
