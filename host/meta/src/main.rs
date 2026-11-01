@@ -13,6 +13,7 @@ mod model;
 mod pilot;
 mod pilot_run;
 mod provider;
+mod provider_report;
 #[path = "../../shared/qemu.rs"]
 mod qemu;
 mod set_bridge;
@@ -117,7 +118,8 @@ fn run() -> Result<(), String> {
             "{}",
             json!({"event":"proposal_source","source":"meta","model":provider::MODEL})
         );
-        let answer = provider::propose(&key, &args[1])?;
+        let answer =
+            decision_source::report(provider::propose(&key, &args[1]), domain::STATE_VERSION)?;
         println!(
             "{}",
             json!({"event":"model_response","model":provider::MODEL,"latency_ms":answer.latency_ms,"usage":answer.usage})

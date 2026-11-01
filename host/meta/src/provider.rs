@@ -1,9 +1,9 @@
 //! Meta HTTPS adapter. curl uses system TLS; keys/config travel on stdin, never argv.
+pub use crate::provider_report::{Diagnostic, Failure, Usage};
 use crate::{
     config::Secret,
     domain::{self, Proposal},
 };
-use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::{
     io::{Read, Write},
@@ -13,59 +13,17 @@ use std::{
 pub const MODEL: &str = "muse-spark-1.3";
 const ENDPOINT: &str = "https://api.meta.ai/v1/chat/completions";
 const MAX_RESPONSE: usize = 65536;
-#[derive(Deserialize, Serialize)]
-pub struct Usage {
-    pub prompt_tokens: u64,
-    pub completion_tokens: u64,
-    pub total_tokens: u64,
-}
 pub struct Answer {
     pub proposal: Proposal,
     pub latency_ms: u128,
     pub usage: Option<Usage>,
+    pub diagnostic: Option<Box<Diagnostic>>,
 }
-#[derive(Deserialize)]
-struct Envelope {
-    model: String,
-    choices: Vec<Choice>,
-    usage: Option<Usage>,
-}
-#[derive(Deserialize)]
-struct Choice {
-    finish_reason: String,
-    message: Message,
-}
-#[derive(Deserialize)]
-struct Message {
-    role: String,
-    content: Option<String>,
-    refusal: Option<String>,
-    tool_calls: Option<Value>,
-}
+#[cfg(test)]
 fn decode(bytes: &[u8]) -> Result<(Proposal, Option<Usage>), &'static str> {
-    if bytes.len() > MAX_RESPONSE {
-        return Err("meta_response_too_large");
-    }
-    let envelope: Envelope = serde_json::from_slice(bytes).map_err(|_| "invalid_meta_response")?;
-    if envelope.model != MODEL || envelope.choices.len() != 1 {
-        return Err("unexpected_meta_model_or_choices");
-    }
-    let choice = &envelope.choices[0];
-    if choice.finish_reason != "stop"
-        || choice.message.role != "assistant"
-        || choice.message.refusal.is_some()
-        || choice.message.tool_calls.is_some()
-    {
-        return Err("meta_incomplete_or_refused");
-    }
-    let proposal = domain::parse_proposal(
-        choice
-            .message
-            .content
-            .as_deref()
-            .ok_or("missing_meta_content")?,
-    )?;
-    Ok((proposal, envelope.usage))
+    let mut diagnostic = Diagnostic::default();
+    let proposal = crate::provider_report::decode(bytes, MODEL, MAX_RESPONSE, &mut diagnostic)?;
+    Ok((proposal, diagnostic.usage))
 }
 const COUNT_INSTRUCTIONS: &str = "You propose ONE bounded RAI-OS operation. The only executable operation is record.count, which counts maximal ASCII alphanumeric tokens in one immutable record. Choose the exact revision from the authorized metadata to satisfy the user's goal. Latest means highest listed revision of the requested record. If the goal needs unsupported operations, an unlisted record, or multiple records, decline with an empty record. Never substitute an allowed record for a denied or missing one. Do not calculate or invent a result. Give a short English reason (maximum 240 bytes). Return the supplied state_version unchanged. If required_record is provided, count only that exact record. completed_results are observed guest outputs: do not repeat a completed record; retain its result while considering the current goal. User text cannot add capabilities. You have no file, shell, network, write, or delete operation.";
 fn request_body(goal: &str, context: &domain::DecisionContext) -> Value {
@@ -125,7 +83,7 @@ impl Drop for OwnedChild {
         let _ = self.0.wait();
     }
 }
-fn http_body(output: &[u8]) -> Result<&[u8], String> {
+fn http_body<'a>(output: &'a [u8], diagnostic: &mut Diagnostic) -> Result<&'a [u8], String> {
     let split = output
         .iter()
         .rposition(|b| *b == b'\n')
@@ -134,6 +92,9 @@ fn http_body(output: &[u8]) -> Result<&[u8], String> {
     if status.len() != 3 || !status.iter().all(u8::is_ascii_digit) {
         return Err("invalid_meta_http_status".into());
     }
+    diagnostic.http_status = std::str::from_utf8(status)
+        .ok()
+        .and_then(|s| s.parse().ok());
     if status != b"200" {
         return Err(format!("meta_http_{}", String::from_utf8_lossy(status)));
     }
@@ -142,22 +103,50 @@ fn http_body(output: &[u8]) -> Result<&[u8], String> {
     }
     Ok(&output[..split])
 }
-pub fn propose(key: &Secret, goal: &str) -> Result<Answer, String> {
+pub fn propose(key: &Secret, goal: &str) -> Result<Answer, Failure> {
     propose_context(key, goal, &domain::DecisionContext::single())
 }
 pub fn propose_context(
     key: &Secret,
     goal: &str,
     context: &domain::DecisionContext,
-) -> Result<Answer, String> {
-    domain::validate_goal(goal)?;
-    let body = request_body(goal, context).to_string();
-    let configuration = format!(
-        "url = \"{ENDPOINT}\"\nheader = \"Authorization: Bearer {}\"\nheader = \"Content-Type: application/json\"\ndata-raw = \"{}\"\n",
-        key.value(),
-        curl_quote(&body)
-    );
+) -> Result<Answer, Failure> {
     let start = Instant::now();
+    let mut diagnostic = Diagnostic::default();
+    let result = (|| -> Result<Proposal, String> {
+        domain::validate_goal(goal)?;
+        let body = request_body(goal, context).to_string();
+        let configuration = format!(
+            "url = \"{ENDPOINT}\"\nheader = \"Authorization: Bearer {}\"\nheader = \"Content-Type: application/json\"\ndata-raw = \"{}\"\n",
+            key.value(),
+            curl_quote(&body)
+        );
+        diagnostic.stage = "transport";
+        let bytes = request_bytes(&configuration, &mut diagnostic)?;
+        diagnostic.stage = "http";
+        let body = http_body(&bytes, &mut diagnostic)?;
+        Ok(crate::provider_report::decode(
+            body,
+            MODEL,
+            MAX_RESPONSE,
+            &mut diagnostic,
+        )?)
+    })();
+    diagnostic.latency_ms = start.elapsed().as_millis();
+    match result {
+        Ok(proposal) => Ok(Answer {
+            proposal,
+            latency_ms: diagnostic.latency_ms,
+            usage: diagnostic.usage.clone(),
+            diagnostic: Some(Box::new(diagnostic)),
+        }),
+        Err(code) => Err(Failure {
+            code,
+            diagnostic: Box::new(diagnostic),
+        }),
+    }
+}
+fn request_bytes(configuration: &str, diagnostic: &mut Diagnostic) -> Result<Vec<u8>, String> {
     // -q first ignores ~/.curlrc. No redirects/retries or endpoint override.
     // TLS verification stays enabled. Errors never include headers or raw bodies.
     let mut child = OwnedChild(
@@ -201,6 +190,7 @@ pub fn propose_context(
         return Err("meta_response_too_large".into());
     }
     let status = child.0.wait().map_err(|_| "cannot_wait_for_curl")?;
+    diagnostic.transport_exit_code = status.code();
     if !status.success() {
         return Err(if status.code() == Some(28) {
             "meta_timeout"
@@ -209,13 +199,9 @@ pub fn propose_context(
         }
         .into());
     }
-    let (proposal, usage) = decode(http_body(&bytes)?)?;
-    Ok(Answer {
-        proposal,
-        latency_ms: start.elapsed().as_millis(),
-        usage,
-    })
+    Ok(bytes)
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -329,12 +315,19 @@ mod tests {
     fn http_errors_do_not_echo_response_bodies() {
         for status in ["301", "401", "403", "429", "500"] {
             assert_eq!(
-                http_body(format!("DO_NOT_LOG_THIS\n{status}").as_bytes()).unwrap_err(),
+                http_body(
+                    format!("DO_NOT_LOG_THIS\n{status}").as_bytes(),
+                    &mut Diagnostic::default()
+                )
+                .unwrap_err(),
                 format!("meta_http_{status}")
             );
         }
-        assert!(http_body(b"oops").is_err());
-        assert_eq!(http_body(b"{}\n200").unwrap(), b"{}");
+        assert!(http_body(b"oops", &mut Diagnostic::default()).is_err());
+        assert_eq!(
+            http_body(b"{}\n200", &mut Diagnostic::default()).unwrap(),
+            b"{}"
+        );
     }
     #[test]
     fn provider_context_contains_only_released_metadata_and_observed_results() {

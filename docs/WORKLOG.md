@@ -1750,3 +1750,31 @@ not acknowledged publications. Documentation identifies host validation trust,
 in-memory retention and the next scope: provider rejection diagnostics/batched
 planning. Semantic benefit, final video and submission remain pending; delivery
 dates and the kickoff/build-period discrepancy are unchanged.
+
+## 2026-10-31 — Distinguish provider failures before batch planning
+
+Implemented host-only redacted provider diagnostics. The pure decoder separates
+finish length/filter/tools/unknown, role, refusal, tool-call, model/choice, content
+and proposal failures. Numeric usage survives readable rejected envelopes;
+unknown usage remains null. Diagnostics normalize untrusted strings and omit
+raw content/refusals/tool arguments/credentials. Typed failures carry metadata to
+the shared async reporter and single-call CLI. Decoded is not domain admission
+or a successful guest task. Replay does not fabricate provider records.
+
+Verified that prompts, request schema, model, endpoint and settings remain
+unchanged. Provider timing now includes local request preparation; it is not pure
+inference time. Documented that successful legacy response records describe the
+same calls and must not double-count usage, and that unconsumed early-teardown
+results can remain unavailable. The original pilot's ambiguous failures and
+partial usage evidence were preserved without guessing their causes.
+
+Verification: all 41 host tests and all-target Clippy passed in debug/release.
+Twenty-five offline curl-fixture cases per profile passed, including safe output,
+specific failure categories, usage preservation, no retries, real-QEMU dispatch
+and async cleanup. Release single-operation and whole-set bridge regressions
+passed. Offline traces are in evidence/2026-10-31-provider-diagnostics. No kernel
+or native display implementation changed and no live request has been made in
+this increment. One unchanged-settings, no-retry live diagnostic probe is planned
+after commit; no new scheduling/performance comparison or AI advantage is claimed.
+Next implement bounded batch proposals, then independently specified semantic
+workloads and a separately frozen fair comparison. Submission dates are unchanged.

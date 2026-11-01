@@ -1,7 +1,8 @@
 # Delivery plan — October 30, 2026
 
-**Current next increment:** provider rejection diagnostics and bounded batch
-proposals, followed by separately specified semantic planning. The implemented
+**Current next increment:** bounded batch proposals, followed by separately
+specified semantic planning. [Provider diagnostics](META_DIAGNOSTICS.md) now
+distinguish response failures and retain available usage. The implemented
 [publication lifecycle](PUBLICATION.md) and [native view](PUBLICATION_DISPLAY.md)
 now expose retained output, current versus historical state and failed updates.
 Historical plans and submission dates below are preserved.

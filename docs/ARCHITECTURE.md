@@ -263,3 +263,13 @@ temporaries into a separate method reduced the debug execution frame from 5296 t
 stack capacity or timer admission. Kernel-wide stack bounds remain unproven.
 The Rust public walkthrough uses existing host transport and the independent
 checker; its scripted failure and pauses are explicit, with no model calls.
+
+## Provider outcome diagnostics — October 31
+
+The host-only provider_report module inspects allowlisted metadata and decodes the
+existing envelope without changing domain admission. Typed provider failures
+carry redacted diagnostics/available usage to the common decision-source reporter;
+the single-request path uses it too. A decoded response can still fail domain or
+guest validation. See [META_DIAGNOSTICS.md](META_DIAGNOSTICS.md) for accounting,
+privacy and incomplete-capture limits. No guest API or provider request settings
+changed; batch proposals are the next separate increment.

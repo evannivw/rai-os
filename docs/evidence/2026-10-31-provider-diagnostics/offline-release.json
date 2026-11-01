@@ -1,0 +1,1304 @@
+[
+  {
+    "case": "valid-count",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "latency_ms": 269,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "proposal",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": null,
+        "event": "provider_diagnostic",
+        "outcome": "decoded",
+        "source": "meta",
+        "state_version": 1
+      },
+      {
+        "event": "model_response",
+        "latency_ms": 269,
+        "model": "muse-spark-1.3",
+        "usage": {
+          "completion_tokens": 20,
+          "prompt_tokens": 10,
+          "total_tokens": 30
+        }
+      },
+      {
+        "event": "validated_proposal",
+        "proposal": {
+          "operation": "record.count",
+          "reason": "Explicit offline provider fixture.",
+          "record": "empty@1",
+          "state_version": 1
+        }
+      },
+      {
+        "event": "guest_boot_confirmed"
+      },
+      {
+        "boot_and_operation_ms": 45,
+        "event": "guest_result",
+        "observed": {
+          "bytes": 0,
+          "record": "empty@1",
+          "tokens": 0
+        },
+        "payload": "record=empty@1; bytes=0; tokens=0; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=21474836480; b_state=exited; b_slices=0; b_code=0; b_value=21474836480; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0",
+        "request_id": 1
+      },
+      {
+        "event": "finished",
+        "status": "observed"
+      }
+    ],
+    "stderr": []
+  },
+  {
+    "case": "finish-meta_finish_length",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "length",
+          "http_status": 200,
+          "latency_ms": 35,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "envelope",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "meta_finish_length",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_finish_length",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "finish-meta_finish_content_filter",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "content_filter",
+          "http_status": 200,
+          "latency_ms": 39,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "envelope",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "meta_finish_content_filter",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_finish_content_filter",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "finish-meta_finish_tool_calls",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "tool_calls",
+          "http_status": 200,
+          "latency_ms": 37,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "envelope",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "meta_finish_tool_calls",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_finish_tool_calls",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "finish-meta_finish_tool_calls",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "function_call",
+          "http_status": 200,
+          "latency_ms": 38,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "envelope",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "meta_finish_tool_calls",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_finish_tool_calls",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "finish-meta_finish_other",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "other",
+          "http_status": 200,
+          "latency_ms": 37,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "envelope",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "meta_finish_other",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_finish_other",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "refusal",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "latency_ms": 37,
+          "model_matches": true,
+          "refusal_present": true,
+          "role": "assistant",
+          "stage": "envelope",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "meta_refusal_present",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_refusal_present",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "tool_calls",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "latency_ms": 36,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "envelope",
+          "tool_calls_present": true,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "meta_tool_calls_present",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_tool_calls_present",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "wrong-role",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "latency_ms": 37,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "other",
+          "stage": "envelope",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "meta_unexpected_role",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_unexpected_role",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "wrong-model",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "latency_ms": 37,
+          "model_matches": false,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "envelope",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "unexpected_meta_model",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "unexpected_meta_model",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "no-choice",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 0,
+          "finish_reason": null,
+          "http_status": 200,
+          "latency_ms": 37,
+          "model_matches": true,
+          "refusal_present": null,
+          "role": null,
+          "stage": "envelope",
+          "tool_calls_present": null,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "unexpected_meta_choices",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "unexpected_meta_choices",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "multiple-choices",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 2,
+          "finish_reason": null,
+          "http_status": 200,
+          "latency_ms": 37,
+          "model_matches": true,
+          "refusal_present": null,
+          "role": null,
+          "stage": "envelope",
+          "tool_calls_present": null,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "unexpected_meta_choices",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "unexpected_meta_choices",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "missing-content",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "latency_ms": 37,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "envelope",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "missing_meta_content",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "missing_meta_content",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "invalid-proposal",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "latency_ms": 37,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "proposal",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "invalid_proposal_json",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "invalid_proposal_json",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "invalid-envelope",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": null,
+          "finish_reason": null,
+          "http_status": 200,
+          "latency_ms": 37,
+          "model_matches": null,
+          "refusal_present": null,
+          "role": null,
+          "stage": "envelope",
+          "tool_calls_present": null,
+          "transport_exit_code": 0,
+          "usage": null
+        },
+        "error": "invalid_meta_response",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "invalid_meta_response",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "duplicate-envelope",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "latency_ms": 36,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "envelope",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "invalid_meta_response",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "invalid_meta_response",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "unknown-usage",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "latency_ms": 37,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "proposal",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": null
+        },
+        "error": null,
+        "event": "provider_diagnostic",
+        "outcome": "decoded",
+        "source": "meta",
+        "state_version": 1
+      },
+      {
+        "event": "model_response",
+        "latency_ms": 37,
+        "model": "muse-spark-1.3",
+        "usage": null
+      },
+      {
+        "event": "validated_proposal",
+        "proposal": {
+          "operation": "record.count",
+          "reason": "Explicit offline provider fixture.",
+          "record": "empty@1",
+          "state_version": 1
+        }
+      },
+      {
+        "event": "guest_boot_confirmed"
+      },
+      {
+        "boot_and_operation_ms": 42,
+        "event": "guest_result",
+        "observed": {
+          "bytes": 0,
+          "record": "empty@1",
+          "tokens": 0
+        },
+        "payload": "record=empty@1; bytes=0; tokens=0; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=21474836480; b_state=exited; b_slices=0; b_code=0; b_value=21474836480; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0",
+        "request_id": 1
+      },
+      {
+        "event": "finished",
+        "status": "observed"
+      }
+    ],
+    "stderr": []
+  },
+  {
+    "case": "http-401",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": null,
+          "finish_reason": null,
+          "http_status": 401,
+          "latency_ms": 37,
+          "model_matches": null,
+          "refusal_present": null,
+          "role": null,
+          "stage": "http",
+          "tool_calls_present": null,
+          "transport_exit_code": 0,
+          "usage": null
+        },
+        "error": "meta_http_401",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_http_401",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "http-429",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": null,
+          "finish_reason": null,
+          "http_status": 429,
+          "latency_ms": 37,
+          "model_matches": null,
+          "refusal_present": null,
+          "role": null,
+          "stage": "http",
+          "tool_calls_present": null,
+          "transport_exit_code": 0,
+          "usage": null
+        },
+        "error": "meta_http_429",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_http_429",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "http-500",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": null,
+          "finish_reason": null,
+          "http_status": 500,
+          "latency_ms": 36,
+          "model_matches": null,
+          "refusal_present": null,
+          "role": null,
+          "stage": "http",
+          "tool_calls_present": null,
+          "transport_exit_code": 0,
+          "usage": null
+        },
+        "error": "meta_http_500",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_http_500",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "curl-28",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": null,
+          "finish_reason": null,
+          "http_status": null,
+          "latency_ms": 38,
+          "model_matches": null,
+          "refusal_present": null,
+          "role": null,
+          "stage": "transport",
+          "tool_calls_present": null,
+          "transport_exit_code": 28,
+          "usage": null
+        },
+        "error": "meta_timeout",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_timeout",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "curl-7",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": null,
+          "finish_reason": null,
+          "http_status": null,
+          "latency_ms": 37,
+          "model_matches": null,
+          "refusal_present": null,
+          "role": null,
+          "stage": "transport",
+          "tool_calls_present": null,
+          "transport_exit_code": 7,
+          "usage": null
+        },
+        "error": "meta_transport_failed",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_transport_failed",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "decoded-is-not-authorized",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "proposal_source",
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "latency_ms": 37,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "proposal",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": null,
+        "event": "provider_diagnostic",
+        "outcome": "decoded",
+        "source": "meta",
+        "state_version": 1
+      },
+      {
+        "event": "model_response",
+        "latency_ms": 37,
+        "model": "muse-spark-1.3",
+        "usage": {
+          "completion_tokens": 20,
+          "prompt_tokens": 10,
+          "total_tokens": 30
+        }
+      }
+    ],
+    "stderr": [
+      {
+        "error": "operation_not_allowed",
+        "event": "error"
+      }
+    ]
+  },
+  {
+    "case": "async-success",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "set_bridge_started",
+        "event_source": "scripted_required_sets",
+        "goal": "Complete the current RAI-OS required index set. Choose one missing revision for record.index with the supplied set state_version, or decline if unsupported. Do not recreate completed revisions.",
+        "graphics": false,
+        "max_model_calls": 8,
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "event": "guest_boot_confirmed"
+      },
+      {
+        "argument": "index",
+        "elapsed_ms": 42,
+        "event": "guest_exchange",
+        "operation": "coord.start",
+        "payload": "coordinator=EL0; worker=EL0; state=idle; event=started; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=1; a_slices=0; b_slices=0; trace=AO,BD,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0",
+        "request_id": 1,
+        "success": true
+      },
+      {
+        "event": "set_due",
+        "index": 0,
+        "required": [
+          "empty@1"
+        ],
+        "schedule_elapsed_ms": 0,
+        "scheduled_ms": 0
+      },
+      {
+        "argument": "empty@1",
+        "elapsed_ms": 44,
+        "event": "guest_exchange",
+        "operation": "coord.goal",
+        "payload": "goal_version=1; state=building; required=empty@1; ready_records=0; total_records=1; completed=0; missing=empty@1",
+        "request_id": 2,
+        "success": true
+      },
+      {
+        "call_id": 1,
+        "elapsed_ms": 44,
+        "event": "decision_requested",
+        "snapshot": {
+          "authorized_records": [
+            [
+              "empty@1",
+              0
+            ]
+          ],
+          "completed_results": [],
+          "index_set": {
+            "completed": 0,
+            "goal_version": 1,
+            "missing": [
+              "empty@1"
+            ],
+            "required": [
+              "empty@1"
+            ]
+          },
+          "operation": "record.index",
+          "required_record": null,
+          "state_version": 1
+        }
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "stop",
+          "http_status": 200,
+          "latency_ms": 37,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "proposal",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": null,
+        "event": "provider_diagnostic",
+        "outcome": "decoded",
+        "source": "meta",
+        "state_version": 1
+      },
+      {
+        "call_id": 1,
+        "event": "decision_response",
+        "latency_ms": 37,
+        "snapshot_goal": 1,
+        "source": "meta",
+        "usage": {
+          "completion_tokens": 20,
+          "prompt_tokens": 10,
+          "total_tokens": 30
+        }
+      },
+      {
+        "call_id": 1,
+        "event": "proposal_forwarded",
+        "proposal": {
+          "operation": "record.index",
+          "reason": "Explicit offline provider fixture.",
+          "record": "empty@1",
+          "state_version": 1
+        }
+      },
+      {
+        "argument": "1:empty@1",
+        "elapsed_ms": 94,
+        "event": "guest_exchange",
+        "operation": "coord.select",
+        "payload": "coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=2; record=empty@1; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0",
+        "request_id": 3,
+        "success": true
+      },
+      {
+        "argument": "2:empty@1",
+        "elapsed_ms": 98,
+        "event": "guest_exchange",
+        "operation": "coord.propose",
+        "payload": "coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=2; record=empty@1; bytes=0; tokens=0; completed=1; a_calls=6; b_calls=4; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=1",
+        "request_id": 4,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 99,
+        "event": "guest_exchange",
+        "operation": "coord.result",
+        "payload": "record=empty@1; bytes=0; worker=EL0; state=completed; index=-",
+        "request_id": 5,
+        "success": true
+      },
+      {
+        "event": "guest_index",
+        "origin": "executed",
+        "payload": "record=empty@1; bytes=0; worker=EL0; state=completed; index=-",
+        "record": "empty@1",
+        "ticket": 2
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 100,
+        "event": "guest_exchange",
+        "operation": "coord.bundle.status",
+        "payload": "goal_version=1; state=complete; required=empty@1; ready_records=1; total_records=1; completed=1; missing=-",
+        "request_id": 6,
+        "success": true
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 102,
+        "event": "guest_exchange",
+        "operation": "coord.bundle",
+        "payload": "{\"format\":\"rai-index-set-v1\",\"goal_version\":1,\"required\":[\"empty@1\"],\"records\":[{\"record\":\"empty@1\",\"bytes\":0,\"source_hex\":\"\",\"index\":\"-\"}]}",
+        "request_id": 7,
+        "success": true
+      },
+      {
+        "event": "guest_bundle",
+        "payload": "{\"format\":\"rai-index-set-v1\",\"goal_version\":1,\"required\":[\"empty@1\"],\"records\":[{\"record\":\"empty@1\",\"bytes\":0,\"source_hex\":\"\",\"index\":\"-\"}]}",
+        "snapshot": {
+          "completed": 1,
+          "goal_version": 1,
+          "missing": [],
+          "required": [
+            "empty@1"
+          ]
+        }
+      },
+      {
+        "elapsed_ms": 102,
+        "event": "set_bridge_finished",
+        "model_calls": 1,
+        "snapshot": {
+          "completed": 1,
+          "goal_version": 1,
+          "missing": [],
+          "required": [
+            "empty@1"
+          ]
+        },
+        "status": "observed_current_set"
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 103,
+        "event": "guest_exchange",
+        "operation": "coord.stop",
+        "payload": "coordinator=EL0; worker=EL0; state=stopped; event=none; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=0; b_slices=0; trace=",
+        "request_id": 8,
+        "success": true
+      }
+    ],
+    "stderr": []
+  },
+  {
+    "case": "async-rejection",
+    "transport": "offline_curl_fixture",
+    "stdout": [
+      {
+        "event": "set_bridge_started",
+        "event_source": "scripted_required_sets",
+        "goal": "Complete the current RAI-OS required index set. Choose one missing revision for record.index with the supplied set state_version, or decline if unsupported. Do not recreate completed revisions.",
+        "graphics": false,
+        "max_model_calls": 8,
+        "model": "muse-spark-1.3",
+        "source": "meta"
+      },
+      {
+        "event": "guest_boot_confirmed"
+      },
+      {
+        "argument": "index",
+        "elapsed_ms": 41,
+        "event": "guest_exchange",
+        "operation": "coord.start",
+        "payload": "coordinator=EL0; worker=EL0; state=idle; event=started; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=1; a_slices=0; b_slices=0; trace=AO,BD,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0",
+        "request_id": 1,
+        "success": true
+      },
+      {
+        "event": "set_due",
+        "index": 0,
+        "required": [
+          "empty@1"
+        ],
+        "schedule_elapsed_ms": 0,
+        "scheduled_ms": 0
+      },
+      {
+        "argument": "empty@1",
+        "elapsed_ms": 43,
+        "event": "guest_exchange",
+        "operation": "coord.goal",
+        "payload": "goal_version=1; state=building; required=empty@1; ready_records=0; total_records=1; completed=0; missing=empty@1",
+        "request_id": 2,
+        "success": true
+      },
+      {
+        "call_id": 1,
+        "elapsed_ms": 43,
+        "event": "decision_requested",
+        "snapshot": {
+          "authorized_records": [
+            [
+              "empty@1",
+              0
+            ]
+          ],
+          "completed_results": [],
+          "index_set": {
+            "completed": 0,
+            "goal_version": 1,
+            "missing": [
+              "empty@1"
+            ],
+            "required": [
+              "empty@1"
+            ]
+          },
+          "operation": "record.index",
+          "required_record": null,
+          "state_version": 1
+        }
+      },
+      {
+        "diagnostic": {
+          "choice_count": 1,
+          "finish_reason": "length",
+          "http_status": 200,
+          "latency_ms": 40,
+          "model_matches": true,
+          "refusal_present": false,
+          "role": "assistant",
+          "stage": "envelope",
+          "tool_calls_present": false,
+          "transport_exit_code": 0,
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 10,
+            "total_tokens": 30
+          }
+        },
+        "error": "meta_finish_length",
+        "event": "provider_diagnostic",
+        "outcome": "rejected",
+        "source": "meta",
+        "state_version": 1
+      },
+      {
+        "argument": null,
+        "elapsed_ms": 92,
+        "event": "guest_exchange",
+        "operation": "coord.stop",
+        "payload": "coordinator=EL0; worker=EL0; state=stopped; event=none; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=0; b_slices=0; trace=",
+        "request_id": 3,
+        "success": true
+      }
+    ],
+    "stderr": [
+      {
+        "error": "meta_finish_length",
+        "event": "error"
+      }
+    ]
+  }
+]

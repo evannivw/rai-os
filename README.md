@@ -31,7 +31,9 @@ and use Meta for bounded interpretation/planning rather than each tiny job. The
 in guest memory during updates and failures, with fresh commit acknowledgments.
 The [native publication view](docs/PUBLICATION_DISPLAY.md) now shows current,
 updating, verifying and blocked states with previous-result availability.
-Semantic planning remains pending.
+The bridge now records [redacted provider diagnostics](docs/META_DIAGNOSTICS.md),
+including available usage on rejected responses. Batch and semantic planning
+remain pending.
 
 ## Run
 

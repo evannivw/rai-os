@@ -57,6 +57,7 @@ impl Source {
                         proposal: entry.proposal,
                         latency_ms: started.elapsed().as_millis(),
                         usage: None,
+                        diagnostic: None,
                     }));
                 })
             }
@@ -70,7 +71,7 @@ impl Source {
 }
 pub struct Pending {
     pub version: u64,
-    receiver: Receiver<Result<provider::Answer, String>>,
+    receiver: Receiver<Result<provider::Answer, provider::Failure>>,
     handle: Option<JoinHandle<()>>,
 }
 impl Drop for Pending {
@@ -108,9 +109,38 @@ impl Source {
 impl Pending {
     pub fn poll(&self) -> Result<Option<provider::Answer>, String> {
         match self.receiver.try_recv() {
-            Ok(answer) => answer.map(Some),
+            Ok(answer) => report(answer, self.version).map(Some),
             Err(TryRecvError::Empty) => Ok(None),
             Err(TryRecvError::Disconnected) => Err("provider_thread_disconnected".into()),
+        }
+    }
+}
+
+/// One redacted diagnostic per consumed live provider outcome. Legacy response
+/// events remain summaries of that same call; replay never fabricates diagnostics.
+pub fn report(
+    result: Result<provider::Answer, provider::Failure>,
+    version: u64,
+) -> Result<provider::Answer, String> {
+    match result {
+        Ok(answer) => {
+            if let Some(diagnostic) = &answer.diagnostic {
+                println!(
+                    "{}",
+                    serde_json::json!({"event":"provider_diagnostic", "source":"meta",
+                    "state_version":version, "outcome":"decoded", "error":null, "diagnostic":diagnostic})
+                );
+            }
+            Ok(answer)
+        }
+        Err(failure) => {
+            println!(
+                "{}",
+                serde_json::json!({"event":"provider_diagnostic", "source":"meta",
+                "state_version":version, "outcome":"rejected", "error":failure.code,
+                "diagnostic":failure.diagnostic})
+            );
+            Err(failure.code)
         }
     }
 }
