@@ -133,3 +133,37 @@ probe, not a performance comparison. Next freeze a meaningful fair resolver
 comparison and connect a bounded goal change only if the remaining delivery time
 permits. Protect November 2 evidence/rehearsal and November 3 video preparation;
 November 4 deadline remains 20:00 Guatemala (internal target 18:00).
+
+
+## November 1: observed six-call development probe
+
+Ran the frozen suite once after pushing source 732051d34db0c388c7944538f831e0c01719b32f.
+All six independently specified cases passed, with one live request each and no
+retry, fallback, prompt tuning or expected-answer change. Four select outcomes
+executed ten total real guest jobs across four fresh sessions and published
+independently checked artifacts. Clarify/decline started no QEMU and did no work.
+Every call returned HTTP 200, matching model, one assistant choice, finish stop,
+no refusal/tools. All six reported usage; total 5335 tokens, counted once.
+
+| Case | Decision | Selected records | Provider adapter ms | End-to-end ms |
+| --- | --- | --- | ---: | ---: |
+| explicit | select | brief@1, notes@2, checklist@1 | 4764 | 5342 |
+| historical | select | brief@1, notes@1, checklist@1 | 4543 | 4684 |
+| latest | select | brief@1, notes@2, checklist@1 | 5506 | 5644 |
+| ambiguous | clarify | None | 2180 | 2191 |
+| unavailable | decline | None | 3170 | 3183 |
+| field | select | appendix@1 | 3135 | 3260 |
+
+These are six public development successes, not a held-out accuracy estimate or
+proof of superiority over a good deterministic resolver. The end-to-end intervals
+include the independent intent gate, file handoff and execution/cleanup where
+applicable; builds are excluded. Interpretation adds measurable delay. No fair
+performance comparison has been run and no complex real-world workload is solved.
+The historical prompt resolved notes@1 and handoff dependencies; the ambiguous
+prompt asked for a revision choice rather than inventing one.
+
+The exact manifest, selections, reports and complete stdout/stderr are preserved
+under evidence/2026-11-01-semantic/live. Independent intent and execution audits
+were rerun against the archived data; provider diagnostics and response summaries
+agree on usage/latency. Native graphics were verified offline in both profiles;
+this live suite was headless. Continuous semantic event recovery remains pending.

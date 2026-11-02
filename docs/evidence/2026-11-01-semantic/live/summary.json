@@ -1,0 +1,196 @@
+[
+  {
+    "case": "explicit",
+    "source": "meta",
+    "interpret_exit": 0,
+    "accepted": true,
+    "executed": true,
+    "pass_case": true,
+    "provider": {
+      "choice_count": 1,
+      "finish_reason": "stop",
+      "http_status": 200,
+      "latency_ms": 4764,
+      "model_matches": true,
+      "refusal_present": false,
+      "role": "assistant",
+      "stage": "proposal",
+      "tool_calls_present": false,
+      "transport_exit_code": 0,
+      "usage": {
+        "completion_tokens": 367,
+        "prompt_tokens": 570,
+        "total_tokens": 937
+      }
+    },
+    "execute_exit": 0,
+    "execution_attempted": true,
+    "decision": "select",
+    "records": [
+      "brief@1",
+      "notes@2",
+      "checklist@1"
+    ],
+    "end_to_end_ms": 5342
+  },
+  {
+    "case": "historical",
+    "source": "meta",
+    "interpret_exit": 0,
+    "accepted": true,
+    "executed": true,
+    "pass_case": true,
+    "provider": {
+      "choice_count": 1,
+      "finish_reason": "stop",
+      "http_status": 200,
+      "latency_ms": 4543,
+      "model_matches": true,
+      "refusal_present": false,
+      "role": "assistant",
+      "stage": "proposal",
+      "tool_calls_present": false,
+      "transport_exit_code": 0,
+      "usage": {
+        "completion_tokens": 442,
+        "prompt_tokens": 579,
+        "total_tokens": 1021
+      }
+    },
+    "execute_exit": 0,
+    "execution_attempted": true,
+    "decision": "select",
+    "records": [
+      "brief@1",
+      "notes@1",
+      "checklist@1"
+    ],
+    "end_to_end_ms": 4684
+  },
+  {
+    "case": "latest",
+    "source": "meta",
+    "interpret_exit": 0,
+    "accepted": true,
+    "executed": true,
+    "pass_case": true,
+    "provider": {
+      "choice_count": 1,
+      "finish_reason": "stop",
+      "http_status": 200,
+      "latency_ms": 5506,
+      "model_matches": true,
+      "refusal_present": false,
+      "role": "assistant",
+      "stage": "proposal",
+      "tool_calls_present": false,
+      "transport_exit_code": 0,
+      "usage": {
+        "completion_tokens": 416,
+        "prompt_tokens": 572,
+        "total_tokens": 988
+      }
+    },
+    "execute_exit": 0,
+    "execution_attempted": true,
+    "decision": "select",
+    "records": [
+      "brief@1",
+      "notes@2",
+      "checklist@1"
+    ],
+    "end_to_end_ms": 5644
+  },
+  {
+    "case": "ambiguous",
+    "source": "meta",
+    "interpret_exit": 0,
+    "accepted": true,
+    "executed": false,
+    "pass_case": true,
+    "provider": {
+      "choice_count": 1,
+      "finish_reason": "stop",
+      "http_status": 200,
+      "latency_ms": 2180,
+      "model_matches": true,
+      "refusal_present": false,
+      "role": "assistant",
+      "stage": "proposal",
+      "tool_calls_present": false,
+      "transport_exit_code": 0,
+      "usage": {
+        "completion_tokens": 211,
+        "prompt_tokens": 563,
+        "total_tokens": 774
+      }
+    },
+    "execute_exit": 0,
+    "execution_attempted": false,
+    "decision": "clarify",
+    "records": [],
+    "end_to_end_ms": 2191
+  },
+  {
+    "case": "unavailable",
+    "source": "meta",
+    "interpret_exit": 0,
+    "accepted": true,
+    "executed": false,
+    "pass_case": true,
+    "provider": {
+      "choice_count": 1,
+      "finish_reason": "stop",
+      "http_status": 200,
+      "latency_ms": 3170,
+      "model_matches": true,
+      "refusal_present": false,
+      "role": "assistant",
+      "stage": "proposal",
+      "tool_calls_present": false,
+      "transport_exit_code": 0,
+      "usage": {
+        "completion_tokens": 303,
+        "prompt_tokens": 570,
+        "total_tokens": 873
+      }
+    },
+    "execute_exit": 0,
+    "execution_attempted": false,
+    "decision": "decline",
+    "records": [],
+    "end_to_end_ms": 3183
+  },
+  {
+    "case": "field",
+    "source": "meta",
+    "interpret_exit": 0,
+    "accepted": true,
+    "executed": true,
+    "pass_case": true,
+    "provider": {
+      "choice_count": 1,
+      "finish_reason": "stop",
+      "http_status": 200,
+      "latency_ms": 3135,
+      "model_matches": true,
+      "refusal_present": false,
+      "role": "assistant",
+      "stage": "proposal",
+      "tool_calls_present": false,
+      "transport_exit_code": 0,
+      "usage": {
+        "completion_tokens": 174,
+        "prompt_tokens": 568,
+        "total_tokens": 742
+      }
+    },
+    "execute_exit": 0,
+    "execution_attempted": true,
+    "decision": "select",
+    "records": [
+      "appendix@1"
+    ],
+    "end_to_end_ms": 3260
+  }
+]

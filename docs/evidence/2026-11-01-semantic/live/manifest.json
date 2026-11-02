@@ -1,0 +1,33 @@
+{
+  "source_commit": "732051d34db0c388c7944538f831e0c01719b32f",
+  "dirty": false,
+  "observed_utc": "2026-11-02T05:19:17.900406+00:00",
+  "source": "meta",
+  "cases": [
+    "explicit",
+    "historical",
+    "latest",
+    "ambiguous",
+    "unavailable",
+    "field"
+  ],
+  "binary_sha256": "afed8438298f8194dc64b85a6e1be5982734ce5ac3824e70778e6a0bc42e23cc",
+  "kernel_sha256": "130c5d00caef399c87606727337b56142ad5d6ac434f7b3126a3b2b9bba30ff0",
+  "fixture_hashes": {
+    "ambiguous.json": "81ef456fa3c494091730cb91dc569c86a2f2406fe584641590eec447ddd310ce",
+    "expected.json": "72ccb3b3bad64a4afd59e179124a48d1f36a077493f451a6fa3900baddf1986d",
+    "explicit.json": "0e221e13ed106548aee55d06f3bbd6684b2bc188e1f22017787a2ef3226a75d4",
+    "field.json": "4757592d6f185b7ab1b577f7ce2e4c19b14095993bcf36c9fac06949e0462065",
+    "historical.json": "1b5962fc7b6d8d74a32d5d4e672f90d10553a813b694d5dce90a456b7e951147",
+    "latest.json": "e339dd89e292c04a6833fbfb0e251af4e5f5167f372cd41afe9f4e019234b635",
+    "unavailable.json": "2ed54957eb9c7471d8949bf1598399f541a4f03aa90b32d64d78c5b185e44fff"
+  },
+  "model": "muse-spark-1.3",
+  "max_tokens": 1024,
+  "reasoning_effort": "minimal",
+  "response_schema": "rai_selection",
+  "maximum_calls": 6,
+  "retries": 0,
+  "fallback": false,
+  "graphics": false
+}

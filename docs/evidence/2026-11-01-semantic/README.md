@@ -10,3 +10,14 @@ Source and expected answers are committed together before the planned six-call
 live probe. Live outcomes will be added separately, including failures. This is
 a tiny public development suite, not a held-out benchmark. See
 [SEMANTIC_SELECTION.md](../../SEMANTIC_SELECTION.md) for trust boundaries and scope.
+
+
+## Live follow-up
+
+`live/` preserves exactly six live calls from committed source 732051d, one per
+pre-authored development case. All six passed: four selections led to ten real
+QEMU jobs across fresh sessions, one clarification and one decline did no work.
+Total reported usage 5335 tokens. Every outcome and its measured latency is kept;
+no retry/fallback or baseline comparison. Source/fixture/binary hashes are in the
+manifest. Archived intent, execution and same-call diagnostic consistency checks
+passed. The live suite was headless; native graphics evidence above is offline.
