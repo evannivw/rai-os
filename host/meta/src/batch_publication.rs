@@ -6,7 +6,7 @@ use std::{
     io::Write,
     process::{Command, Stdio},
 };
-fn fields(text: &str) -> Result<BTreeMap<&str, &str>, String> {
+pub(super) fn fields(text: &str) -> Result<BTreeMap<&str, &str>, String> {
     let mut result = BTreeMap::new();
     for pair in text.split("; ") {
         let (key, value) = pair.split_once('=').ok_or("invalid_publication_status")?;

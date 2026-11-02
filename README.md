@@ -37,7 +37,11 @@ now cover up to four missing operations per request, with fresh per-job admissio
 and independent checks before publication. [Content-based selection](docs/SEMANTIC_SELECTION.md)
 now interprets six small development goals, including old/current revisions,
 clarification and unavailable data, before executing independently accepted sets.
-A complex workload, continuous semantic replanning and a fair comparison remain pending.
+A [scoped deterministic resolver and frozen comparison](docs/SEMANTIC_COMPARISON.md)
+now share the same execution/checking path. A recorded-decision replay shows a
+revision update with two reused records and one new job in a single guest session.
+Live comparative results, a complex workload and continuous semantic replanning
+remain pending.
 
 ## Run
 

@@ -311,3 +311,16 @@ complex workload and fair deterministic comparison remain pending. These six
 public development cases do not establish general correctness or superiority.
 Freeze additional infrastructure; prioritize measured outcomes, reproducibility
 and the three-minute video. November 4 dates and provenance questions are unchanged.
+
+
+## November 1: scoped resolver, frozen comparison and same-session replay
+
+[The comparison](SEMANTIC_COMPARISON.md) adds a deterministic content/reference
+resolver with explicit language coverage, sharing permissions, dependency rules,
+intent oracle and guest execution with Meta. Twelve development cases and two
+rotated repetitions per policy are frozen before live measurement (24 calls max).
+No held-out or general efficiency claim is made. A separate recorded-decision
+replay uses two archived Meta selections to show historical/current publication,
+exact reuse and one new job in a single real guest session. It performs no live
+inference; graphic pauses are presentation-only. Continuous live semantic event
+recovery remains pending. No kernel or graphical implementation changes.

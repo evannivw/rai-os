@@ -1921,3 +1921,35 @@ under evidence/2026-11-01-semantic/live. Independent intent and execution audits
 were rerun against the archived data; provider diagnostics and response summaries
 agree on usage/latency. Native graphics were verified offline in both profiles;
 this live suite was headless. Continuous semantic event recovery remains pending.
+
+
+## 2026-11-01 — Scoped deterministic resolver and frozen semantic comparison
+
+Added a domain resolver using the same public catalog and dependency rules as
+Meta: explicit keys, unit/time/revision references, conflicts, limited synonyms
+and clarification outside its supported grammar. It does not read expected case
+answers. Shared harness/guest execution now accepts rules as a source. Twelve
+public development cases (six previous, six new) and two rotated repetitions per
+policy are frozen before measurement: 48 trials, 24 calls maximum, no retries or
+fallback. The conflicting-version case explicitly accepts either clarification
+or a nonexecuting decline before inference. This is not held-out evaluation.
+
+A separate two-goal playback rechecks archived historical/latest Meta selections,
+then uses one real guest session. Verified unchanged prior publication during the
+update, two reused records and only one additional job (four total). The entire
+input sequence validates before boot. Replay/no-live-inference and native 1500 ms
+presentation pauses are explicit. It is not continuous live semantic replanning
+and is excluded from the timing comparison. No kernel/unsafe/UI changes.
+
+Verification: 50 host tests, formatting and Clippy passed in both profiles;
+twelve deterministic cases and real-QEMU trace checks per profile; headless and
+native sequence checks in both profiles. Bad second selection rejected before
+boot. Auditors rejected altered success/meaning/history/artifact claims and a
+manifest omitting a trial. Existing semantic suites passed in both profiles.
+Offline traces are preserved in evidence/2026-11-01-semantic-comparison.
+
+Next perform the frozen comparison from clean committed source, preserve all
+outcomes and report whether fixed rules are equally accurate/faster. Do not
+convert development success into general superiority or add infrastructure to
+chase a win. Video/rehearsal/submission and contribution eligibility remain
+outstanding; November 4 20:00 Guatemala deadline, 18:00 internal target unchanged.

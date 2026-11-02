@@ -26,7 +26,7 @@ def intent_gate(selection,request,expected):
     assert selection['request_goal']==request['goal']
     assert type(selection['request_version']) is int and selection['request_version']==request['request_version']
     for name in ['catalog_version','permissions_version']: assert type(selection[name]) is int and selection[name]==1
-    assert selection['decision']==expected['decision'],'Wrong intent decision'
+    assert selection['decision'] in expected.get('acceptable_decisions',[expected['decision']]),'Wrong intent decision'
     records=selection['records'];assert isinstance(records,list) and all(isinstance(k,str) for k in records)
     assert len(records)==len(set(records)) and sorted(records)==expected['records'],'Wrong exact membership'
     assert isinstance(selection['reason'],str) and 0<len(selection['reason'].encode())<=240
@@ -78,7 +78,7 @@ def audit_execution(items,request,selection,expected):
         elif kind=='batch_publication':assert committed and e['payload']==candidate[1];check(e['payload'],keys,1);published=True
         elif kind=='semantic_finished':assert published and e['snapshot']['required']==keys and not e['snapshot']['missing'];finished=True
         elif kind=='semantic_no_execution':
-            assert expected['decision'] in ['clarify','decline'] and e['decision']==expected['decision'];assert len(items)==2;return
+            assert selection['decision'] in ['clarify','decline'] and e['decision']==selection['decision'];assert len(items)==2;return
         else:raise AssertionError('Unexpected event '+kind)
     assert finished and stopped and len(cache)==len(keys)
 
@@ -92,12 +92,12 @@ def build(debug=False,graphics=False):
     return ROOT/f'target/host-meta/{host}/{profile}/rai-meta',ROOT/f'{directory}/aarch64-unknown-none-softfloat/{profile}/rai-os'
 
 
-def run_case(binary,kernel,case,source,out,graphics=False):
+def run_case(binary,kernel,case,source,out,graphics=False,fixture=FIXTURE):
     out.mkdir(exist_ok=False)
-    request=load(FIXTURE/(case+'.json'));expected=load(FIXTURE/'expected.json')[case]
+    request=load(fixture/(case+'.json'));expected=load(fixture/'expected.json')[case]
     env=dict(os.environ)
-    if source=='replay':env['MODEL_API_KEY']=''
-    args=[str(binary),str(kernel),'--interpret',str(FIXTURE/(case+'.json'))]
+    if source!='meta':env['MODEL_API_KEY']=''
+    args=[str(binary),str(kernel),'--resolve' if source=='rules' else '--interpret',str(fixture/(case+'.json'))]
     if source=='replay':
         supplied=dict(request_goal=request['goal'],request_version=request['request_version'],catalog_version=1,permissions_version=1,decision=expected['decision'],records=expected['records'],reason='Oracle-supplied offline selection; not model inference.')
         (out/'supplied.json').write_text(json.dumps(supplied)+'\n')
@@ -117,7 +117,7 @@ def run_case(binary,kernel,case,source,out,graphics=False):
         path=out/'selection.json';path.write_text(json.dumps(selection,indent=2)+'\n')
         # No second model request: the independently accepted requirement goes
         # directly to deterministic admission/execution through the existing batch path.
-        e=subprocess.run([str(binary),str(kernel),*(['--graphics'] if graphics else []),'--execute-selection',str(FIXTURE/(case+'.json')),str(path)],cwd=ROOT,env=dict(env,MODEL_API_KEY=''),capture_output=True,text=True,timeout=30)
+        e=subprocess.run([str(binary),str(kernel),*(['--graphics'] if graphics else []),'--execute-selection',str(fixture/(case+'.json')),str(path)],cwd=ROOT,env=dict(env,MODEL_API_KEY=''),capture_output=True,text=True,timeout=30)
         (out/'execute.stdout.jsonl').write_text(e.stdout);(out/'execute.stderr.jsonl').write_text(e.stderr)
         report['execute_exit']=e.returncode
         report['execution_attempted']=selection['decision']=='select'
@@ -132,7 +132,7 @@ def run_case(binary,kernel,case,source,out,graphics=False):
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',choices=['replay','meta'],default='replay');p.add_argument('--case',choices=['all',*load(FIXTURE/'expected.json')],default='historical');p.add_argument('--output',type=Path,required=True);p.add_argument('--debug',action='store_true');p.add_argument('--graphics',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',choices=['replay','rules','meta'],default='replay');p.add_argument('--case',choices=['all',*load(FIXTURE/'expected.json')],default='historical');p.add_argument('--output',type=Path,required=True);p.add_argument('--debug',action='store_true');p.add_argument('--graphics',action='store_true');a=p.parse_args()
     output=a.output.resolve();output.mkdir(exist_ok=False)
     binary,kernel=build(a.debug,a.graphics)
     sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()

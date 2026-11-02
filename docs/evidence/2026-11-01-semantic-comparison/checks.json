@@ -1,0 +1,39 @@
+{
+  "unit-debug": [
+    "",
+    "test result: ok. 50 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    ""
+  ],
+  "clippy-debug": [
+    "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.07s"
+  ],
+  "verify-debug": [
+    "{\"goals\": [1, 6], \"publications\": [1, 6], \"total_jobs\": 4, \"reused_on_update\": 2, \"new_jobs_on_update\": 1, \"previous_bytes_unchanged\": true, \"live_inference\": false}",
+    "Evidence: /Users/jv/Development/Rust/rai-os/target/verification/comparison-debug-84t177gh",
+    "PASS debug : 12 deterministic cases with real QEMU, corrupt comparison/sequence rejection, bad suffix rejected before boot"
+  ],
+  "semantic-debug": [
+    "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s",
+    "Evidence: /Users/jv/Development/Rust/rai-os/target/verification/semantic-debug/run-tshyuwif",
+    "PASS debug graphics=False: 6 replay cases, independent intent/trace corruption checks, 20 pre-boot rejections and four offline provider cases"
+  ],
+  "unit-release": [
+    "",
+    "test result: ok. 50 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    ""
+  ],
+  "clippy-release": [
+    "    Checking rai-meta v0.1.0 (/Users/jv/Development/Rust/rai-os/host/meta)",
+    "    Finished `release` profile [optimized] target(s) in 1.17s"
+  ],
+  "verify-release": [
+    "{\"goals\": [1, 6], \"publications\": [1, 6], \"total_jobs\": 4, \"reused_on_update\": 2, \"new_jobs_on_update\": 1, \"previous_bytes_unchanged\": true, \"live_inference\": false}",
+    "Evidence: /Users/jv/Development/Rust/rai-os/target/verification/comparison-release-jg034fvm",
+    "PASS release : 12 deterministic cases with real QEMU, corrupt comparison/sequence rejection, bad suffix rejected before boot"
+  ],
+  "semantic-release": [
+    "    Finished `release` profile [optimized] target(s) in 0.01s",
+    "Evidence: /Users/jv/Development/Rust/rai-os/target/verification/semantic-release/run-u2bxeiwp",
+    "PASS release graphics=False: 6 replay cases, independent intent/trace corruption checks, 20 pre-boot rejections and four offline provider cases"
+  ]
+}

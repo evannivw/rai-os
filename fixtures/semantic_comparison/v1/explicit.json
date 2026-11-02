@@ -1,0 +1,4 @@
+{
+  "request_version": 1,
+  "goal": "Build the Aurora pump handoff pack using brief@1, notes@2 and checklist@1. Exclude optional material."
+}

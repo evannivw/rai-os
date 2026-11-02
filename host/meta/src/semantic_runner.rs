@@ -51,3 +51,51 @@ pub fn execute(kernel: &str, path: &Path, selection: &Path, graphics: bool) -> R
         Ok(())
     }
 }
+
+/// No credential or provider access. Same typed authority gate and output format.
+pub fn resolve(path: &Path) -> Result<(), String> {
+    let r = request(path)?;
+    let started = Instant::now();
+    println!(
+        "{}",
+        json!({"event":"semantic_started","source":"rules","request":r,"catalog_version":semantic::CATALOG_VERSION,"permissions_version":semantic::PERMISSIONS_VERSION})
+    );
+    let selection = crate::resolver::resolve(&r);
+    semantic::validate(&selection, &r)?;
+    println!(
+        "{}",
+        json!({"event":"semantic_selection","selection":selection,"elapsed_ms":started.elapsed().as_millis(),"validation":"authority_only_not_intent_correctness"})
+    );
+    Ok(())
+}
+
+/// Explicit playback of two previously approved decisions, never live inference.
+pub fn sequence(kernel: &str, path: &Path, graphics: bool) -> Result<(), String> {
+    #[derive(serde::Deserialize)]
+    #[serde(deny_unknown_fields)]
+    struct Approved {
+        request: semantic::Request,
+        selection: semantic::Selection,
+    }
+    let entries: Vec<Approved> = serde_json::from_str(&config::bounded_file(path, 16384)?)
+        .map_err(|_| "invalid_approved_sequence")?;
+    if entries.len() != 2 {
+        return Err("sequence_requires_two_goals".into());
+    }
+    let mut sets = Vec::new();
+    for entry in &entries {
+        crate::domain::validate_goal(&entry.request.goal)?;
+        if entry.request.request_version == 0 {
+            return Err("invalid_request_version".into());
+        }
+        sets.push(
+            semantic::validate(&entry.selection, &entry.request)?
+                .ok_or("sequence_requires_selected_sets")?,
+        );
+    }
+    println!(
+        "{}",
+        json!({"event":"semantic_sequence_started","source":"recorded_approved_selections","live_inference":false,"goals":entries.iter().map(|e|&e.request.goal).collect::<Vec<_>>(),"graphics":graphics,"pause_ms":if graphics{1500}else{0}})
+    );
+    batch_bridge::run_sequence(kernel, &sets, graphics)
+}

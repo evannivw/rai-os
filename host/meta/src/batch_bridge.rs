@@ -305,3 +305,105 @@ pub fn run_selected(kernel: &str, keys: &[&'static str], graphics: bool) -> Resu
     }
     result
 }
+
+/// A presentation replay, not a policy timing experiment. Previous publication
+/// stays readable while the second approved goal reuses exact cached revisions.
+pub fn run_sequence(
+    kernel: &str,
+    sets: &[Vec<&'static str>],
+    graphics: bool,
+) -> Result<(), String> {
+    let started = Instant::now();
+    let connection = if graphics {
+        qemu::Connection::start_graphics(kernel)?
+    } else {
+        qemu::Connection::start(kernel)?
+    };
+    println!("{}", json!({"event":"guest_boot_confirmed"}));
+    let mut t = Transport {
+        connection,
+        request_id: 0,
+        started,
+        work: Work::Index,
+        artifacts: crate::guest_index::History::default(),
+    };
+    let pause = || {
+        if graphics {
+            thread::sleep(Duration::from_millis(1500));
+        }
+    };
+    let result = (|| -> Result<(), String> {
+        let start = t.snapshot(&Operation::CoordIndexStart, "coord.start", Some("index"))?;
+        if start.state != "idle" || start.completed != 0 {
+            return Err("guest_not_fresh".into());
+        }
+        let mut previous: Option<(u32, String)> = None;
+        for (index, keys) in sets.iter().enumerate() {
+            let argument = keys.join(",");
+            let reply = t.exchange(
+                &Operation::CoordGoal(&argument),
+                "coord.goal",
+                Some(&argument),
+            )?;
+            if !reply.success {
+                return Err(reply.payload);
+            }
+            let mut snapshot = Snapshot::parse(&reply.payload)?;
+            if snapshot.required != *keys {
+                return Err("unexpected_sequence_goal".into());
+            }
+            println!(
+                "{}",
+                json!({"event":"sequence_goal","index":index,"snapshot":snapshot})
+            );
+            if let Some((old_version, old_bytes)) = &previous {
+                let reply = t.exchange(&Operation::PublicationRead, "coord.publish.read", None)?;
+                if !reply.success || reply.payload != *old_bytes {
+                    return Err("historical_publication_changed".into());
+                }
+                let status =
+                    t.exchange(&Operation::PublicationStatus, "coord.publish.status", None)?;
+                let fields = batch_publication::fields(&status.payload)?;
+                if !status.success
+                    || fields["availability"] != "historical"
+                    || fields["published_version"] != old_version.to_string()
+                    || fields["target_version"] != snapshot.goal_version.to_string()
+                {
+                    return Err("unexpected_historical_status".into());
+                }
+                println!(
+                    "{}",
+                    json!({"event":"sequence_historical","published_version":old_version,"target_version":snapshot.goal_version,"unchanged":true})
+                );
+            }
+            pause();
+            for key in snapshot.missing.clone() {
+                snapshot = execute(&mut t, &snapshot, key)?;
+            }
+            let candidate = batch_publication::prepare(&mut t, &snapshot)?;
+            pause();
+            previous = Some((snapshot.goal_version, candidate.payload.clone()));
+            batch_publication::commit(&mut t, &snapshot, candidate)?;
+            pause();
+        }
+        println!(
+            "{}",
+            json!({"event":"sequence_finished","snapshot":status(&mut t)?,"live_inference":false})
+        );
+        Ok(())
+    })();
+    let cleanup = t
+        .snapshot(&Operation::CoordStop, "coord.stop", None)
+        .and_then(|s| {
+            if s.state == "stopped" {
+                Ok(())
+            } else {
+                Err("guest_stop_failed".into())
+            }
+        });
+    if let Err(error) = cleanup {
+        println!("{}", json!({"event":"guest_cleanup_failed","error":error}));
+        return result.and(Err("guest_cleanup_failed".into()));
+    }
+    result
+}
