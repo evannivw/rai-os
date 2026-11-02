@@ -1,0 +1,30 @@
+{
+  "case": "unknown-unit",
+  "source": "meta",
+  "interpret_exit": 0,
+  "accepted": true,
+  "executed": false,
+  "pass_case": true,
+  "provider": {
+    "choice_count": 1,
+    "finish_reason": "stop",
+    "http_status": 200,
+    "latency_ms": 4685,
+    "model_matches": true,
+    "refusal_present": false,
+    "role": "assistant",
+    "stage": "proposal",
+    "tool_calls_present": false,
+    "transport_exit_code": 0,
+    "usage": {
+      "completion_tokens": 221,
+      "prompt_tokens": 561,
+      "total_tokens": 782
+    }
+  },
+  "execute_exit": 0,
+  "execution_attempted": false,
+  "decision": "decline",
+  "records": [],
+  "end_to_end_ms": 4695
+}

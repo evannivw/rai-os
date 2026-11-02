@@ -1,0 +1,13 @@
+{
+  "case": "unknown-unit",
+  "source": "rules",
+  "interpret_exit": 0,
+  "accepted": true,
+  "executed": false,
+  "pass_case": true,
+  "execute_exit": 0,
+  "execution_attempted": false,
+  "decision": "decline",
+  "records": [],
+  "end_to_end_ms": 11
+}

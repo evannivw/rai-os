@@ -1,0 +1,2 @@
+{"approval":"trusted_host_input","event":"semantic_execution","intent_verified_by_this_command":false,"request":{"goal":"Prepare an Aurora pump handoff for Pump Z with its required supporting documents.","request_version":1},"selection":{"catalog_version":1,"decision":"decline","permissions_version":1,"reason":"Pump Z not found; only Pump A and Pump B notes exist, cannot substitute.","records":[],"request_goal":"Prepare an Aurora pump handoff for Pump Z with its required supporting documents.","request_version":1}}
+{"decision":"decline","event":"semantic_no_execution"}

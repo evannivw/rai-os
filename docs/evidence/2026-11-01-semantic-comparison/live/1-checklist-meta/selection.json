@@ -1,0 +1,11 @@
+{
+  "catalog_version": 1,
+  "decision": "select",
+  "permissions_version": 1,
+  "reason": "Selected only the requested seals and cables checklist.",
+  "records": [
+    "checklist@1"
+  ],
+  "request_goal": "Give me only the document about checking cables and seals. This is not a pump handoff.",
+  "request_version": 1
+}

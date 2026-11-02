@@ -1,0 +1,13 @@
+{
+  "catalog_version": 1,
+  "decision": "select",
+  "permissions_version": 1,
+  "reason": "Handoff for prior pump 7 requires brief, notes@1, and checklist.",
+  "records": [
+    "brief@1",
+    "notes@1",
+    "checklist@1"
+  ],
+  "request_goal": "Prepare the Aurora pump handoff for the unit used before the switch to pump 8. Include its operating note and the required supporting documents, without the outdoor preview.",
+  "request_version": 1
+}

@@ -134,3 +134,57 @@ rejected. Existing semantic regression suites passed in both profiles (six repla
 links and diff whitespace passed. New traces are under
 evidence/2026-11-01-semantic-comparison. No live measurements occurred before the
 source/protocol commit.
+
+
+## Observed results — November 1
+
+Ran all 48 frozen trials from source 74cdecd7645f2bf053217ad40da19ff62afaba88,
+with 24 real Meta requests, no retries/fallback and no post-result tuning. Both
+policies passed 24/24. Each policy produced 14 verified publications in fresh
+QEMU sessions (34 actual worker jobs), plus ten appropriate clarification/decline
+outcomes without guest work. Rules were faster in every matched case/repetition.
+The inference-backed policy demonstrated no accuracy or latency advantage here.
+
+| Case | Rules correct | Meta correct | Rules median total ms | Meta median total ms |
+| --- | ---: | ---: | ---: | ---: |
+| explicit | 2/2 | 2/2 | 364.0 | 5057.5 |
+| historical | 2/2 | 2/2 | 158.0 | 4104.5 |
+| latest | 2/2 | 2/2 | 223.0 | 4538.5 |
+| ambiguous | 2/2 | 2/2 | 9.0 | 3066.5 |
+| unavailable | 2/2 | 2/2 | 9.0 | 2820.0 |
+| field | 2/2 | 2/2 | 131.5 | 3509.5 |
+| unit | 2/2 | 2/2 | 145.5 | 3607.0 |
+| time | 2/2 | 2/2 | 195.5 | 3460.0 |
+| conflict | 2/2 | 2/2 | 17.0 | 5551.0 |
+| checklist | 2/2 | 2/2 | 110.5 | 2835.0 |
+| unknown-unit | 2/2 | 2/2 | 9.0 | 3775.5 |
+| no-default | 2/2 | 2/2 | 7.5 | 3309.5 |
+
+Among the 14 selecting/executing trials per policy, median end-to-end time was
+138.5 ms for rules and 3778.5 ms for Meta. This subset excludes clarification and
+decline, which do not boot QEMU. These medians summarize this same small mixed
+set of one-/three-record requests; they are not individual-operation timings.
+The first explicit rules trial took 594 ms versus 134 ms on its second repetition;
+both are retained rather than dropping a slow startup. See per-trial raw logs.
+
+All 24 Meta calls reported usage: 22074 total tokens, counted once per call.
+Available redacted diagnostics and exact selections are preserved. No inference
+cost or performance claim is inferred for a different model, hardware, workload
+or language. The resolver was engineered on this known domain; neither its results
+nor the Meta results estimate held-out generalization. No statistical confidence
+or battery/CPU optimization is claimed.
+
+Raw manifest/fixture hashes, all reports, selections and stdout/stderr are under
+[evidence/2026-11-01-semantic-comparison/live](evidence/2026-11-01-semantic-comparison/live).
+All 48 archived outcomes were re-audited, including exact intent and guest
+artifacts, frozen schedule and fixture hashes. The existing replay independently
+shows two historical/current publications, unchanged previous bytes and two reused
+records with one new update job; that behavior is available to both policies.
+
+Delivery decision: do not pitch this as AI making the OS faster. Present the
+working bounded interpretation/admission/publication prototype with measured
+limits. Keep ordinary deterministic work local and fast; broader semantic value
+remains a hypothesis needing independently authored unseen tasks. A hybrid router
+is not implemented or evaluated by this experiment. Prioritize the three-minute
+video, clean-checkout reproduction and submission rather than another infrastructure
+expansion or modifying benchmarks to manufacture a win.

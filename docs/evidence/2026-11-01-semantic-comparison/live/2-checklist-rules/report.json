@@ -1,0 +1,15 @@
+{
+  "case": "checklist",
+  "source": "rules",
+  "interpret_exit": 0,
+  "accepted": true,
+  "executed": true,
+  "pass_case": true,
+  "execute_exit": 0,
+  "execution_attempted": true,
+  "decision": "select",
+  "records": [
+    "checklist@1"
+  ],
+  "end_to_end_ms": 102
+}

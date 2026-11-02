@@ -1,0 +1,9 @@
+{
+  "catalog_version": 1,
+  "decision": "clarify",
+  "permissions_version": 1,
+  "reason": "Which operational note should be included: notes@1 (Pump A) or notes@2 (Pump B)?",
+  "records": [],
+  "request_goal": "Prepare an Aurora pump handoff. Do not assume the newest revision; ask me which operational note to use.",
+  "request_version": 1
+}

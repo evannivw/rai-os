@@ -1,0 +1,13 @@
+{
+  "case": "ambiguous",
+  "source": "rules",
+  "interpret_exit": 0,
+  "accepted": true,
+  "executed": false,
+  "pass_case": true,
+  "execute_exit": 0,
+  "execution_attempted": false,
+  "decision": "clarify",
+  "records": [],
+  "end_to_end_ms": 10
+}

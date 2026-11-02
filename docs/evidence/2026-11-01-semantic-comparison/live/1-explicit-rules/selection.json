@@ -1,0 +1,13 @@
+{
+  "catalog_version": 1,
+  "decision": "select",
+  "permissions_version": 1,
+  "reason": "Resolve supported references from public content and apply handoff dependencies.",
+  "records": [
+    "brief@1",
+    "checklist@1",
+    "notes@2"
+  ],
+  "request_goal": "Build the Aurora pump handoff pack using brief@1, notes@2 and checklist@1. Exclude optional material.",
+  "request_version": 1
+}

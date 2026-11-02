@@ -1,0 +1,13 @@
+{
+  "catalog_version": 1,
+  "decision": "select",
+  "permissions_version": 1,
+  "reason": "Selected brief, notes@2 matching review at 11, and checklist for the handoff.",
+  "records": [
+    "brief@1",
+    "notes@2",
+    "checklist@1"
+  ],
+  "request_goal": "Prepare the Aurora pump handoff whose operational note schedules the review at 11. Include its required support.",
+  "request_version": 1
+}

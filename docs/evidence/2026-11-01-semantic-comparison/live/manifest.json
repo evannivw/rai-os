@@ -1,0 +1,361 @@
+{
+  "source_commit": "74cdecd7645f2bf053217ad40da19ff62afaba88",
+  "observed_utc": "2026-11-02T05:33:19.348442+00:00",
+  "cases": [
+    "explicit",
+    "historical",
+    "latest",
+    "ambiguous",
+    "unavailable",
+    "field",
+    "unit",
+    "time",
+    "conflict",
+    "checklist",
+    "unknown-unit",
+    "no-default"
+  ],
+  "schedule": [
+    {
+      "case": "explicit",
+      "policy": "rules",
+      "repetition": 1,
+      "directory": "1-explicit-rules"
+    },
+    {
+      "case": "explicit",
+      "policy": "meta",
+      "repetition": 1,
+      "directory": "1-explicit-meta"
+    },
+    {
+      "case": "historical",
+      "policy": "meta",
+      "repetition": 1,
+      "directory": "1-historical-meta"
+    },
+    {
+      "case": "historical",
+      "policy": "rules",
+      "repetition": 1,
+      "directory": "1-historical-rules"
+    },
+    {
+      "case": "latest",
+      "policy": "rules",
+      "repetition": 1,
+      "directory": "1-latest-rules"
+    },
+    {
+      "case": "latest",
+      "policy": "meta",
+      "repetition": 1,
+      "directory": "1-latest-meta"
+    },
+    {
+      "case": "ambiguous",
+      "policy": "meta",
+      "repetition": 1,
+      "directory": "1-ambiguous-meta"
+    },
+    {
+      "case": "ambiguous",
+      "policy": "rules",
+      "repetition": 1,
+      "directory": "1-ambiguous-rules"
+    },
+    {
+      "case": "unavailable",
+      "policy": "rules",
+      "repetition": 1,
+      "directory": "1-unavailable-rules"
+    },
+    {
+      "case": "unavailable",
+      "policy": "meta",
+      "repetition": 1,
+      "directory": "1-unavailable-meta"
+    },
+    {
+      "case": "field",
+      "policy": "meta",
+      "repetition": 1,
+      "directory": "1-field-meta"
+    },
+    {
+      "case": "field",
+      "policy": "rules",
+      "repetition": 1,
+      "directory": "1-field-rules"
+    },
+    {
+      "case": "unit",
+      "policy": "rules",
+      "repetition": 1,
+      "directory": "1-unit-rules"
+    },
+    {
+      "case": "unit",
+      "policy": "meta",
+      "repetition": 1,
+      "directory": "1-unit-meta"
+    },
+    {
+      "case": "time",
+      "policy": "meta",
+      "repetition": 1,
+      "directory": "1-time-meta"
+    },
+    {
+      "case": "time",
+      "policy": "rules",
+      "repetition": 1,
+      "directory": "1-time-rules"
+    },
+    {
+      "case": "conflict",
+      "policy": "rules",
+      "repetition": 1,
+      "directory": "1-conflict-rules"
+    },
+    {
+      "case": "conflict",
+      "policy": "meta",
+      "repetition": 1,
+      "directory": "1-conflict-meta"
+    },
+    {
+      "case": "checklist",
+      "policy": "meta",
+      "repetition": 1,
+      "directory": "1-checklist-meta"
+    },
+    {
+      "case": "checklist",
+      "policy": "rules",
+      "repetition": 1,
+      "directory": "1-checklist-rules"
+    },
+    {
+      "case": "unknown-unit",
+      "policy": "rules",
+      "repetition": 1,
+      "directory": "1-unknown-unit-rules"
+    },
+    {
+      "case": "unknown-unit",
+      "policy": "meta",
+      "repetition": 1,
+      "directory": "1-unknown-unit-meta"
+    },
+    {
+      "case": "no-default",
+      "policy": "meta",
+      "repetition": 1,
+      "directory": "1-no-default-meta"
+    },
+    {
+      "case": "no-default",
+      "policy": "rules",
+      "repetition": 1,
+      "directory": "1-no-default-rules"
+    },
+    {
+      "case": "explicit",
+      "policy": "meta",
+      "repetition": 2,
+      "directory": "2-explicit-meta"
+    },
+    {
+      "case": "explicit",
+      "policy": "rules",
+      "repetition": 2,
+      "directory": "2-explicit-rules"
+    },
+    {
+      "case": "historical",
+      "policy": "rules",
+      "repetition": 2,
+      "directory": "2-historical-rules"
+    },
+    {
+      "case": "historical",
+      "policy": "meta",
+      "repetition": 2,
+      "directory": "2-historical-meta"
+    },
+    {
+      "case": "latest",
+      "policy": "meta",
+      "repetition": 2,
+      "directory": "2-latest-meta"
+    },
+    {
+      "case": "latest",
+      "policy": "rules",
+      "repetition": 2,
+      "directory": "2-latest-rules"
+    },
+    {
+      "case": "ambiguous",
+      "policy": "rules",
+      "repetition": 2,
+      "directory": "2-ambiguous-rules"
+    },
+    {
+      "case": "ambiguous",
+      "policy": "meta",
+      "repetition": 2,
+      "directory": "2-ambiguous-meta"
+    },
+    {
+      "case": "unavailable",
+      "policy": "meta",
+      "repetition": 2,
+      "directory": "2-unavailable-meta"
+    },
+    {
+      "case": "unavailable",
+      "policy": "rules",
+      "repetition": 2,
+      "directory": "2-unavailable-rules"
+    },
+    {
+      "case": "field",
+      "policy": "rules",
+      "repetition": 2,
+      "directory": "2-field-rules"
+    },
+    {
+      "case": "field",
+      "policy": "meta",
+      "repetition": 2,
+      "directory": "2-field-meta"
+    },
+    {
+      "case": "unit",
+      "policy": "meta",
+      "repetition": 2,
+      "directory": "2-unit-meta"
+    },
+    {
+      "case": "unit",
+      "policy": "rules",
+      "repetition": 2,
+      "directory": "2-unit-rules"
+    },
+    {
+      "case": "time",
+      "policy": "rules",
+      "repetition": 2,
+      "directory": "2-time-rules"
+    },
+    {
+      "case": "time",
+      "policy": "meta",
+      "repetition": 2,
+      "directory": "2-time-meta"
+    },
+    {
+      "case": "conflict",
+      "policy": "meta",
+      "repetition": 2,
+      "directory": "2-conflict-meta"
+    },
+    {
+      "case": "conflict",
+      "policy": "rules",
+      "repetition": 2,
+      "directory": "2-conflict-rules"
+    },
+    {
+      "case": "checklist",
+      "policy": "rules",
+      "repetition": 2,
+      "directory": "2-checklist-rules"
+    },
+    {
+      "case": "checklist",
+      "policy": "meta",
+      "repetition": 2,
+      "directory": "2-checklist-meta"
+    },
+    {
+      "case": "unknown-unit",
+      "policy": "meta",
+      "repetition": 2,
+      "directory": "2-unknown-unit-meta"
+    },
+    {
+      "case": "unknown-unit",
+      "policy": "rules",
+      "repetition": 2,
+      "directory": "2-unknown-unit-rules"
+    },
+    {
+      "case": "no-default",
+      "policy": "rules",
+      "repetition": 2,
+      "directory": "2-no-default-rules"
+    },
+    {
+      "case": "no-default",
+      "policy": "meta",
+      "repetition": 2,
+      "directory": "2-no-default-meta"
+    }
+  ],
+  "protocol": {
+    "version": 1,
+    "cases": [
+      "explicit",
+      "historical",
+      "latest",
+      "ambiguous",
+      "unavailable",
+      "field",
+      "unit",
+      "time",
+      "conflict",
+      "checklist",
+      "unknown-unit",
+      "no-default"
+    ],
+    "repetitions": 2,
+    "policies": [
+      "rules",
+      "meta"
+    ],
+    "order": "rotate policy order by case index plus repetition index",
+    "maximum_meta_calls": 24,
+    "retries": 0,
+    "fallback": false,
+    "build": "release",
+    "model": "muse-spark-1.3",
+    "max_tokens": 1024,
+    "reasoning_effort": "minimal",
+    "schema": "rai_selection",
+    "future_events": false,
+    "workload": "independent development cases; fresh guest per accepted selection"
+  },
+  "binary_sha256": "55cfdb131641941c043f3635f0edb8b9b44855a498353f8f4a40458dbc767f97",
+  "kernel_sha256": "130c5d00caef399c87606727337b56142ad5d6ac434f7b3126a3b2b9bba30ff0",
+  "fixture_hashes": {
+    "ambiguous.json": "81ef456fa3c494091730cb91dc569c86a2f2406fe584641590eec447ddd310ce",
+    "checklist.json": "3a2e3c6a2f08a84d843a1f3343608704d5026391883d7b1d8e1ee0d19ff1dd69",
+    "conflict.json": "b79496eea3b13549d259e4ceb8656623a81e10c2fef59327951d33e78cfa5c38",
+    "expected.json": "db5cb14727996f8727cd8a85c1301f22cf24ac56e4e01a1af574149fb21641bb",
+    "explicit.json": "0e221e13ed106548aee55d06f3bbd6684b2bc188e1f22017787a2ef3226a75d4",
+    "field.json": "4757592d6f185b7ab1b577f7ce2e4c19b14095993bcf36c9fac06949e0462065",
+    "historical.json": "1b5962fc7b6d8d74a32d5d4e672f90d10553a813b694d5dce90a456b7e951147",
+    "latest.json": "e339dd89e292c04a6833fbfb0e251af4e5f5167f372cd41afe9f4e019234b635",
+    "no-default.json": "c8ec687412498844f1e02229e486ed8ff406d086844f3d2fc98dd42afd7d36e3",
+    "protocol.json": "abe090dc02d4310c2f8d2cc1f3387314c9ef51579e023bfd1cb87b167a2d5204",
+    "time.json": "da1da4bff4db0cd3de666c3b9a7d7fd4ca48fda9ad97c7933dd57155fddb94cf",
+    "unavailable.json": "2ed54957eb9c7471d8949bf1598399f541a4f03aa90b32d64d78c5b185e44fff",
+    "unit.json": "1e6c1f92b5e973016961a49d7717cebd4f379e30ab1d38c0e854a3714b4a2e86",
+    "unknown-unit.json": "1ceb1ebbe0e81aa907b0da7a8b40bd385759c4ea637ea271c2dba9ef5a7cb3af"
+  },
+  "rust": "rustc 1.90.0 (1159e78c4 2025-09-14)",
+  "qemu": "QEMU emulator version 11.1.2"
+}

@@ -1,0 +1,9 @@
+{
+  "catalog_version": 1,
+  "decision": "decline",
+  "permissions_version": 1,
+  "reason": "The requested reference is absent from the authorized catalog.",
+  "records": [],
+  "request_goal": "Prepare an Aurora pump handoff for Pump Z with its required supporting documents.",
+  "request_version": 1
+}

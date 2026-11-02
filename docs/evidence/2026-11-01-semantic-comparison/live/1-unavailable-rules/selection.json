@@ -1,0 +1,9 @@
+{
+  "catalog_version": 1,
+  "decision": "decline",
+  "permissions_version": 1,
+  "reason": "The requested reference is absent from the authorized catalog.",
+  "records": [],
+  "request_goal": "Prepare the Aurora pump handoff for Pump C using its operating note and required supporting documents. Do not substitute another unit.",
+  "request_version": 1
+}

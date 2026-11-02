@@ -1,0 +1,11 @@
+{
+  "catalog_version": 1,
+  "decision": "select",
+  "permissions_version": 1,
+  "reason": "Selected appendix@1 as the only match for east gate inspection after rain.",
+  "records": [
+    "appendix@1"
+  ],
+  "request_goal": "Give me only the document about inspecting the eastern gate after wet weather. This is not a pump handoff.",
+  "request_version": 1
+}

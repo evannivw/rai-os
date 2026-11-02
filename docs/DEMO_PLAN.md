@@ -207,3 +207,31 @@ replay uses two archived Meta selections to show historical/current publication,
 exact reuse and one new job in a single real guest session. It performs no live
 inference; graphic pauses are presentation-only. Continuous live semantic event
 recovery remains pending. No kernel or graphical implementation changes.
+
+
+## November 1 comparison conclusion and bounded video story
+
+The frozen semantic development comparison passed 24/24 for each policy; rules
+were faster in every pair. Selecting trials had median 138.5 ms rules / 3778.5 ms
+Meta. Do not present this as AI performance superiority. Full evidence and limits
+are in SEMANTIC_COMPARISON.md. Record the working prototype honestly:
+
+- 0:00–0:25: goal and architecture: our AArch64 guest, host model bridge, bounded
+  operations. Identify actual contributions and outstanding eligibility questions.
+- 0:25–1:00: one recorded real Meta interpretation, exact selected documents and
+  independently checked output. Label recording/probe latency; do not imply live
+  inference if showing archived decisions.
+- 1:00–1:45: native same-session replay from historical to current requirement.
+  Show old output retained, two indexes reused, one new job, verified replacement.
+  Explicitly identify prerecorded approved decisions and presentation pauses.
+- 1:45–2:10: ambiguity/absent-data cases and an offline stale/invalid rejection.
+  Label injected faults/replay. No arbitrary model-controlled execution.
+- 2:10–2:40: actual comparison: equal development correctness, deterministic
+  rules faster; model flexibility outside this domain is not yet measured.
+- 2:40–3:00: repository/run instructions and limits: experimental mobile direction,
+  QEMU prototype, no physical-phone support or completed autonomous microkernel.
+
+This is a proposed recording sequence, not a finished video or submission. No
+further kernel/UI expansion is needed for this story. Clean-checkout rehearsal,
+three-minute video, accessible links, organizer clarification and submission
+confirmation remain outstanding; preserve the November 4 internal/official targets.

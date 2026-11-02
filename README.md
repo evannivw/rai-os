@@ -40,8 +40,10 @@ clarification and unavailable data, before executing independently accepted sets
 A [scoped deterministic resolver and frozen comparison](docs/SEMANTIC_COMPARISON.md)
 now share the same execution/checking path. A recorded-decision replay shows a
 revision update with two reused records and one new job in a single guest session.
-Live comparative results, a complex workload and continuous semantic replanning
-remain pending.
+[Measured development results](docs/SEMANTIC_COMPARISON.md#observed-results--november-1):
+both policies passed 24/24; fixed rules were faster in every paired trial.
+No AI efficiency advantage is established. A complex workload and continuous
+semantic replanning remain pending.
 
 ## Run
 

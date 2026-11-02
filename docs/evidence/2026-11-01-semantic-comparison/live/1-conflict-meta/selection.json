@@ -1,0 +1,9 @@
+{
+  "catalog_version": 1,
+  "decision": "clarify",
+  "permissions_version": 1,
+  "reason": "Handoff allows exactly one note; which one should be used, Pump A (notes@1) or Pump B (notes@2)?",
+  "records": [],
+  "request_goal": "Prepare an Aurora pump handoff including both notes@1 and notes@2.",
+  "request_version": 1
+}

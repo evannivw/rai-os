@@ -1,0 +1,9 @@
+{
+  "catalog_version": 1,
+  "decision": "clarify",
+  "permissions_version": 1,
+  "reason": "Which exact document revision or unit should the request use?",
+  "records": [],
+  "request_goal": "Prepare an Aurora pump handoff including both notes@1 and notes@2.",
+  "request_version": 1
+}

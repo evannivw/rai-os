@@ -1,0 +1,263 @@
+{
+  "development_only": true,
+  "policies": {
+    "rules": {
+      "trials": 24,
+      "passed": 24,
+      "executed": 14,
+      "known_token_total": 0,
+      "calls_with_usage": 0,
+      "failures": []
+    },
+    "meta": {
+      "trials": 24,
+      "passed": 24,
+      "executed": 14,
+      "known_token_total": 22074,
+      "calls_with_usage": 24,
+      "failures": []
+    }
+  },
+  "cases": {
+    "explicit": {
+      "rules": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          594,
+          134
+        ],
+        "median_ms": 364.0
+      },
+      "meta": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          3831,
+          6284
+        ],
+        "median_ms": 5057.5
+      }
+    },
+    "historical": {
+      "rules": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          177,
+          139
+        ],
+        "median_ms": 158.0
+      },
+      "meta": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          4483,
+          3726
+        ],
+        "median_ms": 4104.5
+      }
+    },
+    "latest": {
+      "rules": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          308,
+          138
+        ],
+        "median_ms": 223.0
+      },
+      "meta": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          4956,
+          4121
+        ],
+        "median_ms": 4538.5
+      }
+    },
+    "ambiguous": {
+      "rules": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          10,
+          8
+        ],
+        "median_ms": 9.0
+      },
+      "meta": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          2907,
+          3226
+        ],
+        "median_ms": 3066.5
+      }
+    },
+    "unavailable": {
+      "rules": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          9,
+          9
+        ],
+        "median_ms": 9.0
+      },
+      "meta": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          3165,
+          2475
+        ],
+        "median_ms": 2820.0
+      }
+    },
+    "field": {
+      "rules": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          124,
+          139
+        ],
+        "median_ms": 131.5
+      },
+      "meta": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          2985,
+          4034
+        ],
+        "median_ms": 3509.5
+      }
+    },
+    "unit": {
+      "rules": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          125,
+          166
+        ],
+        "median_ms": 145.5
+      },
+      "meta": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          2809,
+          4405
+        ],
+        "median_ms": 3607.0
+      }
+    },
+    "time": {
+      "rules": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          279,
+          112
+        ],
+        "median_ms": 195.5
+      },
+      "meta": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          3539,
+          3381
+        ],
+        "median_ms": 3460.0
+      }
+    },
+    "conflict": {
+      "rules": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          27,
+          7
+        ],
+        "median_ms": 17.0
+      },
+      "meta": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          6222,
+          4880
+        ],
+        "median_ms": 5551.0
+      }
+    },
+    "checklist": {
+      "rules": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          119,
+          102
+        ],
+        "median_ms": 110.5
+      },
+      "meta": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          2578,
+          3092
+        ],
+        "median_ms": 2835.0
+      }
+    },
+    "unknown-unit": {
+      "rules": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          11,
+          7
+        ],
+        "median_ms": 9.0
+      },
+      "meta": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          4695,
+          2856
+        ],
+        "median_ms": 3775.5
+      }
+    },
+    "no-default": {
+      "rules": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          8,
+          7
+        ],
+        "median_ms": 7.5
+      },
+      "meta": {
+        "passed": 2,
+        "trials": 2,
+        "wall_ms": [
+          4334,
+          2285
+        ],
+        "median_ms": 3309.5
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "catalog_version": 1,
+  "decision": "select",
+  "permissions_version": 1,
+  "reason": "Pump A selects notes@1 plus required brief and checklist.",
+  "records": [
+    "brief@1",
+    "notes@1",
+    "checklist@1"
+  ],
+  "request_goal": "Prepare the Aurora pump handoff for Pump A with all required supporting documents.",
+  "request_version": 1
+}
