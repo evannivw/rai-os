@@ -1,0 +1,54 @@
+{
+  "source_commit": "948ae1926d31c1ab80f294cc37482dfa68c2cf98",
+  "dirty": false,
+  "observed_utc": "2026-11-02T19:15:56.029591+00:00",
+  "policies": [
+    "rules",
+    "meta"
+  ],
+  "protocol": {
+    "cases": [
+      "historical",
+      "ambiguous",
+      "latest"
+    ],
+    "policies": [
+      "rules",
+      "meta"
+    ],
+    "repetitions": 1,
+    "maximum_meta_calls": 3,
+    "retries": 0,
+    "fallback": false,
+    "known_development_cases": true,
+    "event_delivery": "next event only after guest stream_ready",
+    "event_source": "controlled host request updates; not file watching",
+    "primary": "correct decision and exact membership before guest execution",
+    "secondary": [
+      "same-session publications",
+      "no work for ambiguity",
+      "exact reuse",
+      "inference and end-to-end time"
+    ],
+    "expected_total_worker_jobs": 4,
+    "expected_publications": 2,
+    "graphics": false
+  },
+  "fixture_hashes": {
+    "ambiguous.json": "761520fe886882817166e3a41d231679dec17b3e0e255e5d7cc37f8d0441b3dd",
+    "expected.json": "cb66484dce0b275c18ff4b8f3eeb5e355e0d7c77b4bb973edfd391c275575e5a",
+    "historical.json": "1b5962fc7b6d8d74a32d5d4e672f90d10553a813b694d5dce90a456b7e951147",
+    "latest.json": "a681a41f26612a87671b5bb052fff27aaad25526e22932af5b611f6025c7e132",
+    "protocol.json": "b66077f8964c7dd939fe1562796254dd3317802570b7d1dcc068e52e7a6700a0"
+  },
+  "binary_sha256": "536704f68821b12daf5e1f71aecd4f8fc3cd6815e93b65b20436dda6238a2dd9",
+  "kernel_sha256": "130c5d00caef399c87606727337b56142ad5d6ac434f7b3126a3b2b9bba30ff0",
+  "model": "muse-spark-1.3",
+  "max_tokens": 1024,
+  "reasoning_effort": "minimal",
+  "schema": "rai_selection",
+  "maximum_meta_calls": 3,
+  "retries": 0,
+  "fallback": false,
+  "graphics": false
+}

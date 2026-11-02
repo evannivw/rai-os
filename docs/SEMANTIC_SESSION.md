@@ -133,3 +133,33 @@ Native screen startup/execution is tested; no new screenshot or visual redesign 
 claimed. Keep final video, clean-checkout rehearsal and submission time protected.
 Deadline November 4, 20:00 Guatemala; internal target 18:00. October 26 kickoff /
 October 27 build-period eligibility is still unresolved.
+
+
+## Observed result — November 2
+
+Ran the frozen probe from clean source
+948ae1926d31c1ab80f294cc37482dfa68c2cf98. Three new real Meta requests, no replayed
+answers/retries/fallback. Both policies interpreted only the current event while
+their own guest session remained alive.
+
+| Policy | Correct decisions | Verified publications | Guest jobs | Whole session |
+| --- | ---: | ---: | ---: | ---: |
+| Rules | 3/3 | 2 | 4 | 661 ms |
+| Meta | 3/3 | 2 | 4 | 7121 ms |
+
+Both reused two exact records and ran only one new job for the selected update.
+Both preserved earlier bytes; clarification executed no work. Meta's question
+explicitly distinguished Pump A / notes@1 from Pump B / notes@2. Three calls used
+2910 total tokens. Interpretation process times were 2805, 2229 and 1920 ms.
+Whole-session timing excludes builds and includes boot/interpretation/checking/
+execution/cleanup. No graphical pauses were used in this live measurement.
+
+[Full results](evidence/2026-11-02-semantic-session/live/summary.json) and
+[manifest](evidence/2026-11-02-semantic-session/live/manifest.json) retain the
+frozen source/fixtures and all raw outcomes. Re-audit passed after archiving.
+
+Conclusion: integration/continuity works in the real guest. Decision quality tied
+on these cases; Meta was slower. The decision-improvement hypothesis remains
+unproven. Do not relabel deterministic guest cache savings as model intelligence.
+A subsequent decision study needs genuinely separate tasks/reserved cases and a
+competent common baseline; repeating these known cases cannot establish novelty.

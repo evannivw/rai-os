@@ -2106,3 +2106,30 @@ Next commit the source/protocol, run the frozen live comparison, retain all thre
 Meta outcomes and both policy traces. Prior negative results remain unchanged.
 November 4 final video/rehearsal/submission and contribution-eligibility follow-up
 remain outstanding. No model latency, accuracy or system efficiency win is assumed.
+
+
+## 2026-11-02 — Live retained-session results
+
+Frozen clean source 948ae1926d31c1ab80f294cc37482dfa68c2cf98 ran rules then Meta,
+three sequential known events per session. Exactly three real requests, no
+retries/fallback or answer tuning. Each policy passed 3/3 decisions, with two
+verified guest publications, four total EL0 worker jobs and two cache reuses on
+update. Previous bytes remained unchanged until replacement. The ambiguous event
+caused a clarification and zero guest work. Meta explicitly asked whether Pump A
+(notes@1) or Pump B (notes@2) was intended; the controlled next event requested the
+current handoff. Events were delivered after ready acknowledgments, not loaded as
+precomputed selections. Host interpretation and intent checks remain explicit.
+
+Whole-session time: rules 661 ms; Meta 7121 ms, excluding compilation. Three Meta
+interpretation processes: 2805, 2229, 1920 ms; reported total usage 2910 tokens,
+counted once per request. Both methods have the same correct results and guest
+work here. No decision-quality or speed advantage is demonstrated. Native-display
+execution was separately tested offline; this live measurement was headless.
+
+All events, exact input streams, provider diagnostics, plans, guest artifacts,
+manifest and summary are preserved in evidence/2026-11-02-semantic-session/live.
+Archived raw traces, fixture hashes and same-call metadata were re-audited.
+The next decision-quality study must use a separately specified meaningful task
+and reserved evaluation cases; another repetition of known tiny cases cannot
+establish the user's improvement hypothesis. Existing negative evidence remains
+unchanged. Final rehearsal/video/submission are still outstanding.

@@ -1,0 +1,11 @@
+{
+  "source": "rules",
+  "event_source": "controlled_request_updates",
+  "events_delivered": 3,
+  "exit_code": 0,
+  "correct_decisions": 3,
+  "all_decisions_correct": true,
+  "end_to_end_ms": 661,
+  "graphics": false,
+  "presentation_pause_ms": 0
+}
