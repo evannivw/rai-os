@@ -1,0 +1,168 @@
+[
+  {
+    "case": "replay",
+    "passed": true,
+    "audit": {
+      "correct_decisions": 3,
+      "events": 3,
+      "all_decisions_correct": true,
+      "lifecycle": {
+        "goals": [
+          1,
+          6
+        ],
+        "publications": [
+          1,
+          6
+        ],
+        "total_jobs": 4,
+        "reused_on_update": 2,
+        "new_jobs_on_update": 1,
+        "previous_bytes_unchanged": true
+      },
+      "rejected": []
+    }
+  },
+  {
+    "case": "rules",
+    "passed": true,
+    "audit": {
+      "correct_decisions": 3,
+      "events": 3,
+      "all_decisions_correct": true,
+      "lifecycle": {
+        "goals": [
+          1,
+          6
+        ],
+        "publications": [
+          1,
+          6
+        ],
+        "total_jobs": 4,
+        "reused_on_update": 2,
+        "new_jobs_on_update": 1,
+        "previous_bytes_unchanged": true
+      },
+      "rejected": []
+    }
+  },
+  {
+    "case": "changed-history",
+    "rejected": true
+  },
+  {
+    "case": "changed-artifact",
+    "rejected": true
+  },
+  {
+    "case": "wrong-decision",
+    "rejected": true
+  },
+  {
+    "case": "wrong-version",
+    "rejected": true
+  },
+  {
+    "case": "wrong-selection",
+    "rejected": true
+  },
+  {
+    "case": "stale",
+    "rejected": true,
+    "prior_publication_count": 1,
+    "clean_stop": true
+  },
+  {
+    "case": "private",
+    "rejected": true,
+    "prior_publication_count": 1,
+    "clean_stop": true
+  },
+  {
+    "case": "permission",
+    "rejected": true,
+    "prior_publication_count": 1,
+    "clean_stop": true
+  },
+  {
+    "case": "identity",
+    "rejected": true,
+    "prior_publication_count": 1,
+    "clean_stop": true
+  },
+  {
+    "case": "duplicate",
+    "rejected": true,
+    "prior_publication_count": 1,
+    "clean_stop": true
+  },
+  {
+    "case": "oversized",
+    "rejected": true,
+    "prior_publication_count": 1,
+    "clean_stop": true
+  },
+  {
+    "case": "eof",
+    "rejected": true,
+    "prior_publication_count": 1,
+    "clean_stop": true
+  },
+  {
+    "case": "unknown_stop",
+    "rejected": true,
+    "prior_publication_count": 1,
+    "clean_stop": true
+  },
+  {
+    "case": "offline-provider",
+    "transport": "dummy_curl",
+    "audit": {
+      "correct_decisions": 3,
+      "events": 3,
+      "all_decisions_correct": true,
+      "lifecycle": {
+        "goals": [
+          1,
+          6
+        ],
+        "publications": [
+          1,
+          6
+        ],
+        "total_jobs": 4,
+        "reused_on_update": 2,
+        "new_jobs_on_update": 1,
+        "previous_bytes_unchanged": true
+      },
+      "rejected": []
+    }
+  },
+  {
+    "case": "offline-wrong-meaning",
+    "transport": "dummy_curl",
+    "audit": {
+      "correct_decisions": 2,
+      "events": 3,
+      "all_decisions_correct": false,
+      "lifecycle": {
+        "goals": [
+          1,
+          6
+        ],
+        "publications": [
+          1,
+          6
+        ],
+        "total_jobs": 4,
+        "reused_on_update": 2,
+        "new_jobs_on_update": 1,
+        "previous_bytes_unchanged": true
+      },
+      "rejected": [
+        "ambiguous"
+      ]
+    }
+  }
+]

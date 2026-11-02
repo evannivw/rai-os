@@ -1,0 +1,3 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.00s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+{"goals": [1, 6], "publications": [1, 6], "total_jobs": 4, "reused_on_update": 2, "new_jobs_on_update": 1, "previous_bytes_unchanged": true, "live_inference": false}

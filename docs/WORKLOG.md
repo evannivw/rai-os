@@ -2070,3 +2070,39 @@ metadata. Source commit was already pushed; this follow-up records results only.
 Host execution remains explicit; no new QEMU document execution is claimed.
 Browser visual/disconnected review remains pending following the file-URL policy
 rejection. The package is one-shot, not an automatic semantic update service.
+
+
+## 2026-11-02 — Fresh semantic events in one retained guest, before measurement
+
+Returned to the user's decision-quality hypothesis and actual OS execution. Added
+a bounded Rust approval stream sharing the existing recorded-sequence execution
+path. The guest boots once and retains EL0 coordinator/worker state, cached exact
+indexes and checked publications while a host driver obtains a NEW interpretation
+for each successive request. A host ready/response handshake delivers only the
+current event; decisions are not all preloaded. Clarification or independent
+intent rejection does not dispatch guest work. The existing replay remains intact.
+
+Frozen protocol: three already known development goals, historical -> ambiguous
+-> explicitly current; rules and Meta each run one identical session. Three real
+Meta calls maximum, unchanged schema/settings, no retry/fallback or post-result
+tuning. Expected result: two publications, four total worker jobs, two reused
+indexes on update, and unchanged previous bytes until replacement. These cases
+verify continuity; they do not establish unseen reasoning or decision superiority.
+No guest corpus expansion, kernel changes, file watching or concurrent semantic
+events. New goal/clarification text stays on the host; the native screen reflects
+the last accepted guest target until a selected new target is admitted.
+
+Verification: 55 host tests and warnings-denied Clippy in debug/release. New real
+QEMU suites passed in both profiles: replay/rules, five corrupt evidence traces,
+eight invalid input suffixes and two fake-provider sessions. Wrong meaning in the
+middle event was rejected and the earlier output remained unchanged. Strict stop
+parsing initially accepted an extra field; a strict struct variant fixed it before
+passing tests. Native-display release replay/rules passed. Previous replay passed
+in debug; previous comparison verification passed in release (12 deterministic
+cases, guest execution and corruption checks). Final audit rechecked archived
+traces. Evidence: evidence/2026-11-02-semantic-session/offline.
+
+Next commit the source/protocol, run the frozen live comparison, retain all three
+Meta outcomes and both policy traces. Prior negative results remain unchanged.
+November 4 final video/rehearsal/submission and contribution-eligibility follow-up
+remain outstanding. No model latency, accuracy or system efficiency win is assumed.

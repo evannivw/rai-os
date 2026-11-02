@@ -1,0 +1,28 @@
+{
+  "cases": [
+    "historical",
+    "ambiguous",
+    "latest"
+  ],
+  "policies": [
+    "rules",
+    "meta"
+  ],
+  "repetitions": 1,
+  "maximum_meta_calls": 3,
+  "retries": 0,
+  "fallback": false,
+  "known_development_cases": true,
+  "event_delivery": "next event only after guest stream_ready",
+  "event_source": "controlled host request updates; not file watching",
+  "primary": "correct decision and exact membership before guest execution",
+  "secondary": [
+    "same-session publications",
+    "no work for ambiguity",
+    "exact reuse",
+    "inference and end-to-end time"
+  ],
+  "expected_total_worker_jobs": 4,
+  "expected_publications": 2,
+  "graphics": false
+}

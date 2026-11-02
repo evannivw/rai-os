@@ -291,3 +291,21 @@ infrastructure. If no semantic advantage is established, present the measured
 recovery prototype with its actual Meta role. November 4 remains the deadline
 (18:00 internal target, 20:00 official Guatemala); preserve contribution dates and
 the unresolved October 26 kickoff / October 27 build-period eligibility question.
+
+
+## November 2: fresh semantic decisions in a retained guest
+
+[SEMANTIC_SESSION.md](SEMANTIC_SESSION.md) connects fresh host-side interpretation
+to ONE retained guest session, with externally checked streamed approvals. Guest
+EL0 jobs/cache/publication and native presentation remain the execution boundary.
+Controlled sequential request events replace the previous preloaded-decision-only
+walkthrough; the recorded replay remains available separately. Ambiguity schedules
+no work. During interpretation the screen still represents the last accepted guest
+target; new request/clarification text is host-side only.
+
+This is an integration increment on the existing six tiny guest records, not a
+new decision-quality win. Freeze three known events, both rules and Meta, and three
+Meta calls maximum before measurement. No kernel expansion, concurrent event
+handling, file discovery or resource-efficiency claims. The host-only offline
+mission remains separate. Prioritize final evidence/rehearsal/video/submission;
+preserve original deadlines and unresolved contribution eligibility.

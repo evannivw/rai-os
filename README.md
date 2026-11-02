@@ -51,6 +51,11 @@ presentation, compatible support, approval evidence and open human actions.
 It uses the Rust host bridge and independent checks; these new files are not
 processed by QEMU. Automatic updates and general filesystem ingestion are pending.
 
+The November 2 [retained semantic session](docs/SEMANTIC_SESSION.md) brings newly
+interpreted request updates into one running QEMU guest. Both the fixed resolver
+and Meta share the same guest execution and independent checks. This is controlled
+sequential event delivery; a decision-quality advantage is not assumed.
+
 ## Run
 
 Install Rustup and QEMU (9.2 or newer with virt-9.2), then:

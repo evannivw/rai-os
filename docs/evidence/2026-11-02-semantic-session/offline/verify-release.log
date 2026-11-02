@@ -1,0 +1,5 @@
+    Finished `release` profile [optimized] target(s) in 0.00s
+   Compiling rai-meta v0.1.0 (/Users/jv/Development/Rust/rai-os/host/meta)
+    Finished `release` profile [optimized] target(s) in 3.65s
+Evidence: /Users/jv/Development/Rust/rai-os/target/verification/semantic-session-release-mh8qimgc
+PASS release : replay/rules continuity, 5 corrupted traces, 8 invalid streams, 2 fake-provider sessions; wrong meaning preserves prior guest output

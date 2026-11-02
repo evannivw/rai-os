@@ -313,6 +313,18 @@ pub fn run_sequence(
     sets: &[Vec<&'static str>],
     graphics: bool,
 ) -> Result<(), String> {
+    let mut entries = sets.iter();
+    run_updates(kernel, graphics, false, || Ok(entries.next().cloned()))
+}
+
+/// Each callback runs only after the prior publication finished. It may wait for
+/// a newly interpreted, externally checked event; no future selection is loaded.
+pub(super) fn run_updates(
+    kernel: &str,
+    graphics: bool,
+    streamed: bool,
+    mut next: impl FnMut() -> Result<Option<Vec<&'static str>>, String>,
+) -> Result<(), String> {
     let started = Instant::now();
     let connection = if graphics {
         qemu::Connection::start_graphics(kernel)?
@@ -338,7 +350,8 @@ pub fn run_sequence(
             return Err("guest_not_fresh".into());
         }
         let mut previous: Option<(u32, String)> = None;
-        for (index, keys) in sets.iter().enumerate() {
+        let mut index = 0;
+        while let Some(keys) = next()? {
             let argument = keys.join(",");
             let reply = t.exchange(
                 &Operation::CoordGoal(&argument),
@@ -349,7 +362,7 @@ pub fn run_sequence(
                 return Err(reply.payload);
             }
             let mut snapshot = Snapshot::parse(&reply.payload)?;
-            if snapshot.required != *keys {
+            if snapshot.required != keys {
                 return Err("unexpected_sequence_goal".into());
             }
             println!(
@@ -385,11 +398,19 @@ pub fn run_sequence(
             previous = Some((snapshot.goal_version, candidate.payload.clone()));
             batch_publication::commit(&mut t, &snapshot, candidate)?;
             pause();
+            index += 1;
         }
-        println!(
-            "{}",
-            json!({"event":"sequence_finished","snapshot":status(&mut t)?,"live_inference":false})
-        );
+        if streamed {
+            println!(
+                "{}",
+                json!({"event":"stream_finished","publications":index})
+            );
+        } else {
+            println!(
+                "{}",
+                json!({"event":"sequence_finished","snapshot":status(&mut t)?,"live_inference":false})
+            );
+        }
         Ok(())
     })();
     let cleanup = t

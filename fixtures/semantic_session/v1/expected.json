@@ -1,0 +1,25 @@
+{
+  "historical": {
+    "decision": "select",
+    "records": [
+      "brief@1",
+      "checklist@1",
+      "notes@1"
+    ],
+    "rationale": "The old note describes Pump A / pump 7; the new note describes Pump B / pump 8. Handoff policy adds overview and checklist."
+  },
+  "ambiguous": {
+    "decision": "clarify",
+    "records": [],
+    "rationale": "Both revisions are available. No current, historical, unit or time selector disambiguates the intended note."
+  },
+  "latest": {
+    "decision": "select",
+    "records": [
+      "brief@1",
+      "checklist@1",
+      "notes@2"
+    ],
+    "rationale": "Current/newest explicitly resolves the revision; shared handoff dependencies apply."
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "correct_decisions": 2,
+  "events": 3,
+  "all_decisions_correct": false,
+  "lifecycle": {
+    "goals": [
+      1,
+      6
+    ],
+    "publications": [
+      1,
+      6
+    ],
+    "total_jobs": 4,
+    "reused_on_update": 2,
+    "new_jobs_on_update": 1,
+    "previous_bytes_unchanged": true
+  },
+  "rejected": [
+    "ambiguous"
+  ]
+}

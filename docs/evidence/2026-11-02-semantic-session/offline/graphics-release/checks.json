@@ -1,0 +1,50 @@
+[
+  {
+    "case": "replay",
+    "passed": true,
+    "audit": {
+      "correct_decisions": 3,
+      "events": 3,
+      "all_decisions_correct": true,
+      "lifecycle": {
+        "goals": [
+          1,
+          6
+        ],
+        "publications": [
+          1,
+          6
+        ],
+        "total_jobs": 4,
+        "reused_on_update": 2,
+        "new_jobs_on_update": 1,
+        "previous_bytes_unchanged": true
+      },
+      "rejected": []
+    }
+  },
+  {
+    "case": "rules",
+    "passed": true,
+    "audit": {
+      "correct_decisions": 3,
+      "events": 3,
+      "all_decisions_correct": true,
+      "lifecycle": {
+        "goals": [
+          1,
+          6
+        ],
+        "publications": [
+          1,
+          6
+        ],
+        "total_jobs": 4,
+        "reused_on_update": 2,
+        "new_jobs_on_update": 1,
+        "previous_bytes_unchanged": true
+      },
+      "rejected": []
+    }
+  }
+]
