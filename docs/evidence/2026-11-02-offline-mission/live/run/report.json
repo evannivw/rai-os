@@ -1,0 +1,34 @@
+{
+  "source": "meta",
+  "execution_location": "host",
+  "guest_execution": false,
+  "plan_exit": 0,
+  "published": true,
+  "provider": {
+    "choice_count": 1,
+    "finish_reason": "stop",
+    "http_status": 200,
+    "latency_ms": 3558,
+    "model_matches": true,
+    "refusal_present": false,
+    "role": "assistant",
+    "stage": "proposal",
+    "tool_calls_present": false,
+    "transport_exit_code": 0,
+    "usage": {
+      "completion_tokens": 769,
+      "prompt_tokens": 2863,
+      "total_tokens": 3632
+    }
+  },
+  "build_exit": 0,
+  "checked": {
+    "documents": 9,
+    "source_bytes": 8620,
+    "pending_actions": 2,
+    "external_resources": 0,
+    "execution_location": "host"
+  },
+  "archive_sha256": "67a2d2301be37bb640b4cb739668d9920db4bbebb516474efb72039f9b93c6a5",
+  "end_to_end_ms": 4379
+}

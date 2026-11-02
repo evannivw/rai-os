@@ -2046,3 +2046,27 @@ reasoning. Preserve success or failure without retry/fallback or post-answer tun
 The earlier 48-trial negative comparison remains unchanged. Protect final video,
 clean-checkout rehearsal and submission time before November 4, 20:00 Guatemala
 (18:00 internal target); kickoff/build-period eligibility remains unresolved.
+
+
+## 2026-11-02 — Frozen live offline package result
+
+From clean committed source 303d781e256974ed9de32e7f7e94e70457f60d46, the single
+planned real Meta request succeeded. No retry/fallback or post-answer changes.
+The model selected nine expected documents, five literal release/compatibility
+quotes and both unresolved human actions. The denied file was not provided to the
+model or included in output. Newer unapproved/incompatible and optional sources
+were excluded. All source assertions remain fictional development data.
+
+The independent checker passed 8620 source bytes and a static reader with zero
+external resources. Provider latency 3558 ms; full plan/check/package duration
+4379 ms excluding build. Usage 2863 prompt + 769 completion = 3632 tokens (the
+provider diagnostic and mission_response describe the same single call). No speed,
+energy, broad reasoning superiority or unseen-task accuracy claim follows.
+
+Complete live logs, plan, manifest, exact HTML/source package and portable ZIP
+are preserved under evidence/2026-11-02-offline-mission/live. The archive was
+rechecked against frozen fixture hashes, file bytes, ZIP contents and same-call
+metadata. Source commit was already pushed; this follow-up records results only.
+Host execution remains explicit; no new QEMU document execution is claimed.
+Browser visual/disconnected review remains pending following the file-URL policy
+rejection. The package is one-shot, not an automatic semantic update service.

@@ -1,0 +1,13 @@
+AURORA / Local demonstration runbook
+
+Before leaving
+Open index.html from the prepared package while offline. Follow every document link. Confirm the selected deck is the released one, not the newest draft. Review the evidence and pending actions displayed in the reader. Keep the whole directory together when copying to another computer.
+
+During the demonstration
+Show the project brief, the approval decision and the compatibility memo. Open the released presentation, then the drawing and specification. Explain that selecting the right support requires reading the documents; merely sorting filenames by revision would choose the wrong interface.
+
+Recovery
+If a candidate fails checking, use the previous complete package and describe it accurately. Do not label a partial directory published. Do not edit source documents to conceal a failed validation.
+
+Boundaries
+This runbook does not turn off a network adapter or configure a physical phone. Offline operation is a property of the generated reader's local resources, not a claimed battery or network-management feature of the guest.

@@ -1,0 +1,16 @@
+AURORA / Generation-two architecture drawing
+
+USER GOAL
+    |
+    v
+BOUNDED SELECTION (Meta through the host bridge)
+    |
+    v
+INDEPENDENT CHECK (expected membership, permissions, exact bytes)
+    |
+    v
+OFFLINE PACKAGE (documents + local reader)
+
+Guest boundary: the existing RAI-OS kernel runs separately in QEMU. This package is a host artifact. No claim is made that QEMU stored or indexed these larger documents.
+
+No remote-sync node belongs in this drawing. The drawing is ordinary text, so it remains readable without a font download, image service or network access.

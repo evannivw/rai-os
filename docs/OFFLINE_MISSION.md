@@ -139,3 +139,24 @@ comparison to a competent resolver are not measured by this one probe.
 Actual browser review, clean-checkout rehearsal, final video/submission and the
 kickoff/build-period eligibility question remain open. Deadline November 4 at
 20:00 Guatemala; internal target 18:00. Preserve the earlier negative speed results.
+
+
+## Recorded live result — November 2
+
+The single frozen live request succeeded from clean commit
+303d781e256974ed9de32e7f7e94e70457f60d46. It selected the nine expected documents,
+provided five literal supporting quotes and preserved both open human actions.
+The independent checker accepted all 8620 source bytes and the offline reader;
+ZIP members/bytes and fixture hashes were re-audited after archiving. No retry,
+fallback, post-answer tuning or additional call was performed.
+
+Meta latency: 3558 ms. End-to-end including checking/ZIP: 4379 ms, excluding build.
+Usage: 2863 prompt + 769 completion = 3632 total tokens, counted once. This is a
+successful bounded development example, not a performance win or held-out study.
+The prior negative comparison remains unchanged. This does not establish that
+another system could not implement the same workflow.
+
+[Archived reader](evidence/2026-11-02-offline-mission/live/run/package/published/index.html),
+[portable ZIP](evidence/2026-11-02-offline-mission/live/run/aurora-offline.zip), and
+[raw results](evidence/2026-11-02-offline-mission/live/run/report.json).
+Actual browser visual/offline review remains pending under the stated policy block.

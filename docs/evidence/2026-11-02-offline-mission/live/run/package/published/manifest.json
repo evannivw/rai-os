@@ -1,0 +1,73 @@
+{
+  "catalog_version": 1,
+  "execution_location": "host",
+  "format": "rai-offline-pack-v1",
+  "goal": "Prepare an offline package for tomorrow's Aurora visitor-team presentation. Use the latest owner-approved deck with compatible required support, release evidence and the unresolved preparation actions. Exclude private and optional material. Preserve source bytes.",
+  "permissions_version": 1,
+  "records": [
+    {
+      "byte_length": 1019,
+      "id": "approval-log",
+      "path": "documents/approval-log.txt",
+      "read_allowed": true,
+      "sha256": "c4341d0ffe21761ba76859826acdb865dc0978a8a12aadd8ab76b1f83e2a6975"
+    },
+    {
+      "byte_length": 1187,
+      "id": "deck@2",
+      "path": "documents/deck@2.txt",
+      "read_allowed": true,
+      "sha256": "0439bc90a81f363c4c0f7409bd2ae5acc0cb051ca68d87ac19afff7ccea4cfdd"
+    },
+    {
+      "byte_length": 578,
+      "id": "diagram@1",
+      "path": "documents/diagram@1.txt",
+      "read_allowed": true,
+      "sha256": "ba8d6d84a774e90f8ce885c155d671cf9f63ac2be63879b7a658209ac0b3871b"
+    },
+    {
+      "byte_length": 643,
+      "id": "handoff",
+      "path": "documents/handoff.txt",
+      "read_allowed": true,
+      "sha256": "1f6770a55aebb986e9e0e256d0434161dc10cdea4afc2f56f7613455ee22df65"
+    },
+    {
+      "byte_length": 1390,
+      "id": "project-brief",
+      "path": "documents/project-brief.txt",
+      "read_allowed": true,
+      "sha256": "e610d4352d73d069d08f139ed33f6ba99d8239fb6ce1103b08997effaeb63e1a"
+    },
+    {
+      "byte_length": 845,
+      "id": "qa@1",
+      "path": "documents/qa@1.txt",
+      "read_allowed": true,
+      "sha256": "d4e7685be46c8e37fe3a7bbe20848496f9dd1f6e0aa1d1532808f59b200baa36"
+    },
+    {
+      "byte_length": 806,
+      "id": "review-memo",
+      "path": "documents/review-memo.txt",
+      "read_allowed": true,
+      "sha256": "c39f54404fe81d7c7f699cd848d0925686abd6a588462e1f0f30be8636eea860"
+    },
+    {
+      "byte_length": 1093,
+      "id": "runbook@1",
+      "path": "documents/runbook@1.txt",
+      "read_allowed": true,
+      "sha256": "012edf6cd92e228e7026deaa4b347d11928be700ded8c07289429d85fd44cdf4"
+    },
+    {
+      "byte_length": 1059,
+      "id": "spec@1",
+      "path": "documents/spec@1.txt",
+      "read_allowed": true,
+      "sha256": "4ed03105ad457a44d45573825f6a5b4db5e19b0e7928dc46c54790ae8aa98106"
+    }
+  ],
+  "request_version": 1
+}

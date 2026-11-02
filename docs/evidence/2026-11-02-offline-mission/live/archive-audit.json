@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "fixture_hashes_match": true,
+  "package": {
+    "documents": 9,
+    "source_bytes": 8620,
+    "pending_actions": 2,
+    "external_resources": 0,
+    "execution_location": "host"
+  },
+  "zip_exact": true,
+  "same_call_metadata": true
+}

@@ -1,0 +1,11 @@
+AURORA / Juniper QA findings
+Synthetic development evidence only, not a report about a deployed product.
+
+Passed in this fixture's project story
+The generation-two visitor walkthrough has a local fallback and its instructions do not require a remote service. The selected drawing matches that interface. The newer generation-three workflow was not approved for the visit.
+
+Known limitation
+The camera demonstration is disabled. The owner accepted this limitation for the visitor session. List it visibly; do not describe the camera as functional and do not treat its accepted limitation as permission to use the newer draft.
+
+Separate RAI-OS evidence
+Actual tests of the package builder and checker must be reported from their real execution logs. The fictional project findings above are source content, not newly measured RAI-OS test results.

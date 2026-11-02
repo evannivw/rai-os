@@ -1,0 +1,6 @@
+AURORA / Juniper review memo
+The Juniper name refers to the second presentation. Its wire contract is still generation two even though the newer specification has a larger revision number. Pair Juniper with spec@1 and diagram@1. The generation-three specification is for the unreleased successor.
+
+A person reading the pack must also be able to operate the walkthrough, so include runbook@1. Keep qa@1 alongside it: that document records what passed and what remains limited. The project brief and owner approval log provide scope and release evidence. Include this memo so the compatibility choice is inspectable, and the handoff note so preparation tasks are not lost.
+
+There is no dependency on the roadmap or on commercial pricing. A larger or more recent pack is not automatically a more correct one.
