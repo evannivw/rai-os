@@ -34,8 +34,10 @@ updating, verifying and blocked states with previous-result availability.
 The bridge now records [redacted provider diagnostics](docs/META_DIAGNOSTICS.md),
 including available usage on rejected responses. [Bounded batch proposals](docs/META_BATCH.md)
 now cover up to four missing operations per request, with fresh per-job admission
-and independent checks before publication. Semantic planning and a new fair
-comparison remain pending.
+and independent checks before publication. [Content-based selection](docs/SEMANTIC_SELECTION.md)
+now interprets six small development goals, including old/current revisions,
+clarification and unavailable data, before executing independently accepted sets.
+A complex workload, continuous semantic replanning and a fair comparison remain pending.
 
 ## Run
 

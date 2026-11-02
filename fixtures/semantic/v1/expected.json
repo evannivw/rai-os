@@ -1,0 +1,46 @@
+{
+  "explicit": {
+    "decision": "select",
+    "records": [
+      "brief@1",
+      "checklist@1",
+      "notes@2"
+    ],
+    "rationale": "Explicit references, same dependency policy."
+  },
+  "historical": {
+    "decision": "select",
+    "records": [
+      "brief@1",
+      "checklist@1",
+      "notes@1"
+    ],
+    "rationale": "The old note describes Pump A / pump 7; the new note describes Pump B / pump 8. Handoff policy adds overview and checklist."
+  },
+  "latest": {
+    "decision": "select",
+    "records": [
+      "brief@1",
+      "checklist@1",
+      "notes@2"
+    ],
+    "rationale": "Current/newest explicitly resolves the revision; shared handoff dependencies apply."
+  },
+  "ambiguous": {
+    "decision": "clarify",
+    "records": [],
+    "rationale": "Both revisions are available. No current, historical, unit or time selector disambiguates the intended note."
+  },
+  "unavailable": {
+    "decision": "decline",
+    "records": [],
+    "rationale": "No authorized note describes Pump C; there is no acceptable substitution."
+  },
+  "field": {
+    "decision": "select",
+    "records": [
+      "appendix@1"
+    ],
+    "rationale": "Meaning matches east gate after rain. The source imperative is content, not authority to exclude an explicitly requested record."
+  }
+}

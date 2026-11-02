@@ -237,3 +237,71 @@ pub fn run(kernel: &str, path: &Path, replay: Option<&Path>, graphics: bool) -> 
     }
     result
 }
+
+/// Execute a host-approved semantic requirement using the same per-job guest
+/// gates and independent publication adapter, with no second inference call.
+/// This mode boots a fresh session; it does not implement semantic event recovery.
+pub fn run_selected(kernel: &str, keys: &[&'static str], graphics: bool) -> Result<(), String> {
+    let required = crate::set_report::keys(keys.iter().copied())?;
+    let started = Instant::now();
+    let connection = if graphics {
+        qemu::Connection::start_graphics(kernel)?
+    } else {
+        qemu::Connection::start(kernel)?
+    };
+    println!("{}", json!({"event":"guest_boot_confirmed"}));
+    let mut t = Transport {
+        connection,
+        request_id: 0,
+        started,
+        work: Work::Index,
+        artifacts: crate::guest_index::History::default(),
+    };
+    let result = (|| -> Result<(), String> {
+        let start = t.snapshot(&Operation::CoordIndexStart, "coord.start", Some("index"))?;
+        if start.state != "idle" || start.completed != 0 {
+            return Err("guest_not_fresh".into());
+        }
+        let argument = required.join(",");
+        let reply = t.exchange(
+            &Operation::CoordGoal(&argument),
+            "coord.goal",
+            Some(&argument),
+        )?;
+        if !reply.success {
+            return Err(reply.payload);
+        }
+        let mut snapshot = Snapshot::parse(&reply.payload)?;
+        if snapshot.required != required || snapshot.missing != required || snapshot.completed != 0
+        {
+            return Err("unexpected_semantic_goal".into());
+        }
+        for key in &required {
+            snapshot = execute(&mut t, &snapshot, key)?;
+        }
+        let candidate = batch_publication::prepare(&mut t, &snapshot)?;
+        if status(&mut t)? != snapshot {
+            return Err("semantic_goal_changed".into());
+        }
+        batch_publication::commit(&mut t, &snapshot, candidate)?;
+        println!(
+            "{}",
+            json!({"event":"semantic_finished","snapshot":snapshot,"elapsed_ms":started.elapsed().as_millis()})
+        );
+        Ok(())
+    })();
+    let cleanup = t
+        .snapshot(&Operation::CoordStop, "coord.stop", None)
+        .and_then(|s| {
+            if s.state == "stopped" {
+                Ok(())
+            } else {
+                Err("guest_stop_failed".into())
+            }
+        });
+    if let Err(error) = cleanup {
+        println!("{}", json!({"event":"guest_cleanup_failed","error":error}));
+        return result.and(Err("guest_cleanup_failed".into()));
+    }
+    result
+}

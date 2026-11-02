@@ -141,6 +141,29 @@ pub fn propose_batch(
 ) -> Result<Answer<crate::batch::Plan>, Failure> {
     request(key, goal, || batch_body(goal, context), crate::batch::parse)
 }
+pub fn interpret(
+    key: &Secret,
+    request: &crate::semantic::Request,
+) -> Result<Answer<crate::semantic::Selection>, Failure> {
+    self::request(
+        key,
+        &request.goal,
+        || semantic_body(request),
+        crate::semantic::parse,
+    )
+}
+fn semantic_body(request: &crate::semantic::Request) -> Value {
+    let keys: Vec<_> = domain::RECORDS.iter().map(|(k, _)| *k).collect();
+    json!({"model":MODEL,"stream":false,"max_tokens":1024,"reasoning_effort":"minimal",
+        "messages":[{"role":"developer","content":crate::semantic::POLICY},{"role":"user","content":json!({"request":request,"catalog":crate::semantic::catalog()}).to_string()}],
+        "response_format":{"type":"json_schema","json_schema":{"name":"rai_selection","strict":true,"schema":{
+            "type":"object","additionalProperties":false,
+            "properties":{"request_goal":{"type":"string"},"request_version":{"type":"integer"},"catalog_version":{"type":"integer"},"permissions_version":{"type":"integer"},
+            "decision":{"type":"string","enum":["select","clarify","decline"]},"records":{"type":"array","maxItems":4,"items":{"type":"string","enum":keys}},"reason":{"type":"string"}},
+            "required":["request_goal","request_version","catalog_version","permissions_version","decision","records","reason"]
+        }}}
+    })
+}
 fn request<T>(
     key: &Secret,
     goal: &str,

@@ -1853,3 +1853,37 @@ not a repeated benchmark, evidence of semantic intelligence or proof of advantag
 over fixed batching. It is not directly comparable to the earlier multi-call
 pilot or the different single-count probe. No settings were changed after seeing
 the outcome. Independent semantic cases and the fair comparison remain next.
+
+
+## 2026-11-01 — Content-based selection before deterministic guest execution
+
+Added six public semantic development cases and independent exact expectations
+before model responses: explicit membership, historical/current handoff, ambiguity,
+unavailable unit and content paraphrase. The new interpretation mode sends only
+the goal, shared dependency policy and six public compiled document contents.
+It returns select/clarify/decline bound to exact goal text/request version and
+static catalog/permission versions. Rust admission validates authority/shape;
+it deliberately does not claim to prove semantic correctness.
+
+The Python demo checks the independent expected membership/decision before any
+work, then hands accepted selections to the existing guest batch execution and
+publication functions, without another model call. Clarify/decline boots no QEMU.
+The raw execute-selection CLI trusts host approval and explicitly does not run
+this fixed-case intent oracle. Each case uses a fresh guest session; continuous
+semantic replanning and cross-case publication retention remain unconnected.
+No kernel, syscall, unsafe or UI changes. Legacy provider prompts are unchanged.
+
+Verification: 48 host unit tests and all-target Clippy passed in debug/release;
+formatting and diff whitespace passed. In each profile, six replay cases,
+20 pre-boot invalid selection rejections, four offline provider cases and a native
+historical case passed. Independent checks rejected permitted-but-wrong meaning,
+missing dependencies and corrupted traces/artifacts; failed provider usage remains
+recorded when available. All 20 existing release batch cases passed. Exact offline
+traces and summaries are archived under evidence/2026-11-01-semantic.
+
+Planned after source commit: exactly six live Meta requests, one per checked-in
+case, strict rai_selection schema, muse-spark-1.3, minimal reasoning, 1024-token
+cap, no retries/fallback or tuning after results. Preserve every outcome. This
+small development gate is not the complex workload or a fair policy comparison;
+it cannot establish superiority. Freeze further infrastructure and protect video,
+reproducibility and November 4 submission (18:00 internal, 20:00 Guatemala).

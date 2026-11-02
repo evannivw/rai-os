@@ -1,0 +1,25 @@
+{
+  "verify-debug": "PASS debug graphics=False: 6 replay cases, independent intent/trace corruption checks, 20 pre-boot rejections and four offline provider cases",
+  "native-debug": "PASS debug graphics=True: 1 replay cases, independent intent/trace corruption checks",
+  "unit-debug": [
+    "",
+    "test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    ""
+  ],
+  "clippy-debug": [
+    "    Checking rai-meta v0.1.0 (/Users/jv/Development/Rust/rai-os/host/meta)",
+    "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.84s"
+  ],
+  "verify-release": "PASS release graphics=False: 6 replay cases, independent intent/trace corruption checks, 20 pre-boot rejections and four offline provider cases",
+  "native-release": "PASS release graphics=True: 1 replay cases, independent intent/trace corruption checks",
+  "unit-release": [
+    "",
+    "test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    ""
+  ],
+  "clippy-release": [
+    "    Checking rai-meta v0.1.0 (/Users/jv/Development/Rust/rai-os/host/meta)",
+    "    Finished `release` profile [optimized] target(s) in 1.10s"
+  ],
+  "batch-regression": "PASS release: 20 offline real-QEMU batch cases; independent artifact and trace audit"
+}

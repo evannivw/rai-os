@@ -294,3 +294,20 @@ infrastructure. If no semantic advantage is established, present the measured
 recovery prototype with its actual Meta role. November 4 remains the deadline
 (18:00 internal target, 20:00 official Guatemala); preserve contribution dates and
 the unresolved October 26 kickoff / October 27 build-period eligibility question.
+
+
+## November 1: first content-based selection gate
+
+[Semantic selection](SEMANTIC_SELECTION.md) now separates interpretation from
+execution: natural-language goal plus six public document contents -> bounded
+Meta selection/clarification/decline -> independent fixed-case intent check ->
+existing deterministic guest batch and verified publication. Expected answers
+are authored before inference and excluded from provider context. Host request
+text/version and static catalog/permission versions bind selection; guest goal
+and per-job tickets bind execution. No new kernel or UI mechanisms.
+
+Each case uses a fresh guest session. Continuous semantic replanning, a genuinely
+complex workload and fair deterministic comparison remain pending. These six
+public development cases do not establish general correctness or superiority.
+Freeze additional infrastructure; prioritize measured outcomes, reproducibility
+and the three-minute video. November 4 dates and provenance questions are unchanged.
