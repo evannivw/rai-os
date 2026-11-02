@@ -1,0 +1,2 @@
+{"event":"mission_independent_check","execution_location":"host","passed":true}
+{"directory":"/Users/jv/Development/Rust/rai-os/target/verification/offline-mission-debug-skwnej26/valid/package/published","documents":["approval-log","deck@2","diagram@1","handoff","project-brief","qa@1","review-memo","runbook@1","spec@1"],"event":"mission_published","execution_location":"host","guest_execution":false,"pending_actions":2}

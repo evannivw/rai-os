@@ -1,0 +1,8 @@
+AURORA / Presentation revision one
+Internal rehearsal version. This presentation was approved before the visitor audience was confirmed. It uses an older screenshot and describes a synchronization feature that was removed from the public demonstration.
+
+Slide 1: Why local preparation matters.
+Slide 2: An older arrival-list prototype.
+Slide 3: Synchronization concept, not a validated feature.
+
+Do not silently use this version when a later audience-specific release exists. Consult the owner log for the released presentation.

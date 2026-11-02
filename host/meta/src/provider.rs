@@ -164,6 +164,30 @@ fn semantic_body(request: &crate::semantic::Request) -> Value {
         }}}
     })
 }
+pub fn mission(
+    key: &Secret,
+    goal: &crate::semantic::Request,
+) -> Result<Answer<crate::mission::Plan>, Failure> {
+    request(
+        key,
+        &goal.goal,
+        || mission_body(goal),
+        crate::mission::parse,
+    )
+}
+fn mission_body(goal: &crate::semantic::Request) -> Value {
+    let quote = json!({"type":"object","additionalProperties":false,"properties":{"source":{"type":"string","enum":crate::mission::ids()},"quote":{"type":"string"}},"required":["source","quote"]});
+    json!({"model":MODEL,"stream":false,"max_tokens":2048,"reasoning_effort":"minimal",
+        "messages":[{"role":"developer","content":crate::mission::POLICY},{"role":"user","content":json!({"request":goal,"catalog":crate::mission::context()}).to_string()}],
+        "response_format":{"type":"json_schema","json_schema":{"name":"rai_offline_mission","strict":true,"schema":{
+            "type":"object","additionalProperties":false,"properties":{
+                "request_goal":{"type":"string"},"request_version":{"type":"integer"},"catalog_version":{"type":"integer"},"permissions_version":{"type":"integer"},
+                "decision":{"type":"string","enum":["publish","clarify","blocked"]},"selected":{"type":"array","maxItems":10,"items":{"type":"string","enum":crate::mission::ids()}},
+                "evidence":{"type":"array","maxItems":6,"items":quote},"pending":{"type":"array","maxItems":4,"items":quote},"reason":{"type":"string"}},
+                "required":["request_goal","request_version","catalog_version","permissions_version","decision","selected","evidence","pending","reason"]
+        }}}
+    })
+}
 fn request<T>(
     key: &Secret,
     goal: &str,

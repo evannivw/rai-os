@@ -2007,3 +2007,42 @@ remains a hypothesis needing independently authored unseen tasks. A hybrid route
 is not implemented or evaluated by this experiment. Prioritize the three-minute
 video, clean-checkout reproduction and submission rather than another infrastructure
 expansion or modifying benchmarks to manufacture a win.
+
+
+## 2026-11-02 — Checked portable offline mission, before live probe
+
+Implemented the user-approved useful-artifact pivot after the negative latency
+comparison. A fourteen-document fictional project includes owner approval versus
+reviewed drafts, compatibility requirements, open human actions, optional content
+and one denied synthetic private file. The corpus and exact expected membership,
+evidence requirements and two pending actions were authored before live inference.
+
+Rust domain validation restricts identities, exact public IDs, literal quotations
+and bounded typed actions. A separate host adapter writes escaped static HTML,
+exact source files and a manifest to an unpublished candidate, runs the fixed
+independent Python checker and publishes only a passing package. The harness
+produces and byte-checks a portable ZIP. Existing output directories are rejected.
+No new dependency, unsafe code or kernel change. New documents are handled by the
+HOST only; the guest still has its previous small compiled corpus. This is a
+one-shot development fixture, not automatic indexing, event recovery or general
+filesystem ingestion. The fixed oracle is not a general semantic verifier.
+
+Verification: formatting; 54 Rust tests in each debug/release profile; Clippy
+warnings denied in both profiles. Each offline mission suite passed a valid pack,
+eleven invalid-plan rejections, overwrite protection, eight corrupted-package
+rejections and two dummy-provider cases. The earlier valid pack remained unchanged.
+The prior release semantic suite passed six replay cases with real-QEMU trace
+checks, independent corruption checks, twenty pre-boot rejections and four offline
+provider cases. Logs are in evidence/2026-11-02-offline-mission/offline.
+
+Integrated-browser policy rejected file:// navigation. No alternate surface or
+server bypass was attempted. Structural HTML, links, exact source bytes and no
+external resources are checked; actual visual/disconnected-browser review remains
+pending. No new timing superiority or broad complexity claim is justified.
+
+Next: commit the corpus/code/expected result, then make exactly one live Meta call
+with the separate rai_offline_mission schema, 2048 output-token cap and minimal
+reasoning. Preserve success or failure without retry/fallback or post-answer tuning.
+The earlier 48-trial negative comparison remains unchanged. Protect final video,
+clean-checkout rehearsal and submission time before November 4, 20:00 Guatemala
+(18:00 internal target); kickoff/build-period eligibility remains unresolved.

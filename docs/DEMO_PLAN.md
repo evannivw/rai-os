@@ -235,3 +235,19 @@ This is a proposed recording sequence, not a finished video or submission. No
 further kernel/UI expansion is needed for this story. Clean-checkout rehearsal,
 three-minute video, accessible links, organizer clarification and submission
 confirmation remain outstanding; preserve the November 4 internal/official targets.
+
+
+## November 2: useful offline artifact pivot
+
+The user approved prioritizing a useful result after no semantic speed advantage
+was measured. [OFFLINE_MISSION.md](OFFLINE_MISSION.md) defines a larger fictional
+project corpus with approved versus draft releases, compatible dependencies,
+permission exclusion and unresolved human actions. The Rust host bridge produces
+a portable reader plus exact source files/manifest, with independent checking
+before publication. This new corpus does NOT execute in QEMU. The kernel remains
+unchanged; do not relabel host packaging as a guest filesystem or new native UI.
+
+This first slice is a one-shot checked host publication. Automatic semantic event
+recovery, incremental updates and general file ingestion remain pending. Prior
+negative performance evidence is retained. Protect final verification, browser
+review, video and submission time; the original November 4 targets remain intact.

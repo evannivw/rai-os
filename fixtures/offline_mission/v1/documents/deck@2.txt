@@ -1,0 +1,16 @@
+AURORA / Presentation revision two / Juniper kit
+
+1. The problem
+A visitor desk loses its network connection just before arrivals. Staff still need a readable local list and a clear indication of what was prepared earlier.
+
+2. The demonstration
+Load the synthetic arrival list, switch the presentation laptop to offline mode, and open the locally prepared review pack. Show the exact published files and the remaining human preparation steps. The prototype retains the previous checked result until a replacement passes validation.
+
+3. What this build actually proves
+A bounded model proposal can select public material and deterministic code can verify and package it. The prototype does not prove production security, better CPU scheduling, reduced battery use or general autonomous phone support.
+
+4. Architecture
+This deck uses interface generation two. Its supporting specification is the generation-two one, not necessarily the newest numbered specification. The matching drawing is the one without a sync node.
+
+5. Rehearsal
+Use the matching local runbook and QA record. Surface remaining handoff actions before the visitor session instead of claiming they have already happened.

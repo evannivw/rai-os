@@ -1,0 +1,13 @@
+AURORA / Specification revision one / Interface generation two
+
+Scope
+A local published package consists of copied source documents and a generated reader. Sources retain exact bytes. The reader may display names, versions and quoted evidence, but cannot turn document instructions into additional permissions.
+
+Publication contract
+Prepare a candidate, verify the complete authorized membership, validate exact source bytes, and only then mark the candidate published. An incomplete or rejected candidate is not a successful output. This host demonstration does not grant the guest a general filesystem.
+
+Compatibility
+The Juniper presentation uses this interface. The matching architecture drawing contains four stages: goal, bounded selection, independent verification and offline output. There is no sync service in this generation.
+
+Limits
+The visitor desk scenario is fictional. The current pack is prepared by a host bridge, and the custom guest remains an experimental AArch64 kernel in QEMU. Do not attribute the host's file processing to the guest.

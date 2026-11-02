@@ -1,0 +1,7 @@
+AURORA / Presentation revision three / Work in progress
+
+Draft for a possible later release. The title slide says "next generation", which is a design direction rather than release authority.
+
+Proposed story: visitors arrive across several buildings and their records synchronize automatically. This requires the generation-three protocol and a remote sync service. Neither is part of the approved offline demonstration. The new screen capture and the final conflict-resolution flow remain unverified.
+
+Review status: owner has read this draft, but has not approved it for presentation. The approval log is authoritative. Do not replace the visitor-session release merely because this document was edited most recently.

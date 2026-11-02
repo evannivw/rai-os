@@ -324,3 +324,19 @@ replay uses two archived Meta selections to show historical/current publication,
 exact reuse and one new job in a single real guest session. It performs no live
 inference; graphic pauses are presentation-only. Continuous live semantic event
 recovery remains pending. No kernel or graphical implementation changes.
+
+
+## November 2: useful offline artifact pivot
+
+The user approved prioritizing a useful result after no semantic speed advantage
+was measured. [OFFLINE_MISSION.md](OFFLINE_MISSION.md) defines a larger fictional
+project corpus with approved versus draft releases, compatible dependencies,
+permission exclusion and unresolved human actions. The Rust host bridge produces
+a portable reader plus exact source files/manifest, with independent checking
+before publication. This new corpus does NOT execute in QEMU. The kernel remains
+unchanged; do not relabel host packaging as a guest filesystem or new native UI.
+
+This first slice is a one-shot checked host publication. Automatic semantic event
+recovery, incremental updates and general file ingestion remain pending. Prior
+negative performance evidence is retained. Protect final verification, browser
+review, video and submission time; the original November 4 targets remain intact.

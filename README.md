@@ -45,6 +45,12 @@ both policies passed 24/24; fixed rules were faster in every paired trial.
 No AI efficiency advantage is established. A complex workload and continuous
 semantic replanning remain pending.
 
+The November 2 [offline presentation mission](docs/OFFLINE_MISSION.md) produces
+an actual portable host reading pack from a larger fictional corpus: released
+presentation, compatible support, approval evidence and open human actions.
+It uses the Rust host bridge and independent checks; these new files are not
+processed by QEMU. Automatic updates and general filesystem ingestion are pending.
+
 ## Run
 
 Install Rustup and QEMU (9.2 or newer with virt-9.2), then:

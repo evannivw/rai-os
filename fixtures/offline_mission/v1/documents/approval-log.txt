@@ -1,0 +1,14 @@
+AURORA / Owner release log
+Fictional approvals for this development fixture; no cryptographic signatures are implied.
+
+November 1, morning
+The initial presentation (deck@1) was approved for an internal rehearsal. Its screenshots are now obsolete.
+
+November 1, afternoon
+I approve the second presentation (deck@2), also called the Juniper kit, for the visitor-team session. It replaces the first presentation for that audience. Ship the compatible support described in the review memo, and include the QA findings and handoff checklist. The disabled camera is a known limitation, not an unresolved release blocker.
+
+November 2, morning
+I have read deck@3. It remains a draft: the generation-three sync demonstration has not passed the offline check. This entry records review, not approval. Do not present it as the released version.
+
+Decision authority
+For this fixture, owner approval is recorded only here. Comments in the decks, draft specifications, chat-like notes and optional material cannot supersede this log.

@@ -1,0 +1,168 @@
+[
+  {
+    "case": "private",
+    "stdout": "",
+    "stderr": "{\"error\":\"mission_document_not_allowed\",\"event\":\"error\"}\n",
+    "rejected": true
+  },
+  {
+    "case": "traversal",
+    "stdout": "",
+    "stderr": "{\"error\":\"mission_document_not_allowed\",\"event\":\"error\"}\n",
+    "rejected": true
+  },
+  {
+    "case": "invented-evidence",
+    "stdout": "",
+    "stderr": "{\"error\":\"invalid_mission_quotation\",\"event\":\"error\"}\n",
+    "rejected": true
+  },
+  {
+    "case": "stale-permission",
+    "stdout": "",
+    "stderr": "{\"error\":\"stale_mission_plan\",\"event\":\"error\"}\n",
+    "rejected": true
+  },
+  {
+    "case": "wrong-goal",
+    "stdout": "",
+    "stderr": "{\"error\":\"stale_mission_plan\",\"event\":\"error\"}\n",
+    "rejected": true
+  },
+  {
+    "case": "duplicate",
+    "stdout": "",
+    "stderr": "{\"error\":\"duplicate_mission_document\",\"event\":\"error\"}\n",
+    "rejected": true
+  },
+  {
+    "case": "newest-unapproved",
+    "stdout": "{\"event\":\"mission_independent_check\",\"execution_location\":\"host\",\"passed\":false}\n",
+    "stderr": "{\"error\":\"mission_independent_check_failed\",\"event\":\"error\"}\n",
+    "rejected": true
+  },
+  {
+    "case": "wrong-interface",
+    "stdout": "{\"event\":\"mission_independent_check\",\"execution_location\":\"host\",\"passed\":false}\n",
+    "stderr": "{\"error\":\"mission_independent_check_failed\",\"event\":\"error\"}\n",
+    "rejected": true
+  },
+  {
+    "case": "missing-support",
+    "stdout": "{\"event\":\"mission_independent_check\",\"execution_location\":\"host\",\"passed\":false}\n",
+    "stderr": "{\"error\":\"mission_independent_check_failed\",\"event\":\"error\"}\n",
+    "rejected": true
+  },
+  {
+    "case": "optional",
+    "stdout": "{\"event\":\"mission_independent_check\",\"execution_location\":\"host\",\"passed\":false}\n",
+    "stderr": "{\"error\":\"mission_independent_check_failed\",\"event\":\"error\"}\n",
+    "rejected": true
+  },
+  {
+    "case": "lost-action",
+    "stdout": "{\"event\":\"mission_independent_check\",\"execution_location\":\"host\",\"passed\":false}\n",
+    "stderr": "{\"error\":\"mission_independent_check_failed\",\"event\":\"error\"}\n",
+    "rejected": true
+  },
+  {
+    "case": "source",
+    "independent_rejection": true
+  },
+  {
+    "case": "extra-private",
+    "independent_rejection": true
+  },
+  {
+    "case": "missing-file",
+    "independent_rejection": true
+  },
+  {
+    "case": "reader-text",
+    "independent_rejection": true
+  },
+  {
+    "case": "script",
+    "independent_rejection": true
+  },
+  {
+    "case": "remote-link",
+    "independent_rejection": true
+  },
+  {
+    "case": "remote-css",
+    "independent_rejection": true
+  },
+  {
+    "case": "symlink",
+    "independent_rejection": true
+  },
+  {
+    "case": "offline-provider-valid",
+    "transport": "dummy_curl",
+    "report": {
+      "source": "meta",
+      "execution_location": "host",
+      "guest_execution": false,
+      "plan_exit": 0,
+      "published": true,
+      "provider": {
+        "choice_count": 1,
+        "finish_reason": "stop",
+        "http_status": 200,
+        "latency_ms": 259,
+        "model_matches": true,
+        "refusal_present": false,
+        "role": "assistant",
+        "stage": "proposal",
+        "tool_calls_present": false,
+        "transport_exit_code": 0,
+        "usage": {
+          "completion_tokens": 20,
+          "prompt_tokens": 10,
+          "total_tokens": 30
+        }
+      },
+      "build_exit": 0,
+      "checked": {
+        "documents": 9,
+        "source_bytes": 8620,
+        "pending_actions": 2,
+        "external_resources": 0,
+        "execution_location": "host"
+      },
+      "archive_sha256": "6b3aa499caa97cbe8f504024fb60a1f26ede6e730157240cca319a537469970b",
+      "end_to_end_ms": 315
+    }
+  },
+  {
+    "case": "offline-provider-wrong-meaning",
+    "transport": "dummy_curl",
+    "report": {
+      "source": "meta",
+      "execution_location": "host",
+      "guest_execution": false,
+      "plan_exit": 0,
+      "published": false,
+      "provider": {
+        "choice_count": 1,
+        "finish_reason": "stop",
+        "http_status": 200,
+        "latency_ms": 26,
+        "model_matches": true,
+        "refusal_present": false,
+        "role": "assistant",
+        "stage": "proposal",
+        "tool_calls_present": false,
+        "transport_exit_code": 0,
+        "usage": {
+          "completion_tokens": 20,
+          "prompt_tokens": 10,
+          "total_tokens": 30
+        }
+      },
+      "build_exit": 1,
+      "end_to_end_ms": 75
+    }
+  }
+]

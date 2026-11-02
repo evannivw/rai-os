@@ -1,0 +1,9 @@
+AURORA / Visitor-session handoff
+The following two preparation actions are still open:
+
+Confirm that the presentation laptop opens the package while disconnected.
+Ask the room host whether a wired display adapter is available.
+
+These are human actions. Preparing a package does not mean either action has happened. Do not send a message, schedule an appointment or purchase equipment automatically.
+
+The owner approval already covers the disabled camera demonstration. Keep that limitation visible through qa@1, but do not invent another pending release approval. No commercial pricing or customer contacts are needed for the visitor session.

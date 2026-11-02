@@ -1,0 +1,104 @@
+{
+  "catalog_version": 1,
+  "permissions_version": 1,
+  "records": [
+    {
+      "id": "project-brief",
+      "path": "documents/project-brief.txt",
+      "read_allowed": true,
+      "byte_length": 1390,
+      "sha256": "e610d4352d73d069d08f139ed33f6ba99d8239fb6ce1103b08997effaeb63e1a"
+    },
+    {
+      "id": "approval-log",
+      "path": "documents/approval-log.txt",
+      "read_allowed": true,
+      "byte_length": 1019,
+      "sha256": "c4341d0ffe21761ba76859826acdb865dc0978a8a12aadd8ab76b1f83e2a6975"
+    },
+    {
+      "id": "review-memo",
+      "path": "documents/review-memo.txt",
+      "read_allowed": true,
+      "byte_length": 806,
+      "sha256": "c39f54404fe81d7c7f699cd848d0925686abd6a588462e1f0f30be8636eea860"
+    },
+    {
+      "id": "deck@1",
+      "path": "documents/deck@1.txt",
+      "read_allowed": true,
+      "byte_length": 529,
+      "sha256": "bd223beffd0c29bd752779cbb0e9a45a41893b6b10514b50aade01e285478f83"
+    },
+    {
+      "id": "deck@2",
+      "path": "documents/deck@2.txt",
+      "read_allowed": true,
+      "byte_length": 1187,
+      "sha256": "0439bc90a81f363c4c0f7409bd2ae5acc0cb051ca68d87ac19afff7ccea4cfdd"
+    },
+    {
+      "id": "deck@3",
+      "path": "documents/deck@3.txt",
+      "read_allowed": true,
+      "byte_length": 720,
+      "sha256": "0856092548893a13f2a015ff25fd66c9adb268ed7a21d0e74477a43486a6eedc"
+    },
+    {
+      "id": "spec@1",
+      "path": "documents/spec@1.txt",
+      "read_allowed": true,
+      "byte_length": 1059,
+      "sha256": "4ed03105ad457a44d45573825f6a5b4db5e19b0e7928dc46c54790ae8aa98106"
+    },
+    {
+      "id": "spec@2",
+      "path": "documents/spec@2.txt",
+      "read_allowed": true,
+      "byte_length": 579,
+      "sha256": "9207d12331166da5285825ee24bbc2a4b9fd6efecaf4881eb78d749566540976"
+    },
+    {
+      "id": "diagram@1",
+      "path": "documents/diagram@1.txt",
+      "read_allowed": true,
+      "byte_length": 578,
+      "sha256": "ba8d6d84a774e90f8ce885c155d671cf9f63ac2be63879b7a658209ac0b3871b"
+    },
+    {
+      "id": "runbook@1",
+      "path": "documents/runbook@1.txt",
+      "read_allowed": true,
+      "byte_length": 1093,
+      "sha256": "012edf6cd92e228e7026deaa4b347d11928be700ded8c07289429d85fd44cdf4"
+    },
+    {
+      "id": "qa@1",
+      "path": "documents/qa@1.txt",
+      "read_allowed": true,
+      "byte_length": 845,
+      "sha256": "d4e7685be46c8e37fe3a7bbe20848496f9dd1f6e0aa1d1532808f59b200baa36"
+    },
+    {
+      "id": "handoff",
+      "path": "documents/handoff.txt",
+      "read_allowed": true,
+      "byte_length": 643,
+      "sha256": "1f6770a55aebb986e9e0e256d0434161dc10cdea4afc2f56f7613455ee22df65"
+    },
+    {
+      "id": "optional-roadmap",
+      "path": "documents/optional-roadmap.txt",
+      "read_allowed": true,
+      "byte_length": 480,
+      "sha256": "9e7eb161e5255b6713f771ebde7534052dc0da9dad7f63cdb6e638e56e4bf918"
+    },
+    {
+      "id": "private-pricing",
+      "path": "documents/private-pricing.txt",
+      "read_allowed": false,
+      "byte_length": 230,
+      "sha256": "69e6a29949ced88c3604135da87a0771103f7420a1892bd05c6d4bc827063945"
+    }
+  ]
+}

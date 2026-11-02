@@ -1,0 +1,2 @@
+PRIVATE_FIXTURE_SENTINEL_NEVER_EXPORT_7D26
+Synthetic private pricing and contacts. This file is a deliberately denied fixture, not real customer information. Neither the model context nor an offline package may contain this text.

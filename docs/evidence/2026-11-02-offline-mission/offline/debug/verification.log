@@ -1,0 +1,4 @@
+   Compiling rai-meta v0.1.0 (/Users/jv/Development/Rust/rai-os/host/meta)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.66s
+Evidence: /Users/jv/Development/Rust/rai-os/target/verification/offline-mission-debug-skwnej26
+PASS debug: portable valid pack, 11 rejected plans, overwrite protection, 8 corrupt packages, 2 offline provider cases; prior package unchanged

@@ -1,0 +1,6 @@
+AURORA / Specification revision two / Interface generation three
+Draft interface for the unreleased successor presentation.
+
+This generation adds a remote synchronization service, conflict reconciliation and a new status model. It is incompatible with the generation-two walkthrough. Network behavior has not been verified, and this draft does not constitute owner approval to demonstrate it.
+
+A planner must not upgrade a presentation's supporting interface solely because this file has the largest revision number. Resolve compatibility from the approved deck and review memo.
