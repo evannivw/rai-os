@@ -148,3 +148,9 @@ execution and recovery; it does not make live Meta calls. See
 `docker run --rm --network none rai-os-demo apps-batches-verify` checks the generic
 whole-table programs, reviewed evolution and recovery using disclosed offline
 schemas. See [APP_BATCHES.md](APP_BATCHES.md) for the separate bounded live run.
+
+
+The image now includes Git. Live apps use /state/app-git for dedicated definition
+history; keep the /state volume to preserve it. Run
+`docker run --rm --network none rai-os-demo apps-git-verify` for real offline
+Git/QEMU checks. [APP_GIT.md](APP_GIT.md) describes prompts, rollback and boundaries.

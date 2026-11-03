@@ -185,3 +185,12 @@ result and labels the session replay; it is not a new generation. For a fresh li
 creation, use the existing live entry point with your own key and the two prompts
 in the linked evidence. Keep generation, human review, local execution and saved
 recovery visibly distinct in the three-minute narration.
+
+
+Live demo sessions now enable [Git tools](APP_GIT.md) in their own app-git folder.
+Open an installed app, select Create, and request `git: save this definition`.
+Save a second reviewed definition before requesting
+`git: restore the previous saved version, keeping current records`.
+The restored program requires the usual approvals. Show that the program changes
+while the current values remain, and explain that Git retains both versions.
+This is host-backed app-definition history, not executable OS self-update.

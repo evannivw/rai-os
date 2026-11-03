@@ -1,4 +1,5 @@
 //! Single-proposal, host-coordinated and guest-owned Meta bridge modes.
+mod app_git;
 mod app_repair;
 mod apps;
 mod batch;
@@ -11,6 +12,7 @@ mod coordinator;
 mod decision_source;
 mod domain;
 mod files;
+mod git_store;
 mod guest_bridge;
 mod guest_index;
 mod guest_report;
@@ -68,6 +70,23 @@ fn run() -> Result<(), String> {
         return Err("graphics_requires_guest_index_mode".into());
     }
     let kernel = &args[0];
+    if args.len() == 4 && args[1] == "--app-git-plan" {
+        return app_git::plan(Path::new(&args[2]), Path::new(&args[3]), None);
+    }
+    if args.len() == 5 && args[1] == "--app-git-plan-replay" {
+        return app_git::plan(
+            Path::new(&args[2]),
+            Path::new(&args[3]),
+            Some(Path::new(&args[4])),
+        );
+    }
+    if args.len() == 5 && args[1] == "--app-git-apply" {
+        return app_git::apply(
+            Path::new(&args[2]),
+            Path::new(&args[3]),
+            Path::new(&args[4]),
+        );
+    }
     if args.len() == 3 && args[1] == "--app-state-check" {
         return snapshot::run(Path::new(&args[2]));
     }

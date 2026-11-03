@@ -492,3 +492,16 @@ both initial attempts. Conditional whole-table generation, reviewed program chan
 with retained rows, independent results and reboot are demonstrated. Existing
 saved fixtures were not changed. Use this evidence as a short creation/evolution
 beat in the final video; it does not remove the need to finish recording and submit.
+
+
+## November 3: user-selected Git history and rollback
+
+The user requested Git access for Meta and prioritized app definition history,
+while also expressing interest in later RAI-OS self-update outside the kernel.
+Implement scoped local Git tools and compatible restore through existing review;
+keep executable source, remote repositories and kernel changes out of this slice.
+Verify real Git + QEMU first, including canceled/stale operations and incompatible
+restores. Then freeze source and make three actual Meta Git requests at most one
+call each: save version one, save version two and restore the previous definition.
+These verify tool selection, not new model generation of the disclosed test apps.
+Preserve current records and history and keep final video/submission work visible.

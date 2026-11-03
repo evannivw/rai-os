@@ -1,0 +1,12 @@
+{
+  "app_id": "versiontool",
+  "base_revision": 4,
+  "choice": {
+    "message": "Version one",
+    "operation": "save",
+    "reason": "Explicit verifier Git operation.",
+    "revision": ""
+  },
+  "head": "",
+  "request_id": 5
+}

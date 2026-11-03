@@ -44,3 +44,25 @@ own temporary frame, which returns before command execution. No stack reservatio
 or MMU window increase was made. Real debug/release execution must still verify
 the relevant paths; individual compiler frame sizes are not a complete worst-case
 stack proof. This is infrastructure work an own kernel makes our responsibility.
+
+
+## November 3: Git and safe platform evolution
+
+Git belongs in a service/tool adapter, not in the kernel. The first
+[Git integration](APP_GIT.md) versions checked app definitions on the host and
+proposes compatible restores through native approval. It requires no new kernel
+mechanism and does not authorize changing executable RAI-OS source.
+
+The next systems mechanisms should follow concrete boundaries: move the app
+interpreter and controller into isolated user services with capability-checked
+IPC; add guest-backed durable storage when removing the host checkpoint becomes
+a product requirement; add device services for specific implemented hardware.
+Porting Git into the guest would need a suitable filesystem/runtime environment
+or a smaller Git-compatible service implementation. A model tool enum does not
+supply those mechanisms.
+
+Updating UI/coordinator service code additionally needs candidate build/tests,
+resource limits, state migration policy and atomic package activation with a
+bootable previous version. Git rollback alone is insufficient. Declarative app
+restores already provide a limited example: preserve current data, validate the
+old definition against it, require approval and keep every saved version.

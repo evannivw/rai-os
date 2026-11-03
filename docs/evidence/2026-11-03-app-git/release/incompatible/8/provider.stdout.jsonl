@@ -1,0 +1,1 @@
+{"event":"app_git_plan","execution":false,"pending":{"app_id":"versiontool","base_revision":5,"choice":{"message":"","operation":"restore","reason":"Explicit verifier Git operation.","revision":"468130b046f9e9800eae28e2533e71c52502ae4b"},"head":"f4c14ae78e833d86080b99b72b80789f7c1e3c28","request_id":8}}

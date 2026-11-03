@@ -1,0 +1,16 @@
+{
+  "base_commit": "df49d4a5ae19b0c62e6569fa84cadffa49cefb93",
+  "worktree_modified": true,
+  "sha256": {
+    "host/meta/src/main.rs": "143826b4cc2e907ee4469995293d51a420f48a5945add5343b9c49039e9e05d3",
+    "host/meta/src/provider.rs": "4e2c538d4ad72ca743d101e6602de0d5e7f8684cf60dee219aa42d0269eb3040",
+    "portable/Dockerfile": "4eaa9d41ca9ef0cd594669d4a65b672446e3ce6a15a205fb791ca6b11e989ac7",
+    "scripts/apps.py": "cfc46394648766b18e19302b536376b3d830fb3dd341832465b0e416f270c6f0",
+    "scripts/demo.py": "b332d01a75e904fe5cc1fdb77bfc0551879e4e0b0542eb5cce0790fc32f7404c",
+    "scripts/portable.py": "18877fb17c4c8c357bf92b93b6f9f48234498a2059f2fe61e5ece491cbd0ca9f",
+    "host/meta/src/app_git.rs": "536e4a8cdadcd0a1e16735ec9907f6bd6075cebb6371654e9d4eac177f317948",
+    "host/meta/src/git_store.rs": "7bd753aed44559376d0a1cebbd491bd6e0ce2359b701270f1f54a187abde62d6",
+    "scripts/app_git.py": "188c53f82e7aeb3b57106739e4d9f269b0ef9df2ff2232c95752ada6446da937",
+    "scripts/verify_app_git.py": "676881abd2a74f424528bf45b216f100927b4623e93f417e069de97e53ccb5b8"
+  }
+}

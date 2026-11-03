@@ -1,0 +1,7 @@
+{
+  "source": "replay",
+  "state": "completed",
+  "maximum_provider_calls": 1,
+  "operation": "diff",
+  "session_provider_attempts": 4
+}

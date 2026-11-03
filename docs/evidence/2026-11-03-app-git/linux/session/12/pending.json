@@ -1,0 +1,12 @@
+{
+  "app_id": "versiontool",
+  "base_revision": 6,
+  "choice": {
+    "message": "",
+    "operation": "history",
+    "reason": "Explicit verifier Git operation.",
+    "revision": ""
+  },
+  "head": "2c7e5a511440244e711ca916b73b7a31d77ff385",
+  "request_id": 12
+}

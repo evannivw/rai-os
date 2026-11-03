@@ -571,3 +571,20 @@ use catalog v7; host validation, transport and checkpoints preserve explicit all
 scope without changing older row encodings. Formula correction cannot expand
 scope. There is no new unsafe, kernel service, driver or process boundary. See
 [APP_BATCHES.md](APP_BATCHES.md) for the exact contract and verification.
+
+
+## November 3: scoped app Git service
+
+The existing native prompt routes an explicit git: request to a separate typed
+contract. app_git.rs validates model tool selection and observed revision IDs;
+git_store.rs executes fixed Git plumbing in a dedicated bare repository per app.
+The Python adapter rechecks guest admission before a local tool operation, and
+Rust rechecks the history head under a per-app lock before applying it. Saving
+uses a conditional reference update; restore creates an ordinary app proposal,
+with compatibility validation and native approval, retaining current records.
+
+Only schemas are committed as app.json. Host tools own persistence, Git processes
+and HTTPS; no kernel or guest executable changed for this feature. The host and
+filesystem remain trusted; apps remain shared EL1. Executable service self-update
+is not authorized by this tool contract. See APP_GIT.md for boundaries, subprocess
+limits, cancellation and the difference between definition rollback and boot recovery.

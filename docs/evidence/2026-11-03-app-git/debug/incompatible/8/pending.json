@@ -1,0 +1,12 @@
+{
+  "app_id": "versiontool",
+  "base_revision": 5,
+  "choice": {
+    "message": "",
+    "operation": "restore",
+    "reason": "Explicit verifier Git operation.",
+    "revision": "8a286dbc1dc6710821c222d4c2f5dfe51477602e"
+  },
+  "head": "ead3463590eb2d7e7895a73c244017ec38304c39",
+  "request_id": 8
+}

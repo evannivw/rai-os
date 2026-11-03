@@ -2909,3 +2909,36 @@ per-attempt logs, UART, screenshots, checkpoint, report and hashes. The offline
 last-row rollback and unrelated-app checks remain distinct from this live run.
 DEMO_READY.md links an inspectable saved result without modifying tracked evidence.
 No executable change or further model call occurs in this documentation follow-up.
+
+
+## 2026-11-03 — Scoped Git tools for app definitions
+
+The user requested Git access for Meta, prioritizing generated-app history and
+rollback, with later interest in non-kernel OS updates. Added an explicit git:
+prompt route and seven closed choices: status/history/show/diff/save/restore/clarify.
+Meta sees actual bounded history and chooses an operation; Rust validates request,
+app identity, observed revision and current HEAD before the local Git adapter acts.
+Each app has a dedicated bare repository whose only committed file is app.json.
+Records and credentials are excluded. No shell, remote Git, source rewriting or
+kernel changes. One provider call per Git prompt shares the eight-call session cap.
+
+Restore uses the ordinary guest validation and native approval screens, retaining
+current records. Incompatible fields/workflows/capabilities are rejected. HEAD is
+not reset: saving a restored definition appends another child commit. Locks and
+conditional ref updates prevent overwriting newer history; cancellation/stale guest
+state blocks execution. Explicit bounds and trusted-host assumptions are documented
+in APP_GIT.md. Git history alone is not an executable OS recovery mechanism.
+
+Verified 100 Rust tests, host Clippy, formatting and Python syntax. A new unit test
+initially exposed stale-context handling in the save no-op path; reobservation fixed
+it before final verification. Real QEMU debug/release passed saves, diff/history,
+reviewed rollback over current data, cancel, concurrent HEAD change, incompatible
+restore, stale guest state, session limit and reboot. Existing batch, repair and
+saved/live entry checks passed. Linux ARM64 Docker passed the new verifier and
+saved demo with network disabled. Native Windows was not run.
+
+Evidence: evidence/2026-11-03-app-git. Input definitions and Git selections in these
+offline checks are explicit fixtures. Exact source hashes are retained for this
+modified tree. No Meta calls in this increment yet. Next: freeze source and perform
+one live sequence of two saves and one restore, at most three calls total, retaining
+all outcomes. This checks live tool selection, not generation of the fixture apps.

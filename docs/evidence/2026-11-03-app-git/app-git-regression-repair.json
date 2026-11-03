@@ -1,0 +1,621 @@
+{
+  "verified": true,
+  "source": "offline",
+  "source_commit": "df49d4a5ae19b0c62e6569fa84cadffa49cefb93",
+  "source_worktree_dirty": true,
+  "maximum_live_calls": 0,
+  "kernel_sha256": "822e6c8cf069ed50250dabf40aef3fc74beab6cb4243666edce2b5d267f9e691",
+  "checks": [
+    "Only the accepted proposal reaches guest review; both approvals required; exact arithmetic on different rows, denied empty stock and reboot verified without further inference",
+    "Three attempts maximum; guard-removal repair denied; canceled or replaced requests never deliver or trigger another attempt; transport and unsupported capability stop immediately; session counter limits corrections; clarification does not force installation; malformed adapter envelopes and synthetic timeout stop with notice and retained diagnostics"
+  ],
+  "cases": [
+    {
+      "name": "exhausted",
+      "attempts": 3,
+      "provider_counter": 3,
+      "final_catalog": {
+        "revision": "1",
+        "apps": "-"
+      },
+      "trace": {
+        "source": "replay",
+        "max_attempts": 3,
+        "session_limit": 8,
+        "attempts": [
+          {
+            "attempt": 1,
+            "kind": "initial",
+            "state": "rejected",
+            "exit_code": 1,
+            "code": "formula_syntax"
+          },
+          {
+            "attempt": 2,
+            "kind": "repair",
+            "state": "rejected",
+            "exit_code": 1,
+            "code": "formula_syntax"
+          },
+          {
+            "attempt": 3,
+            "kind": "repair",
+            "state": "rejected",
+            "exit_code": 1,
+            "code": "formula_syntax"
+          }
+        ],
+        "state": "exhausted",
+        "session_attempts_used": 3
+      }
+    },
+    {
+      "name": "scope-denied",
+      "attempts": 2,
+      "provider_counter": 2,
+      "final_catalog": {
+        "revision": "1",
+        "apps": "-"
+      },
+      "trace": {
+        "source": "replay",
+        "max_attempts": 3,
+        "session_limit": 8,
+        "attempts": [
+          {
+            "attempt": 1,
+            "kind": "initial",
+            "state": "rejected",
+            "exit_code": 1,
+            "code": "formula_syntax"
+          },
+          {
+            "attempt": 2,
+            "kind": "repair",
+            "state": "rejected",
+            "exit_code": 1,
+            "code": "app_repair_scope_denied"
+          }
+        ],
+        "state": "not_repairable",
+        "session_attempts_used": 2
+      }
+    },
+    {
+      "name": "cancel-invalid",
+      "attempts": 1,
+      "provider_counter": 1,
+      "final_catalog": {
+        "revision": "1",
+        "apps": "-"
+      },
+      "trace": {
+        "source": "replay",
+        "max_attempts": 3,
+        "session_limit": 8,
+        "attempts": [
+          {
+            "attempt": 1,
+            "kind": "initial",
+            "state": "discarded",
+            "exit_code": 1
+          }
+        ],
+        "state": "cancelled_or_stale",
+        "session_attempts_used": 1
+      }
+    },
+    {
+      "name": "cancel-valid",
+      "attempts": 1,
+      "provider_counter": 1,
+      "final_catalog": {
+        "revision": "1",
+        "apps": "-"
+      },
+      "trace": {
+        "source": "replay",
+        "max_attempts": 3,
+        "session_limit": 8,
+        "attempts": [
+          {
+            "attempt": 1,
+            "kind": "initial",
+            "state": "discarded",
+            "exit_code": 0
+          }
+        ],
+        "state": "cancelled_or_stale",
+        "session_attempts_used": 1
+      }
+    },
+    {
+      "name": "replaced-revision",
+      "attempts": 1,
+      "provider_counter": 1,
+      "final_catalog": {
+        "revision": "2",
+        "apps": "replacement:1:0:5265706c6163656d656e74"
+      },
+      "trace": {
+        "source": "replay",
+        "max_attempts": 3,
+        "session_limit": 8,
+        "attempts": [
+          {
+            "attempt": 1,
+            "kind": "initial",
+            "state": "discarded",
+            "exit_code": 1
+          }
+        ],
+        "state": "cancelled_or_stale",
+        "session_attempts_used": 1
+      }
+    },
+    {
+      "name": "transport-stop",
+      "attempts": 1,
+      "provider_counter": 1,
+      "final_catalog": {
+        "revision": "1",
+        "apps": "-"
+      },
+      "trace": {
+        "source": "replay",
+        "max_attempts": 3,
+        "session_limit": 8,
+        "attempts": [
+          {
+            "attempt": 1,
+            "kind": "initial",
+            "state": "rejected",
+            "exit_code": 1
+          }
+        ],
+        "state": "provider_failed",
+        "session_attempts_used": 1
+      }
+    },
+    {
+      "name": "session-budget",
+      "attempts": 1,
+      "provider_counter": 8,
+      "final_catalog": {
+        "revision": "1",
+        "apps": "-"
+      },
+      "trace": {
+        "source": "replay",
+        "max_attempts": 3,
+        "session_limit": 8,
+        "attempts": [
+          {
+            "attempt": 1,
+            "kind": "initial",
+            "state": "rejected",
+            "exit_code": 1,
+            "code": "formula_syntax"
+          }
+        ],
+        "state": "session_limit",
+        "session_attempts_used": 8
+      }
+    },
+    {
+      "name": "clarify",
+      "attempts": 2,
+      "provider_counter": 2,
+      "final_catalog": {
+        "revision": "1",
+        "apps": "-"
+      },
+      "trace": {
+        "source": "replay",
+        "max_attempts": 3,
+        "session_limit": 8,
+        "attempts": [
+          {
+            "attempt": 1,
+            "kind": "initial",
+            "state": "rejected",
+            "exit_code": 1,
+            "code": "formula_syntax"
+          },
+          {
+            "attempt": 2,
+            "kind": "repair",
+            "state": "accepted",
+            "exit_code": 0
+          }
+        ],
+        "state": "clarify",
+        "accepted_attempt": 2,
+        "session_attempts_used": 2
+      }
+    },
+    {
+      "name": "nonrepairable",
+      "attempts": 1,
+      "provider_counter": 1,
+      "final_catalog": {
+        "revision": "1",
+        "apps": "-"
+      },
+      "trace": {
+        "source": "replay",
+        "max_attempts": 3,
+        "session_limit": 8,
+        "attempts": [
+          {
+            "attempt": 1,
+            "kind": "initial",
+            "state": "rejected",
+            "exit_code": 1,
+            "code": "app_capability_denied"
+          }
+        ],
+        "state": "not_repairable",
+        "session_attempts_used": 1
+      }
+    },
+    {
+      "name": "adapter-null",
+      "attempts": 1,
+      "provider_counter": 1,
+      "final_catalog": {
+        "revision": "1",
+        "apps": "-"
+      },
+      "trace": {
+        "source": "replay",
+        "max_attempts": 3,
+        "session_limit": 8,
+        "attempts": [
+          {
+            "attempt": 1,
+            "kind": "initial",
+            "state": "failed",
+            "exit_code": 0
+          }
+        ],
+        "state": "failed",
+        "error": "ValueError",
+        "session_attempts_used": 1
+      }
+    },
+    {
+      "name": "adapter-missing-plan",
+      "attempts": 1,
+      "provider_counter": 1,
+      "final_catalog": {
+        "revision": "1",
+        "apps": "-"
+      },
+      "trace": {
+        "source": "replay",
+        "max_attempts": 3,
+        "session_limit": 8,
+        "attempts": [
+          {
+            "attempt": 1,
+            "kind": "initial",
+            "state": "failed",
+            "exit_code": 0
+          }
+        ],
+        "state": "failed",
+        "error": "KeyError",
+        "session_attempts_used": 1
+      }
+    },
+    {
+      "name": "adapter-stderr-array",
+      "attempts": 1,
+      "provider_counter": 1,
+      "final_catalog": {
+        "revision": "1",
+        "apps": "-"
+      },
+      "trace": {
+        "source": "replay",
+        "max_attempts": 3,
+        "session_limit": 8,
+        "attempts": [
+          {
+            "attempt": 1,
+            "kind": "initial",
+            "state": "failed",
+            "exit_code": 0
+          }
+        ],
+        "state": "failed",
+        "error": "ValueError",
+        "session_attempts_used": 1
+      }
+    },
+    {
+      "name": "adapter-timeout",
+      "attempts": 1,
+      "provider_counter": 1,
+      "final_catalog": {
+        "revision": "1",
+        "apps": "-"
+      },
+      "trace": {
+        "source": "replay",
+        "max_attempts": 3,
+        "session_limit": 8,
+        "attempts": [
+          {
+            "attempt": 1,
+            "kind": "initial",
+            "state": "failed",
+            "code": "adapter_timeout"
+          }
+        ],
+        "state": "failed",
+        "error": "TimeoutExpired",
+        "session_attempts_used": 1
+      }
+    }
+  ],
+  "success_trace": {
+    "source": "replay",
+    "max_attempts": 3,
+    "session_limit": 8,
+    "attempts": [
+      {
+        "attempt": 1,
+        "kind": "initial",
+        "state": "rejected",
+        "exit_code": 1,
+        "code": "formula_syntax"
+      },
+      {
+        "attempt": 2,
+        "kind": "repair",
+        "state": "accepted",
+        "exit_code": 0
+      }
+    ],
+    "state": "review",
+    "accepted_attempt": 2,
+    "session_attempts_used": 2
+  },
+  "events": [
+    {
+      "code": "formula_syntax",
+      "event": "app_validation_failed",
+      "execution": false,
+      "proposal": {
+        "base_revision": 1,
+        "decision": "install",
+        "reason": "Disclosed offline proposal for correction verification.",
+        "request_id": 2,
+        "spec": {
+          "behaviors": [
+            {
+              "event": "press",
+              "id": "move",
+              "label": "Move one",
+              "steps": [
+                {
+                  "compare": "ge",
+                  "field": "stock",
+                  "op": "require",
+                  "skip": 0,
+                  "value": "1"
+                },
+                {
+                  "compare": "",
+                  "field": "stock",
+                  "op": "calculate",
+                  "skip": 0,
+                  "value": "$stock -"
+                },
+                {
+                  "compare": "",
+                  "field": "moved",
+                  "op": "calculate",
+                  "skip": 0,
+                  "value": "$moved+1"
+                }
+              ]
+            }
+          ],
+          "capability": "records.local",
+          "fields": [
+            {
+              "default": "",
+              "key": "name",
+              "kind": "text",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "default": "0",
+              "key": "stock",
+              "kind": "number",
+              "label": "Stock",
+              "required": true
+            },
+            {
+              "default": "0",
+              "key": "moved",
+              "kind": "number",
+              "label": "Moved",
+              "required": true
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "id": "movement",
+          "title": "Movement"
+        }
+      },
+      "repair_hint": "Use an arithmetic expression only: integer literals, $field references, + - * /, unary minus and parentheses. Every field reference starts with $. Do not put an assignment or destination name before the expression. The step's field property already selects the destination.",
+      "repairable": true,
+      "request_id": 2,
+      "attempt": 1
+    },
+    {
+      "attempt": 2,
+      "event": "app_plan",
+      "execution": false,
+      "plan": {
+        "base_revision": 1,
+        "decision": "install",
+        "reason": "Disclosed offline proposal for correction verification.",
+        "request_id": 2,
+        "spec": {
+          "behaviors": [
+            {
+              "event": "press",
+              "id": "move",
+              "label": "Move one",
+              "steps": [
+                {
+                  "compare": "ge",
+                  "field": "stock",
+                  "op": "require",
+                  "skip": 0,
+                  "value": "1"
+                },
+                {
+                  "compare": "",
+                  "field": "stock",
+                  "op": "calculate",
+                  "skip": 0,
+                  "value": "$stock-1"
+                },
+                {
+                  "compare": "",
+                  "field": "moved",
+                  "op": "calculate",
+                  "skip": 0,
+                  "value": "$moved+1"
+                }
+              ]
+            }
+          ],
+          "capability": "records.local",
+          "fields": [
+            {
+              "default": "",
+              "key": "name",
+              "kind": "text",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "default": "0",
+              "key": "stock",
+              "kind": "number",
+              "label": "Stock",
+              "required": true
+            },
+            {
+              "default": "0",
+              "key": "moved",
+              "kind": "number",
+              "label": "Moved",
+              "required": true
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "id": "movement",
+          "title": "Movement"
+        }
+      },
+      "source": "replay"
+    }
+  ],
+  "actual_attempts": 2,
+  "generation_calls": 0,
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "movement",
+          "title": "Movement",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "stock",
+              "kind": "number",
+              "required": true,
+              "label": "Stock",
+              "default": "0"
+            },
+            {
+              "key": "moved",
+              "kind": "number",
+              "required": true,
+              "label": "Moved",
+              "default": "0"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "behaviors": [
+            {
+              "id": "move",
+              "label": "Move one",
+              "event": "press",
+              "steps": [
+                {
+                  "op": "require",
+                  "field": "stock",
+                  "value": "1",
+                  "compare": "ge",
+                  "skip": 0
+                },
+                {
+                  "op": "calculate",
+                  "field": "stock",
+                  "value": "$stock-1",
+                  "compare": "",
+                  "skip": 0
+                },
+                {
+                  "op": "calculate",
+                  "field": "moved",
+                  "value": "$moved+1",
+                  "compare": "",
+                  "skip": 0
+                }
+              ]
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Widget",
+            "2",
+            "1"
+          ],
+          [
+            "Empty",
+            "0",
+            "0"
+          ],
+          [
+            "Other",
+            "6",
+            "5"
+          ]
+        ]
+      }
+    ]
+  }
+}

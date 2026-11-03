@@ -120,6 +120,9 @@ saved rows, with per-row previews, one atomic commit and reviewed program update
 [Bounded correction](docs/APP_REPAIR.md) sends eligible formula errors back to Meta
 for up to two corrections, preserves app structure and permissions, and still
 requires guest validation and explicit approval before installation.
+[Git tools](docs/APP_GIT.md) let Meta save app definitions, inspect history/diffs
+and propose a compatible restore while retaining current records. Git runs in
+the host bridge and does not edit the kernel or arbitrary repositories.
 [Kernel decision](docs/KERNEL_DECISION.md) explains the learning/control tradeoff
 and why kernel ownership alone is not a performance or AI advantage.
 A [ready-to-open saved showcase](docs/APP_CAPABILITIES.md#live-generation-and-a-ready-to-open-session)

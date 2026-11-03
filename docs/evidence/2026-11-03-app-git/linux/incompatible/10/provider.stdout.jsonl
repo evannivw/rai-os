@@ -1,0 +1,1 @@
+{"event":"app_git_plan","execution":false,"pending":{"app_id":"versiontool","base_revision":5,"choice":{"message":"Stale guest","operation":"save","reason":"Explicit verifier Git operation.","revision":""},"head":"97ed446da6cb262ba583c9c649bcd4553e653d85","request_id":10}}

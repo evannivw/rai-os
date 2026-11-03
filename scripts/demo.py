@@ -49,6 +49,8 @@ def prepare(output, binary, kernel, source='saved'):
         'No API is called in saved mode. The screen says replay; its Create button uses only disclosed offline examples.\n'
         'For arbitrary supported generation, start a separate live demo with your own key.\n'
         'Resume with scripts/demo.py resume --output THIS_DIRECTORY; it never resets your data.\n'
+        'Live Git: open an app, choose Create, and type git: save this definition or git: restore the previous saved version.\n'
+        'Git keeps definitions in app-git; records stay in the device checkpoint. Restores require review.\n'
         'Limits: 3 apps, 6 fields, 8 records each; host checkpoint and HTTPS; shared EL1 runtime.\n')
     return output
 
@@ -65,7 +67,7 @@ def open_demo(kernel, binary, output, source='saved', resume=False, port=5900, b
     session = output / ('session-' + uuid.uuid4().hex[:12])
     print((output / 'START.txt').read_text(), flush=True)
     run(kernel, binary, session, 'replay' if source == 'saved' else 'meta',
-        port=port, bind=bind, state=output / 'device.json', exchange=output / 'exchange')
+        port=port, bind=bind, state=output / 'device.json', exchange=output / 'exchange', git_store=output / 'app-git')
 
 
 def verify(kernel, binary, output):

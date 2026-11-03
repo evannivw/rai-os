@@ -1,0 +1,12 @@
+{
+  "app_id": "versiontool",
+  "base_revision": 5,
+  "choice": {
+    "message": "Stale guest",
+    "operation": "save",
+    "reason": "Explicit verifier Git operation.",
+    "revision": ""
+  },
+  "head": "f4c14ae78e833d86080b99b72b80789f7c1e3c28",
+  "request_id": 10
+}

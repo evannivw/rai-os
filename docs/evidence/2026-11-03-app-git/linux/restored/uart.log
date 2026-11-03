@@ -1,0 +1,57 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Display ready: 480x800 guest framebuffer
+Console ready: type help for commands
+@rai1	1	ok	state=home
+@rai1	2	ok	state=home
+@rai1	3	ok	revision=1; apps=-
+@rai1	4	ok	state=home
+@rai1	5	ok	state=home
+@rai1	6	ok	state=compose
+@rai1	7	ok	state=compose
+@rai1	8	ok	state=compose
+@rai1	9	ok	state=compose
+@rai1	10	ok	state=compose
+@rai1	11	ok	state=compose
+@rai1	12	ok	state=compose
+@rai1	13	ok	state=compose
+@rai1	14	ok	state=compose
+@rai1	15	ok	state=compose
+@rai1	16	ok	state=compose
+@rai1	17	ok	state=compose
+@rai1	18	ok	state=compose
+@rai1	19	ok	state=compose
+@rai1	20	ok	state=compose
+@rai1	21	ok	state=compose
+@rai1	22	ok	state=compose
+@rai1	23	ok	state=compose
+@rai1	24	ok	submit=3; revision=1; target=-; prompt=526573746f726520736176656420617070
+@rai1	25	ok	state=thinking
+@rai1	26	ok	state=thinking
+@rai1	27	ok	state=thinking
+@rai1	28	ok	state=thinking
+@rai1	29	ok	state=thinking
+@rai1	30	ok	state=thinking
+@rai1	31	ok	state=thinking
+@rai1	32	ok	state=review
+@rai1	33	ok	state=behavior_review
+@rai1	34	ok	state=form
+@rai1	35	ok	state=form
+@rai1	36	ok	state=form
+@rai1	37	ok	state=records
+@rai1	38	ok	state=form
+@rai1	39	ok	state=form
+@rai1	40	ok	state=form
+@rai1	41	ok	state=records
+@rai1	42	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b31^^0~all
+@rai1	43	ok	id=versiontool; version=1; count=2; rows=4c4f43414c5f4f4e4c595f41,3136|4c4f43414c5f4f4e4c595f42,3230; states=,
+@rai1	44	ok	state=records
+@rai1	45	ok	state=home
+@rai1	46	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	47	ok	state=home
+@rai1	48	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	49	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b31^^0~all
+@rai1	50	ok	id=versiontool; version=1; count=2; rows=4c4f43414c5f4f4e4c595f41,3136|4c4f43414c5f4f4e4c595f42,3230; states=,
+@rai1	51	ok	state=form
+@rai1	52	ok	state=table
+@rai1	53	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	54	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c

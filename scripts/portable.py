@@ -19,7 +19,7 @@ def binaries():
     return ROOT/f'target/host-meta/{host}/release/rai-meta',ROOT/'target/display/aarch64-unknown-none-softfloat/release/rai-os'
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path);p.add_argument('action',choices=['build','verify','console','desktop','context-rules','context-meta','workspace','workspace-replay','workspace-verify','apps','apps-replay','apps-verify','apps-storage-verify','apps-table-verify','apps-brightness-verify','apps-formulas-verify','apps-exchange-verify','apps-workflow-verify','demo','demo-verify','apps-behaviors-verify','apps-repair-verify','apps-batches-verify'],default='verify',nargs='?');a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path);p.add_argument('action',choices=['build','verify','console','desktop','context-rules','context-meta','workspace','workspace-replay','workspace-verify','apps','apps-replay','apps-verify','apps-storage-verify','apps-table-verify','apps-brightness-verify','apps-formulas-verify','apps-exchange-verify','apps-workflow-verify','demo','demo-verify','apps-behaviors-verify','apps-repair-verify','apps-batches-verify','apps-git-verify'],default='verify',nargs='?');a=p.parse_args()
     binary,kernel=binaries()
     if a.action=='build':
         subprocess.run(['cargo','build','--locked','--bin','rai-os','--features','guest-display','--target-dir','target/display','--release'],check=True)
@@ -51,7 +51,10 @@ def main():
             verify(kernel,binary,output/'demo');return
         if a.action in ['apps','apps-replay']:
             from apps import run
-            run(kernel,binary,output/'apps','meta' if a.action=='apps' else 'replay',bind='0.0.0.0',state=Path('/state/device.json'),exchange=Path('/exchange'));return
+            run(kernel,binary,output/'apps','meta' if a.action=='apps' else 'replay',bind='0.0.0.0',state=Path('/state/device.json'),exchange=Path('/exchange'),git_store=Path('/state/app-git'));return
+        if a.action=='apps-git-verify':
+            from verify_app_git import verify
+            verify(kernel,binary,output/'git');return
         if a.action=='apps-batches-verify':
             from verify_app_batches import verify
             verify(kernel,binary,output/'batches');return

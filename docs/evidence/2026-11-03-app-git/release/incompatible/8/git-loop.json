@@ -1,0 +1,7 @@
+{
+  "source": "replay",
+  "state": "failed",
+  "maximum_provider_calls": 1,
+  "error": "ValueError",
+  "session_provider_attempts": 1
+}

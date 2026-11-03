@@ -1,0 +1,12 @@
+{
+  "app_id": "versiontool",
+  "base_revision": 8,
+  "choice": {
+    "message": "Cancelled save",
+    "operation": "save",
+    "reason": "Explicit verifier Git operation.",
+    "revision": ""
+  },
+  "head": "ed30f9aa3aeef73c7d43e24c484c46108a300075",
+  "request_id": 19
+}

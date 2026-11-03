@@ -16,6 +16,7 @@ kinds of control. A model proposal never grants itself additional authority.
 | System effects | User-applied software framebuffer brightness | No generated-app camera, GPS, network, notifications, arbitrary file or physical backlight access |
 | Durability | Host checkpoint; reviewed CSV import/export | No guest disk driver/database; CSV omits process states |
 | Execution | Generic Rust interpreter and native QEMU framebuffer | App runtime/UI still share EL1; existing EL0 worker isolation is not wired into apps |
+| Versioning | Meta-selected local Git tools for definitions; compatible restore after review | Host Git; no executable self-update, remote Git or record rollback |
 | Generation | Meta returns a strict schema; user reviews before installation | No native executable compiler, dynamic loader or app syscall ABI |
 | Input | 128 ASCII prompt characters; 1 request at a time; 3 attempts per goal, 8 per session | Corrections cover eligible expression errors only; no unrestricted long-form app specification |
 

@@ -78,7 +78,7 @@ def deliver(g,p):
     g.request('app.ready',f"{rid}:{p['reason']}")
 
 class Studio:
-    def __init__(self,kernel,binary,output,source='meta',vnc=False,state=None,exchange=None):
+    def __init__(self,kernel,binary,output,source='meta',vnc=False,state=None,exchange=None,git_store=None):
         self.output=output;output.mkdir(parents=True,exist_ok=False)
         password=os.environ.get('RAI_VNC_PASSWORD')
         if password and (not password.isascii() or not 1<=len(password)<=8):raise ValueError('RAI_VNC_PASSWORD must be 1 to 8 ASCII characters')
@@ -87,6 +87,7 @@ class Studio:
         self.saved_revision=None;self.storage_error=None
         self.lock=threading.RLock();self.threads=[];self.closed=False
         self.binary=binary;self.kernel=kernel;self.source=source
+        self.git_store = Path(git_store).absolute() if git_store is not None else None
         self.repair_enabled = source == 'meta'
         self.provider_calls = 0
         self._attempt_timeout = ATTEMPT_TIMEOUT
@@ -178,7 +179,17 @@ class Studio:
         return subprocess.run(cmd, cwd=ROOT, env=env, capture_output=True,
                               text=True, timeout=self._attempt_timeout)
 
+    def _git_plan_attempt(self, request, request_path, folder):
+        if self.source != 'meta':
+            raise ValueError('Git planning requires Meta; scripted choices belong to the offline verifier.')
+        env=dict(os.environ);env.pop('RAI_VNC_PASSWORD',None)
+        return subprocess.run([str(self.binary),str(self.kernel),'--app-git-plan',str(self.git_store),str(request_path)],
+                              cwd=ROOT,env=env,capture_output=True,text=True,timeout=40)
+
     def plan(self, r):
+        if r['goal'].lstrip().lower().startswith('git:'):
+            from app_git import plan
+            return plan(self,r)
         folder = self.output / str(r['request_id'])
         request_path = folder / 'request.json'
         rid = r['request_id']
@@ -309,8 +320,8 @@ class Studio:
                 self.guest.close()
                 if self.checkpoint:self.checkpoint.close()
 
-def run(kernel,binary,output,source='meta',port=5900,bind='127.0.0.1',state=None,exchange=None):
-    app=Studio(kernel,binary,output,source,vnc=True,state=state,exchange=exchange);keys=queue.Queue(maxsize=256)
+def run(kernel,binary,output,source='meta',port=5900,bind='127.0.0.1',state=None,exchange=None,git_store=None):
+    app=Studio(kernel,binary,output,source,vnc=True,state=state,exchange=exchange,git_store=git_store);keys=queue.Queue(maxsize=256)
     if app.exchange:print(f'CSV exchange folder: {app.exchange.root}',flush=True)
     def press(key):keys.put_nowait(key)
     def keyboard():
@@ -326,6 +337,6 @@ def run(kernel,binary,output,source='meta',port=5900,bind='127.0.0.1',state=None
     finally:keys.put(None);worker.join(timeout=10);app.close()
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',choices=['meta','replay'],default='meta');p.add_argument('--output',type=Path,required=True);p.add_argument('--port',type=int,default=5900);p.add_argument('--debug',action='store_true');p.add_argument('--state',type=Path,default=ROOT/'target/device.json');p.add_argument('--temporary',action='store_true');p.add_argument('--exchange',type=Path,default=ROOT/'target/exchange');a=p.parse_args()
-    try:run(build(a.debug),host_build(a.debug),a.output.resolve(),a.source,a.port,state=None if a.temporary else a.state,exchange=a.exchange)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',choices=['meta','replay'],default='meta');p.add_argument('--output',type=Path,required=True);p.add_argument('--port',type=int,default=5900);p.add_argument('--debug',action='store_true');p.add_argument('--state',type=Path,default=ROOT/'target/device.json');p.add_argument('--temporary',action='store_true');p.add_argument('--exchange',type=Path,default=ROOT/'target/exchange');p.add_argument('--git-store',type=Path);a=p.parse_args()
+    try:run(build(a.debug),host_build(a.debug),a.output.resolve(),a.source,a.port,state=None if a.temporary else a.state,exchange=a.exchange,git_store=a.git_store)
     except KeyboardInterrupt:pass

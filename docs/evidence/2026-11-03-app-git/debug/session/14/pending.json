@@ -1,0 +1,12 @@
+{
+  "app_id": "versiontool",
+  "base_revision": 6,
+  "choice": {
+    "message": "",
+    "operation": "diff",
+    "reason": "Explicit verifier Git operation.",
+    "revision": "8a286dbc1dc6710821c222d4c2f5dfe51477602e"
+  },
+  "head": "ed30f9aa3aeef73c7d43e24c484c46108a300075",
+  "request_id": 14
+}

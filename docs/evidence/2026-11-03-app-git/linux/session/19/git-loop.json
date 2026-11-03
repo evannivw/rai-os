@@ -1,0 +1,6 @@
+{
+  "source": "replay",
+  "state": "cancelled_or_stale",
+  "maximum_provider_calls": 1,
+  "session_provider_attempts": 6
+}
