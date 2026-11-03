@@ -138,3 +138,33 @@ distinguish fake provider measurements from live calls.
 
 Final rehearsal/video/submission and October 26 kickoff / October 27 build-period
 eligibility remain open. Deadline November 4 at 20:00 Guatemala, internal 18:00.
+
+
+## Observed result — November 2, Guatemala
+
+The frozen live probe ran from clean source
+d69c631de11e66946d575d3f5b745ff197b2ee69. Recorded start was
+2026-11-03T04:47:03.792016+00:00, still November 2 in Guatemala. Exactly three
+new Meta calls, no retry/fallback or post-answer tuning.
+
+| Policy | Correct decisions | Guest publications/jobs | Whole session |
+| --- | ---: | ---: | ---: |
+| Rules | 3/3 | 2 / 4 | 581 ms |
+| Meta | 3/3 | 2 / 4 | 11541 ms |
+
+Meta selected A despite newer maintenance advice, clarified the dispatch conflict,
+and selected B after the resolving dispatch report. It did not receive a rewritten
+user objective or future observation. Both policies retained previous bytes and
+reused two indexes on update; no guest work occurred for conflict. Three Meta calls
+reported 2881 total tokens. Live execution was headless; the same native-display
+path passed offline replay/rules tests. Compilation was excluded from timing.
+
+[Full measured results](evidence/2026-11-02-context-session/live/summary.json) and
+[manifest](evidence/2026-11-02-context-session/live/manifest.json) preserve all
+outcomes. Archived traces/contexts/hashes/same-call usage re-audited successfully.
+
+This confirms constant-goal, context-triggered integration with real guest work.
+It does NOT show better decisions than the deterministic context policy, and the
+model remains slower here. These rules are explicitly structured and straightforward
+to implement. Further decision-quality claims need a separately designed meaningful
+workload and reserved cases, rather than making this working policy worse.

@@ -1,0 +1,64 @@
+{
+  "rules": {
+    "audit": {
+      "correct_decisions": 3,
+      "events": 3,
+      "all_decisions_correct": true,
+      "lifecycle": {
+        "goals": [
+          1,
+          6
+        ],
+        "publications": [
+          1,
+          6
+        ],
+        "total_jobs": 4,
+        "reused_on_update": 2,
+        "new_jobs_on_update": 1,
+        "previous_bytes_unchanged": true
+      },
+      "rejected": []
+    },
+    "end_to_end_ms": 581,
+    "interpret_ms": [
+      4,
+      4,
+      7
+    ],
+    "provider_calls": 0,
+    "known_total_tokens": 0,
+    "calls_with_usage": 0
+  },
+  "meta": {
+    "audit": {
+      "correct_decisions": 3,
+      "events": 3,
+      "all_decisions_correct": true,
+      "lifecycle": {
+        "goals": [
+          1,
+          6
+        ],
+        "publications": [
+          1,
+          6
+        ],
+        "total_jobs": 4,
+        "reused_on_update": 2,
+        "new_jobs_on_update": 1,
+        "previous_bytes_unchanged": true
+      },
+      "rejected": []
+    },
+    "end_to_end_ms": 11541,
+    "interpret_ms": [
+      3993,
+      3452,
+      3917
+    ],
+    "provider_calls": 3,
+    "known_total_tokens": 2881,
+    "calls_with_usage": 3
+  }
+}

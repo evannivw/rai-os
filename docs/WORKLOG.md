@@ -2170,3 +2170,30 @@ real Meta evaluations without retries/fallback or post-answer tuning. This is an
 input-boundary integration check on known development observations, not an unseen
 complexity or decision-quality win. Keep all earlier results and protect the
 November 4 rehearsal/video/submission deadline and provenance requirements.
+
+
+## 2026-11-02 — Live constant-goal context results (Guatemala date)
+
+Clean source d69c631de11e66946d575d3f5b745ff197b2ee69 produced three new Meta
+responses while the same user objective remained byte-identical. The recorded
+UTC start was 2026-11-03T04:47:03.792016+00:00, still November 2 locally. No
+retry/fallback or post-answer tuning. Only structured observations changed.
+
+Both policies passed 3/3: authoritative A assignment, clarification for conflicting
+latest reports, and B after a newer resolving dispatch report. Both produced two
+checked guest publications and four total worker jobs, reusing two exact indexes
+on update and retaining earlier bytes. The ambiguous context dispatched no work.
+No user clarification prompt was generated; the controlled third data observation
+resolved the conflict. Host context delivery is simulated; guest work is real.
+
+Whole-session time excluding build: rules 581 ms, Meta 11541 ms. Meta interpreter
+processes took 3993/3452/3917 ms, with 2881 total tokens across exactly three calls.
+The decision-improvement hypothesis remains unproven; both policies were equally
+correct and the rules were faster. No inference-efficiency or OS superiority claim.
+
+All raw observations, unchanged goals, provider/guest traces, manifest and summary
+are archived in evidence/2026-11-02-context-session/live. Archive audit passed for
+fixture hashes, fixed objective, current context, guest artifacts and same-call
+usage. This live probe was headless; native display had separate offline checks.
+Final video/rehearsal/submission remain pending; preserve original deadline and
+contribution-eligibility limitations.

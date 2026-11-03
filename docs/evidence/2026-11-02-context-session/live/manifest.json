@@ -1,0 +1,58 @@
+{
+  "source_commit": "d69c631de11e66946d575d3f5b745ff197b2ee69",
+  "dirty": false,
+  "observed_utc": "2026-11-03T04:47:03.792016+00:00",
+  "policies": [
+    "rules",
+    "meta"
+  ],
+  "protocol": {
+    "cases": [
+      "assigned",
+      "conflict",
+      "resolved"
+    ],
+    "policies": [
+      "rules",
+      "meta"
+    ],
+    "repetitions": 1,
+    "maximum_meta_calls": 3,
+    "retries": 0,
+    "fallback": false,
+    "event_kind": "context_updates",
+    "event_source": "controlled assignment observations, not user prompts or real sensors",
+    "goal": "Keep the Aurora handoff ready for the unit assigned by dispatch.",
+    "publication_cases": [
+      "assigned",
+      "resolved"
+    ],
+    "nonexecuting_cases": [
+      "conflict"
+    ],
+    "development_only": true,
+    "expected_total_worker_jobs": 4,
+    "expected_publications": 2,
+    "graphics": false
+  },
+  "fixture_hashes": {
+    "assigned.json": "8584c6fa092d8e5556a6bf4937be5eb42055f2534dd9118cfb708a250c6a85e4",
+    "conflict.json": "d934fa8b4d2e809ae8fb9d68076b2f47b744f92ccde89308d87aeb7a4a128995",
+    "expected.json": "7ba4109d6441e6b2951cb7dc24829297699f9b3fec18b2ecbf10b6944df607b5",
+    "observations/assigned.json": "99278ed66de228a72a13a053ebbc3021f8db644218e79777ed76ff8590eb159c",
+    "observations/conflict.json": "dd83c511b18dcc90d1360775cbcc710bee4ee2e45297202bf8a6fb3db2097a03",
+    "observations/resolved.json": "120b2e07dcbd1659b85bd089467b50cf7ec5b367a2e9fe1ba8a7413503af73fe",
+    "protocol.json": "6654d117e06589103c7b144c333fa3d4f78e98561de083dd1a6c71521daf4ad0",
+    "resolved.json": "dfb3fba97def248c042d5c86cca826fe92d8e8b3db3b97d2611fd63125fc5374"
+  },
+  "binary_sha256": "a67bff8e3736b133f7b27e4d832343d8ee2db828224fc0fe1dc09ff66098948a",
+  "kernel_sha256": "130c5d00caef399c87606727337b56142ad5d6ac434f7b3126a3b2b9bba30ff0",
+  "model": "muse-spark-1.3",
+  "max_tokens": 1024,
+  "reasoning_effort": "minimal",
+  "schema": "rai_context_selection",
+  "maximum_meta_calls": 3,
+  "retries": 0,
+  "fallback": false,
+  "graphics": false
+}

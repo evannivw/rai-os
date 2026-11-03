@@ -1,0 +1,23 @@
+{
+  "source": "meta",
+  "accepted": true,
+  "exit_code": 0,
+  "interpret_ms": 3993,
+  "provider": {
+    "choice_count": 1,
+    "finish_reason": "stop",
+    "http_status": 200,
+    "latency_ms": 3987,
+    "model_matches": true,
+    "refusal_present": false,
+    "role": "assistant",
+    "stage": "proposal",
+    "tool_calls_present": false,
+    "transport_exit_code": 0,
+    "usage": {
+      "completion_tokens": 355,
+      "prompt_tokens": 598,
+      "total_tokens": 953
+    }
+  }
+}
