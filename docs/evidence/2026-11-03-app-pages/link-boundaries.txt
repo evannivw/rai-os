@@ -1,0 +1,7 @@
+        400c2000         400c2000        0     1         __text_end = .
+        400e0000         400e0000        0     1         __rodata_end = .
+        400e0030         400e0030        0     1         __bss_end = .
+        400e0030         400e0030        0     1         __stack_bottom = .
+        400f0030         400f0030        0     1         __stack_top = .
+        400fc000         400fc000        0     1         __page_pool_start = .
+        401fc000         401fc000        0     1         __page_pool_end = .

@@ -17,10 +17,14 @@ to apply software brightness to the QEMU framebuffer after explicit user action.
 It is the first capability beyond records; physical backlight control is still
 unavailable. An app chooses one capability, and updates cannot change it.
 
+See [APP_TOOLBOX.md](APP_TOOLBOX.md) for composing these pieces and the path toward
+spreadsheet/presentation tools.
+
 ## Available now
 
 | Capability | What an app can do | Execution |
 | --- | --- | --- |
+| [Composed visual pages](APP_PAGES.md) | Text, live count/sum/min/max metrics, signed bars and two-column tables in reviewed pages | Guest Rust |
 | Software display brightness | Apply 20..100%; explicit permission, user action and reset | Guest Rust framebuffer |
 | [Composed behavior](APP_BEHAVIORS.md) | User buttons combine typed writes, arithmetic, conditions and forward branches; preview and atomic one-row commit | Guest Rust |
 | [Processes](APP_WORKFLOWS.md) | Per-record states, up to four guarded actions, final-state editing lock | Guest Rust |

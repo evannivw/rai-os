@@ -56,6 +56,22 @@ pub struct Button {
 }
 #[derive(Deserialize, Serialize, Clone)]
 #[serde(deny_unknown_fields)]
+pub struct Block {
+    pub kind: String,
+    pub title: String,
+    pub value: String,
+    pub label_field: String,
+    pub aggregate: String,
+    pub scope: String,
+}
+#[derive(Deserialize, Serialize, Clone)]
+#[serde(deny_unknown_fields)]
+pub struct Page {
+    pub title: String,
+    pub blocks: Vec<Block>,
+}
+#[derive(Deserialize, Serialize, Clone)]
+#[serde(deny_unknown_fields)]
 pub struct Spec {
     pub id: String,
     pub title: String,
@@ -67,6 +83,8 @@ pub struct Spec {
     pub workflow: Option<Workflow>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub behaviors: Vec<Button>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub pages: Vec<Page>,
 }
 impl Spec {
     pub fn checked(&self) -> Result<microapp::Spec, &'static str> {
@@ -105,6 +123,22 @@ impl Spec {
                 )?)?;
             }
             s.behaviors.add(b)?;
+        }
+        for (index, page) in self.pages.iter().enumerate() {
+            s.pages.add(&page.title)?;
+            for b in &page.blocks {
+                s.pages.add_block(
+                    index,
+                    microapp::Block::new(
+                        &b.kind,
+                        &b.title,
+                        &b.value,
+                        &b.label_field,
+                        &b.aggregate,
+                        &b.scope,
+                    )?,
+                )?;
+            }
         }
         s.check()?;
         Ok(s)
@@ -461,6 +495,12 @@ mod tests {
         for cap in c["capabilities"].as_array().unwrap() {
             assert!(microapp::Capability::parse(cap.as_str().unwrap()).is_ok());
         }
+        assert_eq!(c["presentation"]["limits"]["pages"], 2);
+        assert_eq!(c["presentation"]["limits"]["blocks_per_page"], 2);
+        assert_eq!(
+            c["presentation"]["blocks"],
+            serde_json::json!(["text", "metric", "bars", "table"])
+        );
         assert_eq!(c["limits"]["apps"], microapp::APPS);
         assert_eq!(c["limits"]["fields"], microapp::FIELDS);
         assert_eq!(c["limits"]["rows_per_app"], microapp::ROWS);

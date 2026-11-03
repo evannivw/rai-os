@@ -1,0 +1,8 @@
+{
+  "request_id": 2,
+  "base_revision": 1,
+  "goal": "App: name, amount. Two pages: sum amount and bars by name; text \"My report\" and a name/amount table. No workflow.",
+  "target": null,
+  "app_ids": [],
+  "record_count": 0
+}

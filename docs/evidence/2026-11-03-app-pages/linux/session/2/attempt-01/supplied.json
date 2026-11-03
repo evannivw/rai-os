@@ -1,0 +1,88 @@
+{
+  "request_id": 2,
+  "base_revision": 1,
+  "decision": "install",
+  "spec": {
+    "id": "visualdesk",
+    "title": "Visual desk",
+    "capability": "records.local",
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "kind": "text",
+        "required": true,
+        "default": ""
+      },
+      {
+        "key": "amount",
+        "label": "Amount",
+        "kind": "number",
+        "required": true,
+        "default": "0"
+      },
+      {
+        "key": "total",
+        "label": "Total",
+        "kind": "calculated",
+        "required": true,
+        "default": "",
+        "formula": "$amount*2"
+      },
+      {
+        "key": "done",
+        "label": "Done",
+        "kind": "check",
+        "required": true,
+        "default": "false"
+      }
+    ],
+    "filter_key": "done",
+    "filter_label": "Pending",
+    "pages": [
+      {
+        "title": "Overview",
+        "blocks": [
+          {
+            "kind": "metric",
+            "title": "Total",
+            "value": "total",
+            "label_field": "",
+            "aggregate": "sum",
+            "scope": "all"
+          },
+          {
+            "kind": "bars",
+            "title": "Amounts",
+            "value": "total",
+            "label_field": "name",
+            "aggregate": "",
+            "scope": "all"
+          }
+        ]
+      },
+      {
+        "title": "Report",
+        "blocks": [
+          {
+            "kind": "text",
+            "title": "My report",
+            "value": "Live data | safe ~ composition ^ no scripts",
+            "label_field": "",
+            "aggregate": "",
+            "scope": "all"
+          },
+          {
+            "kind": "table",
+            "title": "Details",
+            "value": "total",
+            "label_field": "name",
+            "aggregate": "",
+            "scope": "all"
+          }
+        ]
+      }
+    ]
+  },
+  "reason": "Disclosed offline proposal for correction verification."
+}

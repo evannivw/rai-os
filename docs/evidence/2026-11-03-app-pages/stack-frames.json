@@ -1,0 +1,48 @@
+{
+  "profile": "Rust 1.90.0 dev opt-level=1 codegen-units=1 incremental=false guest-display",
+  "kernel_stack_bytes": 65536,
+  "frames": {
+    "Controller3key": 1296,
+    "Controller10begin_spec": 1632,
+    "Controller15install_pending": 752,
+    "Controller16preview_behavior": 432,
+    "Controller12run_behavior": 784,
+    "Controller7execute": 4288,
+    "Console11app_command": 480,
+    "console14create_console": 3520,
+    "console3run": 41792,
+    "display4apps6render": 832,
+    "Step7program": 592,
+    "Button5check": 1232,
+    "Button7preview": 2112,
+    "Spec7program": 608,
+    "Spec11materialize": 1984,
+    "Runtime16preview_behavior": 80,
+    "Runtime20preview_behavior_all": 1072,
+    "kernel_main": 192
+  },
+  "conservative_known_action_frames": [
+    "Controller3key",
+    "Controller16preview_behavior",
+    "Controller12run_behavior",
+    "Controller7execute",
+    "Console11app_command",
+    "console3run",
+    "Step7program",
+    "Button5check",
+    "Button7preview",
+    "Spec7program",
+    "Spec11materialize",
+    "Runtime16preview_behavior",
+    "Runtime20preview_behavior_all",
+    "kernel_main"
+  ],
+  "known_action_sum": 56944,
+  "notes": [
+    "CFA offsets measured from emitted AArch64 assembly; not a whole-program stack proof.",
+    "The sum includes mutually exclusive behavior paths, but excludes recursive parser/standard/indirect callees.",
+    "Schema construction is non-inlined and returns before behavior execution; its former retained dispatcher frame was 8832 bytes, now 4288.",
+    "Schema output borrows Spec; no new unsafe or larger stack/MMU allocation.",
+    "Final link map boundaries retained in link-boundaries.txt; no MMU or stack-size change."
+  ]
+}

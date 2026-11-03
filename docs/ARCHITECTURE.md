@@ -588,3 +588,20 @@ and HTTPS; no kernel or guest executable changed for this feature. The host and
 filesystem remain trusted; apps remain shared EL1. Executable service self-update
 is not authorized by this tool contract. See APP_GIT.md for boundaries, subprocess
 limits, cancellation and the difference between definition rollback and boot recovery.
+
+
+## November 3: composed data presentation
+
+The app language now includes up to two pages of two read-only blocks each.
+microapp_pages.rs owns field/scope validation and count/sum/min/max evaluation;
+display/app_pages.rs draws text, metrics, signed bars and two-column tables in the
+guest framebuffer. Page definitions refer only to the owning app. The controller
+stages and reviews each page before installation; navigation and evaluation never
+change record state. Existing mutations update all views without inference.
+
+Catalog v8 and the strict Meta schema describe the same bounds. Pages are included
+in transport, checkpoints and Git app definitions. Old schemas omit pages, keeping
+their prior wire encoding. This expands the declarative interpreter and renderer;
+it does not add drivers, executable loading or process isolation. APP_TOOLBOX.md
+connects these primitives to future richer document tools without claiming format
+compatibility or arbitrary-app support.

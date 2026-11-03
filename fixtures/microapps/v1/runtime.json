@@ -1,5 +1,5 @@
 {
-  "runtime": "rai-declarative-7",
+  "runtime": "rai-declarative-8",
   "limits": {
     "apps": 3,
     "fields": 6,
@@ -15,7 +15,8 @@
   "views": [
     "form",
     "editable_record_list",
-    "table_with_three_column_pages"
+    "table_with_three_column_pages",
+    "composed_read_only_pages"
   ],
   "local_operations": [
     "create_record",
@@ -93,5 +94,41 @@
     },
     "execution": "Prior writes are visible to later steps on the same row; calculated fields refresh after each write. Failure leaves every affected row and revision unchanged. All-row success advances revision once. No unbounded loops, backward jumps, cross-row reads or cross-app writes. Any terminal workflow record blocks the batch. A conditional no-op is valid; confirmation still advances revision once.",
     "updates": "Reviewed compatible schema updates may replace behaviors; preserve existing behaviors unless the user requests a change. Existing workflow definitions and field identity rules still apply."
+  },
+  "presentation": {
+    "limits": {
+      "pages": 2,
+      "blocks_per_page": 2,
+      "page_title_ascii": 24,
+      "block_title_ascii": 18,
+      "text_ascii": 64
+    },
+    "blocks": [
+      "text",
+      "metric",
+      "bars",
+      "table"
+    ],
+    "aggregates": [
+      "count",
+      "sum",
+      "min",
+      "max"
+    ],
+    "scope": [
+      "all",
+      "pending"
+    ],
+    "binding": "Own app field keys only; numeric metrics/bars require number or calculated. Pending requires an existing check filter and includes false values. Text is literal. Tables bind two fields. All blocks are read-only.",
+    "numbers": "Count and sum are 0 for empty input; min/max are unavailable without numeric values. Blank numeric cells are omitted. Signed bars use a zero baseline and per-block max-absolute scale.",
+    "lifecycle": "Native review before install; edits recompute live views locally. Pages can evolve or be restored compatibly with records retained.",
+    "not_available": [
+      "pptx",
+      "xlsx",
+      "images",
+      "arbitrary_layout",
+      "cross_app_bindings",
+      "background_actions"
+    ]
   }
 }

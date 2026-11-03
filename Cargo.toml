@@ -88,7 +88,10 @@ bench = false
 
 [profile.dev]
 # Keep development code within the fixed first-2-MiB MMU window. Debug symbols remain.
+# One compilation unit avoids debug code duplication in the fixed MMU window.
 opt-level = 1
+codegen-units = 1
+incremental = false
 panic = "abort"
 
 [profile.release]

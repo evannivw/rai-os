@@ -170,3 +170,5 @@ fn read<const N: usize>() -> [u8; N] {
     }
     bytes
 }
+
+mod app_pages;

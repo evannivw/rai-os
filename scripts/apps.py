@@ -47,6 +47,15 @@ def schema(g,app_id):
             if len(parts)==5:button['scope']='all'
             buttons.append(button)
         result['behaviors']=buttons
+    if row.get('pages'):
+        pages=[]
+        for encoded in row['pages'].split('|'):
+            title,*blocks=encoded.split('~');page=dict(title=bytes.fromhex(title).decode('ascii'),blocks=[])
+            for encoded_block in blocks:
+                kind,title,value,label,aggregate,scope=encoded_block.split('^')
+                page['blocks'].append(dict(kind=kind,title=bytes.fromhex(title).decode('ascii'),value=bytes.fromhex(value).decode('ascii'),label_field=label,aggregate=aggregate,scope=scope))
+            pages.append(page)
+        result['pages']=pages
     return result
 
 def states(g,app_id):
@@ -74,6 +83,10 @@ def deliver(g,p):
         if button.get('scope','row') != 'row':g.request('app.button.scope',f"{rid}:{button['id']}:{button['scope']}")
         for step in button['steps']:
             g.request('app.step',f"{rid}:{button['id']}:{step['op']}:{step['field']}:{step['value'].encode().hex()}:{step['compare']}:{step['skip']}")
+    for index,page in enumerate(s.get('pages',[])):
+        g.request('app.page',f"{rid}:{page['title'].encode().hex()}")
+        for b in page['blocks']:
+            g.request('app.block',f"{rid}:{index}:{b['kind']}:{b['title'].encode().hex()}:{b['value'].encode().hex()}:{b['label_field']}:{b['aggregate']}:{b['scope']}")
     g.request('app.filter',f"{rid}:{s['filter_key']}:{s['filter_label'].encode().hex()}")
     g.request('app.ready',f"{rid}:{p['reason']}")
 

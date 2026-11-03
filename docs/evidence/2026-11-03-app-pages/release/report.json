@@ -1,0 +1,198 @@
+{
+  "verified": true,
+  "source": "offline",
+  "source_commit": "9540f1fbd6620fa6ed19cdcbe28aad113a1e2d70",
+  "source_worktree_dirty": true,
+  "provider_calls": 0,
+  "checks": [
+    "Four generic block kinds, two reviewed pages, signed/zero values, all eight records, real guest pixels, page navigation without data mutation",
+    "Editing input recomputes live metrics and derived data without another model request",
+    "Cancel preserves definition; reviewed visual evolution retains rows; pending filter is exact; bad binding rejected; unrelated app shares min/max executor",
+    "Exact definitions, pages, rows and calculated values survive fresh QEMU boot without inference"
+  ],
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "visualdesk",
+          "title": "Visual desk",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "amount",
+              "kind": "number",
+              "required": true,
+              "label": "Amount",
+              "default": "0"
+            },
+            {
+              "key": "total",
+              "kind": "calculated",
+              "required": true,
+              "label": "Total",
+              "default": "",
+              "formula": "$amount*2"
+            },
+            {
+              "key": "done",
+              "kind": "check",
+              "required": true,
+              "label": "Done",
+              "default": "false"
+            }
+          ],
+          "filter_key": "done",
+          "filter_label": "Pending",
+          "pages": [
+            {
+              "title": "Overview",
+              "blocks": [
+                {
+                  "kind": "metric",
+                  "title": "Total",
+                  "value": "total",
+                  "label_field": "",
+                  "aggregate": "sum",
+                  "scope": "pending"
+                },
+                {
+                  "kind": "bars",
+                  "title": "Amounts",
+                  "value": "total",
+                  "label_field": "name",
+                  "aggregate": "",
+                  "scope": "pending"
+                }
+              ]
+            },
+            {
+              "title": "Report",
+              "blocks": [
+                {
+                  "kind": "text",
+                  "title": "My report",
+                  "value": "Live data | safe ~ composition ^ no scripts",
+                  "label_field": "",
+                  "aggregate": "",
+                  "scope": "all"
+                },
+                {
+                  "kind": "table",
+                  "title": "Details",
+                  "value": "total",
+                  "label_field": "name",
+                  "aggregate": "",
+                  "scope": "all"
+                }
+              ]
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Item 1",
+            "9",
+            "18",
+            "false"
+          ],
+          [
+            "Item 2",
+            "0",
+            "0",
+            "false"
+          ],
+          [
+            "Item 3",
+            "10",
+            "20",
+            "true"
+          ],
+          [
+            "Item 4",
+            "20",
+            "40",
+            "false"
+          ],
+          [
+            "Item 5",
+            "7",
+            "14",
+            "false"
+          ],
+          [
+            "Item 6",
+            "2",
+            "4",
+            "false"
+          ],
+          [
+            "Item 7",
+            "3",
+            "6",
+            "true"
+          ],
+          [
+            "Item 8",
+            "-1",
+            "-2",
+            "false"
+          ]
+        ]
+      },
+      {
+        "spec": {
+          "id": "readings",
+          "title": "Readings",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "level",
+              "kind": "number",
+              "required": true,
+              "label": "Level",
+              "default": "-20"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "pages": [
+            {
+              "title": "Range",
+              "blocks": [
+                {
+                  "kind": "metric",
+                  "title": "Low",
+                  "value": "level",
+                  "label_field": "",
+                  "aggregate": "min",
+                  "scope": "all"
+                },
+                {
+                  "kind": "metric",
+                  "title": "High",
+                  "value": "level",
+                  "label_field": "",
+                  "aggregate": "max",
+                  "scope": "all"
+                }
+              ]
+            }
+          ]
+        },
+        "rows": [
+          [
+            "-20"
+          ]
+        ]
+      }
+    ]
+  }
+}

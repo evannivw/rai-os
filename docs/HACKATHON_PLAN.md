@@ -514,3 +514,18 @@ support versions declarative app definitions only. Prioritize a consistent nativ
 phone interface and one verified create/use/evolve/restore narrative. Design
 alternatives and the recommended Tactile Terminal direction are documented in
 DESIGN_DIRECTION.md; no native redesign has been selected or implemented yet.
+
+
+## November 3: user-requested creative application primitives
+
+The user prioritized deeper reusable capabilities toward spreadsheet-like and
+presentation-like tools. Add composed data pages with text, metrics, signed bars
+and tables, reviewed evolution and recovery. Preserve small explicit capacity
+and validate ownership/type/scope. Document the toolbox for experimentation.
+Keyboard and executable OS self-update remain deferred; the creation lock is a
+future owner-policy feature, not implemented by hiding a button.
+
+Verify offline QEMU debug/release and Linux first, then freeze source and perform
+one real Meta generation call with no retry or replacement. Preserve failures if
+it does not pass. Return to the approved native design and final recording afterward;
+no unsupported Linux efficiency or Excel/PowerPoint compatibility claim.

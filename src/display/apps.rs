@@ -109,6 +109,8 @@ fn number(s: &mut Display, value: i64, x: i32, y: i32) {
 pub fn render(s: &mut Display, u: &Controller) {
     let a = u.runtime.app(u.selected);
     let title = match u.mode {
+        Mode::Pages => "Your pages.",
+        Mode::PageReview => "Review the pages.",
         Mode::Home => "Your space.",
         Mode::Search => "Find an app.",
         Mode::Compose => {
@@ -132,6 +134,19 @@ pub fn render(s: &mut Display, u: &Controller) {
     };
     header(s, u, title);
     match u.mode {
+        Mode::Pages | Mode::PageReview => {
+            super::app_pages::render(s, u);
+            if u.mode == Mode::PageReview {
+                action(
+                    s,
+                    if u.page + 1 < u.pending.pages.entries().len() {
+                        "Review next page >"
+                    } else {
+                        "Approve pages / Install"
+                    },
+                );
+            }
+        }
         Mode::Home | Mode::Search => {
             frame(s, 24, 146, 432, 48, QUIET);
             text(
@@ -808,6 +823,7 @@ pub fn render(s: &mut Display, u: &Controller) {
             | Mode::Workflow
             | Mode::Behaviors
             | Mode::BehaviorPreview
+            | Mode::Pages
     ) && a.is_some_and(|a| a.spec.capability() == Capability::Records)
     {
         t::rect(s, 24, 146, 432, 36, 0x060908);
@@ -849,6 +865,13 @@ pub fn render(s: &mut Display, u: &Controller) {
             text(s, "import", 300, 154, LIME);
             text(s, "export", 390, 154, LIME);
         }
+    }
+    if matches!(
+        u.mode,
+        Mode::Form | Mode::Records | Mode::Table | Mode::Workflow | Mode::Behaviors
+    ) && a.is_some_and(|a| !a.spec.pages.is_empty())
+    {
+        text(s, "pages >", 372, 120, 0x87bfff);
     }
     if !u.storage.text().is_empty() {
         center(s, u.storage.text(), 672, Size::Small, QUIET);

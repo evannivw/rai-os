@@ -432,6 +432,27 @@ mod tests {
         serde_json::from_str(r#"{"id":"counter","title":"Counter","capability":"records.local","fields":[{"key":"amount","label":"Amount","kind":"number","required":true,"default":"1"}],"filter_key":"","filter_label":""}"#).unwrap()
     }
     #[test]
+    fn composed_pages_survive_real_git_roundtrip() {
+        let tmp = Temp::new();
+        let store = Store::new(&tmp.0, "counter").unwrap();
+        let mut a = spec();
+        a.pages=serde_json::from_value(serde_json::json!([{"title":"Totals","blocks":[{"kind":"metric","title":"Sum","value":"amount","label_field":"","aggregate":"sum","scope":"all"}]}])).unwrap();
+        let _lock = store.lock().unwrap();
+        let context = store.context(&a).unwrap();
+        let id = store.save(&a, "Add visual report", &context).unwrap();
+        assert_eq!(
+            serde_json::to_value(store.show(&id).unwrap()).unwrap(),
+            serde_json::to_value(&a).unwrap()
+        );
+        a.pages.clear();
+        let id2 = store
+            .save(&a, "Remove visual report", &store.context(&a).unwrap())
+            .unwrap();
+        assert_ne!(id, id2);
+        assert_eq!(store.show(&id).unwrap().pages.len(), 1);
+        assert!(store.show(&id2).unwrap().pages.is_empty());
+    }
+    #[test]
     fn real_git_versions_diff_and_compare_exchange_preserve_history() {
         let tmp = Temp::new();
         let store = Store::new(&tmp.0, "counter").unwrap();

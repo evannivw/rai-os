@@ -293,13 +293,31 @@ impl Console<'_> {
             }
             return;
         }
+        if name == "app.page.values" {
+            if let Some((app_id, page)) = arg.and_then(|v| v.split_once(':'))
+                && let Some(a) = self
+                    .apps
+                    .runtime
+                    .find(app_id)
+                    .and_then(|i| self.apps.runtime.app(i))
+                && let Ok(page) = page.parse::<usize>()
+                && page < a.spec.pages.entries().len()
+            {
+                response(id, "ok", crate::microapp::pages::PageValues(a, page));
+            } else {
+                response(id, "err", "page_not_found");
+            }
+            return;
+        }
         if matches!(name, "app.schema" | "app.export") {
             if let Some(a) = arg
                 .and_then(|s| self.apps.runtime.find(s))
                 .and_then(|i| self.apps.runtime.app(i))
             {
                 if name == "app.schema" {
-                    response(id, "ok", a.spec);
+                    // Borrowing avoids a multi-KiB Spec copy on the fixed kernel stack.
+                    #[allow(clippy::needless_borrows_for_generic_args)]
+                    response(id, "ok", &a.spec);
                 } else {
                     response(id, "ok", crate::microapp::Export(a));
                 }

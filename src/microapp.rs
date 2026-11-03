@@ -4,6 +4,9 @@ use core::fmt::{self, Write};
 mod behavior;
 #[path = "microapp_formula.rs"]
 mod formula;
+#[path = "microapp_pages.rs"]
+pub mod pages;
+pub use pages::{Block, Pages};
 #[path = "microapp_workflow.rs"]
 mod workflow;
 pub use behavior::{BatchError, BehaviorError, Behaviors, Button, Step};
@@ -189,6 +192,7 @@ pub struct Spec {
     pub filter_label: Text<18>,
     pub workflow: Workflow,
     pub behaviors: Behaviors,
+    pub pages: Pages,
 }
 impl Spec {
     pub const EMPTY: Self = Self {
@@ -201,6 +205,7 @@ impl Spec {
         filter_label: Text::EMPTY,
         workflow: Workflow::EMPTY,
         behaviors: Behaviors::EMPTY,
+        pages: Pages::EMPTY,
     };
     pub fn new(id: &str, title: &str, capability: &str) -> Result<Self, &'static str> {
         let capability = Capability::parse(capability)?;
@@ -311,6 +316,7 @@ impl Spec {
         }
         self.workflow.check(self)?;
         self.behaviors.check(self)?;
+        self.pages.check(self)?;
         if !self.filter_key.text().is_empty() && self.check_field().is_none() {
             return Err("app_bad_filter");
         }
@@ -404,6 +410,9 @@ impl fmt::Display for Spec {
             if button.all_rows {
                 f.write_str("~all")?;
             }
+        }
+        if !self.pages.is_empty() {
+            write!(f, "; pages={}", self.pages)?;
         }
         Ok(())
     }

@@ -21,6 +21,8 @@ pub enum Mode {
     Behaviors,
     BehaviorReview,
     BehaviorPreview,
+    Pages,
+    PageReview,
 }
 pub struct Controller {
     pub active: bool,
@@ -31,6 +33,7 @@ pub struct Controller {
     pub focus: usize,
     pub row: usize,
     pub columns: usize,
+    pub page: usize,
     pub filtered: bool,
     pub draft: Values,
     pub editing: Option<usize>,
@@ -141,6 +144,7 @@ impl Controller {
             focus: 0,
             row: 0,
             columns: 0,
+            page: 0,
             filtered: false,
             draft: [Text::EMPTY; 6],
             editing: None,
@@ -193,6 +197,8 @@ impl Controller {
     }
     fn state(&self) -> &'static str {
         match self.mode {
+            Mode::Pages => "pages",
+            Mode::PageReview => "page_review",
             Mode::Home => "home",
             Mode::Search => "search",
             Mode::Compose => "compose",
@@ -244,6 +250,17 @@ impl Controller {
             self.key(27)?;
             return self.key(47);
         }
+        if self.mode == Mode::Pages && (696..745).contains(&y) {
+            return self.key(if x < 240 { 1009 } else { 1008 });
+        }
+        if matches!(
+            self.mode,
+            Mode::Form | Mode::Records | Mode::Table | Mode::Workflow | Mode::Behaviors
+        ) && (112..142).contains(&y)
+            && x >= 320
+        {
+            return self.key(1015);
+        }
         if (696..745).contains(&y) {
             return self.key(13);
         }
@@ -270,6 +287,7 @@ impl Controller {
                 | Mode::Workflow
                 | Mode::Behaviors
                 | Mode::BehaviorPreview
+                | Mode::Pages
         ) && (146..183).contains(&y)
         {
             if self
@@ -478,6 +496,7 @@ impl Controller {
                     | Mode::ImportReview
                     | Mode::WorkflowReview
                     | Mode::BehaviorReview
+                    | Mode::PageReview
             )
         {
             let t = if matches!(
@@ -488,6 +507,7 @@ impl Controller {
                     | Mode::Workflow
                     | Mode::Behaviors
                     | Mode::BehaviorPreview
+                    | Mode::Pages
             ) {
                 Some(self.selected)
             } else {
@@ -504,12 +524,28 @@ impl Controller {
                 | Mode::Workflow
                 | Mode::Behaviors
                 | Mode::BehaviorPreview
+                | Mode::Pages
         ) && self
             .runtime
             .app(self.selected)
             .is_some_and(|a| a.spec.capability() == Capability::Records)
         {
             match key {
+                1015 => {
+                    if self
+                        .runtime
+                        .app(self.selected)
+                        .unwrap()
+                        .spec
+                        .pages
+                        .is_empty()
+                    {
+                        return Err("page_unavailable");
+                    }
+                    self.page = 0;
+                    self.mode = Mode::Pages;
+                    return Ok(Reply::State("pages"));
+                }
                 1014 => {
                     let a = self.runtime.app(self.selected).unwrap();
                     if a.spec.behaviors.is_empty() {
@@ -574,6 +610,29 @@ impl Controller {
             }
         }
         match self.mode {
+            Mode::Pages => {
+                let len = self
+                    .runtime
+                    .app(self.selected)
+                    .ok_or("app_not_found")?
+                    .spec
+                    .pages
+                    .entries()
+                    .len();
+                if matches!(key, 13 | 1008) && self.page + 1 < len {
+                    self.page += 1;
+                }
+                if key == 1009 {
+                    self.page = self.page.saturating_sub(1);
+                }
+            }
+            Mode::PageReview if key == 13 => {
+                if self.page + 1 < self.pending.pages.entries().len() {
+                    self.page += 1;
+                } else {
+                    self.install_pending()?;
+                }
+            }
             Mode::Search => match key {
                 8 | 127 => {
                     self.search.pop();
@@ -644,7 +703,7 @@ impl Controller {
             }
             Mode::Review | Mode::WorkflowReview if key == 13 => {
                 if self.pending.behaviors.is_empty() {
-                    self.install_pending()?;
+                    self.review_pages_or_install()?;
                 } else {
                     self.focus = 0;
                     self.mode = Mode::BehaviorReview;
@@ -654,7 +713,7 @@ impl Controller {
                 if self.focus + 1 < self.pending.behaviors.buttons().len() {
                     self.focus += 1;
                 } else {
-                    self.install_pending()?;
+                    self.review_pages_or_install()?;
                 }
             }
             Mode::Form => {
@@ -821,6 +880,22 @@ impl Controller {
             _ => {}
         }
         Ok(Reply::State(self.state()))
+    }
+    // Keep large schema construction temporaries out of the dispatcher frame,
+    // which remains on the stack during row evaluation and presentation.
+    #[inline(never)]
+    fn begin_spec(&mut self, app: &str, title: &str, capability: &str) -> Result<(), &'static str> {
+        self.pending = Spec::new(app, decode::<28>(title)?.text(), capability)?;
+        Ok(())
+    }
+    fn review_pages_or_install(&mut self) -> Result<(), &'static str> {
+        if self.pending.pages.is_empty() {
+            self.install_pending()
+        } else {
+            self.page = 0;
+            self.mode = Mode::PageReview;
+            Ok(())
+        }
     }
     fn install_pending(&mut self) -> Result<(), &'static str> {
         self.selected = self
@@ -995,6 +1070,26 @@ impl Controller {
                 }
                 self.restoring = false;
             }
+            "app.page" => {
+                let [request, title] = parts(arg)?;
+                self.check_request(request)?;
+                self.pending.pages.add(decode::<24>(title)?.text())?;
+            }
+            "app.block" => {
+                let [request, page, kind, title, value, label, aggregate, scope] = parts(arg)?;
+                self.check_request(request)?;
+                self.pending.pages.add_block(
+                    page.parse().map_err(|_| "bad_args")?,
+                    crate::microapp::Block::new(
+                        kind,
+                        decode::<18>(title)?.text(),
+                        decode::<64>(value)?.text(),
+                        label,
+                        aggregate,
+                        scope,
+                    )?,
+                )?;
+            }
             "app.button" => {
                 let [request, id, label, event] = parts(arg)?;
                 self.check_request(request)?;
@@ -1136,7 +1231,7 @@ impl Controller {
                 if base.parse::<u32>().ok() != Some(self.base) {
                     return Err("app_stale_revision");
                 }
-                self.pending = Spec::new(app, decode::<28>(title)?.text(), cap)?;
+                self.begin_spec(app, title, cap)?;
             }
             "app.field" => {
                 let [id, key, kind, required, label, default] = parts(arg)?;

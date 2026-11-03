@@ -1,0 +1,74 @@
+   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)
+warning: unused import: `BlockKind`
+ --> src/microapp.rs:9:24
+  |
+9 | pub use pages::{Block, BlockKind, PageValues, Pages};
+  |                        ^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: method `label_index` is never used
+   --> src/microapp_pages.rs:142:12
+    |
+ 81 | impl Block {
+    | ---------- method in this implementation
+...
+142 |     pub fn label_index(&self, spec: &Spec) -> Option<usize> {
+    |            ^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: `rai-os` (bin "rai-os") generated 2 warnings (run `cargo fix --bin "rai-os"` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 1.51s
+PASS: real AArch64 boot and UART output
+PASS: guest counter advances; counter_hz=62500000
+PASS: 37 console/protocol checks, including invalid input and recovery
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+help
+help | info | fs.list | fs.read <path> | fs.begin <generation>:<size>:<path> | fs.append <ticket>:<offset>:<hex> | fs.commit <ticket> | fs.abort <ticket> | fs.copy <generation>:<src>:<dst> | fs.move <generation>:<src>:<dst> | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | record.index <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start [index] | coord.result | coord.goal <keys> | coord.bundle.status | coord.bundle | coord.publish.status | coord.publish.read | coord.publish.prepare | coord.publish.commit <ticket> | coord.publish.reject <ticket> | coord.observe <key> | coord.select <goal_version>:<key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>
+info
+RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected
+echo hello Rust
+hello Rust
+echo
+
+oops
+error: unknown_command
+echx o edited
+edited
+@rai1	1	ok	help | info | fs.list | fs.read <path> | fs.begin <generation>:<size>:<path> | fs.append <ticket>:<offset>:<hex> | fs.commit <ticket> | fs.abort <ticket> | fs.copy <generation>:<src>:<dst> | fs.move <generation>:<src>:<dst> | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | record.index <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start [index] | coord.result | coord.goal <keys> | coord.bundle.status | coord.bundle | coord.publish.status | coord.publish.read | coord.publish.prepare | coord.publish.commit <ticket> | coord.publish.reject <ticket> | coord.observe <key> | coord.select <goal_version>:<key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>
+@rai1	2	ok	RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected
+@rai1	3	ok	bridge ready
+@rai1	4	ok	
+@rai1	5	err	bad_version
+@rai1	0	err	bad_id
+@rai1	0	err	bad_id
+@rai1	0	err	bad_id
+@rai1	0	err	bad_id
+@rai1	6	err	bad_frame
+@rai1	7	err	bad_args
+@rai1	8	err	bad_args
+@rai1	9	err	bad_args
+@rai1	10	err	unknown_operation
+@rai1	0	err	invalid_byte
+@rai1	0	err	invalid_byte
+@rai1	0	err	invalid_byte
+@rai1	19	err	bad_args
+uptime extra
+error: unknown_command
+@rai1	20	ok	uptime_ms=21; counter_hz=62500000
+uptime
+uptime_ms=272; counter_hz=62500000
+@rai1	21	ok	uptime_ms=273; counter_hz=62500000
+@rai1	22	ok	uptime_ms=274; counter_hz=62500000
+@rai1	23	ok	uptime_ms=275; counter_hz=62500000
+@rai1	24	ok	uptime_ms=275; counter_hz=62500000
+@rai1	25	ok	uptime_ms=276; counter_hz=62500000
+@rai1	14	ok	xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+@rai1	0	err	line_too_long
+@rai1	15	ok	recovered
+@rai1	16	ok	a
+@rai1	17	ok	b
+@rai1	18	ok	fragmented
+

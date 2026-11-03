@@ -154,3 +154,8 @@ The image now includes Git. Live apps use /state/app-git for dedicated definitio
 history; keep the /state volume to preserve it. Run
 `docker run --rm --network none rai-os-demo apps-git-verify` for real offline
 Git/QEMU checks. [APP_GIT.md](APP_GIT.md) describes prompts, rollback and boundaries.
+
+
+For composed data pages, the image also provides `apps-pages-verify`. It runs real
+QEMU using disclosed offline proposals and requires no network or API key. See
+[APP_PAGES.md](APP_PAGES.md) for the separate bounded live-generation check.

@@ -1,0 +1,131 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Display ready: 480x800 guest framebuffer
+Console ready: type help for commands
+@rai1	1	ok	state=home
+@rai1	2	ok	state=home
+@rai1	3	ok	revision=1; apps=-
+@rai1	4	ok	state=home
+@rai1	5	ok	state=home
+@rai1	6	ok	state=compose
+@rai1	7	ok	state=compose
+@rai1	8	ok	state=compose
+@rai1	9	ok	state=compose
+@rai1	10	ok	state=compose
+@rai1	11	ok	state=compose
+@rai1	12	ok	state=compose
+@rai1	13	ok	state=compose
+@rai1	14	ok	state=compose
+@rai1	15	ok	state=compose
+@rai1	16	ok	state=compose
+@rai1	17	ok	state=compose
+@rai1	18	ok	state=compose
+@rai1	19	ok	state=compose
+@rai1	20	ok	state=compose
+@rai1	21	ok	state=compose
+@rai1	22	ok	state=compose
+@rai1	23	ok	state=compose
+@rai1	24	ok	submit=3; revision=1; target=-; prompt=526573746f726520736176656420617070
+@rai1	25	ok	state=thinking
+@rai1	26	ok	state=thinking
+@rai1	27	ok	state=thinking
+@rai1	28	ok	state=thinking
+@rai1	29	ok	state=thinking
+@rai1	30	ok	state=thinking
+@rai1	31	ok	state=thinking
+@rai1	32	ok	state=thinking
+@rai1	33	ok	state=thinking
+@rai1	34	ok	state=thinking
+@rai1	35	ok	state=thinking
+@rai1	36	ok	state=thinking
+@rai1	37	ok	state=thinking
+@rai1	38	ok	state=review
+@rai1	39	ok	state=page_review
+@rai1	40	ok	state=page_review
+@rai1	41	ok	state=form
+@rai1	42	ok	state=form
+@rai1	43	ok	state=form
+@rai1	44	ok	state=form
+@rai1	45	ok	state=records
+@rai1	46	ok	state=form
+@rai1	47	ok	state=form
+@rai1	48	ok	state=form
+@rai1	49	ok	state=form
+@rai1	50	ok	state=records
+@rai1	51	ok	state=form
+@rai1	52	ok	state=form
+@rai1	53	ok	state=form
+@rai1	54	ok	state=form
+@rai1	55	ok	state=records
+@rai1	56	ok	state=form
+@rai1	57	ok	state=form
+@rai1	58	ok	state=form
+@rai1	59	ok	state=form
+@rai1	60	ok	state=records
+@rai1	61	ok	state=form
+@rai1	62	ok	state=form
+@rai1	63	ok	state=form
+@rai1	64	ok	state=form
+@rai1	65	ok	state=records
+@rai1	66	ok	state=form
+@rai1	67	ok	state=form
+@rai1	68	ok	state=form
+@rai1	69	ok	state=form
+@rai1	70	ok	state=records
+@rai1	71	ok	state=form
+@rai1	72	ok	state=form
+@rai1	73	ok	state=form
+@rai1	74	ok	state=form
+@rai1	75	ok	state=records
+@rai1	76	ok	state=form
+@rai1	77	ok	state=form
+@rai1	78	ok	state=form
+@rai1	79	ok	state=form
+@rai1	80	ok	state=records
+@rai1	81	ok	id=visualdesk; title=56697375616c206465736b; capability=records.local; filter=done; filter_label=50656e64696e67; fields=name~text~1~4e616d65~~,amount~number~1~416d6f756e74~30~,total~calculated~1~546f74616c~~24616d6f756e742a32,done~check~1~446f6e65~66616c7365~; initial=; actions=; behaviors=; pages=4f76657276696577~metric^546f74616c^746f74616c^^sum^pending~bars^416d6f756e7473^746f74616c^name^^pending|5265706f7274~text^4d79207265706f7274^4c6976652064617461207c2073616665207e20636f6d706f736974696f6e205e206e6f2073637269707473^^^all~table^44657461696c73^746f74616c^name^^all
+@rai1	82	ok	id=visualdesk; version=1; count=8; rows=4974656d2031,39,3138,66616c7365|4974656d2032,30,30,66616c7365|4974656d2033,3130,3230,74727565|4974656d2034,3230,3430,66616c7365|4974656d2035,37,3134,66616c7365|4974656d2036,32,34,66616c7365|4974656d2037,33,36,74727565|4974656d2038,2d31,2d32,66616c7365; states=,,,,,,,
+@rai1	83	ok	state=home
+@rai1	84	ok	state=compose
+@rai1	85	ok	state=compose
+@rai1	86	ok	state=compose
+@rai1	87	ok	state=compose
+@rai1	88	ok	state=compose
+@rai1	89	ok	state=compose
+@rai1	90	ok	state=compose
+@rai1	91	ok	state=compose
+@rai1	92	ok	state=compose
+@rai1	93	ok	state=compose
+@rai1	94	ok	state=compose
+@rai1	95	ok	state=compose
+@rai1	96	ok	state=compose
+@rai1	97	ok	state=compose
+@rai1	98	ok	state=compose
+@rai1	99	ok	state=compose
+@rai1	100	ok	state=compose
+@rai1	101	ok	state=compose
+@rai1	102	ok	submit=5; revision=10; target=-; prompt=526573746f726520736176656420617070
+@rai1	103	ok	state=thinking
+@rai1	104	ok	state=thinking
+@rai1	105	ok	state=thinking
+@rai1	106	ok	state=thinking
+@rai1	107	ok	state=thinking
+@rai1	108	ok	state=thinking
+@rai1	109	ok	state=review
+@rai1	110	ok	state=page_review
+@rai1	111	ok	state=form
+@rai1	112	ok	state=form
+@rai1	113	ok	state=records
+@rai1	114	ok	id=readings; title=52656164696e6773; capability=records.local; filter=; filter_label=; fields=level~number~1~4c6576656c~2d3230~; initial=; actions=; behaviors=; pages=52616e6765~metric^4c6f77^6c6576656c^^min^all~metric^48696768^6c6576656c^^max^all
+@rai1	115	ok	id=readings; version=1; count=1; rows=2d3230; states=
+@rai1	116	ok	state=records
+@rai1	117	ok	state=home
+@rai1	118	ok	revision=12; apps=visualdesk:1:8:56697375616c206465736b,readings:1:1:52656164696e6773
+@rai1	119	ok	state=home
+@rai1	120	ok	revision=12; apps=visualdesk:1:8:56697375616c206465736b,readings:1:1:52656164696e6773
+@rai1	121	ok	id=visualdesk; title=56697375616c206465736b; capability=records.local; filter=done; filter_label=50656e64696e67; fields=name~text~1~4e616d65~~,amount~number~1~416d6f756e74~30~,total~calculated~1~546f74616c~~24616d6f756e742a32,done~check~1~446f6e65~66616c7365~; initial=; actions=; behaviors=; pages=4f76657276696577~metric^546f74616c^746f74616c^^sum^pending~bars^416d6f756e7473^746f74616c^name^^pending|5265706f7274~text^4d79207265706f7274^4c6976652064617461207c2073616665207e20636f6d706f736974696f6e205e206e6f2073637269707473^^^all~table^44657461696c73^746f74616c^name^^all
+@rai1	122	ok	id=visualdesk; version=1; count=8; rows=4974656d2031,39,3138,66616c7365|4974656d2032,30,30,66616c7365|4974656d2033,3130,3230,74727565|4974656d2034,3230,3430,66616c7365|4974656d2035,37,3134,66616c7365|4974656d2036,32,34,66616c7365|4974656d2037,33,36,74727565|4974656d2038,2d31,2d32,66616c7365; states=,,,,,,,
+@rai1	123	ok	id=readings; title=52656164696e6773; capability=records.local; filter=; filter_label=; fields=level~number~1~4c6576656c~2d3230~; initial=; actions=; behaviors=; pages=52616e6765~metric^4c6f77^6c6576656c^^min^all~metric^48696768^6c6576656c^^max^all
+@rai1	124	ok	id=readings; version=1; count=1; rows=2d3230; states=
+@rai1	125	ok	state=form
+@rai1	126	ok	state=pages
+@rai1	127	ok	revision=12; apps=visualdesk:1:8:56697375616c206465736b,readings:1:1:52656164696e6773
+@rai1	128	ok	revision=12; apps=visualdesk:1:8:56697375616c206465736b,readings:1:1:52656164696e6773

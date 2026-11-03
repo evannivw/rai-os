@@ -3006,3 +3006,36 @@ and VNC/UART forwarding before documenting the path to a guest-drawn keyboard.
 The interactive concept sends no API calls; it is not a native implementation.
 Checked preview script syntax and documentation whitespace. No QEMU execution or
 rendered-browser validation was performed for this design-only increment.
+
+
+## 2026-11-03 — Compose live-data pages from reusable primitives
+
+The user requested deeper reusable creative capabilities toward spreadsheet and
+presentation tools. Added two pages of two blocks each: literal text, count/sum/min/
+max metrics, signed bars and two-column tables. Explicit all/pending scope binds to
+current fields in the owning app. Evaluation is local and read-only; existing
+formulas/actions remain available. Pages require native review and participate in
+compatible evolution, checkpoints and Git definitions. Old empty-page schemas
+retain their prior wire format. Catalog v8 tells Meta the exact language and bounds.
+
+APP_TOOLBOX and APP_PAGES document experimentation, primitives, protocol and future
+work. This is neither XLSX/PPTX support nor arbitrary applications. A creation lock,
+keyboard, isolated app services and executable OS self-update remain unimplemented.
+No comparative efficiency claim against Linux.
+
+Initial debug linking exposed fixed-window pressure. Borrowing schema output avoids
+a large copy; one development compilation unit with incremental disabled avoids
+code duplication. Extracted schema construction from the retained dispatcher frame
+(8832 -> 4288 bytes measured). Final selected action frames sum conservatively to
+56944 bytes, excluding recursive/standard/indirect callees; this is not a complete
+stack proof. Stack remains 64 KiB, MMU window unchanged, final pool end 0x401fc000.
+No new unsafe or driver. Debug symbols and opt-level 1 remain.
+
+Verified 106 Rust tests, host/guest Clippy, formatting/Python syntax, real QEMU
+debug/release all-block checks, pixel oracle for a negative bar, all eight records,
+recomputation, filtered scopes, reviewed evolution/cancel/rejection, unrelated-app
+aggregates and reboot. Batch/Git/repair/demo-entry regressions, console/protocol
+both profiles and host-console system checks passed. Linux ARM64 Docker passed
+pages and saved demo without network. Evidence: evidence/2026-11-03-app-pages.
+No Meta call yet. Next: frozen-source generation, at most one actual call, retaining
+the result with no retry or fixture substitution.

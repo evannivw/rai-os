@@ -1,0 +1,23 @@
+{
+  "base_commit": "9540f1fbd6620fa6ed19cdcbe28aad113a1e2d70",
+  "worktree_modified": true,
+  "sha256": {
+    "Cargo.toml": "a6c65415a1c24fdc3ed0a2035d8f37ee5aad6c46e891ec66494c4893548deb1b",
+    "fixtures/microapps/v1/runtime.json": "d703f77c5ebf49f94b1c2e4645d2cdf5912f9582331b94a471996ed7faa841c5",
+    "host/meta/src/apps.rs": "45cd6b852a58c5888ce73335a5c7b32e2ae5dc6ede3d63b0b8b22bc5709df60c",
+    "host/meta/src/git_store.rs": "61f0e8ed67c9eb2db5caf1fca36c87aa6042bee6138df9fd8c0cc949172558c9",
+    "host/meta/src/provider.rs": "02bf7e510d1e5f850adfedcd48aae19fb9f695832a27537c30281760dae54762",
+    "scripts/app_storage.py": "8651e40f39feb5233e86b38c107b4623847e641103987b0d7420876f9773e6ba",
+    "scripts/apps.py": "7e1b9ae1c7f0f870b515ddd7341aa6064c5fbebe25727fcff0df1b38c63e8d66",
+    "scripts/portable.py": "606a847da543349883bcd4ddccc181931d5a8fef0db4c4df1cca0262f31875df",
+    "scripts/workspace_vnc.py": "57de9c8fd463ca37026e7c553549ad42ba3f73df59e0f0a917df89fbbaa040b2",
+    "src/app_ui.rs": "8ae4f932198949a7523ff374376081eefcd38c2a76bfcf2b6575cf0e871bb9ff",
+    "src/console.rs": "d710f24743e4a16cc706a736246ea4c9b15eade3b75e176609aec8a455de2e98",
+    "src/display/apps.rs": "3ed4a5cedad00b98571e2bde1ce95789c5334fe5db22be846f1193da53b909b3",
+    "src/display/mod.rs": "2d799e6be2ccce81827f5ca835c58a953062f81587a24c90dc4fef16d4b77aa5",
+    "src/microapp.rs": "f7b537290a30745a001b153c011fb8dcfc3f51feb4c2a4fb7013daee9d6ba1af",
+    "src/microapp_pages.rs": "db093d0a5cb812e2e76cd56c14a856e3de4d0fe862919b9813092066b0cd23fe",
+    "src/display/app_pages.rs": "2058f132a01670cd7dbc4548710186fc5a3fd2575a8ba18de91c8454abf47824",
+    "scripts/verify_app_pages.py": "d48a622d8bacc38d5f0bc90835b8176ea1b05d81b088779be22b0a14e080e5ce"
+  }
+}

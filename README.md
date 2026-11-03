@@ -300,3 +300,6 @@ work identifiable; eligibility needs clarification because the supplied guide
 separates the Oct 26 kickoff from the Oct 27-Nov 4 build period. No dates have
 been altered. New project text and commits are in English; historical evidence
 and already-published commit messages retain their original form.
+
+The [app toolbox](docs/APP_TOOLBOX.md) explains reusable capabilities, including
+[composed visual pages](docs/APP_PAGES.md), and their current limits.
