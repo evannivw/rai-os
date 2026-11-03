@@ -242,6 +242,18 @@ impl Console<'_> {
 
     fn app_command(&mut self, name: &str, arg: Option<&str>, id: Option<&str>) {
         let id = id.unwrap_or("0");
+        #[cfg(feature = "guest-display")]
+        {
+            self.apps.display_available = self.display.is_some();
+        }
+        if name == "app.display" {
+            if arg.is_some() {
+                response(id, "err", "bad_args");
+            } else {
+                response(id, "ok", crate::app_ui::DisplayState(&self.apps));
+            }
+            return;
+        }
         if name == "app.catalog" {
             if arg.is_some() {
                 response(id, "err", "bad_args");
@@ -286,6 +298,7 @@ impl Console<'_> {
         let result = self.apps.execute(name, arg);
         #[cfg(feature = "guest-display")]
         if let Some(display) = &mut self.display {
+            display.set_brightness(self.apps.brightness);
             crate::display::apps::render(display, &self.apps);
         }
         match result {

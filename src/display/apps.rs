@@ -6,7 +6,7 @@ use super::{
 };
 use crate::{
     app_ui::{Controller, Mode},
-    microapp::Kind,
+    microapp::{Capability, Kind},
 };
 const QUIET: u32 = 0x62716d;
 const WHITE: u32 = 0xe6ece7;
@@ -258,7 +258,17 @@ pub fn render(s: &mut Display, u: &Controller) {
                 text(s, f.label.text(), 42, y, WHITE);
                 text(s, f.kind.name(), 371, y, QUIET);
             }
-            text(s, "Local records only", 42, 577, LIME);
+            text(
+                s,
+                if u.pending.capability() == Capability::Brightness {
+                    "Allow: change display brightness"
+                } else {
+                    "Local records only"
+                },
+                42,
+                577,
+                LIME,
+            );
             wrap(s, u.message.text(), 606, 3);
             action(s, "+ Install app");
         }
@@ -268,6 +278,8 @@ pub fn render(s: &mut Display, u: &Controller) {
                     s,
                     if u.editing.is_some() {
                         "/ edit record"
+                    } else if a.spec.capability() == Capability::Brightness {
+                        "/ display control"
                     } else {
                         "/ new record"
                     },
@@ -302,9 +314,30 @@ pub fn render(s: &mut Display, u: &Controller) {
                 if !u.message.text().is_empty() {
                     wrap(s, u.message.text(), 638, 2);
                 } else {
-                    text(s, "Tab fields   F3 records   F5 table", 42, 651, QUIET);
+                    text(
+                        s,
+                        if a.spec.capability() == Capability::Brightness {
+                            "Enter apply   F6 reset   F2 evolve"
+                        } else {
+                            "Tab fields   F3 records   F5 table"
+                        },
+                        42,
+                        651,
+                        QUIET,
+                    );
                 }
-                action(s, "Save record");
+                if a.spec.capability() == Capability::Brightness {
+                    text(s, "20..100 percent / software dimming", 42, 283, QUIET);
+                    frame(s, 24, 330, 432, 48, QUIET);
+                    center(s, "Reset to 100% / F6", 342, Size::Body, WHITE);
+                    text(s, "Current display", 42, 408, QUIET);
+                    number(s, i64::from(u.brightness.percent()), 365, 408);
+                    t::rect(s, 42, 450, 396, 32, 0xffffff);
+                    text(s, "QEMU pixels / no physical backlight", 42, 503, QUIET);
+                    action(s, "Apply brightness");
+                } else {
+                    action(s, "Save record");
+                }
             }
         }
         Mode::Records => {
@@ -437,7 +470,9 @@ pub fn render(s: &mut Display, u: &Controller) {
             action(s, "Back home");
         }
     }
-    if matches!(u.mode, Mode::Form | Mode::Records) {
+    if matches!(u.mode, Mode::Form | Mode::Records)
+        && a.is_some_and(|a| a.spec.capability() == Capability::Records)
+    {
         t::rect(s, 24, 146, 432, 36, 0x060908);
         text(s, "[ records ]", 42, 154, QUIET);
         text(s, "table", 184, 154, QUIET);

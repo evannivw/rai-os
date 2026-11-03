@@ -9,10 +9,16 @@ installation, record changes and migrations. Full control for the user means
 reviewing/choosing behavior within implemented capabilities, not allowing a model
 to manufacture a location driver, network stack or arbitrary privileged code.
 
+The [display control capability](DISPLAY_CONTROL.md) now permits a separate app
+to apply software brightness to the QEMU framebuffer after explicit user action.
+It is the first capability beyond records; physical backlight control is still
+unavailable. An app chooses one capability, and updates cannot change it.
+
 ## Available now
 
 | Capability | What an app can do | Execution |
 | --- | --- | --- |
+| Software display brightness | Apply 20..100%; explicit permission, user action and reset | Guest Rust framebuffer |
 | Typed fields | Text, signed integer, checkbox; labels, required values and defaults | Guest Rust |
 | Local records | Create and edit complete records in the current app | Guest Rust |
 | Record view | Select/edit rows; toggle one configured status | Guest Rust |

@@ -80,8 +80,9 @@ and the existing Tab hotspot; text fields are selected with Tab, not a mouse.
 - One optional filter references a checkbox and shows false records (pending).
   Its label is at most 18 bytes. The first field is the record-list headline;
   open a row to see/edit all fields. No sort/formulas/loops/deletion yet.
-- Only `records.local` exists. No file, location, network, timer, native code or
-  arbitrary memory capability. Schemas cannot name another app as a data source.
+- Choose `records.local` or the separate [display.brightness](DISPLAY_CONTROL.md)
+  control capability. No file, location, network, timer, native code or arbitrary
+  memory capability. Schemas cannot name another app as a data source.
 - Updates retain every old field's ID, position and type, adding fields only.
   Existing values are checked against the new constraints before any write.
   Added fields get valid defaults; incompatible migration changes nothing.
@@ -194,3 +195,6 @@ the expense example, arithmetic limits and the sequence toward more expressive
 apps. The third exact replay prompt creates the documented expense table; earlier
 inspection create/update prompts remain supported. Formula execution, embedded
 AI and native machine-code generation remain unimplemented.
+
+A fourth exact replay prompt creates the [brightness control app](DISPLAY_CONTROL.md).
+It has an Apply action and explicit display permission instead of record storage.

@@ -27,12 +27,15 @@ TABLE_SPEC=dict(id='expenses',title='Expenses',capability='records.local',fields
  dict(key='amount',label='Amount (cents)',kind='number',required=True,default='0'),
  dict(key='paid',label='Paid',kind='check',required=True,default='false')],filter_key='paid',filter_label='Unpaid')
 
+BRIGHTNESS='Create an app to adjust the RAI-OS display brightness from 20 to 100 percent, with a default of 50.'
+BRIGHTNESS_SPEC=dict(id='brightness',title='Screen brightness',capability='display.brightness',fields=[dict(key='level',label='Brightness %',kind='number',required=True,default='50')],filter_key='',filter_label='')
+
 def schema(g,app_id):
     row=g.fields('app.schema',app_id);fields=[]
     for item in row['fields'].split(','):
         key,kind,required,label,default=item.split('~')
         fields.append(dict(key=key,kind=kind,required=required=='1',label=bytes.fromhex(label).decode('ascii'),default=bytes.fromhex(default).decode('ascii')))
-    return dict(id=row['id'],title=bytes.fromhex(row['title']).decode('ascii'),capability='records.local',fields=fields,filter_key=row['filter'],filter_label=bytes.fromhex(row['filter_label']).decode('ascii'))
+    return dict(id=row['id'],title=bytes.fromhex(row['title']).decode('ascii'),capability=row['capability'],fields=fields,filter_key=row['filter'],filter_label=bytes.fromhex(row['filter_label']).decode('ascii'))
 
 def records(g,app_id):
     data=g.fields('app.export',app_id)
@@ -112,6 +115,7 @@ class Studio:
             spec=None
             if r['goal']==CREATE and r['target'] is None:spec=copy.deepcopy(SPEC)
             if r['goal']==TABLE and r['target'] is None:spec=copy.deepcopy(TABLE_SPEC)
+            if r['goal']==BRIGHTNESS and r['target'] is None:spec=copy.deepcopy(BRIGHTNESS_SPEC)
             if r['goal']==EVOLVE and r['target'] is not None:
                 spec=copy.deepcopy(r['target']);spec['fields'].append(dict(key='priority',label='Priority',kind='number',required=True,default='1'))
             plan=dict(request_id=rid,base_revision=r['base_revision'],decision='install' if spec else 'clarify',spec=spec,reason='Scripted offline proposal. Review before installing.' if spec else 'Offline replay supports the documented prompts only. Select Meta for your own app.')

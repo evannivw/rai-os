@@ -1,0 +1,43 @@
+{
+  "source": "replay",
+  "maximum_live_calls": 0,
+  "retries": 0,
+  "source_commit": "6c4648f807c06490341cc526ad65f943d645a7e6",
+  "source_worktree_dirty": true,
+  "kernel_sha256": "a0fadf1f43f193727bae1293933bee72bc2d5217a154487657626ff7733f2f66",
+  "mode": "guest software RGB attenuation; not physical backlight",
+  "verified": true,
+  "checks": [
+    "Review and install do not actuate; Apply changes actual QEMU pixels including the home screen; repeated redraws do not compound dimming",
+    "20 percent has exact 51/255 white pixels; invalid inputs have no effect; reset recovers the exact original image; actions do not create records or change saved schemas",
+    "Records-only app cannot actuate display; capability escalation, invalid default, unknown permission and late response rejected without changing installed state",
+    "Saved control schema restores without inference or actuation; user can apply again and recover with F6"
+  ],
+  "plan": {
+    "base_revision": 1,
+    "decision": "install",
+    "reason": "Scripted offline proposal. Review before installing.",
+    "request_id": 2,
+    "spec": {
+      "capability": "display.brightness",
+      "fields": [
+        {
+          "default": "50",
+          "key": "level",
+          "kind": "number",
+          "label": "Brightness %",
+          "required": true
+        }
+      ],
+      "filter_key": "",
+      "filter_label": "",
+      "id": "brightness",
+      "title": "Screen brightness"
+    }
+  },
+  "pixel_check": {
+    "max_channel_difference_from_half": 1,
+    "mean_channel_difference_from_half": 0.0014965277777777778,
+    "total_rgb_ratio": 0.48257399642011156
+  }
+}

@@ -376,3 +376,11 @@ then reopen the saved device. Explain native QEMU rendering, the model's limited
 schema role, shared EL1 runtime and host storage/API boundary. Do not claim Excel
 compatibility, native-code compilation or phone installation. The next capability
 sequence is in APP_CAPABILITIES.md; delivery/video time still takes precedence.
+
+## November 3: user-requested system control increment
+
+The next demonstrated app can control software display brightness in QEMU. Keep
+its scope explicit: permission review, Apply, visible pixel change, reset and safe
+recovery; no physical backlight or energy claim. This extends app creation from
+records into a real guest display effect. Follow the same capability/backend/check
+sequence for future OS controls, preserving delivery/video time for November 4.

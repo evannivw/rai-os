@@ -95,6 +95,11 @@ contains two previously Meta-generated apps and fictional data; restoration runs
 offline. It demonstrates usable local tools, not an Excel implementation or
 arbitrary native-code generation.
 
+A [display-control app](docs/DISPLAY_CONTROL.md) can now apply software brightness
+to the actual QEMU framebuffer, with explicit installed authority and a reset path.
+This is guest RGB attenuation, not physical backlight control. App creation and
+restore do not execute the action automatically.
+
 ## Run
 
 Install Rustup and QEMU (9.2 or newer with virt-9.2), then:

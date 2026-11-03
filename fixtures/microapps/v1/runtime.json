@@ -1,13 +1,55 @@
 {
-  "runtime": "rai-declarative-1",
-  "capability": "records.local",
-  "limits": {"apps": 3, "fields": 6, "rows_per_app": 8, "value_ascii_bytes": 32},
-  "field_kinds": ["text", "number", "check"],
-  "views": ["form", "editable_record_list", "table_with_three_column_pages"],
-  "local_operations": ["create_record", "edit_record", "toggle_configured_check", "filter_check_false", "sum_each_number_column_over_visible_rows"],
+  "runtime": "rai-declarative-2",
+  "limits": {
+    "apps": 3,
+    "fields": 6,
+    "rows_per_app": 8,
+    "value_ascii_bytes": 32
+  },
+  "field_kinds": [
+    "text",
+    "number",
+    "check"
+  ],
+  "views": [
+    "form",
+    "editable_record_list",
+    "table_with_three_column_pages"
+  ],
+  "local_operations": [
+    "create_record",
+    "edit_record",
+    "toggle_configured_check",
+    "filter_check_false",
+    "sum_each_number_column_over_visible_rows"
+  ],
   "schema_updates": "Keep old field keys, order and kinds. Append fields with valid migration defaults.",
   "launching": "Installed apps appear in the guest launcher with an icon; title and id are searchable.",
   "storage": "The launcher checkpoints confirmed schemas and rows to an explicit host file; no arbitrary file access.",
   "numbers": "Signed 32-bit integer cells; sums use signed 64-bit arithmetic. No decimal or currency conversion.",
-  "not_available": ["formulas", "native_code", "shell", "network", "location", "timers", "background_jobs", "cross_app_data", "embedded_ai", "xlsx", "arbitrary_files"]
+  "not_available": [
+    "formulas",
+    "native_code",
+    "shell",
+    "network",
+    "location",
+    "timers",
+    "background_jobs",
+    "cross_app_data",
+    "embedded_ai",
+    "xlsx",
+    "arbitrary_files"
+  ],
+  "capabilities": [
+    "records.local",
+    "display.brightness"
+  ],
+  "display_control": {
+    "capability": "display.brightness",
+    "fields": "Exactly one required number field with a valid default 20..100; no filter.",
+    "scope": "QEMU software RGB attenuation only; no physical backlight or energy-saving claim.",
+    "execution": "Explicit Apply checks the installed app capability. Install, update and restore do not actuate. Reset to 100% with F6.",
+    "storage": "Control app schema persists; applied display level resets to 100% at boot.",
+    "updates": "Capability is immutable; create a separate app for a different capability."
+  }
 }

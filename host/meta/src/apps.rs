@@ -138,8 +138,40 @@ pub fn run(path: &std::path::Path, replay: Option<&std::path::Path>) -> Result<(
 mod tests {
     use super::*;
     #[test]
+    fn display_schema_is_bounded_and_updates_cannot_escalate() {
+        let old:Spec=serde_json::from_value(serde_json::json!({"id":"screen","title":"Screen","capability":"display.brightness","fields":[{"key":"level","label":"Brightness %","kind":"number","required":true,"default":"50"}],"filter_key":"","filter_label":""})).unwrap();
+        old.checked().unwrap();
+        let mut bad = old.clone();
+        bad.fields[0].default = "0".into();
+        assert!(bad.checked().is_err());
+        bad = old.clone();
+        bad.fields[0].required = false;
+        assert!(bad.checked().is_err());
+        let mut record = old.clone();
+        record.capability = "records.local".into();
+        let r = Request {
+            request_id: 1,
+            base_revision: 1,
+            goal: "Change app type".into(),
+            target: Some(record),
+            app_ids: vec!["screen".into()],
+            record_count: 0,
+        };
+        let p = Plan {
+            request_id: 1,
+            base_revision: 1,
+            decision: "install".into(),
+            spec: Some(old),
+            reason: "Proposed change".into(),
+        };
+        assert_eq!(validate(&p, &r), Err("app_capability_change"));
+    }
+    #[test]
     fn advertised_limits_match_the_guest_domain() {
         let c = capabilities();
+        for cap in c["capabilities"].as_array().unwrap() {
+            assert!(microapp::Capability::parse(cap.as_str().unwrap()).is_ok());
+        }
         assert_eq!(c["limits"]["apps"], microapp::APPS);
         assert_eq!(c["limits"]["fields"], microapp::FIELDS);
         assert_eq!(c["limits"]["rows_per_app"], microapp::ROWS);

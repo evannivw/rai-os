@@ -2465,3 +2465,28 @@ access disabled. Both platform logs and image/build hashes are archived under
 evidence/2026-11-03-app-tables/portable. Those images contain the frozen executable
 code and were built before the final documentation/evidence/showcase fixture.
 Physical Windows and phone hardware remain untested.
+
+## 2026-11-03 — Declarative guest display control
+
+Added display.brightness as a separate immutable app capability. A control schema
+contains exactly one required number with a default in 20..100 and no filter;
+records apps retain their behavior. User review displays the permission, and Apply
+checks the installed capability and device availability. Only then does the guest
+adapter attenuate RGB output. F6 and the reset button recover 100%. Installation,
+updates and checkpoint restore never actuate; applied brightness is session-local.
+No physical monitor/phone backlight or power-saving behavior is claimed.
+
+Debug real-QEMU checks passed: exact sample-bar values at 50% and 20%, actual home
+pixels changed, repeated redraws stayed identical, and reset returned the exact
+original home image. Maximum per-channel difference from a halved baseline was
+one, consistent with integer alpha rounding. Invalid ranges, records-only authority,
+capability escalation, invalid defaults and late replies were rejected. Recovery
+restored the control schema but kept brightness at 100%. The actual headless build
+rejected actions with display_unavailable. Shared domain/host contract tests and
+Clippy with/without display and on the host passed. Further results follow below.
+Release brightness verification also passed. Existing release app/RFB and saved-
+session tests passed, as did the debug file-workspace/RFB regression. Captures,
+exact measurements and reports are archived under
+ evidence/2026-11-03-display-control/offline. Pre-commit reports explicitly mark
+the working tree as dirty. The next step freezes these sources before one live
+Meta control-app request; no live result is inferred from replay.

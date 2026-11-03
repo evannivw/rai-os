@@ -1,5 +1,5 @@
 //! Guest UI controller for a bounded interpreter. No model or transport dependency.
-use crate::microapp::{Field, Kind, Runtime, Spec, Text, Values};
+use crate::microapp::{Brightness, Capability, Field, Kind, Runtime, Spec, Text, Values};
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Mode {
     Home,
@@ -27,6 +27,8 @@ pub struct Controller {
     pub prompt: Text<128>,
     pub search: Text<32>,
     pub storage: Text<16>,
+    pub brightness: Brightness,
+    pub display_available: bool,
     pub message: Text<160>,
     pub pending: Spec,
     request: u32,
@@ -109,6 +111,8 @@ impl Controller {
             prompt: Text::EMPTY,
             search: Text::EMPTY,
             storage: Text::EMPTY,
+            brightness: Brightness::FULL,
+            display_available: false,
             message: Text::EMPTY,
             pending: Spec::EMPTY,
             request: 0,
@@ -168,6 +172,15 @@ impl Controller {
         }
         if (696..745).contains(&y) {
             return self.key(13);
+        }
+        if self.mode == Mode::Form
+            && self
+                .runtime
+                .app(self.selected)
+                .is_some_and(|a| a.spec.capability() == Capability::Brightness)
+            && (330..382).contains(&y)
+        {
+            return self.key(1010);
         }
         if matches!(self.mode, Mode::Form | Mode::Records | Mode::Table) && (146..183).contains(&y)
         {
@@ -274,7 +287,27 @@ impl Controller {
             self.row = (0..8).find(|r| self.visible(*r)).unwrap_or(0);
         }
     }
+    fn run_control(&mut self) -> Result<Reply, &'static str> {
+        if self.mode != Mode::Form {
+            return Err("app_form_required");
+        }
+        let level = self.runtime.brightness(self.selected, &self.draft)?;
+        if !self.display_available {
+            return Err("display_unavailable");
+        }
+        self.brightness = level;
+        self.message = Text::new("Brightness applied.")?;
+        Ok(Reply::State("applied"))
+    }
     fn key(&mut self, key: u32) -> Result<Reply, &'static str> {
+        if key == 1010 {
+            if !self.display_available {
+                return Err("display_unavailable");
+            }
+            self.brightness = Brightness::FULL;
+            self.message = Text::new("Display restored to 100%.")?;
+            return Ok(Reply::State("display_reset"));
+        }
         if key == 27 || key == 1001 {
             self.request = self.request.checked_add(1).ok_or("app_request_exhausted")?;
             self.mode = Mode::Home;
@@ -292,7 +325,12 @@ impl Controller {
             self.begin_prompt(t);
             return Ok(Reply::State("compose"));
         }
-        if matches!(self.mode, Mode::Form | Mode::Records | Mode::Table) {
+        if matches!(self.mode, Mode::Form | Mode::Records | Mode::Table)
+            && self
+                .runtime
+                .app(self.selected)
+                .is_some_and(|a| a.spec.capability() == Capability::Records)
+        {
             match key {
                 1007 => {
                     self.mode = Mode::Table;
@@ -388,9 +426,8 @@ impl Controller {
                 match key {
                     9 | 1006 => self.focus = (self.focus + 1) % a.spec.fields().len(),
                     1005 => self.focus = self.focus.saturating_sub(1),
-                    1003 => {
-                        self.mode = Mode::Records;
-                        self.normalize_row();
+                    13 if a.spec.capability() == Capability::Brightness => {
+                        return self.run_control();
                     }
                     13 => {
                         self.runtime
@@ -483,6 +520,12 @@ impl Controller {
         if !self.active {
             return Err("app_ui_not_open");
         }
+        if name == "app.run" {
+            if arg.is_some() {
+                return Err("bad_args");
+            }
+            return self.run_control();
+        }
         let arg = arg.ok_or("bad_args")?;
         match name {
             "app.storage" => {
@@ -574,5 +617,17 @@ impl Controller {
             self.message = Text::new(error).unwrap_or(Text::EMPTY);
         }
         result
+    }
+}
+
+pub struct DisplayState<'a>(pub &'a Controller);
+impl core::fmt::Display for DisplayState<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(
+            f,
+            "available={}; brightness={}; mode=software_rgb",
+            self.0.display_available,
+            self.0.brightness.percent()
+        )
     }
 }

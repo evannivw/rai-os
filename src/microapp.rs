@@ -119,10 +119,49 @@ impl Field {
         (!self.required || !value.trim().is_empty()) && self.kind.valid(value)
     }
 }
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum Capability {
+    Records,
+    Brightness,
+}
+impl Capability {
+    pub fn parse(value: &str) -> Result<Self, &'static str> {
+        match value {
+            "records.local" => Ok(Self::Records),
+            "display.brightness" => Ok(Self::Brightness),
+            _ => Err("app_capability_denied"),
+        }
+    }
+    pub fn name(self) -> &'static str {
+        match self {
+            Self::Records => "records.local",
+            Self::Brightness => "display.brightness",
+        }
+    }
+}
+/// A validated software-display setting, never a physical backlight command.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub struct Brightness(u8);
+impl Brightness {
+    pub const FULL: Self = Self(100);
+    pub fn parse(value: &str) -> Result<Self, &'static str> {
+        let n = value
+            .parse::<u8>()
+            .map_err(|_| "display_brightness_range")?;
+        if !(20..=100).contains(&n) {
+            return Err("display_brightness_range");
+        }
+        Ok(Self(n))
+    }
+    pub fn percent(self) -> u8 {
+        self.0
+    }
+}
 #[derive(Clone, Copy)]
 pub struct Spec {
     pub id: Text<12>,
     pub title: Text<28>,
+    capability: Capability,
     fields: [Field; FIELDS],
     len: usize,
     pub filter_key: Text<12>,
@@ -132,23 +171,26 @@ impl Spec {
     pub const EMPTY: Self = Self {
         id: Text::EMPTY,
         title: Text::EMPTY,
+        capability: Capability::Records,
         fields: [Field::EMPTY; FIELDS],
         len: 0,
         filter_key: Text::EMPTY,
         filter_label: Text::EMPTY,
     };
     pub fn new(id: &str, title: &str, capability: &str) -> Result<Self, &'static str> {
-        if capability != "records.local" {
-            return Err("app_capability_denied");
-        }
+        let capability = Capability::parse(capability)?;
         if !identifier(id) || title.trim().is_empty() {
             return Err("app_bad_identity");
         }
         Ok(Self {
             id: Text::new(id)?,
             title: Text::new(title)?,
+            capability,
             ..Self::EMPTY
         })
+    }
+    pub fn capability(&self) -> Capability {
+        self.capability
     }
     pub fn add(&mut self, f: Field) -> Result<(), &'static str> {
         if self.len == FIELDS {
@@ -176,6 +218,16 @@ impl Spec {
         if self.len == 0 || !identifier(self.id.text()) {
             return Err("app_empty_spec");
         }
+        if self.capability == Capability::Brightness {
+            if self.len != 1
+                || self.fields[0].kind != Kind::Number
+                || !self.fields[0].required
+                || !self.filter_key.text().is_empty()
+            {
+                return Err("app_invalid_display_control");
+            }
+            Brightness::parse(self.fields[0].default.text())?;
+        }
         if !self.filter_key.text().is_empty() && self.check_field().is_none() {
             return Err("app_bad_filter");
         }
@@ -187,6 +239,9 @@ impl Spec {
             .position(|f| f.kind == Kind::Check && f.key == self.filter_key)
     }
     pub fn compatible(&self, old: &Spec) -> Result<(), &'static str> {
+        if self.capability != old.capability {
+            return Err("app_capability_change");
+        }
         if self.id != old.id || self.len < old.len {
             return Err("app_destructive_update");
         }
@@ -202,7 +257,12 @@ impl fmt::Display for Spec {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "id={}; title=", self.id.text())?;
         self.title.hex(f)?;
-        write!(f, "; filter={}; filter_label=", self.filter_key.text())?;
+        write!(
+            f,
+            "; capability={}; filter={}; filter_label=",
+            self.capability.name(),
+            self.filter_key.text()
+        )?;
         self.filter_label.hex(f)?;
         f.write_str("; fields=")?;
         for (i, a) in self.fields().iter().enumerate() {
@@ -337,6 +397,14 @@ impl Runtime {
         self.revision += 1;
         Ok(slot)
     }
+    pub fn brightness(&self, index: usize, values: &Values) -> Result<Brightness, &'static str> {
+        let app = self.app(index).ok_or("app_not_found")?;
+        if app.spec.capability() != Capability::Brightness {
+            return Err("app_capability_denied");
+        }
+        // Authority comes from the installed spec, not a caller-supplied string.
+        Brightness::parse(values[0].text())
+    }
     pub fn save(
         &mut self,
         index: usize,
@@ -344,6 +412,9 @@ impl Runtime {
         values: &Values,
     ) -> Result<(), &'static str> {
         let app = self.app(index).ok_or("app_not_found")?;
+        if app.spec.capability() != Capability::Records {
+            return Err("app_records_unavailable");
+        }
         let slot = if let Some(r) = row {
             if r >= app.count {
                 return Err("app_row_not_found");
@@ -486,6 +557,41 @@ mod tests {
             .unwrap();
         s.filter("done", "Pending").unwrap();
         s
+    }
+    #[test]
+    fn display_controls_require_installed_authority_and_bounded_values() {
+        let mut control = Spec::new("screen", "Screen", "display.brightness").unwrap();
+        control
+            .add(Field::new("level", "Brightness %", "number", true, "50").unwrap())
+            .unwrap();
+        control.check().unwrap();
+        let mut r = Runtime::new();
+        let record = r.install(&spec("notes"), r.revision(), None).unwrap();
+        let c = r.install(&control, r.revision(), None).unwrap();
+        let mut values = r.app(c).unwrap().defaults();
+        assert_eq!(r.brightness(c, &values).unwrap().percent(), 50);
+        assert!(matches!(
+            r.brightness(record, &values),
+            Err("app_capability_denied")
+        ));
+        for bad in ["0", "19", "101", "-1", "", "oops", "256"] {
+            values[0] = Text::new(bad).unwrap();
+            assert!(r.brightness(c, &values).is_err());
+        }
+        values[0] = Text::new("20").unwrap();
+        assert_eq!(r.brightness(c, &values).unwrap().percent(), 20);
+        assert_eq!(r.save(c, None, &values), Err("app_records_unavailable"));
+        assert_eq!(r.app(c).unwrap().count(), 0);
+        let mut escalate = control;
+        escalate.id = Text::new("notes").unwrap();
+        assert_eq!(
+            r.validate(&escalate, r.revision(), Some(record)),
+            Err("app_capability_change")
+        );
+        let mut bad = control;
+        bad.add(Field::new("extra", "Extra", "text", false, "").unwrap())
+            .unwrap();
+        assert_eq!(bad.check(), Err("app_invalid_display_control"));
     }
     #[test]
     fn totals_use_wide_integer_arithmetic_and_the_selected_filter() {

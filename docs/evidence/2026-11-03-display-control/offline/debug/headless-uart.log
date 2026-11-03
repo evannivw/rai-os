@@ -1,0 +1,30 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	state=home
+@rai1	2	ok	state=compose
+@rai1	3	ok	state=compose
+@rai1	4	ok	state=compose
+@rai1	5	ok	state=compose
+@rai1	6	ok	state=compose
+@rai1	7	ok	state=compose
+@rai1	8	ok	state=compose
+@rai1	9	ok	state=compose
+@rai1	10	ok	state=compose
+@rai1	11	ok	state=compose
+@rai1	12	ok	state=compose
+@rai1	13	ok	state=compose
+@rai1	14	ok	state=compose
+@rai1	15	ok	state=compose
+@rai1	16	ok	state=compose
+@rai1	17	ok	state=compose
+@rai1	18	ok	state=compose
+@rai1	19	ok	submit=2; revision=1; target=-; prompt=486561646c65737320636f6e74726f6c
+@rai1	20	ok	state=thinking
+@rai1	21	ok	state=thinking
+@rai1	22	ok	state=thinking
+@rai1	23	ok	state=review
+@rai1	24	ok	state=form
+@rai1	25	ok	available=false; brightness=100; mode=software_rgb
+@rai1	26	err	display_unavailable
+@rai1	27	err	display_unavailable
+@rai1	28	ok	available=false; brightness=100; mode=software_rgb

@@ -1,0 +1,10 @@
+{
+  "live_meta_calls": 0,
+  "guest_reboots": 2,
+  "storage": "atomic host checkpoint; no guest disk driver",
+  "checks": [
+    "Install and save checkpoint only committed state; second session cannot write the same device",
+    "Fresh QEMU recovered exact apps/rows without Meta; compatible update persisted; interrupted replacement preserved last good state and retry recovered",
+    "Abrupt guest termination retained committed state; checksum corruption and valid-checksum unsupported capability rejected without overwriting saved data"
+  ]
+}

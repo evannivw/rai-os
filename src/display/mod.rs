@@ -19,6 +19,7 @@ const _: () = assert!(WIDTH * HEIGHT * 4 <= CONFIG - memory::START);
 static mut ARENA: [u8; memory::END - memory::START] = [0; memory::END - memory::START];
 pub struct Display {
     _exclusive: (),
+    brightness: crate::microapp::Brightness,
 }
 impl Display {
     /// # Safety
@@ -54,7 +55,10 @@ impl Display {
         let Some(key) = selected else {
             return Ok(None);
         };
-        let mut display = Self { _exclusive: () };
+        let mut display = Self {
+            _exclusive: (),
+            brightness: crate::microapp::Brightness::FULL,
+        };
         display.fill(0x080a0d);
         let words = [
             0,
@@ -91,7 +95,21 @@ impl Display {
         }
         Err("display_dma_timeout")
     }
+    pub fn set_brightness(&mut self, level: crate::microapp::Brightness) {
+        self.brightness = level;
+    }
+    fn color(&self, color: u32) -> u32 {
+        let mut output = 0;
+        for shift in [0, 8, 16] {
+            output |=
+                (((color >> shift) & 255) * u32::from(self.brightness.percent()) / 100) << shift;
+        }
+        output
+    }
     pub fn pixel(&mut self, x: usize, y: usize, color: u32) {
+        self.raw_pixel(x, y, self.color(color));
+    }
+    fn raw_pixel(&mut self, x: usize, y: usize, color: u32) {
         if x < WIDTH && y < HEIGHT {
             // SAFETY: the unique display owner clips every pixel to the framebuffer;
             // its identity mapping is writable/non-executable. QEMU only reads pixels.
@@ -110,6 +128,9 @@ impl Display {
         let offset = y as usize * WIDTH + x as usize;
         // SAFETY: clipped index in exclusively owned, initialized framebuffer RAM.
         let old = unsafe { ptr::read_volatile((memory::START as *const u32).add(offset)) };
+        // The destination is already attenuated; attenuate only the new source.
+        // Writing this blend through raw_pixel prevents cumulative dimming.
+        let color = self.color(color);
         let alpha = alpha.min(255);
         let mut result = 0;
         for shift in [0, 8, 16] {
@@ -118,7 +139,7 @@ impl Display {
                     / 255;
             result |= channel << shift;
         }
-        self.pixel(x as usize, y as usize, result);
+        self.raw_pixel(x as usize, y as usize, result);
     }
     pub fn fill(&mut self, color: u32) {
         for y in 0..HEIGHT {

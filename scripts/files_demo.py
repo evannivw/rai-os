@@ -21,7 +21,7 @@ def build(debug=False):
 
 
 class Guest:
-    def __init__(self,kernel,graphics=False,vnc=False,vnc_password=None):
+    def __init__(self,kernel,graphics=False,vnc=False,vnc_password=None,expect_display=True):
         self.temp=tempfile.TemporaryDirectory(prefix='rai-files-');self.socket=Path(self.temp.name)/'qmp'
         self.log=[];self.lines=queue.Queue();self.serial=0
         env=dict(os.environ);env.pop('MODEL_API_KEY',None);env.pop('RAI_VNC_PASSWORD',None)
@@ -34,7 +34,7 @@ class Guest:
         self.reader=threading.Thread(target=read,daemon=True);self.reader.start()
         try:
             assert self.line()=='RAI-OS: boot OK | AArch64 EL1 | UART PL011'
-            assert self.line()=='Display ready: 480x800 guest framebuffer'
+            if expect_display:assert self.line()=='Display ready: 480x800 guest framebuffer'
             assert self.line()=='Console ready: type help for commands'
             if vnc_password:self.qmp(dict(execute='set_password',arguments=dict(protocol='vnc',password=vnc_password)))
         except BaseException:self.close();raise

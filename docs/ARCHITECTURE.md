@@ -445,3 +445,17 @@ prevents concurrent launcher writers. Fresh-guest restore validates all input
 before boot and reads back exact data before input starts; failure preserves the
 checkpoint. There is no guest block driver, storage capability for generated apps,
 encryption or new process isolation. Runtime revisions are session-local.
+
+## November 3: first declarative system-control capability
+
+[DISPLAY_CONTROL.md](DISPLAY_CONTROL.md) adds display.brightness beside the existing
+records.local capability. An installed control schema has one bounded required
+numeric input, no records and no filter. Domain validation returns a checked
+Brightness value; the controller verifies display availability; the display adapter
+attenuates new RGB source colors. All views share the setting, with no cumulative
+dimming on redraw. The user can reset to 100% from the launcher with F6.
+
+Review exposes the requested permission. Capability cannot change during an app
+update. Install/restore/update never actuate, and boot returns to 100%. The adapter
+is a QEMU framebuffer implementation, not a phone backlight driver or a power
+optimization. Shared EL1 privilege and trusted UART/host limitations remain.
