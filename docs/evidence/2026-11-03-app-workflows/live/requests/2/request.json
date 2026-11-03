@@ -1,0 +1,8 @@
+{
+  "request_id": 2,
+  "base_revision": 1,
+  "goal": "Repair shop: device, job, quote, paid, balance=quote-paid in cents. Initially received; start, finish, deliver if balance<=0.",
+  "target": null,
+  "app_ids": [],
+  "record_count": 0
+}

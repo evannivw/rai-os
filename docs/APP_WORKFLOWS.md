@@ -114,3 +114,32 @@ app.schema adds initial/actions; app.export adds states. app.workflow.run
 app.restore.begin/end `1` and app.restore.state `app_id:row:state` are trusted
 boot-only checkpoint diagnostics, not generated-app capabilities. Update guest
 and host together. Old snapshots without workflows remain compatible.
+
+## Observed live result and reproducible saved example
+
+Clean source 64250c3 made one Meta request on November 3. The actual model returned
+Repair Shop, with balance = quote - paid and received -> inprog -> done -> delivered;
+the delivery condition was balance <= 0. HTTP 200, 5518 ms provider time, no retries.
+The eight-order verifier passed, including native action taps, rejection checks,
+local payment editing, field export and exact fresh-guest recovery. These labels
+and field definitions came from the model, not the offline fixture. Enter numeric
+0 for no payment: the returned paid field allows blank input, but the balance
+formula requires a numeric operand before saving.
+
+[Live report](evidence/2026-11-03-app-workflows/live/report.json) and
+[eight-order screen](evidence/2026-11-03-app-workflows/live/05-eight-orders.png)
+retain the actual results. To inspect the saved fictional workshop without a key:
+
+```sh
+mkdir -p target
+cp docs/evidence/2026-11-03-app-workflows/live/device.json target/workshop-device.json
+python3 -B scripts/apps.py --source replay --state target/workshop-device.json --exchange target/workshop-exchange --output target/workshop-inspect-1
+```
+
+Connect the VNC viewer to localhost:5900, open Repair Shop, then Records. Select
+Phone C and open Actions to see a completed repair with unpaid balance blocked
+from delivery. Select Laptop D to continue an in-progress repair. New imports
+cannot fit while all eight slots are occupied; use a separate fresh device for
+additional records. This opens a previously generated app, not new inference.
+Use source meta and your own key on a fresh device to generate your own process.
+Protect the evidence file by copying it; use a fresh output directory per run.

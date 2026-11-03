@@ -2657,3 +2657,31 @@ next frozen-source check permits one live request with no retry or fallback.
 APP_WORKFLOWS.md documents usage/limits; KERNEL_DECISION.md answers the own-kernel
 tradeoff: direct systems ownership and learning at substantial infrastructure cost,
 without claiming that this app experience requires our kernel or is faster.
+
+## 2026-11-03 — Live Meta workshop process verified with eight orders
+
+One live request from clean frozen source
+64250c336081b297deed17483a833794514e4e5a returned Repair Shop with five fields,
+balance = quote - paid, and received -> inprog -> done -> delivered. Delivery had
+a balance <= 0 guard. HTTP 200; configured model matched; 5518 ms provider latency;
+2749 reported tokens. No retry, fallback, post-response prompt adjustment or source
+change. The generated intermediate state names differed from the offline example;
+the verifier followed returned state/action/field identities.
+
+The actual returned schema and process were reviewed before installation. Real
+QEMU imported eight fictional orders, exercised successful actions via native
+card taps, rejected out-of-order/unpaid/stale/repeated transitions and terminal
+edits, and checked that runtime restoration cannot bypass normal action handling.
+Recording payment enabled delivery. Final states were two delivered, one done,
+one inprog and four received. CSV field data matched exactly, and a fresh QEMU
+instance recovered all rows and states without inference. This used one model
+call total; subsequent execution was local. Evidence, diagnostics, generated
+schema, fictional saved state and native captures are in
+[evidence/2026-11-03-app-workflows/live](evidence/2026-11-03-app-workflows/live).
+
+This is a successful declared development example, not production readiness,
+large data scale, general model reliability, verified real-world payment or
+physical phone support. The app permits an empty paid input in its field metadata,
+but the balance formula requires a numeric value: enter 0 for no payment. No
+silent default or schema repair was applied to the live result. The final evidence
+commit changes only documentation/artifacts; executable sources remain frozen.
