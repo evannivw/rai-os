@@ -28,6 +28,7 @@ pub fn parse(line: &str) -> Result<Request<'_>, Error<'_>> {
         return Err(error("bad_id"));
     }
     let operation = match fields.next() {
+        Some(name) if name.starts_with("ui.") => Operation::Ui(name, fields.next()),
         Some(name) if name.starts_with("fs.") => {
             Operation::Files(crate::ramfs::Operation::parse(name, fields.next()).map_err(error)?)
         }

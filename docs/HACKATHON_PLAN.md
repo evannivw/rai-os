@@ -341,3 +341,17 @@ no persistent disk, and is NOT an isolated filesystem service or AI file manager
 Next design bounded whole-plan file actions with preview and atomic publication;
 preserve originals and reject stale/colliding plans. Existing comparisons remain
 unchanged; stop framing tiny per-operation inference as a speed optimization.
+
+
+## November 2–3: prompt workspace delivery
+
+The next demonstrable product slice is [PROMPT_WORKSPACE.md](PROMPT_WORKSPACE.md):
+type a bounded goal, inspect the model's proposed file actions, then confirm real
+guest changes. The native screen has compose/wait/review/result/clarification
+states, with a portable input relay. Offline replay is labeled; live results must
+be recorded separately. This is not an AI speed or decision-quality win.
+
+Prioritize rehearsal, a concise three-minute video and submission over another
+kernel expansion. Use the real Meta role, measured outcome and current limits.
+The November 4 18:00 internal / 20:00 Guatemala submission targets, public repo,
+contribution timestamps and unresolved Oct 26/27 eligibility distinction stand.

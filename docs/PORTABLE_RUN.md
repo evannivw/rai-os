@@ -120,3 +120,13 @@ Recorded verification for this increment:
 These runs establish portability of the tested Linux environment and exact guest
 operations. They are not cross-platform performance benchmarks or proof of phone
 compatibility. Full traces and source hashes are in the linked evidence directory.
+
+
+## Interactive prompt workspace
+
+Use `workspace` with your runtime env file for Meta, or `workspace-replay` without
+credentials for the explicitly scripted offline example. Both use the guest's
+native prompt UI through standard VNC keyboard/button events. `workspace-verify`
+checks the real RFB input and guest transaction path without network access.
+See [PROMPT_WORKSPACE.md](PROMPT_WORKSPACE.md) for complete commands and limits.
+The earlier `desktop` action remains a static file demonstration.

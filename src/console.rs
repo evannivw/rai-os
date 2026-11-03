@@ -20,6 +20,7 @@ struct Console<'a> {
     clock: &'a Clock,
     task: Task,
     files: crate::ramfs::Store,
+    workspace: crate::workspace::Workspace,
     memory: &'a mut Memory,
     mmu: &'a Mmu,
     timer: &'a mut Timer,
@@ -36,11 +37,15 @@ impl Console<'_> {
             let result = self.files.execute(operation);
             #[cfg(feature = "guest-display")]
             if let Some(display) = &mut self.display {
-                crate::display::view::render_files(
-                    display,
-                    &self.files,
-                    result.as_ref().err().copied(),
-                );
+                if self.workspace.active {
+                    crate::display::view::render_workspace(display, &self.files, &self.workspace);
+                } else {
+                    crate::display::view::render_files(
+                        display,
+                        &self.files,
+                        result.as_ref().err().copied(),
+                    );
+                }
             }
             return result.map(command::Reply::Files);
         }
@@ -205,9 +210,40 @@ impl Console<'_> {
         #[cfg(not(feature = "guest-display"))]
         let _ = (line, code);
     }
+    fn workspace_command(&mut self, name: &str, arg: Option<&str>, id: Option<&str>) {
+        let result = self.workspace.execute(name, arg, &mut self.files);
+        #[cfg(feature = "guest-display")]
+        if let Some(display) = &mut self.display {
+            crate::display::view::render_workspace(display, &self.files, &self.workspace);
+        }
+        match result {
+            Ok(reply) => {
+                if let Some(id) = id {
+                    response(id, "ok", reply)
+                } else {
+                    uart::write_display(reply);
+                    uart::write("\n");
+                }
+            }
+            Err(error) => {
+                if let Some(id) = id {
+                    response(id, "err", error)
+                } else {
+                    uart::write(error);
+                    uart::write("\n");
+                }
+            }
+        }
+    }
+
     fn dispatch(&mut self, line: &str) {
         if line.starts_with('@') {
             match protocol::parse(line) {
+                Ok(request) if matches!(request.operation, command::Operation::Ui(_, _)) => {
+                    if let command::Operation::Ui(name, arg) = request.operation {
+                        self.workspace_command(name, arg, Some(request.id));
+                    }
+                }
                 Ok(request) => match self.execute(request.operation) {
                     Ok(reply) => response(request.id, "ok", reply),
                     Err(code) => response(request.id, "err", code),
@@ -219,6 +255,10 @@ impl Console<'_> {
             }
         } else if !line.is_empty() {
             let result = match command::parse_shell(line) {
+                Ok(command::Operation::Ui(name, arg)) => {
+                    self.workspace_command(name, arg, None);
+                    return;
+                }
                 Ok(operation) => self.execute(operation),
                 Err(code) => {
                     self.parse_error(line, code);
@@ -260,6 +300,7 @@ pub fn run(clock: &Clock, memory: &mut Memory, mmu: &Mmu, timer: &mut Timer) -> 
         clock,
         task: Task::new(),
         files: crate::ramfs::Store::new(),
+        workspace: crate::workspace::Workspace::new(),
         memory,
         mmu,
         timer,

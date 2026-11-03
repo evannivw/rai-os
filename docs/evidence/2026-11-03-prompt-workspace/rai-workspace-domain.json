@@ -1,0 +1,3 @@
+{
+  "log": "\nrunning 3 tests\ntest plan_tests::last_invalid_action_never_applies_first_and_stale_preview_cannot_commit ... ok\ntest tests::bounded_names_and_capacity ... ok\ntest tests::partial_uploads_and_failed_operations_never_publish ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n"
+}

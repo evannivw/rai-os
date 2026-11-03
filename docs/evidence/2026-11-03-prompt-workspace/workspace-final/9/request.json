@@ -1,0 +1,37 @@
+{
+  "request_id": 9,
+  "generation": 7,
+  "goal": "x",
+  "files": [
+    {
+      "path": "/inbox/aurora.txt",
+      "bytes": 94,
+      "text": "Project Aurora. Approved release notes: offline handoff and tested power budget. Owner: Maya.\n"
+    },
+    {
+      "path": "/inbox/field.txt",
+      "bytes": 98,
+      "text": "Project Aurora. Approved field checklist: confirm cable, firmware version and recovery procedure.\n"
+    },
+    {
+      "path": "/inbox/draft.txt",
+      "bytes": 86,
+      "text": "Project Aurora. DRAFT ONLY. Unapproved ideas for next quarter; not ready for handoff.\n"
+    },
+    {
+      "path": "/inbox/personal.txt",
+      "bytes": 76,
+      "text": "Personal weekend grocery list: rice, tomatoes, coffee. Unrelated to Aurora.\n"
+    },
+    {
+      "path": "/work/aurora.txt",
+      "bytes": 94,
+      "text": "Project Aurora. Approved release notes: offline handoff and tested power budget. Owner: Maya.\n"
+    },
+    {
+      "path": "/work/field.txt",
+      "bytes": 98,
+      "text": "Project Aurora. Approved field checklist: confirm cable, firmware version and recovery procedure.\n"
+    }
+  ]
+}

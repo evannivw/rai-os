@@ -353,6 +353,107 @@ impl Store {
         Ok(self.state())
     }
 }
+// Bounded independent actions: sources exist in the original snapshot; destinations
+// must be new. No chains or overwrites, so validation can precede every write.
+#[derive(Clone, Copy)]
+struct Action {
+    copy: bool,
+    source: Name,
+    destination: Name,
+}
+pub struct Plan {
+    generation: u32,
+    actions: [Option<Action>; 3],
+    len: usize,
+}
+impl Plan {
+    pub const fn new(generation: u32) -> Self {
+        Self {
+            generation,
+            actions: [None; 3],
+            len: 0,
+        }
+    }
+    pub fn add(&mut self, input: &str) -> Result<(), &'static str> {
+        if self.len == 3 {
+            return Err("fs_plan_full");
+        }
+        let (kind, source, destination) = triple(input)?;
+        let copy = match kind {
+            "copy" => true,
+            "move" => false,
+            _ => return Err("fs_bad_action"),
+        };
+        let action = Action {
+            copy,
+            source: Name::parse(source)?,
+            destination: Name::parse(destination)?,
+        };
+        self.actions[self.len] = Some(action);
+        self.len += 1;
+        Ok(())
+    }
+    #[cfg(feature = "guest-display")]
+    pub fn entries(&self) -> impl Iterator<Item = (&str, &str, &str)> {
+        self.actions.iter().flatten().map(|a| {
+            (
+                if a.copy { "COPY" } else { "MOVE" },
+                a.source.text(),
+                a.destination.text(),
+            )
+        })
+    }
+}
+impl Store {
+    pub fn validate_plan(&self, plan: &Plan) -> Result<(), &'static str> {
+        self.next(plan.generation)?;
+        if self.stage.is_some() {
+            return Err("fs_upload_busy");
+        }
+        if plan.len == 0 {
+            return Err("fs_empty_plan");
+        }
+        let mut copies = 0;
+        for (i, action) in plan.actions.iter().flatten().enumerate() {
+            self.locate(&action.source).ok_or("fs_not_found")?;
+            if self.locate(&action.destination).is_some() {
+                return Err("fs_exists");
+            }
+            for prior in plan.actions[..i].iter().flatten() {
+                if prior.source.text() == action.source.text() {
+                    return Err("fs_duplicate_source");
+                }
+                if prior.destination.text() == action.destination.text() {
+                    return Err("fs_exists");
+                }
+            }
+            copies += usize::from(action.copy);
+        }
+        if copies > self.files.iter().filter(|f| f.name.len == 0).count() {
+            return Err("fs_full");
+        }
+        Ok(())
+    }
+    pub fn apply_plan(&mut self, plan: &Plan) -> Result<(), &'static str> {
+        self.validate_plan(plan)?;
+        // All failure paths precede publication. Sources are distinct and no
+        // destination exists in the initial snapshot; copies use only empty slots.
+        // One console owner, one CPU, no concurrent store access or interrupts here.
+        for action in plan.actions.iter().flatten() {
+            let source = self.locate(&action.source).expect("validated source");
+            let target = if action.copy {
+                self.free().expect("validated capacity")
+            } else {
+                source
+            };
+            self.files[target] = self.files[source];
+            self.files[target].name = action.destination;
+        }
+        self.generation += 1;
+        Ok(())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -400,5 +501,45 @@ mod tests {
         }
         assert!(s.execute(Operation::Begin("9:0:/extra")).is_err());
         assert!(s.execute(Operation::Copy("9:/f0:/extra")).is_err());
+    }
+}
+#[cfg(test)]
+mod plan_tests {
+    use super::*;
+    fn seed(s: &mut Store, name: &str) {
+        let g = s.generation;
+        s.execute(Operation::Begin(&format!("{g}:1:{name}")))
+            .unwrap();
+        let t = s.ticket;
+        s.execute(Operation::Append(&format!("{t}:0:41"))).unwrap();
+        s.execute(Operation::Commit(&t.to_string())).unwrap();
+    }
+    #[test]
+    fn last_invalid_action_never_applies_first_and_stale_preview_cannot_commit() {
+        let mut s = Store::new();
+        seed(&mut s, "/a");
+        seed(&mut s, "/b");
+        let mut bad = Plan::new(s.generation);
+        bad.add("copy:/a:/c").unwrap();
+        bad.add("move:/b:/a").unwrap();
+        assert!(s.apply_plan(&bad).is_err());
+        assert!(s.execute(Operation::Read("/c")).is_err());
+        let mut good = Plan::new(s.generation);
+        good.add("copy:/a:/c").unwrap();
+        good.add("move:/b:/d").unwrap();
+        s.validate_plan(&good).unwrap();
+        s.apply_plan(&good).unwrap();
+        assert_eq!(s.generation, 4);
+        for p in ["/a", "/c", "/d"] {
+            assert!(s.execute(Operation::Read(p)).is_ok());
+        }
+        assert!(s.execute(Operation::Read("/b")).is_err());
+        assert!(s.apply_plan(&good).is_err());
+        let mut stale = Plan::new(s.generation);
+        stale.add("copy:/a:/e").unwrap();
+        s.validate_plan(&stale).unwrap();
+        seed(&mut s, "/z");
+        assert!(s.apply_plan(&stale).is_err());
+        assert!(s.execute(Operation::Read("/e")).is_err());
     }
 }

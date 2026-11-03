@@ -1,0 +1,1 @@
+{"event":"file_plan","execution":false,"plan":{"actions":[{"destination":"/work/aurora.txt","kind":"copy","source":"/inbox/aurora.txt"},{"destination":"/work/field.txt","kind":"copy","source":"/inbox/field.txt"}],"decision":"plan","generation":5,"reason":"Copy the two approved Aurora documents. Leave draft and personal notes unchanged.","request_id":3},"source":"replay"}

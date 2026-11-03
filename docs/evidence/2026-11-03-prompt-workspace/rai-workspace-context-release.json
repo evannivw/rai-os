@@ -1,0 +1,3 @@
+{
+  "log": "   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)\n    Finished `release` profile [optimized] target(s) in 0.69s\n    Finished `release` profile [optimized] target(s) in 0.01s\nEvidence: /Users/jv/Development/Rust/rai-os/target/verification/context-session-release-_5hcihb8\nPASS release : replay/rules continuity, 5 corrupted traces, 8 invalid streams, 2 fake-provider sessions; wrong meaning preserves prior guest output\n"
+}

@@ -1,0 +1,1 @@
+{"request_id": 2, "generation": 5, "decision": "plan", "actions": [{"kind": "copy", "source": "/inbox/aurora.txt", "destination": "/work/aurora.txt"}, {"kind": "copy", "source": "/inbox/field.txt", "destination": "/work/field.txt"}], "reason": "Copy the two approved Aurora documents. Leave draft and personal notes unchanged."}

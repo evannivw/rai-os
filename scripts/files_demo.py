@@ -21,11 +21,13 @@ def build(debug=False):
 
 
 class Guest:
-    def __init__(self,kernel,graphics=False):
+    def __init__(self,kernel,graphics=False,vnc=False,vnc_password=None):
         self.temp=tempfile.TemporaryDirectory(prefix='rai-files-');self.socket=Path(self.temp.name)/'qmp'
         self.log=[];self.lines=queue.Queue();self.serial=0
-        env=dict(os.environ);env.pop('MODEL_API_KEY',None)
-        self.process=subprocess.Popen(['sh','scripts/qemu.sh',str(kernel),'--graphics' if graphics else '--capture','-qmp',f'unix:{self.socket},server=on,wait=off'],cwd=ROOT,env=env,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+        env=dict(os.environ);env.pop('MODEL_API_KEY',None);env.pop('RAI_VNC_PASSWORD',None)
+        self.vnc_socket=Path(self.temp.name)/'vnc'
+        extra=['-vnc',f'unix:{self.vnc_socket}'+(',password=on' if vnc_password else '')] if vnc else []
+        self.process=subprocess.Popen(['sh','scripts/qemu.sh',str(kernel),'--graphics' if graphics else '--capture','-qmp',f'unix:{self.socket},server=on,wait=off',*extra],cwd=ROOT,env=env,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
         def read():
             for line in self.process.stdout:self.lines.put(line.decode('utf-8',errors='replace').rstrip('\r\n'))
             self.lines.put(None)
@@ -34,6 +36,7 @@ class Guest:
             assert self.line()=='RAI-OS: boot OK | AArch64 EL1 | UART PL011'
             assert self.line()=='Display ready: 480x800 guest framebuffer'
             assert self.line()=='Console ready: type help for commands'
+            if vnc_password:self.qmp(dict(execute='set_password',arguments=dict(protocol='vnc',password=vnc_password)))
         except BaseException:self.close();raise
     def line(self):
         value=self.lines.get(timeout=20)
@@ -55,15 +58,17 @@ class Guest:
         ticket=self.fields('fs.begin',f'{generation}:{len(data)}:{path}')['ticket']
         for offset in range(0,len(data),64):self.request('fs.append',f'{ticket}:{offset}:{data[offset:offset+64].hex()}')
         self.request('fs.commit',ticket);assert self.read(path)==data
-    def capture(self,path):
+    def qmp(self,command):
         with socket.socket(socket.AF_UNIX) as connection:
             connection.settimeout(10);connection.connect(str(self.socket));stream=connection.makefile('rwb',buffering=0)
             assert 'QMP' in json.loads(stream.readline())
-            for command in [dict(execute='qmp_capabilities'),dict(execute='screendump',arguments=dict(filename=str(path.resolve())))]:
+            for command in [dict(execute='qmp_capabilities'),command]:
                 stream.write((json.dumps(command)+'\n').encode())
                 while True:
                     response=json.loads(stream.readline());assert 'error' not in response,response
                     if 'return' in response:break
+    def capture(self,path):
+        self.qmp(dict(execute='screendump',arguments=dict(filename=str(path.resolve()))))
         data=path.read_bytes();magic,size,maximum,pixels=data.split(b'\n',3)
         assert (magic,size,maximum)==(b'P6',b'480 800',b'255') and len(pixels)==480*800*3
         from verify_display import png

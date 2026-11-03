@@ -1,0 +1,3 @@
+{
+  "log": "<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)\n<jemalloc>: (This is the expected behaviour if you are running under QEMU)\n{\n  \"source\": \"replay\",\n  \"live_meta_calls\": 0,\n  \"graphics\": \"native_guest_framebuffer\",\n  \"input\": \"host_RFB_to_guest_UART\",\n  \"checks\": [\n    \"RFB 3.8 framebuffer, keyboard submission, real guest preview without writes, pointer confirmation; exact originals and selected copies\",\n    \"Invalid last action changes nothing; cancelled request rejected; changed catalog blocks whole commit\",\n    \"Unknown offline instruction produces an explicit replay clarification, not invented inference\"\n  ]\n}\n"
+}

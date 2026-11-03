@@ -399,3 +399,27 @@ bytes; new router 144 plus coordinator helper 9,808 (system helper 12,720 on its
 separate path). The console run frame is 23,376 bytes. The 64 KiB stack is unchanged.
 Actual headless/native context cycles and scheduling fault diagnostics pass;
 these frame measurements are not a complete worst-case stack bound or guard.
+
+
+## November 2–3: guest-native prompt workspace
+
+[PROMPT_WORKSPACE.md](PROMPT_WORKSPACE.md) adds a complete bounded interaction:
+keyboard prompt, one Meta file-plan proposal, native preview, explicit confirmation
+or cancellation, and actual guest copy/move results. The RFB adapter transports
+QEMU pixels and UART keys; it is not a host-rendered UI or guest keyboard driver.
+The prompt/review/file modules currently share EL1 privilege, not isolated services.
+
+All plan checks precede writes. Sources must exist and be distinct; destinations
+must be new and distinct; copy slots must fit. Chains, overwrite and deletion are
+unsupported. Three actions maximum; one generation increment for a confirmed plan.
+The guest rechecks after review, and cancellation invalidates late request IDs.
+Meta receives current text file contents through the host Rust provider; one call
+per prompt, one in-flight request, eight calls maximum per interactive session.
+Semantic correctness is still a review/evaluation concern, not a kernel guarantee.
+
+The unoptimized native-display development build exceeded the fixed first-2-MiB
+RAM mapping when including the 1-MiB page pool. Development now uses opt-level=1
+with debug symbols. The linker assertion, map, pool and 64-KiB stack are unchanged.
+Earlier opt-level=0 frame measurements remain historical evidence, not current
+bounds. Debug/release workspace and coordinator checks and debug MMU/scheduler
+fault checks cover this configuration; a whole-kernel stack bound is still pending.

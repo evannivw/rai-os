@@ -1,0 +1,27 @@
+{
+  "request_id": 2,
+  "generation": 5,
+  "goal": "collect approved Aurora notes in /work. Keep originals.",
+  "files": [
+    {
+      "path": "/inbox/aurora.txt",
+      "bytes": 94,
+      "text": "Project Aurora. Approved release notes: offline handoff and tested power budget. Owner: Maya.\n"
+    },
+    {
+      "path": "/inbox/field.txt",
+      "bytes": 98,
+      "text": "Project Aurora. Approved field checklist: confirm cable, firmware version and recovery procedure.\n"
+    },
+    {
+      "path": "/inbox/draft.txt",
+      "bytes": 86,
+      "text": "Project Aurora. DRAFT ONLY. Unapproved ideas for next quarter; not ready for handoff.\n"
+    },
+    {
+      "path": "/inbox/weekend.txt",
+      "bytes": 76,
+      "text": "Personal weekend grocery list: rice, tomatoes, coffee. Unrelated to Aurora.\n"
+    }
+  ]
+}

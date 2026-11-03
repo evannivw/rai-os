@@ -2250,3 +2250,48 @@ Linux ARM64 and emulated Linux AMD64 both passed the offline retained-context an
 file/reboot checks. A core.autocrlf=true staged checkout initially changed bundled
 font notice/license line endings; scoped attributes now preserve all 254 included
 input files byte-for-byte. This checkout simulation is not a Windows host test.
+
+
+## 2026-11-02–03 — Native prompt workspace, before live file-plan smoke test
+
+The user requested a more visual file manager and a prompt-operated OS experience.
+Implemented compose/wait/review/result/clarification states drawn by the guest,
+with actual keyboard and bottom-button input through a portable RFB-to-UART
+adapter. Four fictional notes are imported at runtime. The same request/catalog
+can go to a strict Rust Meta file planner or explicitly labeled offline replay.
+One model call proposes up to three independent copy/move actions; the user reviews
+and confirms. Request IDs reject cancelled/late answers. The guest validates the
+whole plan before review and again before writes, including source/destination,
+capacity, pending-upload and generation checks. No partial plan is applied. One
+successful plan increments the generation once. No new unsafe or dependencies.
+
+The interface lives in the guest; input transport and HTTPS remain on the host.
+The new UI/file modules share EL1 privilege, not separate processes. This is still
+an eight-file, 512-byte-per-file RAM workspace with ASCII input, not persistent
+storage, a full file browser, a physical-phone build or autonomous agents.
+Original-preservation intent is reviewed semantically; the kernel guarantees the
+listed operations and structural checks, not natural-language understanding.
+
+The opt-level=0 native debug image exceeded the linker-guarded initial RAM window.
+Set development optimization to level 1 while retaining debug symbols, the same
+map/page pool/64-KiB stack and the assertion. Saved the original failure. Both
+workspace profiles then passed real QEMU RFB frame/key/button, preview-before-write,
+exact-result, invalid-last-action, cancellation and stale-generation checks.
+Clippy, 58 host tests, three RAM-store/plan tests, old context suites in both profiles,
+file regression, and debug scheduling/MMU/UART checks passed. No full stack bound
+or new performance claim follows from these checks.
+
+Manual macOS Screen Sharing testing first exposed RFB 3.3 negotiation and its
+password requirement. Added standard 3.3/3.8 negotiation and optional authentication
+delegated to QEMU through a private Unix socket/QMP. Verified typed prompt, replay
+review, confirmation and result paging in that real viewer. The local test password
+was not saved in the repository or Keychain. Keep published ports on loopback;
+legacy VNC authentication does not encrypt the connection. Windows host testing
+remains pending. Portable test outcomes/source hashes are archived separately.
+
+Next freeze the source and make one explicit live Meta call on the disclosed
+approved-Aurora development case. Independently check the proposed set before
+confirming, then exact guest bytes afterward. Preserve failed results with no
+retry or prompt tuning. This proves an integration path, not an unseen semantic
+advantage over a competent baseline. Protect video/rehearsal/submission time and
+the existing November 4 20:00 Guatemala deadline and contribution-date caveats.

@@ -301,3 +301,22 @@ no persistent disk, and is NOT an isolated filesystem service or AI file manager
 Next design bounded whole-plan file actions with preview and atomic publication;
 preserve originals and reject stale/colliding plans. Existing comparisons remain
 unchanged; stop framing tiny per-operation inference as a speed optimization.
+
+
+## Prompt workspace segment (November 2–3)
+
+Use the native [prompt workspace](PROMPT_WORKSPACE.md) for a legible product story:
+
+1. Show the four fictional notes: two approved Aurora documents, one draft, one
+   personal list. State that the bytes live in guest RAM.
+2. Type “Collect approved Aurora notes in /work. Keep originals.” with Meta mode
+   visibly selected. Include the real waiting time; do not substitute replay.
+3. Explain and inspect both proposed copies, then confirm. Show /work results and
+   unchanged originals. This demonstrates the connection from intent to OS action.
+4. Briefly show cancel/stale-plan rejection, then the architecture boundary: host
+   inference/input transport, guest review/validation/file execution and display.
+5. Close with limits and next evaluation, not a claim of outperforming Android.
+
+Budget roughly 20 seconds for context, 40 for prompt/proposal, 50 for review/result,
+30 for control/failure handling and 40 for architecture/contribution status. Verify
+actual timings during rehearsal. This script is a plan, not a recorded video.

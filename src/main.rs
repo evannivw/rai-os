@@ -26,6 +26,7 @@ mod timer;
 mod uart;
 mod user;
 mod user_memory;
+mod workspace;
 
 use core::arch::global_asm;
 use core::panic::PanicInfo;

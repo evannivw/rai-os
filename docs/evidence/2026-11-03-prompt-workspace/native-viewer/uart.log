@@ -1,0 +1,159 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Display ready: 480x800 guest framebuffer
+Console ready: type help for commands
+@rai1	1	ok	generation=1; capacity=8; max_bytes=512; persistence=ram; staged=false; files=-
+@rai1	2	ok	generation=1; ticket=1; written=0
+@rai1	3	ok	generation=1; ticket=1; written=64
+@rai1	4	ok	generation=1; ticket=1; written=94
+@rai1	5	ok	generation=2; ticket=0; written=0
+@rai1	6	ok	generation=2; path=/inbox/aurora.txt; bytes=94; data=50726f6a656374204175726f72612e20417070726f7665642072656c65617365206e6f7465733a206f66666c696e652068616e646f666620616e642074657374656420706f776572206275646765742e204f776e65723a204d6179612e0a
+@rai1	7	ok	generation=2; capacity=8; max_bytes=512; persistence=ram; staged=false; files=/inbox/aurora.txt:94
+@rai1	8	ok	generation=2; ticket=2; written=0
+@rai1	9	ok	generation=2; ticket=2; written=64
+@rai1	10	ok	generation=2; ticket=2; written=98
+@rai1	11	ok	generation=3; ticket=0; written=0
+@rai1	12	ok	generation=3; path=/inbox/field.txt; bytes=98; data=50726f6a656374204175726f72612e20417070726f766564206669656c6420636865636b6c6973743a20636f6e6669726d206361626c652c206669726d776172652076657273696f6e20616e64207265636f766572792070726f6365647572652e0a
+@rai1	13	ok	generation=3; capacity=8; max_bytes=512; persistence=ram; staged=false; files=/inbox/aurora.txt:94,/inbox/field.txt:98
+@rai1	14	ok	generation=3; ticket=3; written=0
+@rai1	15	ok	generation=3; ticket=3; written=64
+@rai1	16	ok	generation=3; ticket=3; written=86
+@rai1	17	ok	generation=4; ticket=0; written=0
+@rai1	18	ok	generation=4; path=/inbox/draft.txt; bytes=86; data=50726f6a656374204175726f72612e204452414654204f4e4c592e20556e617070726f76656420696465617320666f72206e65787420717561727465723b206e6f7420726561647920666f722068616e646f66662e0a
+@rai1	19	ok	generation=4; capacity=8; max_bytes=512; persistence=ram; staged=false; files=/inbox/aurora.txt:94,/inbox/field.txt:98,/inbox/draft.txt:86
+@rai1	20	ok	generation=4; ticket=4; written=0
+@rai1	21	ok	generation=4; ticket=4; written=64
+@rai1	22	ok	generation=4; ticket=4; written=76
+@rai1	23	ok	generation=5; ticket=0; written=0
+@rai1	24	ok	generation=5; path=/inbox/weekend.txt; bytes=76; data=506572736f6e616c207765656b656e642067726f63657279206c6973743a20726963652c20746f6d61746f65732c20636f666665652e20556e72656c6174656420746f204175726f72612e0a
+@rai1	25	ok	state=compose
+@rai1	26	ok	state=compose
+@rai1	27	ok	state=compose
+@rai1	28	ok	state=compose
+@rai1	29	ok	state=compose
+@rai1	30	ok	state=compose
+@rai1	31	ok	state=compose
+@rai1	32	ok	state=compose
+@rai1	33	ok	state=compose
+@rai1	34	ok	state=compose
+@rai1	35	ok	state=compose
+@rai1	36	ok	state=compose
+@rai1	37	ok	state=compose
+@rai1	38	ok	state=compose
+@rai1	39	ok	state=compose
+@rai1	40	ok	state=compose
+@rai1	41	ok	state=compose
+@rai1	42	ok	state=compose
+@rai1	43	ok	state=compose
+@rai1	44	ok	state=compose
+@rai1	45	ok	state=compose
+@rai1	46	ok	state=compose
+@rai1	47	ok	state=compose
+@rai1	48	ok	state=compose
+@rai1	49	ok	state=compose
+@rai1	50	ok	state=compose
+@rai1	51	ok	state=compose
+@rai1	52	ok	state=compose
+@rai1	53	ok	state=compose
+@rai1	54	ok	state=compose
+@rai1	55	ok	state=compose
+@rai1	56	ok	state=compose
+@rai1	57	ok	state=compose
+@rai1	58	ok	state=compose
+@rai1	59	ok	state=compose
+@rai1	60	ok	state=compose
+@rai1	61	ok	state=compose
+@rai1	62	ok	state=compose
+@rai1	63	ok	state=compose
+@rai1	64	ok	state=compose
+@rai1	65	ok	state=compose
+@rai1	66	ok	state=compose
+@rai1	67	ok	state=compose
+@rai1	68	ok	state=compose
+@rai1	69	ok	state=compose
+@rai1	70	ok	state=compose
+@rai1	71	ok	state=compose
+@rai1	72	ok	state=compose
+@rai1	73	ok	state=compose
+@rai1	74	ok	state=compose
+@rai1	75	ok	state=compose
+@rai1	76	ok	state=compose
+@rai1	77	ok	state=compose
+@rai1	78	ok	state=compose
+@rai1	79	ok	state=compose
+@rai1	80	ok	state=compose
+@rai1	81	ok	state=compose
+@rai1	82	ok	submit=2; prompt=636f6c6c65637420617070726f766564204175726f7261206e6f74657320696e202f776f726b2e204b656570206f726967696e616c732e
+@rai1	83	ok	generation=5; capacity=8; max_bytes=512; persistence=ram; staged=false; files=/inbox/aurora.txt:94,/inbox/field.txt:98,/inbox/draft.txt:86,/inbox/weekend.txt:76
+@rai1	84	ok	generation=5; path=/inbox/aurora.txt; bytes=94; data=50726f6a656374204175726f72612e20417070726f7665642072656c65617365206e6f7465733a206f66666c696e652068616e646f666620616e642074657374656420706f776572206275646765742e204f776e65723a204d6179612e0a
+@rai1	85	ok	generation=5; path=/inbox/field.txt; bytes=98; data=50726f6a656374204175726f72612e20417070726f766564206669656c6420636865636b6c6973743a20636f6e6669726d206361626c652c206669726d776172652076657273696f6e20616e64207265636f766572792070726f6365647572652e0a
+@rai1	86	ok	generation=5; path=/inbox/draft.txt; bytes=86; data=50726f6a656374204175726f72612e204452414654204f4e4c592e20556e617070726f76656420696465617320666f72206e65787420717561727465723b206e6f7420726561647920666f722068616e646f66662e0a
+@rai1	87	ok	generation=5; path=/inbox/weekend.txt; bytes=76; data=506572736f6e616c207765656b656e642067726f63657279206c6973743a20726963652c20746f6d61746f65732c20636f666665652e20556e72656c6174656420746f204175726f72612e0a
+@rai1	88	ok	state=notice
+@rai1	89	ok	state=compose
+@rai1	90	ok	state=compose
+@rai1	91	ok	state=compose
+@rai1	92	ok	state=compose
+@rai1	93	ok	state=compose
+@rai1	94	ok	state=compose
+@rai1	95	ok	state=compose
+@rai1	96	ok	state=compose
+@rai1	97	ok	state=compose
+@rai1	98	ok	state=compose
+@rai1	99	ok	state=compose
+@rai1	100	ok	state=compose
+@rai1	101	ok	state=compose
+@rai1	102	ok	state=compose
+@rai1	103	ok	state=compose
+@rai1	104	ok	state=compose
+@rai1	105	ok	state=compose
+@rai1	106	ok	state=compose
+@rai1	107	ok	state=compose
+@rai1	108	ok	state=compose
+@rai1	109	ok	state=compose
+@rai1	110	ok	state=compose
+@rai1	111	ok	state=compose
+@rai1	112	ok	state=compose
+@rai1	113	ok	state=compose
+@rai1	114	ok	state=compose
+@rai1	115	ok	state=compose
+@rai1	116	ok	state=compose
+@rai1	117	ok	state=compose
+@rai1	118	ok	state=compose
+@rai1	119	ok	state=compose
+@rai1	120	ok	state=compose
+@rai1	121	ok	state=compose
+@rai1	122	ok	state=compose
+@rai1	123	ok	state=compose
+@rai1	124	ok	state=compose
+@rai1	125	ok	state=compose
+@rai1	126	ok	state=compose
+@rai1	127	ok	state=compose
+@rai1	128	ok	state=compose
+@rai1	129	ok	state=compose
+@rai1	130	ok	state=compose
+@rai1	131	ok	state=compose
+@rai1	132	ok	state=compose
+@rai1	133	ok	state=compose
+@rai1	134	ok	state=compose
+@rai1	135	ok	state=compose
+@rai1	136	ok	state=compose
+@rai1	137	ok	state=compose
+@rai1	138	ok	state=compose
+@rai1	139	ok	state=compose
+@rai1	140	ok	state=compose
+@rai1	141	ok	state=compose
+@rai1	142	ok	state=compose
+@rai1	143	ok	state=compose
+@rai1	144	ok	state=compose
+@rai1	145	ok	submit=3; prompt=436f6c6c65637420617070726f766564204175726f7261206e6f74657320696e202f776f726b2e204b656570206f726967696e616c732e
+@rai1	146	ok	generation=5; capacity=8; max_bytes=512; persistence=ram; staged=false; files=/inbox/aurora.txt:94,/inbox/field.txt:98,/inbox/draft.txt:86,/inbox/weekend.txt:76
+@rai1	147	ok	generation=5; path=/inbox/aurora.txt; bytes=94; data=50726f6a656374204175726f72612e20417070726f7665642072656c65617365206e6f7465733a206f66666c696e652068616e646f666620616e642074657374656420706f776572206275646765742e204f776e65723a204d6179612e0a
+@rai1	148	ok	generation=5; path=/inbox/field.txt; bytes=98; data=50726f6a656374204175726f72612e20417070726f766564206669656c6420636865636b6c6973743a20636f6e6669726d206361626c652c206669726d776172652076657273696f6e20616e64207265636f766572792070726f6365647572652e0a
+@rai1	149	ok	generation=5; path=/inbox/draft.txt; bytes=86; data=50726f6a656374204175726f72612e204452414654204f4e4c592e20556e617070726f76656420696465617320666f72206e65787420717561727465723b206e6f7420726561647920666f722068616e646f66662e0a
+@rai1	150	ok	generation=5; path=/inbox/weekend.txt; bytes=76; data=506572736f6e616c207765656b656e642067726f63657279206c6973743a20726963652c20746f6d61746f65732c20636f666665652e20556e72656c6174656420746f204175726f72612e0a
+@rai1	151	ok	state=thinking
+@rai1	152	ok	state=thinking
+@rai1	153	ok	state=thinking
+@rai1	154	ok	state=review
+@rai1	155	ok	state=done
+@rai1	156	ok	state=page

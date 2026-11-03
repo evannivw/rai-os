@@ -8,6 +8,7 @@ mod context_runner;
 mod coordinator;
 mod decision_source;
 mod domain;
+mod files;
 mod guest_bridge;
 mod guest_index;
 mod guest_report;
@@ -61,6 +62,13 @@ fn run() -> Result<(), String> {
         return Err("graphics_requires_guest_index_mode".into());
     }
     let kernel = &args[0];
+    if args.len() == 3 && args[1] == "--file-plan" {
+        return files::run(Path::new(&args[2]), None);
+    }
+    if args.len() == 4 && args[1] == "--file-plan-replay" {
+        return files::run(Path::new(&args[2]), Some(Path::new(&args[3])));
+    }
+
     if (args.len() == 4 || args.len() == 5) && args[1] == "--pilot" {
         return pilot_run::run(
             kernel,

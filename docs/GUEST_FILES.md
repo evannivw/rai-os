@@ -8,7 +8,8 @@ and verifies the returned bytes.
 
 The native Files view displays actual guest paths and sizes. It is read-only
 presentation; input still uses UART. It does not yet offer clicks, folders, search
-or AI actions. The file code currently runs at EL1 as a kernel module, not as an
+or a full file browser. The new [prompt workspace](PROMPT_WORKSPACE.md) adds a
+separate interactive view with model proposals and explicit confirmation. The file code currently runs at EL1 as a kernel module, not as an
 isolated EL0 service. No new unsafe code, heap allocator or dependency was added.
 
 ## Limits and lifetime
@@ -62,7 +63,8 @@ copy/move likewise require current generation and an unused destination. Each
 committed creation, copy or move increments generation. A move/copy during an upload makes its
 commit stale; fs.abort <ticket> discards that pending upload. Failed operations
 preserve committed files. Each operation is atomic in this sequential runtime;
-a multi-operation all-or-nothing plan is NOT implemented yet.
+the [prompt workspace](PROMPT_WORKSPACE.md) now adds all-or-nothing plans of up to
+three independent copy/move actions.
 
 ## Import, demonstrate and verify
 
@@ -91,18 +93,16 @@ after a second boot. UART logs, source hashes, outcome JSON and actual QMP scree
 captures are saved under the new output directory. Source/returned byte equality
 is checked independently by Python, not asserted solely by the kernel.
 
-## Next product increment: bounded file plans
+## Bounded file plans
 
-The next useful AI task can operate on runtime file contents: interpret a request
-such as grouping related notes while preserving originals, propose a structured
-copy/move plan, preview changes and refuse ambiguous destinations. Before enabling
-model-driven writes, implement whole-plan validation against a guest generation
-and atomic commit/rollback semantics. A changed catalog must invalidate an old
-plan. Permission scope, collisions and source preservation belong to deterministic
-code; semantic grouping is where the model's contribution should be evaluated.
+[PROMPT_WORKSPACE.md](PROMPT_WORKSPACE.md) adds a native prompt and review surface.
+A plan contains up to three independent copies/moves against one guest generation.
+Every source, destination and required slot is checked before any write; a stale
+or invalid plan changes nothing. Confirmation increments the generation once.
+The host model proposes and the guest validates/executes. Existing uploads and
+single-file commands remain available separately.
 
-This is a plan, not an implemented feature or proof of advantage. Do not restart
-per-operation model timing comparisons or credit ordinary copies/cache reuse as
-AI optimization. A useful evaluation should measure correct requested outcomes,
-ambiguity handling and unintended changes with a competent baseline, plus actual
-model overhead. Keep the November 4 delivery/video and provenance constraints.
+This is a useful execution surface, not a measured semantic advantage or complete
+filesystem. Evaluate requested outcomes, ambiguity and unintended changes against
+a competent baseline, including real model overhead. Do not credit ordinary copies
+or cache reuse as AI optimization. Preserve the November 4 delivery constraints.

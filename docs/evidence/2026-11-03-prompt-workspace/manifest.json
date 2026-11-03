@@ -1,0 +1,13 @@
+{
+  "observed_utc": "2026-11-03T06:04:58.756895+00:00",
+  "work_dates_guatemala": [
+    "2026-11-02",
+    "2026-11-03"
+  ],
+  "base_commit": "68276554a3f00c6ef3e358ba9cf171d72c5cbf7f",
+  "source_state": "Implementation snapshot; container build-info files retain source hashes",
+  "offline_source": "explicit_replay",
+  "development_profile": "opt-level=1 with debug symbols",
+  "windows_host_tested": false,
+  "native_viewer": "macOS Screen Sharing: password authentication, typed prompt, replay review, confirmation and result paging observed"
+}

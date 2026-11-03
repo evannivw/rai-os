@@ -66,6 +66,12 @@ the bridge for use from Windows/Linux/macOS Docker environments. A new
 checked read/copy/move with a native file-list view. It is limited to eight
 512-byte files, lost on reboot; AI file planning and persistent storage are pending.
 
+A [prompt-driven native workspace](docs/PROMPT_WORKSPACE.md) now accepts keyboard
+input through a portable VNC relay, requests one whole-file plan from Meta,
+previews every copy/move, and applies the checked plan only after confirmation.
+Offline replay is clearly labeled. Guest RAM limits and host input/API adapters
+remain explicit; this is not a general desktop or an AI efficiency claim.
+
 ## Run
 
 Install Rustup and QEMU (9.2 or newer with virt-9.2), then:

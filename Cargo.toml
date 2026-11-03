@@ -87,6 +87,8 @@ test = false
 bench = false
 
 [profile.dev]
+# Keep development code within the fixed first-2-MiB MMU window. Debug symbols remain.
+opt-level = 1
 panic = "abort"
 
 [profile.release]

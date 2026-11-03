@@ -1,0 +1,1 @@
+{"event":"file_plan","execution":false,"plan":{"actions":[],"decision":"clarify","generation":5,"reason":"Offline replay supports the documented example only. Use Meta for your own instruction.","request_id":2},"source":"replay"}
