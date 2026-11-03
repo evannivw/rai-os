@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Prompt-to-microapp bridge. QEMU owns schemas, records, UI and installation."""
 import argparse
-import copy
 import json
 import os
 from pathlib import Path
@@ -14,27 +13,12 @@ from files_demo import Guest,ROOT,build
 from workspace import host_build
 from workspace_vnc import serve
 from app_storage import Checkpoint,collect,restore
-CREATE='Create an inspection app with equipment, notes, a done checkbox and a pending view.'
-EVOLVE='Add a required integer priority field with default 1. Preserve all existing fields, records and the pending view.'
-SPEC=dict(id='inspection',title='Field inspections',capability='records.local',fields=[
- dict(key='equipment',label='Equipment',kind='text',required=True,default=''),
- dict(key='notes',label='Notes',kind='text',required=False,default=''),
- dict(key='done',label='Done',kind='check',required=True,default='false')],filter_key='done',filter_label='Pending')
-
-TABLE='Create an expense app with item, integer amount in cents, paid checkbox and an unpaid view. I want a table and totals.'
-TABLE_SPEC=dict(id='expenses',title='Expenses',capability='records.local',fields=[
- dict(key='item',label='Item',kind='text',required=True,default=''),
- dict(key='amount',label='Amount (cents)',kind='number',required=True,default='0'),
- dict(key='paid',label='Paid',kind='check',required=True,default='false')],filter_key='paid',filter_label='Unpaid')
-
-BRIGHTNESS='Create an app to adjust the RAI-OS display brightness from 20 to 100 percent, with a default of 50.'
-BRIGHTNESS_SPEC=dict(id='brightness',title='Screen brightness',capability='display.brightness',fields=[dict(key='level',label='Brightness %',kind='number',required=True,default='50')],filter_key='',filter_label='')
-
 def schema(g,app_id):
     row=g.fields('app.schema',app_id);fields=[]
     for item in row['fields'].split(','):
-        key,kind,required,label,default=item.split('~')
+        key,kind,required,label,default,formula=item.split('~')
         fields.append(dict(key=key,kind=kind,required=required=='1',label=bytes.fromhex(label).decode('ascii'),default=bytes.fromhex(default).decode('ascii')))
+        if formula:fields[-1]['formula']=bytes.fromhex(formula).decode('ascii')
     return dict(id=row['id'],title=bytes.fromhex(row['title']).decode('ascii'),capability=row['capability'],fields=fields,filter_key=row['filter'],filter_label=bytes.fromhex(row['filter_label']).decode('ascii'))
 
 def records(g,app_id):
@@ -49,6 +33,7 @@ def deliver(g,p):
     s=p['spec'];g.request('app.begin',f"{rid}:{p['base_revision']}:{s['id']}:{s['title'].encode().hex()}:{s['capability']}")
     for f in s['fields']:
         g.request('app.field',f"{rid}:{f['key']}:{f['kind']}:{int(f['required'])}:{f['label'].encode().hex()}:{f['default'].encode().hex()}")
+        if f.get('formula'):g.request('app.formula',f"{rid}:{f['key']}:{f['formula'].encode().hex()}")
     g.request('app.filter',f"{rid}:{s['filter_key']}:{s['filter_label'].encode().hex()}")
     g.request('app.ready',f"{rid}:{p['reason']}")
 
@@ -112,13 +97,8 @@ class Studio:
         folder=self.output/str(r['request_id']);folder.mkdir();path=folder/'request.json';path.write_text(json.dumps(r,indent=2)+'\n');rid=r['request_id']
         cmd=[str(self.binary),str(self.kernel),'--app-plan',str(path)]
         if self.source=='replay':
-            spec=None
-            if r['goal']==CREATE and r['target'] is None:spec=copy.deepcopy(SPEC)
-            if r['goal']==TABLE and r['target'] is None:spec=copy.deepcopy(TABLE_SPEC)
-            if r['goal']==BRIGHTNESS and r['target'] is None:spec=copy.deepcopy(BRIGHTNESS_SPEC)
-            if r['goal']==EVOLVE and r['target'] is not None:
-                spec=copy.deepcopy(r['target']);spec['fields'].append(dict(key='priority',label='Priority',kind='number',required=True,default='1'))
-            plan=dict(request_id=rid,base_revision=r['base_revision'],decision='install' if spec else 'clarify',spec=spec,reason='Scripted offline proposal. Review before installing.' if spec else 'Offline replay supports the documented prompts only. Select Meta for your own app.')
+            from app_replay import propose
+            plan=propose(r)
             supplied=folder/'supplied.json';supplied.write_text(json.dumps(plan)+'\n');cmd[2]='--app-plan-replay';cmd.append(str(supplied))
         try:
             env=dict(os.environ);env.pop('RAI_VNC_PASSWORD',None)

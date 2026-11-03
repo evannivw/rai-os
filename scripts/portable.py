@@ -19,7 +19,7 @@ def binaries():
     return ROOT/f'target/host-meta/{host}/release/rai-meta',ROOT/'target/display/aarch64-unknown-none-softfloat/release/rai-os'
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path);p.add_argument('action',choices=['build','verify','console','desktop','context-rules','context-meta','workspace','workspace-replay','workspace-verify','apps','apps-replay','apps-verify','apps-storage-verify','apps-table-verify','apps-brightness-verify'],default='verify',nargs='?');a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path);p.add_argument('action',choices=['build','verify','console','desktop','context-rules','context-meta','workspace','workspace-replay','workspace-verify','apps','apps-replay','apps-verify','apps-storage-verify','apps-table-verify','apps-brightness-verify','apps-formulas-verify'],default='verify',nargs='?');a=p.parse_args()
     binary,kernel=binaries()
     if a.action=='build':
         subprocess.run(['cargo','build','--locked','--bin','rai-os','--features','guest-display','--target-dir','target/display','--release'],check=True)
@@ -45,6 +45,9 @@ def main():
         if a.action in ['apps','apps-replay']:
             from apps import run
             run(kernel,binary,output/'apps','meta' if a.action=='apps' else 'replay',bind='0.0.0.0',state=Path('/state/device.json'));return
+        if a.action=='apps-formulas-verify':
+            from verify_app_formulas import verify
+            verify(kernel,binary,output/'formulas');return
         if a.action=='apps-brightness-verify':
             from verify_app_brightness import verify
             verify(kernel,binary,output/'brightness');return

@@ -1,0 +1,124 @@
+{
+  "source": "offline",
+  "maximum_live_calls": 0,
+  "retries": 0,
+  "source_commit": "e42fa0cffec0cd204fc480e6c0a9cfb6969e686e",
+  "source_worktree_dirty": true,
+  "kernel_sha256": "3d1f0915b62c877fe1618a81e6fa9545f29ac0dfc4e9f5a8da193df27ca0ec18",
+  "development_cases": true,
+  "ai_advantage_measured": false,
+  "verified": true,
+  "apps": [
+    {
+      "goal": "Create a quote app: item, integer quantity, integer unit cents, and calculated total cents = quantity * unit cents.",
+      "spec": {
+        "id": "quotes",
+        "title": "Quotes",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "item",
+            "label": "Item",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "qty",
+            "label": "Qty",
+            "kind": "number",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "unit",
+            "label": "Unit",
+            "kind": "number",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "total",
+            "label": "Total",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "$qty-$unit"
+          }
+        ]
+      },
+      "rows": [
+        [
+          "Cable",
+          "4",
+          "125",
+          "-121"
+        ],
+        [
+          "Adapter",
+          "2",
+          "80",
+          "-78"
+        ]
+      ]
+    },
+    {
+      "goal": "Create a travel budget app: trip, integer budget cents, integer spent cents, calculated remaining cents = budget - spent.",
+      "spec": {
+        "id": "trips",
+        "title": "Travel budget",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "trip",
+            "label": "Trip",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "budget",
+            "label": "Budget",
+            "kind": "number",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "spent",
+            "label": "Spent",
+            "kind": "number",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "remaining",
+            "label": "Remaining",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "$budget-$spent"
+          }
+        ]
+      },
+      "rows": [
+        [
+          "Lake",
+          "6000",
+          "1250",
+          "4750"
+        ],
+        [
+          "City",
+          "800",
+          "950",
+          "-150"
+        ]
+      ]
+    }
+  ],
+  "rejections_and_atomic_update": true
+}

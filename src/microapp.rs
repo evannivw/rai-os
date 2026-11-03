@@ -1,5 +1,7 @@
 //! Bounded declarative records runtime. No I/O, bytecode, pointers or ambient capabilities.
 use core::fmt::{self, Write};
+#[path = "microapp_formula.rs"]
+mod formula;
 pub const APPS: usize = 3;
 pub const FIELDS: usize = 6;
 pub const ROWS: usize = 8;
@@ -52,6 +54,7 @@ pub enum Kind {
     Text,
     Number,
     Check,
+    Calculated,
 }
 impl Kind {
     pub fn parse(s: &str) -> Result<Self, &'static str> {
@@ -59,6 +62,7 @@ impl Kind {
             "text" => Ok(Self::Text),
             "number" => Ok(Self::Number),
             "check" => Ok(Self::Check),
+            "calculated" => Ok(Self::Calculated),
             _ => Err("app_unknown_kind"),
         }
     }
@@ -67,12 +71,13 @@ impl Kind {
             Self::Text => "text",
             Self::Number => "number",
             Self::Check => "check",
+            Self::Calculated => "calculated",
         }
     }
     fn valid(self, value: &str) -> bool {
         match self {
             Self::Text => true,
-            Self::Number => value.is_empty() || value.parse::<i32>().is_ok(),
+            Self::Number | Self::Calculated => value.is_empty() || value.parse::<i32>().is_ok(),
             Self::Check => matches!(value, "true" | "false"),
         }
     }
@@ -84,6 +89,7 @@ pub struct Field {
     pub kind: Kind,
     pub required: bool,
     pub default: Text<32>,
+    pub formula: Text<64>,
 }
 impl Field {
     const EMPTY: Self = Self {
@@ -92,6 +98,7 @@ impl Field {
         kind: Kind::Text,
         required: false,
         default: Text::EMPTY,
+        formula: Text::EMPTY,
     };
     pub fn new(
         key: &str,
@@ -109,11 +116,19 @@ impl Field {
             kind: Kind::parse(kind)?,
             required,
             default: Text::new(default)?,
+            formula: Text::EMPTY,
         };
         if !result.kind.valid(default) {
             return Err("app_bad_default");
         }
         Ok(result)
+    }
+    pub fn with_formula(mut self, expression: &str) -> Result<Self, &'static str> {
+        if self.kind != Kind::Calculated && !expression.is_empty() {
+            return Err("formula_wrong_kind");
+        }
+        self.formula = Text::new(expression)?;
+        Ok(self)
     }
     pub fn valid(&self, value: &str) -> bool {
         (!self.required || !value.trim().is_empty()) && self.kind.valid(value)
@@ -214,9 +229,65 @@ impl Spec {
     pub fn fields(&self) -> &[Field] {
         &self.fields[..self.len]
     }
+    pub fn formula(&mut self, key: &str, value: &str) -> Result<(), &'static str> {
+        let index = self
+            .fields()
+            .iter()
+            .position(|f| f.key.text() == key)
+            .ok_or("app_bad_field")?;
+        self.fields[index] = self.fields[index].with_formula(value)?;
+        Ok(())
+    }
+    fn program(&self, index: usize) -> Result<formula::Program, &'static str> {
+        formula::compile(self.fields[index].formula.text(), |key| {
+            self.fields[..index].iter().position(|f| {
+                f.key.text() == key && matches!(f.kind, Kind::Number | Kind::Calculated)
+            })
+        })
+    }
+    /// Validate inputs and derive all calculated columns in dependency order.
+    pub fn materialize(&self, values: &Values) -> Result<Values, &'static str> {
+        let mut result = *values;
+        let mut numbers = [None; FIELDS];
+        for (i, field) in self.fields().iter().enumerate() {
+            if field.kind == Kind::Calculated {
+                let value = self.program(i)?.eval(&numbers)?;
+                result[i] = integer(value);
+                numbers[i] = Some(value);
+            } else {
+                if !field.valid(values[i].text()) {
+                    return Err("app_invalid_value");
+                }
+                if field.kind == Kind::Number {
+                    numbers[i] = values[i].text().parse::<i32>().ok();
+                }
+            }
+        }
+        Ok(result)
+    }
+    fn migrate(&self, row: &Values, old_len: usize) -> Result<Values, &'static str> {
+        let mut values = *row;
+        for (i, field) in self.fields().iter().enumerate().skip(old_len) {
+            values[i] = field.default;
+        }
+        self.materialize(&values)
+    }
     pub fn check(&self) -> Result<(), &'static str> {
         if self.len == 0 || !identifier(self.id.text()) {
             return Err("app_empty_spec");
+        }
+        if self.fields().iter().all(|f| f.kind == Kind::Calculated) {
+            return Err("app_input_required");
+        }
+        for (i, field) in self.fields().iter().enumerate() {
+            if field.kind == Kind::Calculated {
+                if !field.required || !field.default.text().is_empty() {
+                    return Err("formula_bad_field");
+                }
+                self.program(i)?;
+            } else if !field.formula.text().is_empty() {
+                return Err("formula_wrong_kind");
+            }
         }
         if self.capability == Capability::Brightness {
             if self.len != 1
@@ -279,9 +350,29 @@ impl fmt::Display for Spec {
             a.label.hex(f)?;
             f.write_str("~")?;
             a.default.hex(f)?;
+            f.write_str("~")?;
+            a.formula.hex(f)?;
         }
         Ok(())
     }
+}
+fn integer(value: i32) -> Text<32> {
+    let mut bytes = [0u8; 12];
+    let mut i = 12;
+    let mut n = value.unsigned_abs();
+    loop {
+        i -= 1;
+        bytes[i] = b'0' + (n % 10) as u8;
+        n /= 10;
+        if n == 0 {
+            break;
+        }
+    }
+    if value < 0 {
+        i -= 1;
+        bytes[i] = b'-';
+    }
+    Text::new(core::str::from_utf8(&bytes[i..]).expect("ASCII digits")).expect("bounded integer")
 }
 pub type Values = [Text<32>; FIELDS];
 #[derive(Clone, Copy)]
@@ -355,16 +446,7 @@ impl Runtime {
             spec.compatible(&old.spec)?;
             old.version.checked_add(1).ok_or("app_version_exhausted")?;
             for row in &old.rows[..old.count] {
-                for (i, field) in spec.fields().iter().enumerate() {
-                    let v = if i < old.spec.len {
-                        row[i]
-                    } else {
-                        field.default
-                    };
-                    if !field.valid(v.text()) {
-                        return Err("app_migration_requires_value");
-                    }
-                }
+                spec.migrate(row, old.spec.len)?;
             }
             Ok(index)
         } else {
@@ -385,12 +467,12 @@ impl Runtime {
     ) -> Result<usize, &'static str> {
         let slot = self.validate(spec, base, target)?;
         let app = &mut self.apps[slot];
-        // Validation precedes all writes. Existing columns keep exact bytes; new columns
-        // use checked defaults. No descriptor primitive addresses another app's rows.
+        // Validation above derived every row before mutation. This deterministic
+        // second pass retains inputs and recalculates derived columns atomically.
         for row in &mut app.rows[..app.count] {
-            for (i, field) in spec.fields().iter().enumerate().skip(app.spec.len) {
-                row[i] = field.default;
-            }
+            *row = spec
+                .migrate(row, app.spec.len)
+                .expect("previously validated migration");
         }
         app.spec = *spec;
         app.version += 1;
@@ -426,16 +508,12 @@ impl Runtime {
             }
             app.count
         };
-        for (i, field) in app.spec.fields().iter().enumerate() {
-            if !field.valid(values[i].text()) {
-                return Err("app_invalid_value");
-            }
-        }
+        let values = app.spec.materialize(values)?;
         self.revision
             .checked_add(1)
             .ok_or("app_revision_exhausted")?;
         let app = &mut self.apps[index];
-        app.rows[slot] = *values;
+        app.rows[slot] = values;
         if row.is_none() {
             app.count += 1;
         }
@@ -457,7 +535,10 @@ impl Runtime {
 /// Bounded aggregation over validated signed-32-bit cells. Eight cells fit i64.
 impl App {
     pub fn sum(&self, field: usize, pending: bool) -> Option<i64> {
-        if self.spec.fields().get(field)?.kind != Kind::Number {
+        if !matches!(
+            self.spec.fields().get(field)?.kind,
+            Kind::Number | Kind::Calculated
+        ) {
             return None;
         }
         Some(
@@ -615,6 +696,62 @@ mod tests {
         row[2] = Text::EMPTY;
         r.save(i, Some(0), &row).unwrap();
         assert_eq!(r.app(i).unwrap().sum(2, false), Some(15_032_385_529));
+    }
+    #[test]
+    fn calculated_rows_and_migrations_are_atomic() {
+        let mut s = Spec::new("custom", "Custom", "records.local").unwrap();
+        for key in ["x", "y"] {
+            s.add(Field::new(key, key, "number", true, "1").unwrap())
+                .unwrap();
+        }
+        s.add(
+            Field::new("z", "Result", "calculated", true, "")
+                .unwrap()
+                .with_formula("$x * $y")
+                .unwrap(),
+        )
+        .unwrap();
+        s.add(
+            Field::new("next", "Next", "calculated", true, "")
+                .unwrap()
+                .with_formula("$z + 1")
+                .unwrap(),
+        )
+        .unwrap();
+        let mut r = Runtime::new();
+        let i = r.install(&s, 1, None).unwrap();
+        let mut v = r.app(i).unwrap().defaults();
+        v[0] = Text::new("7").unwrap();
+        v[1] = Text::new("3").unwrap();
+        v[2] = Text::new("999").unwrap(); // Derived input is never trusted.
+        r.save(i, None, &v).unwrap();
+        v[0] = Text::new("8").unwrap();
+        v[1] = Text::new("0").unwrap();
+        r.save(i, None, &v).unwrap();
+        assert_eq!(r.app(i).unwrap().row(0).unwrap()[2].text(), "21");
+        assert_eq!(r.app(i).unwrap().row(0).unwrap()[3].text(), "22");
+        let before = format!("{}", Export(r.app(i).unwrap()));
+        let revision = r.revision();
+        let mut bad = s;
+        bad.formula("z", "$x / $y").unwrap();
+        assert_eq!(r.install(&bad, revision, Some(i)), Err("formula_div_zero"));
+        assert_eq!(r.revision(), revision);
+        assert_eq!(format!("{}", Export(r.app(i).unwrap())), before);
+        bad.formula("z", "$next").unwrap();
+        assert_eq!(bad.check(), Err("formula_unknown_field"));
+        bad.formula("z", "$z").unwrap();
+        assert_eq!(bad.check(), Err("formula_unknown_field"));
+        v[0] = Text::new("2147483647").unwrap();
+        v[1] = Text::new("2").unwrap();
+        assert_eq!(r.save(i, Some(0), &v), Err("formula_overflow"));
+        assert_eq!(r.revision(), revision);
+        assert_eq!(format!("{}", Export(r.app(i).unwrap())), before);
+        s.formula("z", "$x - $y").unwrap();
+        r.install(&s, revision, Some(i)).unwrap();
+        assert_eq!(r.app(i).unwrap().row(0).unwrap()[2].text(), "4");
+        assert_eq!(r.app(i).unwrap().row(1).unwrap()[3].text(), "9");
+        assert_eq!(r.app(i).unwrap().sum(2, false), Some(12));
+        assert_eq!(integer(i32::MIN).text(), "-2147483648");
     }
     #[test]
     fn scope_migration_and_failed_updates() {

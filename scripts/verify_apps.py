@@ -10,7 +10,8 @@ import sys
 import threading
 import time
 sys.dont_write_bytecode=True
-from apps import Studio,CREATE,EVOLVE,SPEC,deliver,schema,records,build,host_build
+from app_replay import CREATE,EVOLVE,SPEC
+from apps import Studio,deliver,schema,records,build,host_build
 from workspace_vnc import session,exact
 
 def wait(app):

@@ -73,7 +73,8 @@ def restore(g,state,deliver,schema,records):
         g.request('app.key','13')
         for rowno,row in enumerate(app['rows']):
             if rowno:g.request('app.key','110')
-            for index,value in enumerate(row):g.request('app.value',f'{index}:{value.encode("ascii").hex()}')
+            for index,value in enumerate(row):
+                if app['spec']['fields'][index]['kind']!='calculated':g.request('app.value',f'{index}:{value.encode("ascii").hex()}')
             g.request('app.key','13')
         assert schema(g,app['spec']['id'])==app['spec'] and records(g,app['spec']['id'])==app['rows'],'Restored bytes differ'
     g.request('app.open')

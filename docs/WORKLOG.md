@@ -2513,3 +2513,35 @@ network access disabled. Both platform logs and image/source/binary hashes are i
 evidence/2026-11-03-display-control/portable. These results do not establish a
 physical Windows or phone test. Executable sources match frozen b2e5c9a; final
 changes only archive evidence and documentation.
+
+## 2026-11-03 — Per-app formulas without hardcoded app behavior
+
+Added calculated columns to the shared declarative runtime. Formula text belongs
+to each installed schema; no quote/budget app identity or prompt is recognized by
+the kernel. The bounded Rust compiler accepts earlier numeric-field references,
+integer arithmetic and parentheses. It rejects unknown/cyclic dependencies,
+unsupported syntax and excessive depth/size. Checked evaluation rejects missing
+inputs, overflow and division by zero. Full-record saves and schema migrations
+validate before mutation; updates retain editable bytes and recompute derived
+values. Computed fields are read-only, preview locally, appear in totals and show
+the full expression during review. Snapshot validation recomputes saved results;
+fresh-guest restore sends inputs only and checks exact readback.
+
+Moved existing disclosed offline examples into scripts/app_replay.py, imported
+only in replay mode. Live generation already accepted arbitrary prompts; this
+change makes that separation explicit rather than claiming it previously used
+fixed examples. The versioned runtime catalog and strict Meta proposal schema now
+advertise calculated fields. No unsafe, new process boundary or arbitrary native
+code generation was introduced. Host HTTPS/storage dependencies remain explicit.
+
+Verified: 69 shared domain/host tests; formatting and Clippy for the kernel with
+and without guest display and for the host. Real QEMU debug and release checks
+passed for two declared arithmetic apps, edits, totals, invalid access, overflow,
+failed migration on a later row, successful formula replacement and reboot.
+Existing release app/RFB, saved-session and brightness regressions passed. Linux
+ARM64 Docker passed the formula check with network disabled; physical Windows and
+phones were not tested. Reports, selected native captures and portable hashes are
+under evidence/2026-11-03-app-formulas/offline and portable. Pre-commit reports
+honestly identify the modified worktree; these are offline results, not Meta
+success. Freeze these sources before the separate two-call live check; no retries
+or benchmark/AI-performance claims are authorized by these observations.

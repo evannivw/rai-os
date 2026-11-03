@@ -7,7 +7,8 @@ from pathlib import Path
 import subprocess
 import sys
 sys.dont_write_bytecode=True
-from apps import Studio,TABLE,records,schema,build,host_build
+from app_replay import TABLE
+from apps import Studio,records,schema,build,host_build
 
 def verify(kernel,binary,out,source='replay'):
     head=subprocess.run(['git','rev-parse','HEAD'],capture_output=True,text=True)

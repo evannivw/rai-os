@@ -20,6 +20,7 @@ unavailable. An app chooses one capability, and updates cannot change it.
 | --- | --- | --- |
 | Software display brightness | Apply 20..100%; explicit permission, user action and reset | Guest Rust framebuffer |
 | Typed fields | Text, signed integer, checkbox; labels, required values and defaults | Guest Rust |
+| [Calculated fields](APP_FORMULAS.md) | Per-app integer expressions over earlier numeric fields | Guest Rust, checked i32 |
 | Local records | Create and edit complete records in the current app | Guest Rust |
 | Record view | Select/edit rows; toggle one configured status | Guest Rust |
 | Pending filter | Show records whose configured checkbox is false | Guest Rust |
@@ -46,7 +47,8 @@ Long values/labels are clipped in table cells; the form shows the full values.
 Numbers are signed i32 cells, optional empty cells are omitted from sums, and
 at most eight values are accumulated into i64. This prevents overflow for the
 available range without approximating decimal arithmetic. Currency examples use
-explicit integer cents; no currency conversion, arbitrary formulas, references,
+explicit integer cents. Bounded same-row formulas are now available; no currency
+conversion, arbitrary functions, cross-row references,
 CSV/XLSX compatibility or Microsoft Excel behavior is claimed.
 
 A disclosed offline prompt is:
@@ -74,17 +76,16 @@ maximum i32 values without overflow and checks optional blanks and filtering.
 
 ## Next capabilities, in order
 
-1. **Calculated fields:** bounded integer expressions over named fields; no loops
-   or arbitrary code. Detect invalid references, cycles, division by zero and
-   overflow, then validate recomputation and schema migrations independently.
-2. **Private app files and exchange:** scoped file handles, explicit import/export,
+Calculated fields are implemented; see [APP_FORMULAS.md](APP_FORMULAS.md).
+
+1. **Private app files and exchange:** scoped file handles, explicit import/export,
    quotas and reviewed changes; build on the existing guest file store.
-3. **Events and background work:** declared triggers, queues, cancellation and
+2. **Events and background work:** declared triggers, queues, cancellation and
    execution budgets. Wire to an actual service boundary before claiming isolation.
-4. **Optional in-app AI:** a declared action with explicit user consent, selected
+3. **Optional in-app AI:** a declared action with explicit user consent, selected
    data only, cost/rate limits and unavailable/offline behavior. Apps do not get
    the provider key. Ordinary forms and calculations remain local.
-5. **Native apps:** restricted build pipeline, stable ABI, checked loader, separate
+4. **Native apps:** restricted build pipeline, stable ABI, checked loader, separate
    address spaces and capability-bearing syscalls. Only then expose generated
    native code as an app type. Phone drivers are another separate project.
 

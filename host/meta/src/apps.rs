@@ -9,6 +9,8 @@ pub struct Field {
     pub kind: String,
     pub required: bool,
     pub default: String,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub formula: String,
 }
 #[derive(Deserialize, Serialize, Clone)]
 #[serde(deny_unknown_fields)]
@@ -24,9 +26,10 @@ impl Spec {
     pub fn checked(&self) -> Result<microapp::Spec, &'static str> {
         let mut s = microapp::Spec::new(&self.id, &self.title, &self.capability)?;
         for f in &self.fields {
-            s.add(microapp::Field::new(
-                &f.key, &f.label, &f.kind, f.required, &f.default,
-            )?)?;
+            s.add(
+                microapp::Field::new(&f.key, &f.label, &f.kind, f.required, &f.default)?
+                    .with_formula(&f.formula)?,
+            )?;
         }
         s.filter(&self.filter_key, &self.filter_label)?;
         s.check()?;
@@ -105,7 +108,7 @@ pub fn validate(p: &Plan, r: &Request) -> Result<(), &'static str> {
         if r.record_count > 0
             && s.fields()[old.fields().len()..]
                 .iter()
-                .any(|f| !f.valid(f.default.text()))
+                .any(|f| f.kind != microapp::Kind::Calculated && !f.valid(f.default.text()))
         {
             return Err("app_invalid_migration_default");
         }

@@ -1,5 +1,5 @@
 {
-  "runtime": "rai-declarative-2",
+  "runtime": "rai-declarative-3",
   "limits": {
     "apps": 3,
     "fields": 6,
@@ -9,7 +9,8 @@
   "field_kinds": [
     "text",
     "number",
-    "check"
+    "check",
+    "calculated"
   ],
   "views": [
     "form",
@@ -21,14 +22,14 @@
     "edit_record",
     "toggle_configured_check",
     "filter_check_false",
-    "sum_each_number_column_over_visible_rows"
+    "sum_each_number_column_over_visible_rows",
+    "derive_calculated_columns_on_preview_save_and_schema_update"
   ],
   "schema_updates": "Keep old field keys, order and kinds. Append fields with valid migration defaults.",
   "launching": "Installed apps appear in the guest launcher with an icon; title and id are searchable.",
   "storage": "The launcher checkpoints confirmed schemas and rows to an explicit host file; no arbitrary file access.",
   "numbers": "Signed 32-bit integer cells; sums use signed 64-bit arithmetic. No decimal or currency conversion.",
   "not_available": [
-    "formulas",
     "native_code",
     "shell",
     "network",
@@ -51,5 +52,15 @@
     "execution": "Explicit Apply checks the installed app capability. Install, update and restore do not actuate. Reset to 100% with F6.",
     "storage": "Control app schema persists; applied display level resets to 100% at boot.",
     "updates": "Capability is immutable; create a separate app for a different capability."
+  },
+  "formulas": {
+    "syntax": "Integer literals, $key references, + - * /, unary minus and parentheses. References only to earlier number/calculated fields; no functions or loops.",
+    "limits": {
+      "ascii_bytes": 64,
+      "instructions": 32,
+      "parser_depth_levels": 8
+    },
+    "semantics": "Checked signed i32; division truncates toward zero. Missing input, overflow or zero division rejects the whole save/update. Required calculated fields have an empty default; ordinary fields have an empty formula.",
+    "updates": "Keep editable values, recompute derived values. Validate every existing row before committing the schema update."
   }
 }

@@ -18,6 +18,8 @@ The default state is `target/device.json`; it is ignored by Git. Use
 for a RAM-only session. A separate output folder holds each session's logs.
 Changing the model source to replay does not change stored apps. Restore never
 contacts Meta. Each installed app retains its schema and exact saved record bytes;
+calculated values are independently recomputed and must match those saved bytes.
+Only editable values are sent through app.value during restore;
 transient drafts, UI selection, request IDs and runtime revision numbers are not
 persistent and are rebuilt for the new session.
 

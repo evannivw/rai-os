@@ -36,6 +36,10 @@ fn validate(text: &str) -> Result<usize, &'static str> {
             for (i, v) in row.iter().enumerate() {
                 values[i] = Text::new(v)?;
             }
+            let normalized = spec.materialize(&values)?;
+            if normalized != values {
+                return Err("snapshot_derived_mismatch");
+            }
             runtime.save(index, None, &values)?;
         }
     }
@@ -53,6 +57,13 @@ pub fn run(path: &std::path::Path) -> Result<(), String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn derived_snapshot_values_must_match_recomputation() {
+        let mut s = serde_json::json!({"version":1,"apps":[{"spec":{"id":"custom","title":"Custom","capability":"records.local","fields":[{"key":"x","label":"Input","kind":"number","required":true,"default":"1"},{"key":"y","label":"Result","kind":"calculated","required":true,"default":"","formula":"$x*2"}],"filter_key":"","filter_label":""},"rows":[["3","6"]]}]});
+        assert_eq!(validate(&s.to_string()), Ok(1));
+        s["apps"][0]["rows"][0][1] = "999".into();
+        assert_eq!(validate(&s.to_string()), Err("snapshot_derived_mismatch"));
+    }
     #[test]
     fn restoration_rejects_unknown_fields_duplicates_types_and_limits() {
         let mut s = serde_json::json!({"version":1,"apps":[{"spec":{"id":"stock","title":"Stock","capability":"records.local","fields":[{"key":"qty","label":"Quantity","kind":"number","required":true,"default":"1"}],"filter_key":"","filter_label":""},"rows":[["12"]]}]});

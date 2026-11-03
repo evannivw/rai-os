@@ -7,7 +7,8 @@ from pathlib import Path
 import subprocess
 import sys
 sys.dont_write_bytecode=True
-from apps import Studio,CREATE,EVOLVE,records,schema,build,host_build
+from app_replay import CREATE,EVOLVE
+from apps import Studio,records,schema,build,host_build
 from verify_apps import text
 
 def main():

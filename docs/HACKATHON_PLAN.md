@@ -384,3 +384,14 @@ its scope explicit: permission review, Apply, visible pixel change, reset and sa
 recovery; no physical backlight or energy claim. This extends app creation from
 records into a real guest display effect. Follow the same capability/backend/check
 sequence for future OS controls, preserving delivery/video time for November 4.
+
+
+## November 3: dynamic behavior, not an app-specific catalog
+
+Calculated fields extend the existing app interpreter: Meta can describe different
+arithmetic apps without adding app IDs, prompts or business logic to the kernel.
+Demonstrate two declared development cases, review the formula, edit inputs locally
+and recover the same results after reboot. The live check is capped at two calls
+from frozen source, with no retries; offline fixtures do not establish live success.
+This is bounded declarative app creation, not arbitrary native app compilation.
+Keep remaining delivery time for rehearsal, repository instructions and video.

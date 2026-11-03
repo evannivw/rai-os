@@ -233,7 +233,7 @@ pub fn render(s: &mut Display, u: &Controller) {
             center(
                 s,
                 if u.target().is_some() {
-                    "Your existing records stay."
+                    "Your input records stay."
                 } else {
                     "Your idea. Your app."
                 },
@@ -251,12 +251,16 @@ pub fn render(s: &mut Display, u: &Controller) {
             );
         }
         Mode::Review => {
-            icon(s, 205, 152, 0, LIME);
-            center(s, u.pending.title.text(), 238, Size::Body, WHITE);
+            center(s, u.pending.title.text(), 175, Size::Body, WHITE);
             for (i, f) in u.pending.fields().iter().enumerate() {
-                let y = 292 + i as i32 * 43;
+                let y = 222 + i as i32 * 56;
                 text(s, f.label.text(), 42, y, WHITE);
                 text(s, f.kind.name(), 371, y, QUIET);
+                // Formula text is bounded printable ASCII; both slices are valid.
+                let expression = f.formula.text();
+                let split = expression.len().min(48);
+                text(s, &expression[..split], 42, y + 18, LIME);
+                text(s, &expression[split..], 42, y + 34, LIME);
             }
             text(
                 s,
@@ -287,6 +291,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                     154,
                     QUIET,
                 );
+                let calculated = a.spec.materialize(&u.draft).ok();
                 for (i, f) in a.spec.fields().iter().enumerate() {
                     let y = 190 + i * 72;
                     frame(
@@ -298,7 +303,10 @@ pub fn render(s: &mut Display, u: &Controller) {
                         if i == u.focus { LIME } else { 0x26392e },
                     );
                     text(s, f.label.text(), 42, y as i32 + 6, QUIET);
-                    let value = if f.kind == Kind::Check {
+                    let value = if f.kind == Kind::Calculated {
+                        text(s, "= auto", 362, y as i32 + 6, LIME);
+                        calculated.as_ref().map_or("--", |v| v[i].text())
+                    } else if f.kind == Kind::Check {
                         if u.draft[i].text() == "true" {
                             "[x]"
                         } else {

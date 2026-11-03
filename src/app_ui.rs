@@ -226,7 +226,9 @@ impl Controller {
                     && (190..622).contains(&y)
                 {
                     let field = (y - 190) / 72;
-                    if field < a.spec.fields().len() {
+                    if field < a.spec.fields().len()
+                        && a.spec.fields()[field].kind != Kind::Calculated
+                    {
                         self.focus = field;
                         if a.spec.fields()[field].kind == Kind::Check {
                             return self.key(32);
@@ -270,7 +272,12 @@ impl Controller {
         };
         self.columns = 0;
         self.editing = row;
-        self.focus = 0;
+        self.focus = a
+            .spec
+            .fields()
+            .iter()
+            .position(|f| f.kind != Kind::Calculated)
+            .ok_or("app_input_required")?;
         self.message = Text::EMPTY;
         self.mode = Mode::Form;
         Ok(())
@@ -424,8 +431,16 @@ impl Controller {
                 let a = self.runtime.app(self.selected).ok_or("app_not_found")?;
                 let kind = a.spec.fields()[self.focus].kind;
                 match key {
-                    9 | 1006 => self.focus = (self.focus + 1) % a.spec.fields().len(),
-                    1005 => self.focus = self.focus.saturating_sub(1),
+                    9 | 1006 | 1005 => {
+                        let len = a.spec.fields().len();
+                        let step = if key == 1005 { len - 1 } else { 1 };
+                        for _ in 0..len {
+                            self.focus = (self.focus + step) % len;
+                            if a.spec.fields()[self.focus].kind != Kind::Calculated {
+                                break;
+                            }
+                        }
+                    }
                     13 if a.spec.capability() == Capability::Brightness => {
                         return self.run_control();
                     }
@@ -447,8 +462,12 @@ impl Controller {
                                 "true"
                             })?
                     }
-                    8 | 127 if kind != Kind::Check => self.draft[self.focus].pop(),
-                    32..=126 if kind != Kind::Check => self.draft[self.focus].push(key as u8),
+                    8 | 127 if matches!(kind, Kind::Text | Kind::Number) => {
+                        self.draft[self.focus].pop()
+                    }
+                    32..=126 if matches!(kind, Kind::Text | Kind::Number) => {
+                        self.draft[self.focus].push(key as u8)
+                    }
                     _ => {}
                 }
             }
@@ -547,6 +566,9 @@ impl Controller {
                 if index >= app.spec.fields().len() {
                     return Err("app_bad_field_index");
                 }
+                if app.spec.fields()[index].kind == Kind::Calculated {
+                    return Err("app_read_only");
+                }
                 self.draft[index] = decode(value)?;
             }
             "app.source" => {
@@ -587,6 +609,12 @@ impl Controller {
                     required,
                     decode::<32>(default)?.text(),
                 )?)?;
+            }
+            "app.formula" => {
+                let [id, key, expression] = parts(arg)?;
+                self.check_request(id)?;
+                self.pending
+                    .formula(key, decode::<64>(expression)?.text())?;
             }
             "app.filter" => {
                 let [id, key, label] = parts(arg)?;

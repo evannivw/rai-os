@@ -81,7 +81,7 @@ the host and restores them across QEMU restarts without calling Meta.
 
 ```sh
 python3 -B scripts/apps.py --source meta --output target/apps-session-1
-# No key needed for the two disclosed scripted prompts:
+# No key needed for the disclosed scripted examples:
 python3 -B scripts/apps.py --source replay --output target/apps-replay-1
 ```
 
@@ -89,7 +89,9 @@ Connect a VNC viewer to localhost:5900; see the microapp guide for macOS viewer
 password setup, Docker, controls and current limits.
 
 The launcher now includes app icons, search and guest-owned pointer navigation.
-Apps have a [table view with exact numeric totals](docs/APP_CAPABILITIES.md).
+Apps have a [table view with exact numeric totals](docs/APP_CAPABILITIES.md) and
+[dynamic calculated fields](docs/APP_FORMULAS.md): formulas belong to each generated
+app, execute locally, and survive saved-session recovery.
 A [ready-to-open saved showcase](docs/APP_CAPABILITIES.md#live-generation-and-a-ready-to-open-session)
 contains two previously Meta-generated apps and fictional data; restoration runs
 offline. It demonstrates usable local tools, not an Excel implementation or

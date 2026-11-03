@@ -7,7 +7,8 @@ from pathlib import Path
 import sys
 from unittest.mock import patch
 sys.dont_write_bytecode=True
-from apps import Studio,SPEC,CREATE,EVOLVE,records,schema,build,host_build
+from app_replay import SPEC,CREATE,EVOLVE
+from apps import Studio,records,schema,build,host_build
 from app_storage import Checkpoint,collect,canonical
 from verify_apps import wait,text
 

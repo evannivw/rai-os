@@ -8,7 +8,8 @@ from pathlib import Path
 import subprocess
 import sys
 sys.dont_write_bytecode=True
-from apps import Studio,BRIGHTNESS,SPEC,deliver,schema,records,build,host_build,ROOT
+from app_replay import BRIGHTNESS,SPEC
+from apps import Studio,deliver,schema,records,build,host_build,ROOT
 from files_demo import Guest
 from verify_apps import submit,stage
 
@@ -80,7 +81,7 @@ def headless(binary,out):
     subprocess.run(['cargo','build','--locked','--bin','rai-os','--target-dir','target/no-display'],cwd=ROOT,check=True)
     kernel=ROOT/'target/no-display/aarch64-unknown-none-softfloat/debug/rai-os';g=Guest(kernel,expect_display=False)
     try:
-        from apps import BRIGHTNESS_SPEC
+        from app_replay import BRIGHTNESS_SPEC
         p=submit(g,'Headless control');p['spec']=BRIGHTNESS_SPEC;deliver(g,p);g.request('app.key','13')
         assert g.fields('app.display')==dict(available='false',brightness='100',mode='software_rgb')
         g.request('app.run',error='display_unavailable');g.request('app.key','1010',error='display_unavailable')

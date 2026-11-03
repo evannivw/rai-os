@@ -79,13 +79,14 @@ and the existing Tab hotspot; text fields are selected with Tab, not a mouse.
   28, field label up to 22. Required fields are checked on complete-record save.
 - One optional filter references a checkbox and shows false records (pending).
   Its label is at most 18 bytes. The first field is the record-list headline;
-  open a row to see/edit all fields. No sort/formulas/loops/deletion yet.
+  open a row to see/edit all fields. No sort/loops/deletion yet. [Calculated fields](APP_FORMULAS.md) support bounded integer expressions.
 - Choose `records.local` or the separate [display.brightness](DISPLAY_CONTROL.md)
   control capability. No file, location, network, timer, native code or arbitrary
   memory capability. Schemas cannot name another app as a data source.
 - Updates retain every old field's ID, position and type, adding fields only.
   Existing values are checked against the new constraints before any write.
-  Added fields get valid defaults; incompatible migration changes nothing.
+  Added input fields get valid defaults; calculated fields are recomputed.
+  Incompatible migration changes nothing, including every existing row.
 - Request IDs, target app and global revision bind review to the intended
   installation. Duplicate/cancelled/stale responses cannot install silently.
 - The runtime holds schemas and records in guest RAM. The launcher now saves
@@ -106,11 +107,13 @@ Meta receives only the prompt, existing schema if updating, installed app IDs,
 record count and revision. Record values are not included in that request. Session
 logs contain prompts/schemas and the local UART verifier may include record data;
 use fictional demo data. Host validation shares the guest domain rules. JSON
-rejects unknown fields, and generated content is never evaluated as code.
+rejects unknown fields. Generated arithmetic is compiled to bounded internal
+operations; it is never evaluated as host code or native machine code.
 
 ## Code map and wire contract
 
 - `src/microapp.rs`: pure bounded schemas, namespace selection and atomic migration.
+- `src/microapp_formula.rs`: bounded arithmetic compiler and interpreter.
 - `src/app_ui.rs`: prompt/review/form/list state and user confirmation.
 - `src/display/apps.rs`, `terminal.rs`: guest framebuffer presentation only.
 - `host/meta/src/apps.rs`, `provider.rs`: strict JSON and one model proposal.
@@ -121,7 +124,7 @@ app.key code, app.catalog, app.schema id and app.export id. A submitted prompt
 returns submit/request ID, revision, target ID or '-', and hex ASCII prompt.
 Staging is app.begin `request:revision:id:title_hex:records.local`, app.field
 `request:key:kind:required_0_or_1:label_hex:default_hex`, optional app.filter
-`request:key:label_hex`, then app.ready `request:reason`. No staged state is
+`request:key:label_hex`, optional app.formula `request:key:expression_hex`, then app.ready `request:reason`. No staged state is
 installed until app.key 13. app.notice gives a clarification; Esc invalidates
 pending responses. Text fields are hex framed so punctuation cannot inject an
 operation. app.* is a trusted diagnostic surface, not an untrusted-process ABI.

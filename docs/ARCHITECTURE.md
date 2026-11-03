@@ -459,3 +459,17 @@ Review exposes the requested permission. Capability cannot change during an app
 update. Install/restore/update never actuate, and boot returns to 100%. The adapter
 is a QEMU framebuffer implementation, not a phone backlight driver or a power
 optimization. Shared EL1 privilege and trusted UART/host limitations remain.
+
+
+## November 3: dynamic calculated fields
+
+The app schema now carries bounded formulas. microapp_formula.rs compiles integer
+expressions to a private fixed-size instruction array and evaluates checked i32
+arithmetic. References resolve only to earlier numeric columns, so dependencies
+are acyclic. Domain save/update materializes all derived values before mutation;
+schema migration validates every row before its deterministic commit pass. No
+unsafe, allocation, host expression evaluator, new capability or process boundary.
+The guest controller skips computed fields during editing, while presentation
+shows a local preview and the complete formula before approval. The host catalog
+teaches Meta this generic vocabulary; replay fixtures live in a separate module
+that the live branch never consults. See APP_FORMULAS.md for limits and checks.
