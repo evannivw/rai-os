@@ -1,0 +1,372 @@
+{
+  "verified": true,
+  "source": "offline",
+  "source_commit": null,
+  "source_worktree_dirty": null,
+  "maximum_live_calls": 0,
+  "generation_calls": 0,
+  "checks": [
+    "Eight rows; preview/cancel changes nothing; native approval applies independent branch oracle atomically with one revision; no further inference",
+    "Hidden rows included; last-row failure rolls back entire table with row/step diagnostic; reviewed program evolution retains data; stale preview rejected; unrelated app uses same executor",
+    "Exact schemas, scopes, all rows and computed values recover after reboot without inference"
+  ],
+  "kernel_sha256": "fe9a9de4c685fb7c97935df61db672f9f57b61d73b41cf5f99c40c070ec4427a",
+  "loop": {
+    "source": "replay",
+    "max_attempts": 3,
+    "session_limit": 8,
+    "attempts": [
+      {
+        "attempt": 1,
+        "kind": "initial",
+        "state": "accepted",
+        "exit_code": 0
+      }
+    ],
+    "state": "review",
+    "accepted_attempt": 1,
+    "session_attempts_used": 1
+  },
+  "events": [
+    {
+      "attempt": 1,
+      "event": "app_plan",
+      "execution": false,
+      "plan": {
+        "base_revision": 1,
+        "decision": "install",
+        "reason": "Disclosed offline proposal for correction verification.",
+        "request_id": 2,
+        "spec": {
+          "behaviors": [
+            {
+              "event": "press",
+              "id": "move",
+              "label": "Move all",
+              "scope": "all",
+              "steps": [
+                {
+                  "compare": "ge",
+                  "field": "stock",
+                  "op": "if",
+                  "skip": 3,
+                  "value": "2"
+                },
+                {
+                  "compare": "",
+                  "field": "stock",
+                  "op": "calculate",
+                  "skip": 0,
+                  "value": "$stock-2"
+                },
+                {
+                  "compare": "",
+                  "field": "moved",
+                  "op": "calculate",
+                  "skip": 0,
+                  "value": "$moved+2"
+                },
+                {
+                  "compare": "",
+                  "field": "flag",
+                  "op": "set",
+                  "skip": 0,
+                  "value": "true"
+                }
+              ]
+            },
+            {
+              "event": "press",
+              "id": "reject",
+              "label": "Check all",
+              "scope": "all",
+              "steps": [
+                {
+                  "compare": "",
+                  "field": "status",
+                  "op": "set",
+                  "skip": 0,
+                  "value": "staged"
+                },
+                {
+                  "compare": "ne",
+                  "field": "name",
+                  "op": "require",
+                  "skip": 0,
+                  "value": "Blocked"
+                }
+              ]
+            }
+          ],
+          "capability": "records.local",
+          "fields": [
+            {
+              "default": "",
+              "key": "name",
+              "kind": "text",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "default": "0",
+              "key": "stock",
+              "kind": "number",
+              "label": "Stock",
+              "required": true
+            },
+            {
+              "default": "0",
+              "key": "moved",
+              "kind": "number",
+              "label": "Moved",
+              "required": true
+            },
+            {
+              "default": "false",
+              "key": "flag",
+              "kind": "check",
+              "label": "Flag",
+              "required": true
+            },
+            {
+              "default": "ready",
+              "key": "status",
+              "kind": "text",
+              "label": "Status",
+              "required": true
+            },
+            {
+              "default": "",
+              "formula": "$stock+$moved",
+              "key": "total",
+              "kind": "calculated",
+              "label": "Total",
+              "required": true
+            }
+          ],
+          "filter_key": "flag",
+          "filter_label": "Pending",
+          "id": "batchdesk",
+          "title": "Batch desk"
+        }
+      },
+      "source": "replay"
+    }
+  ],
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "batchdesk",
+          "title": "Batch desk",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "stock",
+              "kind": "number",
+              "required": true,
+              "label": "Stock",
+              "default": "0"
+            },
+            {
+              "key": "moved",
+              "kind": "number",
+              "required": true,
+              "label": "Moved",
+              "default": "0"
+            },
+            {
+              "key": "flag",
+              "kind": "check",
+              "required": true,
+              "label": "Flag",
+              "default": "false"
+            },
+            {
+              "key": "status",
+              "kind": "text",
+              "required": true,
+              "label": "Status",
+              "default": "ready"
+            },
+            {
+              "key": "total",
+              "kind": "calculated",
+              "required": true,
+              "label": "Total",
+              "default": "",
+              "formula": "$stock+$moved"
+            }
+          ],
+          "filter_key": "flag",
+          "filter_label": "Pending",
+          "behaviors": [
+            {
+              "id": "move",
+              "label": "Move all",
+              "event": "press",
+              "steps": [
+                {
+                  "op": "calculate",
+                  "field": "moved",
+                  "value": "$moved+10",
+                  "compare": "",
+                  "skip": 0
+                }
+              ],
+              "scope": "all"
+            },
+            {
+              "id": "reject",
+              "label": "Check all",
+              "event": "press",
+              "steps": [
+                {
+                  "op": "set",
+                  "field": "status",
+                  "value": "staged",
+                  "compare": "",
+                  "skip": 0
+                },
+                {
+                  "op": "require",
+                  "field": "name",
+                  "value": "Blocked",
+                  "compare": "ne",
+                  "skip": 0
+                }
+              ],
+              "scope": "all"
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Changed",
+            "0",
+            "14",
+            "true",
+            "ready",
+            "14"
+          ],
+          [
+            "Item 2",
+            "0",
+            "11",
+            "false",
+            "ready",
+            "11"
+          ],
+          [
+            "Item 3",
+            "3",
+            "16",
+            "true",
+            "ready",
+            "19"
+          ],
+          [
+            "Item 4",
+            "1",
+            "13",
+            "false",
+            "ready",
+            "14"
+          ],
+          [
+            "Item 5",
+            "1",
+            "18",
+            "true",
+            "ready",
+            "19"
+          ],
+          [
+            "Item 6",
+            "0",
+            "17",
+            "true",
+            "ready",
+            "17"
+          ],
+          [
+            "Item 7",
+            "4",
+            "20",
+            "true",
+            "ready",
+            "24"
+          ],
+          [
+            "Blocked",
+            "1",
+            "19",
+            "true",
+            "ready",
+            "20"
+          ]
+        ]
+      },
+      {
+        "spec": {
+          "id": "reviewqueue",
+          "title": "Review queue",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "title",
+              "kind": "text",
+              "required": true,
+              "label": "Title",
+              "default": ""
+            },
+            {
+              "key": "approved",
+              "kind": "check",
+              "required": true,
+              "label": "Approved",
+              "default": "false"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "behaviors": [
+            {
+              "id": "approve",
+              "label": "Approve all",
+              "event": "press",
+              "steps": [
+                {
+                  "op": "set",
+                  "field": "approved",
+                  "value": "true",
+                  "compare": "",
+                  "skip": 0
+                }
+              ],
+              "scope": "all"
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Doc 0",
+            "true"
+          ],
+          [
+            "Doc 1",
+            "true"
+          ]
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "source": "replay",
+  "max_attempts": 3,
+  "session_limit": 8,
+  "attempts": [
+    {
+      "attempt": 1,
+      "kind": "initial",
+      "state": "accepted",
+      "exit_code": 0
+    }
+  ],
+  "state": "review",
+  "accepted_attempt": 1,
+  "session_attempts_used": 1
+}

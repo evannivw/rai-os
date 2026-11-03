@@ -2856,3 +2856,32 @@ logs, request, checkpoint, UART, screenshots, report and hashes. Offline correct
 and its thirteen adverse cases remain separate evidence. The earlier failed
 single-call run is retained unchanged. This follow-up changes documentation and
 evidence only; it makes no further provider calls or executable changes.
+
+
+## 2026-11-03 — Compose atomic whole-table actions
+
+The user explicitly prioritized more general runtime capabilities without
+hardcoded apps. Added button scope row (backward-compatible default) or all.
+Whole-table actions evaluate the same typed program independently on every saved
+row, including hidden rows. Preview validates every candidate without mutation;
+confirmation revalidates and commits all rows with one revision. A failing row,
+terminal workflow state, stale version or invalid scope publishes nothing.
+
+The two-pass commit retains one candidate at a time. Its atomicity depends on the
+current pure, row-local language and lack of concurrent writers; cross-row reads
+would require another strategy. Existing eight-row/six-field/two-button/six-step
+bounds and 64 KiB kernel stack remain. No new unsafe, driver or isolation boundary.
+App runtime/UI still share EL1. Native review shows scope, changed-row count and
+paged before/after values; diagnostics identify a failing batch row and step.
+Catalog v7, host validation, UART schema transport and checkpoints retain scope;
+older apps still mean one row. Formula correction cannot expand scope.
+
+Verified 94 Rust tests; host/kernel Clippy, formatting and Python syntax; real QEMU
+debug/release with full capacity, cancellation, both branch outcomes, hidden rows,
+last-row rollback, reviewed evolution, a distinct text/check app and exact recovery.
+Existing behavior/correction/demo-entry regressions pass. Console boot/protocol
+passes 37 checks per profile. Linux ARM64 Docker passes new batch checks and saved
+demo offline. Measured debug frame details and caveats are retained, not a universal
+stack safety claim. Evidence: evidence/2026-11-03-app-batches. No Meta calls yet in
+this increment. Next: frozen-source generation and evolution, at most three
+attempts per goal and six calls total, with all outcomes retained.

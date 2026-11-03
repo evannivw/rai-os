@@ -12,6 +12,9 @@ this increment does not wire them into isolated EL0 processes or add device driv
 
 ## What a button can express
 
+See [whole-table actions](APP_BATCHES.md) for the later explicit all-row scope;
+this page describes the row-local program language shared by both scopes.
+
 A records.local schema may have a behaviors array with at most two buttons. Each
 button has id, label, event: press and one to six ordered steps. A step has op,
 field, value, compare and skip. Keys reference fields in that same app and row.
@@ -198,3 +201,7 @@ review, guarded composed execution, unchanged rejected data and exact restart
 recovery. That live run did not need correction. See the separate
 [successful live evidence](evidence/2026-11-03-app-repair/live/README.md); the original
 failed run above remains preserved.
+
+Whole-table scope is now implemented in [APP_BATCHES.md](APP_BATCHES.md). Programs
+still read only their current row; this does not add cross-row references or
+external effects. Earlier per-row verification results above remain historical.

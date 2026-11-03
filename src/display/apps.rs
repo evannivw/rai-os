@@ -651,7 +651,11 @@ pub fn render(s: &mut Display, u: &Controller) {
                 }
                 wrap(
                     s,
-                    "One saved record. In order. False if skips steps. Any failure saves nothing.",
+                    if button.all_rows {
+                        "ALL saved records, including hidden rows. One transaction. Any failure saves nothing."
+                    } else {
+                        "One saved record. In order. False if skips steps. Any failure saves nothing."
+                    },
                     613,
                     3,
                 );
@@ -677,7 +681,11 @@ pub fn render(s: &mut Display, u: &Controller) {
                     number(s, button.steps().len() as i64, 42, y as i32 + 44);
                     text(
                         s,
-                        "steps / preview before applying",
+                        if button.all_rows {
+                            "steps / ALL records / preview"
+                        } else {
+                            "steps / this record / preview"
+                        },
                         65,
                         y as i32 + 44,
                         QUIET,
@@ -696,6 +704,10 @@ pub fn render(s: &mut Display, u: &Controller) {
                 if let Some(error) = u.behavior_error {
                     text(s, "Failed step:", 42, 590, QUIET);
                     number(s, i64::from(error.step), 160, 590);
+                    if u.behavior_failed_row > 0 {
+                        text(s, "Row:", 260, 590, QUIET);
+                        number(s, u.behavior_failed_row as i64, 310, 590);
+                    }
                     text(s, "Nothing saved.", 42, 614, WHITE);
                 }
                 action(s, "Preview changes >");
@@ -706,6 +718,9 @@ pub fn render(s: &mut Display, u: &Controller) {
                 && let Some(before) = a.row(u.row)
             {
                 text(s, u.behavior_label(), 42, 194, LIME);
+                if u.behavior_is_all() {
+                    text(s, "ALL rows", 360, 194, LIME);
+                }
                 for (i, field) in a.spec.fields().iter().enumerate() {
                     let y = 224 + i as i32 * 64;
                     text(s, field.label.text(), 42, y, WHITE);
@@ -720,17 +735,33 @@ pub fn render(s: &mut Display, u: &Controller) {
                         if before[i] == u.draft[i] { QUIET } else { LIME },
                     );
                 }
-                wrap(
-                    s,
+                if u.behavior_is_all() {
+                    text(s, "< Previous", 42, 625, LIME);
+                    text(s, "Row", 190, 625, QUIET);
+                    number(s, (u.row + 1) as i64, 220, 625);
+                    text(s, "/", 239, 625, QUIET);
+                    number(s, a.count() as i64, 252, 625);
+                    text(s, "Next >", 372, 625, LIME);
                     if u.message.text().is_empty() {
-                        "No changes saved yet. Confirm together, or leave this screen to cancel."
+                        number(s, u.behavior_changed as i64, 42, 656);
+                        text(s, "rows change. Nothing saved yet.", 62, 656, QUIET);
                     } else {
-                        u.message.text()
-                    },
-                    617,
-                    3,
-                );
-                action(s, "Apply all changes");
+                        wrap(s, u.message.text(), 650, 2);
+                    }
+                    action(s, "Apply entire table");
+                } else {
+                    wrap(
+                        s,
+                        if u.message.text().is_empty() {
+                            "No changes saved yet. Confirm together, or leave this screen to cancel."
+                        } else {
+                            u.message.text()
+                        },
+                        617,
+                        3,
+                    );
+                    action(s, "Apply all changes");
+                }
             }
         }
         Mode::Transfer => {

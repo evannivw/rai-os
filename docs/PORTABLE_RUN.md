@@ -143,3 +143,8 @@ It supplies disclosed invalid/corrected proposals to the real Rust validator and
 QEMU guest. This checks correction limits, stale/cancelled requests, guarded
 execution and recovery; it does not make live Meta calls. See
 [APP_REPAIR.md](APP_REPAIR.md) for native commands and the separate live check.
+
+
+`docker run --rm --network none rai-os-demo apps-batches-verify` checks the generic
+whole-table programs, reviewed evolution and recovery using disclosed offline
+schemas. See [APP_BATCHES.md](APP_BATCHES.md) for the separate bounded live run.

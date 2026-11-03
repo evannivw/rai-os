@@ -115,6 +115,8 @@ and terminal edit locks; an eight-order workshop checks the full lifecycle.
 using typed assignments, calculations, conditions and forward branches. RAI-OS
 previews and validates all changes, then commits one row atomically after approval.
 These are reusable operations, not hardcoded applications.
+[Whole-table actions](docs/APP_BATCHES.md) compose the same operations across all
+saved rows, with per-row previews, one atomic commit and reviewed program updates.
 [Bounded correction](docs/APP_REPAIR.md) sends eligible formula errors back to Meta
 for up to two corrections, preserves app structure and permissions, and still
 requires guest validation and explicit approval before installation.

@@ -553,3 +553,21 @@ approval remain the installation boundary. No new unsafe or kernel mechanism.
 This verifies permitted syntax and structure, not the meaning of arbitrary user
 goals. The app controller/interpreter still share EL1, and the host is trusted.
 See [APP_REPAIR.md](APP_REPAIR.md) for bounds, stopping conditions and reproduction.
+
+
+## November 3: atomic whole-table behavior scope
+
+Buttons declare row or all scope; old saved definitions default to row. The same
+pure row interpreter evaluates each saved record. Preview validates the entire
+batch and returns its changed-row count. Confirmation validates again before a
+deterministic row-by-row commit and one revision increment. No whole-table scratch
+copy is retained. Correctness depends on row-local reads, deterministic evaluation
+and absence of concurrent runtime writers; cross-row operations would require a
+new transaction strategy. Terminal states block the batch before any write.
+
+The controller binds preview to the installed scope and revision; native rendering
+shows all-records authority, before/after values and a row pager. Model requests
+use catalog v7; host validation, transport and checkpoints preserve explicit all
+scope without changing older row encodings. Formula correction cannot expand
+scope. There is no new unsafe, kernel service, driver or process boundary. See
+[APP_BATCHES.md](APP_BATCHES.md) for the exact contract and verification.

@@ -6,6 +6,13 @@ pub const BUTTONS: usize = 2;
 pub const STEPS: usize = 6;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct BatchError {
+    /// One-based failing row, or zero for batch admission failure.
+    pub row: usize,
+    pub error: BehaviorError,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct BehaviorError {
     /// One-based failed instruction, or zero for request admission failure.
     pub step: u8,
@@ -190,6 +197,7 @@ impl Step {
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct Button {
+    pub all_rows: bool,
     pub id: Text<12>,
     pub label: Text<22>,
     pub event: Text<8>,
@@ -198,6 +206,7 @@ pub struct Button {
 }
 impl Button {
     const EMPTY: Self = Self {
+        all_rows: false,
         id: Text::EMPTY,
         label: Text::EMPTY,
         event: Text::EMPTY,
@@ -214,6 +223,15 @@ impl Button {
             event: Text::new(event)?,
             ..Self::EMPTY
         })
+    }
+    #[cfg(not(target_os = "none"))]
+    pub fn with_scope(mut self, scope: &str) -> Result<Self, &'static str> {
+        self.all_rows = match scope {
+            "row" => false,
+            "all" => true,
+            _ => return Err("behavior_bad_scope"),
+        };
+        Ok(self)
     }
     pub fn steps(&self) -> &[Step] {
         &self.steps[..self.len]
@@ -293,6 +311,20 @@ impl Behaviors {
         }
         self.buttons[self.len] = button;
         self.len += 1;
+        Ok(())
+    }
+    pub fn set_scope(&mut self, id: &str, scope: &str) -> Result<(), &'static str> {
+        let button = self.buttons[..self.len]
+            .iter_mut()
+            .find(|b| b.id.text() == id)
+            .ok_or("behavior_unknown_button")?;
+        // Parse before changing the stored button.
+        let all_rows = match scope {
+            "row" => false,
+            "all" => true,
+            _ => return Err("behavior_bad_scope"),
+        };
+        button.all_rows = all_rows;
         Ok(())
     }
     pub fn add_step(&mut self, id: &str, step: Step) -> Result<(), &'static str> {
@@ -665,5 +697,155 @@ mod tests {
                 .ends_with("; behaviors=")
         );
         assert!(core::mem::size_of::<Behaviors>() <= 2048);
+    }
+    #[test]
+    fn all_rows_preview_branches_and_one_revision_commit_at_capacity() {
+        let mut s = spec();
+        s.behaviors
+            .add(
+                button(
+                    "batch",
+                    &[
+                        step("if", "stock", "2", "ge", 3),
+                        step("calculate", "stock", "$stock-2", "", 0),
+                        step("calculate", "moved", "$moved+2", "", 0),
+                        step("set", "status", "moved", "", 0),
+                    ],
+                )
+                .with_scope("all")
+                .unwrap(),
+            )
+            .unwrap();
+        let mut r = Runtime::new();
+        let slot = r.install(&s, r.revision(), None).unwrap();
+        assert_eq!(
+            r.preview_behavior_all(slot, "batch", r.revision())
+                .unwrap_err()
+                .error
+                .code,
+            "behavior_empty_batch"
+        );
+        for i in 0..crate::microapp::ROWS {
+            let mut values = r.app(slot).unwrap().defaults();
+            values[1] = integer(i as i32);
+            r.save(slot, None, &values).unwrap();
+        }
+        let rev = r.revision();
+        assert_eq!(r.preview_behavior_all(slot, "batch", rev), Ok(6));
+        assert_eq!(r.revision(), rev);
+        for i in 0..8 {
+            assert_eq!(
+                r.app(slot).unwrap().row(i).unwrap()[1].text(),
+                i.to_string()
+            );
+        }
+        assert_eq!(
+            r.run_behavior(slot, 0, "batch", rev).unwrap_err().code,
+            "behavior_scope_required"
+        );
+        r.run_behavior_all(slot, "batch", rev).unwrap();
+        assert_eq!(r.revision(), rev + 1);
+        for i in 0..8 {
+            let v = r.app(slot).unwrap().row(i).unwrap();
+            assert_eq!(v[1].text(), (if i < 2 { i } else { i - 2 }).to_string());
+            assert_eq!(v[2].text(), if i < 2 { "0" } else { "2" });
+            assert_eq!(v[4].text(), if i < 2 { "normal" } else { "moved" });
+            assert_eq!(v[5].text(), i.to_string());
+        }
+        assert_eq!(
+            r.run_behavior_all(slot, "batch", rev)
+                .unwrap_err()
+                .error
+                .code,
+            "app_stale_revision"
+        );
+    }
+    #[test]
+    fn late_row_errors_rollback_the_entire_batch_and_terminal_locks_apply() {
+        for (operation, code) in [
+            (
+                step("require", "stock", "1", "ge", 0),
+                "behavior_condition_failed",
+            ),
+            (
+                step("calculate", "moved", "10/$stock", "", 0),
+                "formula_div_zero",
+            ),
+            (
+                step("calculate", "moved", "2147483647+$stock", "", 0),
+                "formula_overflow",
+            ),
+        ] {
+            let mut s = spec();
+            s.behaviors
+                .add(
+                    button(
+                        "batch",
+                        &[step("set", "status", "staged", "", 0), operation],
+                    )
+                    .with_scope("all")
+                    .unwrap(),
+                )
+                .unwrap();
+            let mut r = Runtime::new();
+            let slot = r.install(&s, r.revision(), None).unwrap();
+            for i in 0..8 {
+                let mut v = r.app(slot).unwrap().defaults();
+                v[1] = Text::new(if code == "formula_overflow" {
+                    if i == 7 { "1" } else { "0" }
+                } else if i == 7 {
+                    "0"
+                } else {
+                    "5"
+                })
+                .unwrap();
+                r.save(slot, None, &v).unwrap();
+            }
+            let before = *r.app(slot).unwrap();
+            let rev = r.revision();
+            let error = r.run_behavior_all(slot, "batch", rev).unwrap_err();
+            assert_eq!(error.row, 8);
+            assert_eq!(error.error.step, 2);
+            assert_eq!(error.error.code, code);
+            assert_eq!(r.revision(), rev);
+            for i in 0..8 {
+                assert!(r.app(slot).unwrap().row(i) == before.row(i));
+            }
+        }
+        let mut s = spec();
+        s.workflow = Workflow::new("open").unwrap();
+        s.workflow
+            .add(Action::new("close", "Close", "open", "closed", "", "none", 0).unwrap())
+            .unwrap();
+        s.behaviors
+            .add(
+                button("batch", &[step("set", "status", "staged", "", 0)])
+                    .with_scope("all")
+                    .unwrap(),
+            )
+            .unwrap();
+        s.behaviors
+            .add(button("row", &[step("set", "status", "local", "", 0)]))
+            .unwrap();
+        let (mut r, slot) = setup(&s);
+        let v = r.app(slot).unwrap().defaults();
+        r.save(slot, None, &v).unwrap();
+        r.apply_action(slot, 1, "close", r.revision()).unwrap();
+        let rev = r.revision();
+        let error = r.run_behavior_all(slot, "batch", rev).unwrap_err();
+        assert_eq!(error.row, 2);
+        assert_eq!(error.error.code, "workflow_closed");
+        assert_eq!(cell(&r, slot, 4), "normal");
+        assert_eq!(r.revision(), rev);
+        assert_eq!(
+            r.run_behavior_all(slot, "row", rev).unwrap_err().error.code,
+            "behavior_scope_required"
+        );
+        assert!(
+            Button::new("bad", "Bad", "press")
+                .unwrap()
+                .with_scope("filtered")
+                .is_err()
+        );
     }
 }

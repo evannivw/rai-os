@@ -1,0 +1,28 @@
+{
+  "profile": "Rust 1.90.0 dev opt-level=1 guest-display",
+  "kernel_stack_bytes": 65536,
+  "frames": {
+    "Controller3key": 1296,
+    "Controller16preview_behavior": 432,
+    "Controller12run_behavior": 784,
+    "Controller7execute": 7920,
+    "Console11app_command": 4048,
+    "console14create_console": 3520,
+    "console3run": 39984,
+    "Step7program": 592,
+    "Button5check": 1232,
+    "Button7preview": 2112,
+    "Spec7program": 608,
+    "Spec11materialize": 1984,
+    "Runtime16preview_behavior": 80,
+    "Runtime20preview_behavior_all": 1072,
+    "kernel_main": 192
+  },
+  "known_conservative_action_sum": 61904,
+  "notes": [
+    "Measured emitted assembly CFA offsets; not a whole-program worst-case proof.",
+    "The sum includes mutually exclusive check/materialize paths, but excludes recursive parser and indirect/standard callees.",
+    "Constant scratch space across rows; runtime all-row commit is inlined into the controller in this profile.",
+    "No stack limit increase or unsafe addition."
+  ]
+}

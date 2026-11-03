@@ -220,3 +220,8 @@ arithmetic expressions and its reason; it cannot remove guards, change permissio
 or alter application structure. Cancellation and stale state stop further calls,
 and installation still requires guest validation and review. See
 [APP_REPAIR.md](APP_REPAIR.md) for the exact limits and independent checks.
+
+
+[Whole-table actions](APP_BATCHES.md) extend the same button language with explicit
+all-row scope. Users can inspect each candidate before one atomic confirmation;
+older definitions retain single-row behavior. This adds no model access to rows.

@@ -6,7 +6,7 @@ mod behavior;
 mod formula;
 #[path = "microapp_workflow.rs"]
 mod workflow;
-pub use behavior::{BehaviorError, Behaviors, Button, Step};
+pub use behavior::{BatchError, BehaviorError, Behaviors, Button, Step};
 pub use workflow::{Action, Workflow};
 pub const APPS: usize = 3;
 pub const FIELDS: usize = 6;
@@ -401,6 +401,9 @@ impl fmt::Display for Spec {
                 step.value.hex(f)?;
                 write!(f, "^{}^{}", step.compare.text(), step.skip)?;
             }
+            if button.all_rows {
+                f.write_str("~all")?;
+            }
         }
         Ok(())
     }
@@ -749,8 +752,90 @@ impl Runtime {
         id: &str,
         base: u32,
     ) -> Result<(), BehaviorError> {
+        if self
+            .app(index)
+            .and_then(|a| {
+                a.spec
+                    .behaviors
+                    .buttons()
+                    .iter()
+                    .find(|b| b.id.text() == id)
+            })
+            .is_some_and(|b| b.all_rows)
+        {
+            return Err(BehaviorError::admission("behavior_scope_required"));
+        }
         let candidate = self.preview_behavior(index, row, id, base)?;
         self.apps[index].rows[row] = candidate;
+        self.revision += 1;
+        Ok(())
+    }
+    /// Validate every saved row with constant scratch space. Conditions can skip
+    /// writes on a row, but a failed requirement aborts the whole batch.
+    pub fn preview_behavior_all(
+        &self,
+        index: usize,
+        id: &str,
+        base: u32,
+    ) -> Result<usize, BatchError> {
+        let admission = |code| BatchError {
+            row: 0,
+            error: BehaviorError::admission(code),
+        };
+        if base != self.revision {
+            return Err(admission("app_stale_revision"));
+        }
+        let app = self.app(index).ok_or(admission("app_not_found"))?;
+        let button = app
+            .spec
+            .behaviors
+            .buttons()
+            .iter()
+            .find(|b| b.id.text() == id)
+            .ok_or(admission("behavior_unknown_button"))?;
+        if !button.all_rows {
+            return Err(admission("behavior_scope_required"));
+        }
+        if app.count == 0 {
+            return Err(admission("behavior_empty_batch"));
+        }
+        let mut changed = 0;
+        for row in 0..app.count {
+            let candidate = self
+                .preview_behavior(index, row, id, base)
+                .map_err(|error| BatchError {
+                    row: row + 1,
+                    error,
+                })?;
+            changed += usize::from(candidate != app.rows[row]);
+        }
+        Ok(changed)
+    }
+    pub fn run_behavior_all(
+        &mut self,
+        index: usize,
+        id: &str,
+        base: u32,
+    ) -> Result<(), BatchError> {
+        self.preview_behavior_all(index, id, base)?;
+        let app = &mut self.apps[index];
+        let button = app
+            .spec
+            .behaviors
+            .buttons()
+            .iter()
+            .find(|b| b.id.text() == id)
+            .unwrap();
+        // The first pass evaluated every row before any mutation. Programs are
+        // pure, row-local and deterministic, with no cross-row reads or effects.
+        // Therefore writing an earlier row cannot change a later evaluation.
+        // Keep this invariant if the language grows: cross-row reads would need
+        // a different transaction strategy. No interrupts mutate this runtime.
+        for row in &mut app.rows[..app.count] {
+            *row = button
+                .preview(&app.spec, row)
+                .expect("previously validated batch row");
+        }
         self.revision += 1;
         Ok(())
     }

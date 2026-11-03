@@ -43,6 +43,8 @@ pub struct Controller {
     pub pending: Spec,
     pub import: ImportBatch,
     pub behavior_error: Option<BehaviorError>,
+    pub behavior_failed_row: usize,
+    pub behavior_changed: usize,
     behavior_base: u32,
     behavior_id: Text<12>,
     importing: bool,
@@ -151,6 +153,8 @@ impl Controller {
             pending: Spec::EMPTY,
             import: ImportBatch::EMPTY,
             behavior_error: None,
+            behavior_failed_row: 0,
+            behavior_changed: 0,
             behavior_base: 0,
             behavior_id: Text::EMPTY,
             importing: false,
@@ -177,6 +181,15 @@ impl Controller {
                     .find(|b| b.id == self.behavior_id)
             })
             .map_or("Button", |b| b.label.text())
+    }
+    pub fn behavior_is_all(&self) -> bool {
+        self.runtime.app(self.selected).is_some_and(|a| {
+            a.spec
+                .behaviors
+                .buttons()
+                .iter()
+                .any(|b| b.id == self.behavior_id && b.all_rows)
+        })
     }
     fn state(&self) -> &'static str {
         match self.mode {
@@ -289,6 +302,9 @@ impl Controller {
             } else {
                 1012
             });
+        }
+        if self.mode == Mode::BehaviorPreview && self.behavior_is_all() && (617..649).contains(&y) {
+            return self.key(if x < 240 { 1005 } else { 1006 });
         }
         if self.mode == Mode::Behaviors && (238..426).contains(&y) {
             let index = (y - 238) / 94;
@@ -507,6 +523,7 @@ impl Controller {
                     self.focus = 0;
                     self.message = Text::EMPTY;
                     self.behavior_error = None;
+                    self.behavior_failed_row = 0;
                     return Ok(Reply::State("behaviors"));
                 }
                 1013 => {
@@ -773,6 +790,29 @@ impl Controller {
                     _ => {}
                 }
             }
+            Mode::BehaviorPreview if self.behavior_is_all() && matches!(key, 1005 | 1006 | 9) => {
+                let count = self
+                    .runtime
+                    .app(self.selected)
+                    .ok_or("app_not_found")?
+                    .count();
+                let row = if key == 1005 {
+                    self.row.saturating_sub(1)
+                } else {
+                    (self.row + 1).min(count - 1)
+                };
+                let values = self
+                    .runtime
+                    .preview_behavior(
+                        self.selected,
+                        row,
+                        self.behavior_id.text(),
+                        self.behavior_base,
+                    )
+                    .map_err(|e| e.code)?;
+                self.row = row;
+                self.draft = values;
+            }
             Mode::BehaviorPreview if key == 13 => {
                 let id = self.behavior_id;
                 self.run_behavior(id.text(), self.behavior_base)?;
@@ -794,9 +834,32 @@ impl Controller {
     }
     fn preview_behavior(&mut self, id: &str, base: u32) -> Result<(), &'static str> {
         self.behavior_error = None;
+        self.behavior_failed_row = 0;
         if self.mode != Mode::Behaviors {
             self.behavior_error = Some(BehaviorError::admission("behavior_view_required"));
             return Err("behavior_view_required");
+        }
+        self.behavior_failed_row = 0;
+        self.behavior_changed = 0;
+        let all = self.runtime.app(self.selected).is_some_and(|a| {
+            a.spec
+                .behaviors
+                .buttons()
+                .iter()
+                .any(|b| b.id.text() == id && b.all_rows)
+        });
+        if all {
+            match self.runtime.preview_behavior_all(self.selected, id, base) {
+                Ok(changed) => {
+                    self.behavior_changed = changed;
+                    self.row = 0;
+                }
+                Err(failed) => {
+                    self.behavior_failed_row = failed.row;
+                    self.behavior_error = Some(failed.error);
+                    return Err(failed.error.code);
+                }
+            }
         }
         match self
             .runtime
@@ -818,6 +881,7 @@ impl Controller {
     }
     fn run_behavior(&mut self, id: &str, base: u32) -> Result<(), &'static str> {
         self.behavior_error = None;
+        self.behavior_failed_row = 0;
         if self.mode != Mode::BehaviorPreview
             || self.behavior_id.text() != id
             || self.behavior_base != base
@@ -825,7 +889,18 @@ impl Controller {
             self.behavior_error = Some(BehaviorError::admission("behavior_preview_required"));
             return Err("behavior_preview_required");
         }
-        match self.runtime.run_behavior(self.selected, self.row, id, base) {
+        self.behavior_failed_row = 0;
+        let result = if self.behavior_is_all() {
+            self.runtime
+                .run_behavior_all(self.selected, id, base)
+                .map_err(|failed| {
+                    self.behavior_failed_row = failed.row;
+                    failed.error
+                })
+        } else {
+            self.runtime.run_behavior(self.selected, self.row, id, base)
+        };
+        match result {
             Ok(()) => {
                 self.mode = Mode::Behaviors;
                 self.message = Text::new("All changes applied locally.")?;
@@ -926,6 +1001,11 @@ impl Controller {
                 self.pending
                     .behaviors
                     .add(Button::new(id, decode::<22>(label)?.text(), event)?)?;
+            }
+            "app.button.scope" => {
+                let [request, id, scope] = parts(arg)?;
+                self.check_request(request)?;
+                self.pending.behaviors.set_scope(id, scope)?;
             }
             "app.step" => {
                 let [request, button, op, field, value, compare, skip] = parts(arg)?;
@@ -1148,7 +1228,11 @@ impl core::fmt::Display for BehaviorStatus<'_> {
             "step={}; error={}",
             error.map_or(0, |e| e.step),
             error.map_or("", |e| e.code)
-        )
+        )?;
+        if self.0.behavior_failed_row > 0 {
+            write!(f, "; row={}", self.0.behavior_failed_row)?;
+        }
+        Ok(())
     }
 }
 

@@ -37,7 +37,7 @@ The validator recomputes the rejected proposal's error against the original
 request. Feedback cannot simply label a different failure as repairable.
 A repair may change only a calculated field's `formula`, a `calculate` step's
 `value`, and the human-readable proposal reason. Original field identities,
-types/defaults, capabilities, workflow, guards, button definitions, step order,
+types/defaults, capabilities, workflow, guards, button definitions/scope, step order,
 branch spans and all other values must remain identical. A candidate that removes
 a `require` guard to avoid an error fails `app_repair_scope_denied`.
 

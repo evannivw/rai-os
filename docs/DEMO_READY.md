@@ -155,3 +155,10 @@ three attempts per goal and eight per session, with every response retained.
 Eligible expression errors may be corrected; changed guards or permissions are
 rejected, and a valid result still requires approval. The saved showcase remains
 offline and unchanged. Do not present its recovery as a new model generation.
+
+
+The [whole-table action extension](APP_BATCHES.md) adds a separate demonstration
+beat: describe a conditional action, inspect different row previews, apply once,
+then change the program by prompt while retaining data. Existing saved showcase
+fixtures remain unchanged. Live evidence for this extension belongs to its own
+reports, not the earlier saved workshop generation.

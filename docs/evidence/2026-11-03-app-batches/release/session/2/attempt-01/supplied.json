@@ -1,0 +1,118 @@
+{
+  "request_id": 2,
+  "base_revision": 1,
+  "decision": "install",
+  "spec": {
+    "id": "batchdesk",
+    "title": "Batch desk",
+    "capability": "records.local",
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "kind": "text",
+        "required": true,
+        "default": ""
+      },
+      {
+        "key": "stock",
+        "label": "Stock",
+        "kind": "number",
+        "required": true,
+        "default": "0"
+      },
+      {
+        "key": "moved",
+        "label": "Moved",
+        "kind": "number",
+        "required": true,
+        "default": "0"
+      },
+      {
+        "key": "flag",
+        "label": "Flag",
+        "kind": "check",
+        "required": true,
+        "default": "false"
+      },
+      {
+        "key": "status",
+        "label": "Status",
+        "kind": "text",
+        "required": true,
+        "default": "ready"
+      },
+      {
+        "key": "total",
+        "label": "Total",
+        "kind": "calculated",
+        "required": true,
+        "default": "",
+        "formula": "$stock+$moved"
+      }
+    ],
+    "filter_key": "flag",
+    "filter_label": "Pending",
+    "behaviors": [
+      {
+        "id": "move",
+        "label": "Move all",
+        "event": "press",
+        "scope": "all",
+        "steps": [
+          {
+            "op": "if",
+            "field": "stock",
+            "value": "2",
+            "compare": "ge",
+            "skip": 3
+          },
+          {
+            "op": "calculate",
+            "field": "stock",
+            "value": "$stock-2",
+            "compare": "",
+            "skip": 0
+          },
+          {
+            "op": "calculate",
+            "field": "moved",
+            "value": "$moved+2",
+            "compare": "",
+            "skip": 0
+          },
+          {
+            "op": "set",
+            "field": "flag",
+            "value": "true",
+            "compare": "",
+            "skip": 0
+          }
+        ]
+      },
+      {
+        "id": "reject",
+        "label": "Check all",
+        "event": "press",
+        "scope": "all",
+        "steps": [
+          {
+            "op": "set",
+            "field": "status",
+            "value": "staged",
+            "compare": "",
+            "skip": 0
+          },
+          {
+            "op": "require",
+            "field": "name",
+            "value": "Blocked",
+            "compare": "ne",
+            "skip": 0
+          }
+        ]
+      }
+    ]
+  },
+  "reason": "Disclosed offline proposal for correction verification."
+}

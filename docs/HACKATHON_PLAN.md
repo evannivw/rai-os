@@ -470,3 +470,18 @@ live correction was needed. Preserve the earlier failed run and the distinction
 between offline correction and live generation. The next delivery priority is to
 rehearse the existing app-creation/approval/local-execution story and finish the
 three-minute video; this result is not a reason to add another subsystem first.
+
+
+## November 3: user-requested capability expansion for the demonstration
+
+The user asked to continue adding general capabilities without hardcoded apps.
+Extend reusable button programs with explicit whole-table scope, atomic admission,
+per-row preview and reviewed evolution. Keep the existing app/field/record bounds
+and kernel mechanisms. Verify a second unrelated schema with the same runtime.
+
+Freeze source after offline QEMU debug/release and Linux checks, then verify two
+live goals: generation and behavior evolution over retained records. Limit each
+goal to three attempts (six total), retain all failures and use no fixture fallback.
+The demo should show the user's changed intent becoming a different local program,
+with review and data continuity. Final video/submission remains necessary; do not
+claim an unlimited app platform, real phone support or a measured performance win.

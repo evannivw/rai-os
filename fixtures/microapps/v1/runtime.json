@@ -1,5 +1,5 @@
 {
-  "runtime": "rai-declarative-6",
+  "runtime": "rai-declarative-7",
   "limits": {
     "apps": 3,
     "fields": 6,
@@ -76,13 +76,13 @@
     "execution": "Every successful action advances the runtime revision once; invalid/stale/out-of-order actions do nothing."
   },
   "behaviors": {
-    "scope": "Optional records.local buttons over one saved row. Each press stages a bounded program, previews the candidate and commits only on explicit confirmation at the same revision. No native code or external effects.",
+    "scope": "Optional records.local buttons, scope row (default) or all. All means every saved row, including hidden rows; one failing row aborts the entire batch. Each row runs independently, with no cross-row reads. Preview every candidate and confirm at the same revision. No native code or external effects.",
     "limits": {
       "buttons_per_app": 2,
       "steps_per_button": 6,
       "expression_ascii_bytes": 64
     },
-    "button": "id, label, event=press, steps. Unique IDs. At least one mutating step per button. Installation and restore never run buttons.",
+    "button": "id, label, event=press, scope=row|all, steps. Unique IDs. At least one mutating step. Choose all only for explicit whole-table intent. Missing scope in older saved apps means row. Installation and restore never run buttons.",
     "step": "Every step has op, field, value, compare, skip. All references and branches are validated, including skipped steps.",
     "operations": {
       "set": "Set an editable field to a typed literal of at most 32 printable ASCII bytes. compare empty, skip 0.",
@@ -91,7 +91,7 @@
       "require": "Compare a field to a typed literal. Failure aborts the whole press. Numeric eq/ne/lt/le/gt/ge; text/check eq/ne. skip 0.",
       "if": "Compare a field to a typed literal. True continues; false skips the next skip steps. skip 1..remaining; forward only. Same comparison rules as require."
     },
-    "execution": "Prior writes are visible to later steps; calculated fields refresh after each write. Failure at any step leaves row and revision unchanged. No loops, jumps backward, cross-row or cross-app writes. Terminal workflow records reject behavior edits.",
+    "execution": "Prior writes are visible to later steps on the same row; calculated fields refresh after each write. Failure leaves every affected row and revision unchanged. All-row success advances revision once. No unbounded loops, backward jumps, cross-row reads or cross-app writes. Any terminal workflow record blocks the batch. A conditional no-op is valid; confirmation still advances revision once.",
     "updates": "Reviewed compatible schema updates may replace behaviors; preserve existing behaviors unless the user requests a change. Existing workflow definitions and field identity rules still apply."
   }
 }

@@ -218,6 +218,16 @@ mod tests {
     }
 
     #[test]
+    fn correction_cannot_expand_button_scope() {
+        let old = invalid();
+        let mut candidate = corrected(&old);
+        candidate.spec.as_mut().unwrap().behaviors[0].scope = "all".into();
+        assert_eq!(
+            check_scope(&old, &candidate),
+            Err("app_repair_scope_denied")
+        );
+    }
+    #[test]
     fn repair_cannot_weaken_or_replace_app_structure_even_while_invalid() {
         let original = invalid();
         let encoded = serde_json::to_value(&original).unwrap();

@@ -1,0 +1,156 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Display ready: 480x800 guest framebuffer
+Console ready: type help for commands
+@rai1	1	ok	state=home
+@rai1	2	ok	state=home
+@rai1	3	ok	revision=1; apps=-
+@rai1	4	ok	state=home
+@rai1	5	ok	state=home
+@rai1	6	ok	state=compose
+@rai1	7	ok	state=compose
+@rai1	8	ok	state=compose
+@rai1	9	ok	state=compose
+@rai1	10	ok	state=compose
+@rai1	11	ok	state=compose
+@rai1	12	ok	state=compose
+@rai1	13	ok	state=compose
+@rai1	14	ok	state=compose
+@rai1	15	ok	state=compose
+@rai1	16	ok	state=compose
+@rai1	17	ok	state=compose
+@rai1	18	ok	state=compose
+@rai1	19	ok	state=compose
+@rai1	20	ok	state=compose
+@rai1	21	ok	state=compose
+@rai1	22	ok	state=compose
+@rai1	23	ok	state=compose
+@rai1	24	ok	submit=3; revision=1; target=-; prompt=526573746f726520736176656420617070
+@rai1	25	ok	state=thinking
+@rai1	26	ok	state=thinking
+@rai1	27	ok	state=thinking
+@rai1	28	ok	state=thinking
+@rai1	29	ok	state=thinking
+@rai1	30	ok	state=thinking
+@rai1	31	ok	state=thinking
+@rai1	32	ok	state=thinking
+@rai1	33	ok	state=thinking
+@rai1	34	ok	state=thinking
+@rai1	35	ok	state=thinking
+@rai1	36	ok	state=thinking
+@rai1	37	ok	state=thinking
+@rai1	38	ok	state=thinking
+@rai1	39	ok	state=thinking
+@rai1	40	ok	state=thinking
+@rai1	41	ok	state=review
+@rai1	42	ok	state=behavior_review
+@rai1	43	ok	state=behavior_review
+@rai1	44	ok	state=form
+@rai1	45	ok	state=form
+@rai1	46	ok	state=form
+@rai1	47	ok	state=form
+@rai1	48	ok	state=form
+@rai1	49	ok	state=form
+@rai1	50	ok	state=records
+@rai1	51	ok	state=form
+@rai1	52	ok	state=form
+@rai1	53	ok	state=form
+@rai1	54	ok	state=form
+@rai1	55	ok	state=form
+@rai1	56	ok	state=form
+@rai1	57	ok	state=records
+@rai1	58	ok	state=form
+@rai1	59	ok	state=form
+@rai1	60	ok	state=form
+@rai1	61	ok	state=form
+@rai1	62	ok	state=form
+@rai1	63	ok	state=form
+@rai1	64	ok	state=records
+@rai1	65	ok	state=form
+@rai1	66	ok	state=form
+@rai1	67	ok	state=form
+@rai1	68	ok	state=form
+@rai1	69	ok	state=form
+@rai1	70	ok	state=form
+@rai1	71	ok	state=records
+@rai1	72	ok	state=form
+@rai1	73	ok	state=form
+@rai1	74	ok	state=form
+@rai1	75	ok	state=form
+@rai1	76	ok	state=form
+@rai1	77	ok	state=form
+@rai1	78	ok	state=records
+@rai1	79	ok	state=form
+@rai1	80	ok	state=form
+@rai1	81	ok	state=form
+@rai1	82	ok	state=form
+@rai1	83	ok	state=form
+@rai1	84	ok	state=form
+@rai1	85	ok	state=records
+@rai1	86	ok	state=form
+@rai1	87	ok	state=form
+@rai1	88	ok	state=form
+@rai1	89	ok	state=form
+@rai1	90	ok	state=form
+@rai1	91	ok	state=form
+@rai1	92	ok	state=records
+@rai1	93	ok	state=form
+@rai1	94	ok	state=form
+@rai1	95	ok	state=form
+@rai1	96	ok	state=form
+@rai1	97	ok	state=form
+@rai1	98	ok	state=form
+@rai1	99	ok	state=records
+@rai1	100	ok	id=batchdesk; title=4261746368206465736b; capability=records.local; filter=flag; filter_label=50656e64696e67; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~,flag~check~1~466c6167~66616c7365~,status~text~1~537461747573~7265616479~,total~calculated~1~546f74616c~~2473746f636b2b246d6f766564; initial=; actions=; behaviors=move~4d6f766520616c6c~press~calculate^moved^246d6f7665642b3130^^0~all,reject~436865636b20616c6c~press~set^status^737461676564^^0/require^name^426c6f636b6564^ne^0~all
+@rai1	101	ok	id=batchdesk; version=1; count=8; rows=4368616e676564,30,3134,74727565,7265616479,3134|4974656d2032,30,3131,66616c7365,7265616479,3131|4974656d2033,33,3136,74727565,7265616479,3139|4974656d2034,31,3133,66616c7365,7265616479,3134|4974656d2035,31,3138,74727565,7265616479,3139|4974656d2036,30,3137,74727565,7265616479,3137|4974656d2037,34,3230,74727565,7265616479,3234|426c6f636b6564,31,3139,74727565,7265616479,3230; states=,,,,,,,
+@rai1	102	ok	state=home
+@rai1	103	ok	state=compose
+@rai1	104	ok	state=compose
+@rai1	105	ok	state=compose
+@rai1	106	ok	state=compose
+@rai1	107	ok	state=compose
+@rai1	108	ok	state=compose
+@rai1	109	ok	state=compose
+@rai1	110	ok	state=compose
+@rai1	111	ok	state=compose
+@rai1	112	ok	state=compose
+@rai1	113	ok	state=compose
+@rai1	114	ok	state=compose
+@rai1	115	ok	state=compose
+@rai1	116	ok	state=compose
+@rai1	117	ok	state=compose
+@rai1	118	ok	state=compose
+@rai1	119	ok	state=compose
+@rai1	120	ok	state=compose
+@rai1	121	ok	submit=5; revision=10; target=-; prompt=526573746f726520736176656420617070
+@rai1	122	ok	state=thinking
+@rai1	123	ok	state=thinking
+@rai1	124	ok	state=thinking
+@rai1	125	ok	state=thinking
+@rai1	126	ok	state=thinking
+@rai1	127	ok	state=thinking
+@rai1	128	ok	state=thinking
+@rai1	129	ok	state=review
+@rai1	130	ok	state=behavior_review
+@rai1	131	ok	state=form
+@rai1	132	ok	state=form
+@rai1	133	ok	state=form
+@rai1	134	ok	state=records
+@rai1	135	ok	state=form
+@rai1	136	ok	state=form
+@rai1	137	ok	state=form
+@rai1	138	ok	state=records
+@rai1	139	ok	id=reviewqueue; title=526576696577207175657565; capability=records.local; filter=; filter_label=; fields=title~text~1~5469746c65~~,approved~check~1~417070726f766564~66616c7365~; initial=; actions=; behaviors=approve~417070726f766520616c6c~press~set^approved^74727565^^0~all
+@rai1	140	ok	id=reviewqueue; version=1; count=2; rows=446f632030,74727565|446f632031,74727565; states=,
+@rai1	141	ok	state=records
+@rai1	142	ok	state=home
+@rai1	143	ok	revision=13; apps=batchdesk:1:8:4261746368206465736b,reviewqueue:1:2:526576696577207175657565
+@rai1	144	ok	state=home
+@rai1	145	ok	revision=13; apps=batchdesk:1:8:4261746368206465736b,reviewqueue:1:2:526576696577207175657565
+@rai1	146	ok	id=batchdesk; title=4261746368206465736b; capability=records.local; filter=flag; filter_label=50656e64696e67; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~,flag~check~1~466c6167~66616c7365~,status~text~1~537461747573~7265616479~,total~calculated~1~546f74616c~~2473746f636b2b246d6f766564; initial=; actions=; behaviors=move~4d6f766520616c6c~press~calculate^moved^246d6f7665642b3130^^0~all,reject~436865636b20616c6c~press~set^status^737461676564^^0/require^name^426c6f636b6564^ne^0~all
+@rai1	147	ok	id=batchdesk; version=1; count=8; rows=4368616e676564,30,3134,74727565,7265616479,3134|4974656d2032,30,3131,66616c7365,7265616479,3131|4974656d2033,33,3136,74727565,7265616479,3139|4974656d2034,31,3133,66616c7365,7265616479,3134|4974656d2035,31,3138,74727565,7265616479,3139|4974656d2036,30,3137,74727565,7265616479,3137|4974656d2037,34,3230,74727565,7265616479,3234|426c6f636b6564,31,3139,74727565,7265616479,3230; states=,,,,,,,
+@rai1	148	ok	id=reviewqueue; title=526576696577207175657565; capability=records.local; filter=; filter_label=; fields=title~text~1~5469746c65~~,approved~check~1~417070726f766564~66616c7365~; initial=; actions=; behaviors=approve~417070726f766520616c6c~press~set^approved^74727565^^0~all
+@rai1	149	ok	id=reviewqueue; version=1; count=2; rows=446f632030,74727565|446f632031,74727565; states=,
+@rai1	150	ok	state=form
+@rai1	151	ok	state=table
+@rai1	152	ok	revision=13; apps=batchdesk:1:8:4261746368206465736b,reviewqueue:1:2:526576696577207175657565
+@rai1	153	ok	revision=13; apps=batchdesk:1:8:4261746368206465736b,reviewqueue:1:2:526576696577207175657565

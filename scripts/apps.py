@@ -36,12 +36,16 @@ def schema(g,app_id):
     if row.get('behaviors'):
         buttons=[]
         for item in row['behaviors'].split(','):
-            key,label,event,encoded=item.split('~')
+            parts=item.split('~')
+            key,label,event,encoded=parts[:4]
+            if len(parts) not in (4,5) or (len(parts)==5 and parts[4]!='all'):raise ValueError('Invalid behavior scope')
             steps=[]
             for entry in encoded.split('/'):
                 op,field,value,compare,skip=entry.split('^')
                 steps.append(dict(op=op,field=field,value=bytes.fromhex(value).decode('ascii'),compare=compare,skip=int(skip)))
-            buttons.append(dict(id=key,label=bytes.fromhex(label).decode('ascii'),event=event,steps=steps))
+            button=dict(id=key,label=bytes.fromhex(label).decode('ascii'),event=event,steps=steps)
+            if len(parts)==5:button['scope']='all'
+            buttons.append(button)
         result['behaviors']=buttons
     return result
 
@@ -67,6 +71,7 @@ def deliver(g,p):
         for a in flow['actions']:g.request('app.action',f"{rid}:{a['id']}:{a['label'].encode().hex()}:{a['from']}:{a['to']}:{a['guard_field']}:{a['guard_op']}:{a['guard_value']}")
     for button in s.get('behaviors',[]):
         g.request('app.button',f"{rid}:{button['id']}:{button['label'].encode().hex()}:{button['event']}")
+        if button.get('scope','row') != 'row':g.request('app.button.scope',f"{rid}:{button['id']}:{button['scope']}")
         for step in button['steps']:
             g.request('app.step',f"{rid}:{button['id']}:{step['op']}:{step['field']}:{step['value'].encode().hex()}:{step['compare']}:{step['skip']}")
     g.request('app.filter',f"{rid}:{s['filter_key']}:{s['filter_label'].encode().hex()}")

@@ -38,9 +38,17 @@ pub struct Step {
     pub compare: String,
     pub skip: usize,
 }
+fn row_scope() -> String {
+    "row".into()
+}
+fn is_row_scope(value: &str) -> bool {
+    value == "row"
+}
 #[derive(Deserialize, Serialize, Clone)]
 #[serde(deny_unknown_fields)]
 pub struct Button {
+    #[serde(default = "row_scope", skip_serializing_if = "is_row_scope")]
+    pub scope: String,
     pub id: String,
     pub label: String,
     pub event: String,
@@ -85,7 +93,8 @@ impl Spec {
             }
         }
         for button in &self.behaviors {
-            let mut b = microapp::Button::new(&button.id, &button.label, &button.event)?;
+            let mut b = microapp::Button::new(&button.id, &button.label, &button.event)?
+                .with_scope(&button.scope)?;
             for step in &button.steps {
                 b.add(microapp::Step::new(
                     &step.op,
@@ -368,6 +377,29 @@ mod tests {
         spec.checked().unwrap();
         assert!(spec.behaviors.is_empty());
         assert_eq!(serde_json::to_value(spec).unwrap(), old);
+    }
+    #[test]
+    fn behavior_scope_is_explicit_and_older_apps_keep_row_scope() {
+        let old = behavior_spec();
+        let spec: Spec = serde_json::from_value(old.clone()).unwrap();
+        assert_eq!(spec.behaviors[0].scope, "row");
+        assert!(!spec.checked().unwrap().behaviors.buttons()[0].all_rows);
+        assert!(
+            serde_json::to_value(&spec).unwrap()["behaviors"][0]
+                .get("scope")
+                .is_none()
+        );
+        let mut all = old.clone();
+        all["behaviors"][0]["scope"] = serde_json::json!("all");
+        let spec: Spec = serde_json::from_value(all).unwrap();
+        assert!(spec.checked().unwrap().behaviors.buttons()[0].all_rows);
+        assert!(spec.checked().unwrap().to_string().ends_with("~all"));
+        for scope in ["filtered", "system", "", "ALL"] {
+            let mut bad = old.clone();
+            bad["behaviors"][0]["scope"] = serde_json::json!(scope);
+            let bad: Spec = serde_json::from_value(bad).unwrap();
+            assert!(matches!(bad.checked(), Err("behavior_bad_scope")));
+        }
     }
     #[test]
     fn behavior_updates_are_reviewable_without_changing_existing_field_identity() {

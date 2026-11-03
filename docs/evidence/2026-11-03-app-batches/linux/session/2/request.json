@@ -1,0 +1,8 @@
+{
+  "request_id": 2,
+  "base_revision": 1,
+  "goal": "App: name, stock, moved. Button Move all: for every row, if stock>=2, stock=stock-2 and moved=moved+2. Defaults 0.",
+  "target": null,
+  "app_ids": [],
+  "record_count": 0
+}
