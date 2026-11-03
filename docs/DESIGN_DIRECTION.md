@@ -6,14 +6,14 @@ keyboard-like linework and recognizable applications. Keep native QEMU rendering
 as the product target; conversational interactive mockups only explore layouts.
 Example app names and rows in those mockups are illustrative, not new live evidence.
 
-## Recommended: Tactile Terminal
+## Initial proposal: Tactile Terminal (superseded by feedback)
 
 A quiet home screen with three application launchers, simple bracket monograms,
 a persistent prompt entry and one recent application. Use off-white primary text,
 muted readable secondary text, one pale green accent and fine structural lines.
 The prompt is the strongest action; applications remain easy to open without AI.
 Corners and brackets provide identity without a wall of decorative ASCII text.
-This best matches the user's stated mobile/terminal direction and the current
+The initial proposal was based on the user's mobile/terminal direction and the current
 three-app runtime capacity. Monograms derive from app metadata, not hardcoded
 application identities. Color, typography and hit targets must be translated to
 the actual framebuffer renderer and verified at its supported resolution.
@@ -51,3 +51,25 @@ chat transcript that displaces the installed applications.
 Do not add new kernel mechanisms for appearance alone. Native redesign is pending
 selection/implementation. No new model calls, OS behavior or performance claims
 are introduced by this design document.
+
+## Home-screen correction after user review
+
+The user found the initial home crowded and rejected putting the creation prompt
+on the landing screen. Home must prioritize finding and opening applications.
+Move prompt entry to a separate Create destination. Remove the marketing headline,
+recent-activity block and explanatory copy from Home. Keep a compact, predictable
+Home / Apps / Create navigation; Apps holds the searchable library.
+
+Three revised conversational concepts explore the same navigation:
+
+- Column (recommended for review): icon/name pairs connected by a fine vertical
+  line. All three current apps are visible without an extra navigation step.
+- Focus: one large app launcher at a time with previous/next controls. More distinct
+  visually, but opening another app can require additional interactions.
+- Shelf: three compact icon/name launchers above one horizontal rule. Familiar,
+  sparse and easy to scan, with less departure from existing launchers.
+
+These are unselected design proposals with illustrative app metadata. They do not
+increase the current runtime capacity or implement a new guest launcher. Keep
+application identity dynamic when implementing the chosen layout. The preview
+script passed syntax validation; rendered browser verification was not performed.

@@ -2977,3 +2977,12 @@ direction narration to DEMO_READY, with the required isolation/recovery distinct
 No code/runtime changes or API calls. Checked local documentation links and diff
 whitespace. The mockup script passed a syntax check; browser preview was blocked by
 the browser URL policy, so no rendered-layout verification is claimed.
+
+
+## 2026-11-03 — Separate home navigation from creation
+
+User feedback supersedes the prompt-led home proposal: remove the headline and
+activity block; put creation in its own screen. Recorded three simpler directions
+(Column, Focus, Shelf) and their navigation tradeoffs. Conversational previews are
+local simulations, not guest implementation. Documentation and whitespace checked;
+preview JavaScript passed syntax validation. No model calls or runtime changes.
