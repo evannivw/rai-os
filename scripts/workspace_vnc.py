@@ -62,8 +62,8 @@ def session(client,path,press,tap=None):
                 elif kind==4:
                     data=exact(client,7);key=struct.unpack('!I',data[3:])[0]
                     if data[0]:
-                        key={0xff0d:13,0xff08:8,0xff1b:27,0xff09:9,0xffbe:1001,0xffbf:1002,0xffc0:1003,0xffc1:1004,0xff52:1005,0xff54:1006,0xffc2:1007,0xff53:1008,0xff51:1009,0xffc3:1010}.get(key,key)
-                        if key in (8,9,13,27,1001,1002,1003,1004,1005,1006,1007,1008,1009,1010) or 32<=key<=126:press(key)
+                        key={0xff0d:13,0xff08:8,0xff1b:27,0xff09:9,0xffbe:1001,0xffbf:1002,0xffc0:1003,0xffc1:1004,0xff52:1005,0xff54:1006,0xffc2:1007,0xff53:1008,0xff51:1009,0xffc3:1010,0xffc4:1011,0xffc5:1012}.get(key,key)
+                        if key in (8,9,13,27,1001,1002,1003,1004,1005,1006,1007,1008,1009,1010,1011,1012) or 32<=key<=126:press(key)
                 elif kind==5:
                     mask,x,y=struct.unpack('!BHH',exact(client,5))
                     if mask&1 and not buttons&1:

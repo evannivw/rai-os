@@ -1,0 +1,32 @@
+{
+  "verified": true,
+  "live_meta_calls": 0,
+  "schema_source": "Prior Meta result d20f98f, restored without inference",
+  "checks": [
+    "Native preview and cancel; confirmed batch increments revision once and preserves existing rows",
+    "Export includes exact quoted text and derived results; repeated export does not overwrite",
+    "Later-row overflow, forged derived values, duplicate headers, malformed widths and capacity excess rejected unchanged",
+    "Full CSV round-trip accepted; duplicate, incomplete and cancelled staging rejected",
+    "Imported rows and formulas survive fresh QEMU recovery without inference"
+  ],
+  "final_rows": [
+    [
+      "Existing",
+      "1",
+      "50",
+      "50"
+    ],
+    [
+      "Cable, blue",
+      "3",
+      "125",
+      "375"
+    ],
+    [
+      "Adapter \"pro\"",
+      "2",
+      "80",
+      "160"
+    ]
+  ]
+}

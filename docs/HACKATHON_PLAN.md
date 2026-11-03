@@ -395,3 +395,13 @@ and recover the same results after reboot. The live check is capped at two calls
 from frozen source, with no retries; offline fixtures do not establish live success.
 This is bounded declarative app creation, not arbitrary native app compilation.
 Keep remaining delivery time for rehearsal, repository instructions and video.
+
+## November 3: show a complete evolving tool
+
+The demo now targets create -> reviewed data import -> schema evolution retaining
+records -> local edit -> CSV export -> reboot recovery. A quoting/profit example
+exercises generic primitives; it is not a built-in app. DEMO_JOURNEY.md specifies
+a three-minute sequence and a verifier with two capped live calls. Complete the
+live rehearsal before claiming it works, then prioritize the actual video and
+submission. User-mediated CSV exchange does not add model file access or guest
+persistent storage.

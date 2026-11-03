@@ -92,6 +92,9 @@ The launcher now includes app icons, search and guest-owned pointer navigation.
 Apps have a [table view with exact numeric totals](docs/APP_CAPABILITIES.md) and
 [dynamic calculated fields](docs/APP_FORMULAS.md): formulas belong to each generated
 app, execute locally, and survive saved-session recovery.
+[Reviewed CSV import/export](docs/APP_EXCHANGE.md) connects these tools to user
+data. The [three-minute demo journey](docs/DEMO_JOURNEY.md) covers creation, data,
+app evolution and recovery, with a reproducible QEMU verifier.
 A [ready-to-open saved showcase](docs/APP_CAPABILITIES.md#live-generation-and-a-ready-to-open-session)
 contains two previously Meta-generated apps and fictional data; restoration runs
 offline. It demonstrates usable local tools, not an Excel implementation or

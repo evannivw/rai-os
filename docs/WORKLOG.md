@@ -2563,3 +2563,32 @@ and actual native framebuffer captures are under
 This confirms these two development cases; it is not a general success-rate,
 novelty, isolation or runtime-speed claim. The final evidence commit changes only
 documentation/artifacts; executable sources remain the frozen tested version.
+
+## 2026-11-03 — Reviewed CSV exchange and complete demo rehearsal
+
+Added generic user-mediated CSV import/export for records.local apps. The native
+import/export toolbar and F7/F8 request a transfer through an explicitly selected
+host inbox/outbox. Import stages a bounded batch, validates all columns/rows and
+formula results, previews each incoming row, and appends only after native user
+approval. A whole batch increments the revision once; errors/cancellation leave
+all prior rows untouched. Export includes all saved inputs/derived results and
+publishes a complete new file without overwriting a destination. The host owns
+CSV/file I/O; Meta sees no file contents/paths and gets no new file capability.
+No unsafe, guest disk driver, process isolation or arbitrary native app execution
+was added. The existing checkpoint mechanism persists approved imports.
+
+Verification passed: 70 shared domain/host tests, formatting and Clippy with and
+without guest display and on the host; real QEMU debug/release exchange checks;
+release existing app/RFB and formula regressions; Linux ARM64 Docker exchange
+with network disabled. Checks covered quoted/reordered columns, native preview
+and cancel, all-or-nothing failure on a later row, forged calculated values,
+duplicate/incomplete/late frames, capacity limits, no-overwrite export, symlink
+input rejection and fresh-guest restoration. No physical Windows/phone test.
+Evidence is under evidence/2026-11-03-app-exchange/offline and portable.
+
+Added DEMO_JOURNEY.md and a separate create/import/evolve/export/reboot verifier.
+The disclosed offline rehearsal passed: two input rows total 535 cents; adding
+cost/profit fields preserves them; editing one cost yields profits 225 and 60,
+285 cents total, preserved in CSV and after reboot. This offline run uses example
+schemas and is not live Meta evidence. Freeze sources before the capped two-call
+live rehearsal. The planned three-minute video is documented, not yet recorded.

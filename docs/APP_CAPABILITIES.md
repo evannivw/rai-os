@@ -21,6 +21,7 @@ unavailable. An app chooses one capability, and updates cannot change it.
 | Software display brightness | Apply 20..100%; explicit permission, user action and reset | Guest Rust framebuffer |
 | Typed fields | Text, signed integer, checkbox; labels, required values and defaults | Guest Rust |
 | [Calculated fields](APP_FORMULAS.md) | Per-app integer expressions over earlier numeric fields | Guest Rust, checked i32 |
+| [CSV exchange](APP_EXCHANGE.md) | Reviewed atomic import and explicit export through a selected host folder | Guest validation + host I/O |
 | Local records | Create and edit complete records in the current app | Guest Rust |
 | Record view | Select/edit rows; toggle one configured status | Guest Rust |
 | Pending filter | Show records whose configured checkbox is false | Guest Rust |
@@ -39,7 +40,7 @@ pipeline. Do not call a schema proposal native machine-code compilation.
 ## Tables
 
 From an app press F5 or tap `table`; F3/tap `records` returns to the list. Right or
-the column-page indicator selects the second three-column page when needed; Left
+the lower-right column-page indicator selects the second three-column page when needed; Left
 returns to the first. Up/Down select rows. Enter or a row tap opens its form.
 N adds a row; F4 toggles the configured pending filter. Totals follow that filter.
 Long values/labels are clipped in table cells; the form shows the full values.
@@ -49,7 +50,8 @@ at most eight values are accumulated into i64. This prevents overflow for the
 available range without approximating decimal arithmetic. Currency examples use
 explicit integer cents. Bounded same-row formulas are now available; no currency
 conversion, arbitrary functions, cross-row references,
-CSV/XLSX compatibility or Microsoft Excel behavior is claimed.
+XLSX compatibility or Microsoft Excel behavior is claimed. Bounded CSV exchange
+is now available through a user-selected host folder.
 
 A disclosed offline prompt is:
 
@@ -78,8 +80,9 @@ maximum i32 values without overflow and checks optional blanks and filtering.
 
 Calculated fields are implemented; see [APP_FORMULAS.md](APP_FORMULAS.md).
 
-1. **Private app files and exchange:** scoped file handles, explicit import/export,
-   quotas and reviewed changes; build on the existing guest file store.
+1. **Guest-private app files:** scoped file handles and quotas, building on the
+   existing guest file store. User-mediated CSV exchange is already available;
+   it does not grant generated apps arbitrary file access.
 2. **Events and background work:** declared triggers, queues, cancellation and
    execution budgets. Wire to an actual service boundary before claiming isolation.
 3. **Optional in-app AI:** a declared action with explicit user consent, selected

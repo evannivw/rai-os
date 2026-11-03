@@ -1,5 +1,7 @@
 //! Guest UI controller for a bounded interpreter. No model or transport dependency.
-use crate::microapp::{Brightness, Capability, Field, Kind, Runtime, Spec, Text, Values};
+use crate::microapp::{
+    Brightness, Capability, Field, ImportBatch, Kind, Runtime, Spec, Text, Values,
+};
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Mode {
     Home,
@@ -11,6 +13,8 @@ pub enum Mode {
     Records,
     Table,
     Notice,
+    Transfer,
+    ImportReview,
 }
 pub struct Controller {
     pub active: bool,
@@ -31,11 +35,19 @@ pub struct Controller {
     pub display_available: bool,
     pub message: Text<160>,
     pub pending: Spec,
+    pub import: ImportBatch,
+    importing: bool,
     request: u32,
     base: u32,
     target: Option<usize>,
 }
 pub enum Reply {
+    Transfer {
+        request: u32,
+        revision: u32,
+        app: Text<12>,
+        import: bool,
+    },
     State(&'static str),
     Submit {
         request: u32,
@@ -47,6 +59,17 @@ pub enum Reply {
 impl core::fmt::Display for Reply {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
+            Self::Transfer {
+                request,
+                revision,
+                app,
+                import,
+            } => write!(
+                f,
+                "transfer={}; request={request}; revision={revision}; app={}",
+                if *import { "import" } else { "export" },
+                app.text()
+            ),
             Self::State(s) => write!(f, "state={s}"),
             Self::Submit {
                 request,
@@ -115,6 +138,8 @@ impl Controller {
             display_available: false,
             message: Text::EMPTY,
             pending: Spec::EMPTY,
+            import: ImportBatch::EMPTY,
+            importing: false,
             request: 0,
             base: 0,
             target: None,
@@ -135,6 +160,8 @@ impl Controller {
             Mode::Records => "records",
             Mode::Table => "table",
             Mode::Notice => "notice",
+            Mode::Transfer => "transfer",
+            Mode::ImportReview => "import_review",
         }
     }
     pub fn app_matches(&self, slot: usize) -> bool {
@@ -173,6 +200,12 @@ impl Controller {
         if (696..745).contains(&y) {
             return self.key(13);
         }
+        if self.mode == Mode::Table && x >= 350 && (635..670).contains(&y) {
+            return self.key(1008);
+        }
+        if self.mode == Mode::ImportReview && (195..235).contains(&y) {
+            return self.key(1006);
+        }
         if self.mode == Mode::Form
             && self
                 .runtime
@@ -184,6 +217,14 @@ impl Controller {
         }
         if matches!(self.mode, Mode::Form | Mode::Records | Mode::Table) && (146..183).contains(&y)
         {
+            if x >= 270
+                && self
+                    .runtime
+                    .app(self.selected)
+                    .is_some_and(|a| a.spec.capability() == Capability::Records)
+            {
+                return self.key(if x < 360 { 1011 } else { 1012 });
+            }
             return self.key(if x < 155 {
                 1003
             } else if x < 320 {
@@ -323,7 +364,12 @@ impl Controller {
             self.search = Text::EMPTY;
             return Ok(Reply::State("home"));
         }
-        if key == 1002 && !matches!(self.mode, Mode::Thinking | Mode::Review) {
+        if key == 1002
+            && !matches!(
+                self.mode,
+                Mode::Thinking | Mode::Review | Mode::Transfer | Mode::ImportReview
+            )
+        {
             let t = if matches!(self.mode, Mode::Form | Mode::Records | Mode::Table) {
                 Some(self.selected)
             } else {
@@ -339,6 +385,20 @@ impl Controller {
                 .is_some_and(|a| a.spec.capability() == Capability::Records)
         {
             match key {
+                1011 | 1012 => {
+                    self.request = self.request.checked_add(1).ok_or("app_request_exhausted")?;
+                    self.base = self.runtime.revision();
+                    self.importing = key == 1011;
+                    self.import = ImportBatch::EMPTY;
+                    self.message = Text::EMPTY;
+                    self.mode = Mode::Transfer;
+                    return Ok(Reply::Transfer {
+                        request: self.request,
+                        revision: self.base,
+                        app: self.runtime.app(self.selected).unwrap().spec.id,
+                        import: self.importing,
+                    });
+                }
                 1007 => {
                     self.mode = Mode::Table;
                     self.normalize_row();
@@ -510,6 +570,24 @@ impl Controller {
                 }
                 _ => {}
             },
+            Mode::ImportReview if key == 13 => {
+                self.runtime
+                    .append(self.selected, self.base, &self.import)?;
+                self.import = ImportBatch::EMPTY;
+                self.mode = Mode::Table;
+                self.filtered = false;
+                self.columns = 0;
+                self.row = 0;
+                self.message = Text::new("Imported. Existing rows preserved.")?;
+            }
+            Mode::ImportReview => {
+                if matches!(key, 9 | 1006) {
+                    self.row = (self.row + 1) % self.import.len();
+                }
+                if key == 1005 {
+                    self.row = self.row.saturating_sub(1);
+                }
+            }
             Mode::Notice if key == 13 => self.mode = Mode::Home,
             _ => {}
         }
@@ -521,6 +599,18 @@ impl Controller {
         } else {
             Ok(())
         }
+    }
+    fn check_transfer(&self, id: &str, import: bool) -> Result<(), &'static str> {
+        if id.parse::<u32>().ok() != Some(self.request)
+            || self.mode != Mode::Transfer
+            || (import && !self.importing)
+        {
+            return Err("app_stale_transfer");
+        }
+        if self.base != self.runtime.revision() {
+            return Err("app_stale_revision");
+        }
+        Ok(())
     }
     fn command(&mut self, name: &str, arg: Option<&str>) -> Result<Reply, &'static str> {
         if name == "app.open" {
@@ -547,6 +637,36 @@ impl Controller {
         }
         let arg = arg.ok_or("bad_args")?;
         match name {
+            "app.import.begin" => {
+                let [id, count] = parts(arg)?;
+                self.check_transfer(id, true)?;
+                if self.import.len() != 0 {
+                    return Err("app_import_started");
+                }
+                self.import = ImportBatch::new(count.parse().map_err(|_| "bad_args")?)?;
+            }
+            "app.import.cell" => {
+                let [id, row, field, value] = parts(arg)?;
+                self.check_transfer(id, true)?;
+                self.import.set(
+                    row.parse().map_err(|_| "bad_args")?,
+                    field.parse().map_err(|_| "bad_args")?,
+                    decode(value)?,
+                )?;
+            }
+            "app.import.ready" => {
+                self.check_transfer(arg, true)?;
+                self.runtime
+                    .validate_append(self.selected, self.base, &self.import)?;
+                self.row = 0;
+                self.mode = Mode::ImportReview;
+            }
+            "app.transfer.notice" => {
+                let (id, message) = arg.split_once(':').ok_or("bad_args")?;
+                self.check_transfer(id, false)?;
+                self.message = Text::new(message)?;
+                self.mode = Mode::Notice;
+            }
             "app.storage" => {
                 if !matches!(
                     arg,

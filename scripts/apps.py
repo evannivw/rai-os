@@ -13,6 +13,7 @@ from files_demo import Guest,ROOT,build
 from workspace import host_build
 from workspace_vnc import serve
 from app_storage import Checkpoint,collect,restore
+from app_exchange import Exchange
 def schema(g,app_id):
     row=g.fields('app.schema',app_id);fields=[]
     for item in row['fields'].split(','):
@@ -38,10 +39,11 @@ def deliver(g,p):
     g.request('app.ready',f"{rid}:{p['reason']}")
 
 class Studio:
-    def __init__(self,kernel,binary,output,source='meta',vnc=False,state=None):
+    def __init__(self,kernel,binary,output,source='meta',vnc=False,state=None,exchange=None):
         self.output=output;output.mkdir(parents=True,exist_ok=False)
         password=os.environ.get('RAI_VNC_PASSWORD')
         if password and (not password.isascii() or not 1<=len(password)<=8):raise ValueError('RAI_VNC_PASSWORD must be 1 to 8 ASCII characters')
+        self.exchange=Exchange(exchange) if exchange else None
         self.checkpoint=Checkpoint(state,binary,kernel) if state else None
         self.saved_revision=None;self.storage_error=None
         self.lock=threading.RLock();self.threads=[];self.closed=False
@@ -74,6 +76,19 @@ class Studio:
         with self.lock:
             if self.closed:return
             reply=self.guest.request(name,arg)
+            if reply.startswith('transfer='):
+                event=dict(p.split('=',1) for p in reply.split('; '))
+                try:
+                    if self.exchange is None:raise ValueError('No exchange folder selected. Start with --exchange PATH.')
+                    self.exchange.transfer(self.guest,event,schema,records)
+                except FileNotFoundError:
+                    self.guest.request('app.transfer.notice',f"{event['request']}:Place {event['app']}.csv in the selected exchange inbox, then request Import again.")
+                except FileExistsError:
+                    self.guest.request('app.transfer.notice',f"{event['request']}:This export already exists. Existing files are never overwritten.")
+                except ValueError as error:
+                    self.guest.request('app.transfer.notice',f"{event['request']}:{str(error)[:160]}")
+                except (OSError,AssertionError):
+                    self.guest.request('app.transfer.notice',f"{event['request']}:Transfer rejected. Check file access, values, formulas and available row slots. No rows were imported.")
             if reply.startswith('submit='):
                 state=dict(p.split('=',1) for p in reply.split('; '));rid=int(state['submit'])
                 if any(t.is_alive() for t in self.threads) or len(self.threads)>=8:
@@ -125,8 +140,9 @@ class Studio:
             self.guest.close()
             if self.checkpoint:self.checkpoint.close()
 
-def run(kernel,binary,output,source='meta',port=5900,bind='127.0.0.1',state=None):
-    app=Studio(kernel,binary,output,source,vnc=True,state=state);keys=queue.Queue(maxsize=256)
+def run(kernel,binary,output,source='meta',port=5900,bind='127.0.0.1',state=None,exchange=None):
+    app=Studio(kernel,binary,output,source,vnc=True,state=state,exchange=exchange);keys=queue.Queue(maxsize=256)
+    if app.exchange:print(f'CSV exchange folder: {app.exchange.root}',flush=True)
     def press(key):keys.put_nowait(key)
     def keyboard():
         while True:
@@ -141,6 +157,6 @@ def run(kernel,binary,output,source='meta',port=5900,bind='127.0.0.1',state=None
     finally:keys.put(None);worker.join(timeout=10);app.close()
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',choices=['meta','replay'],default='meta');p.add_argument('--output',type=Path,required=True);p.add_argument('--port',type=int,default=5900);p.add_argument('--debug',action='store_true');p.add_argument('--state',type=Path,default=ROOT/'target/device.json');p.add_argument('--temporary',action='store_true');a=p.parse_args()
-    try:run(build(a.debug),host_build(a.debug),a.output.resolve(),a.source,a.port,state=None if a.temporary else a.state)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',choices=['meta','replay'],default='meta');p.add_argument('--output',type=Path,required=True);p.add_argument('--port',type=int,default=5900);p.add_argument('--debug',action='store_true');p.add_argument('--state',type=Path,default=ROOT/'target/device.json');p.add_argument('--temporary',action='store_true');p.add_argument('--exchange',type=Path,default=ROOT/'target/exchange');a=p.parse_args()
+    try:run(build(a.debug),host_build(a.debug),a.output.resolve(),a.source,a.port,state=None if a.temporary else a.state,exchange=a.exchange)
     except KeyboardInterrupt:pass

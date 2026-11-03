@@ -1,5 +1,5 @@
 {
-  "runtime": "rai-declarative-3",
+  "runtime": "rai-declarative-4",
   "limits": {
     "apps": 3,
     "fields": 6,
@@ -62,5 +62,10 @@
     },
     "semantics": "Checked signed i32; division truncates toward zero. Missing input, overflow or zero division rejects the whole save/update. Required calculated fields have an empty default; ordinary fields have an empty formula.",
     "updates": "Keep editable values, recompute derived values. Validate every existing row before committing the schema update."
+  },
+  "user_file_exchange": {
+    "import": "User-selected host exchange folder, inbox/<installed-app-id>.csv; guest previews then appends a validated batch only after confirmation. No model access to file paths or data.",
+    "export": "Explicit user action exports all saved rows and computed values to a new outbox/<installed-app-id>-r<revision>.csv file; existing files are never overwritten.",
+    "limits": "1..8 incoming rows, existing per-app capacity still eight, exact input or full-field header, printable ASCII values up to 32 bytes. This adds no schema properties or model-callable file operations."
   }
 }

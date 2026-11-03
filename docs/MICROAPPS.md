@@ -68,7 +68,8 @@ cannot implement unavailable operations; inspect the proposed fields carefully.
 On keyboards that reserve function keys, use Fn with the key. Clipboard paste
 accepts bounded ASCII; newlines do not submit. This is a keyboard-first graphical
 UI, not a terminal emulator. Clicks are limited to the main action, footer/home
-and the existing Tab hotspot; text fields are selected with Tab, not a mouse.
+form fields, launcher icons, table rows and the import/export toolbar. Tab also
+selects editable fields. F7 imports and F8 exports; see [APP_EXCHANGE.md](APP_EXCHANGE.md).
 
 ## Contract and boundaries
 

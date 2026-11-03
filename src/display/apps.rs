@@ -122,6 +122,8 @@ pub fn render(s: &mut Display, u: &Controller) {
         Mode::Review => "Ready to install.",
         Mode::Form | Mode::Records | Mode::Table => a.map_or("Your app", |a| a.spec.title.text()),
         Mode::Notice => "One more thing.",
+        Mode::Transfer => "Moving your data.",
+        Mode::ImportReview => "Review your data.",
     };
     header(s, u, title);
     match u.mode {
@@ -397,19 +399,6 @@ pub fn render(s: &mut Display, u: &Controller) {
             if let Some(a) = a {
                 text(s, "records", 42, 154, QUIET);
                 text(s, "[ table ]", 184, 154, LIME);
-                text(
-                    s,
-                    if a.spec.fields().len() <= 3 {
-                        "1 / 1"
-                    } else if u.columns == 0 {
-                        "1 / 2 >"
-                    } else {
-                        "< 2 / 2"
-                    },
-                    371,
-                    154,
-                    QUIET,
-                );
                 frame(s, 24, 192, 432, 446, QUIET);
                 for (column, f) in a
                     .spec
@@ -469,8 +458,56 @@ pub fn render(s: &mut Display, u: &Controller) {
                         number(s, sum, 67 + column as i32 * 128, 606);
                     }
                 }
-                text(s, "N new   F4 filter   Right next columns", 42, 651, QUIET);
+                if u.message.text().is_empty() {
+                    text(s, "N new   F4 filter", 42, 651, QUIET);
+                } else {
+                    text(s, "Rows saved locally.", 42, 651, QUIET);
+                }
+                text(
+                    s,
+                    if a.spec.fields().len() <= 3 {
+                        "1 / 1"
+                    } else if u.columns == 0 {
+                        "1 / 2 >"
+                    } else {
+                        "< 2 / 2"
+                    },
+                    371,
+                    651,
+                    LIME,
+                );
                 action(s, "Edit row");
+            }
+        }
+        Mode::Transfer => {
+            wrap(
+                s,
+                "Waiting for the selected exchange folder. Esc cancels.",
+                260,
+                3,
+            );
+        }
+        Mode::ImportReview => {
+            if let Some(a) = a {
+                center(s, a.spec.title.text(), 160, Size::Body, WHITE);
+                text(s, "Incoming row", 42, 203, QUIET);
+                number(s, (u.row + 1) as i64, 176, 203);
+                text(s, "of", 199, 203, QUIET);
+                number(s, u.import.len() as i64, 224, 203);
+                if let Ok(values) = u.import.values(&a.spec, u.row) {
+                    for (i, field) in a.spec.fields().iter().enumerate() {
+                        let y = 250 + i as i32 * 50;
+                        text(s, field.label.text(), 42, y, QUIET);
+                        t::body(s, values[i].text(), 42, y + 18, WHITE);
+                    }
+                }
+                wrap(
+                    s,
+                    "Append all rows. Existing records stay. Tab / arrows: inspect each row.",
+                    580,
+                    3,
+                );
+                action(s, "+ Import rows");
             }
         }
         Mode::Notice => {
@@ -478,12 +515,34 @@ pub fn render(s: &mut Display, u: &Controller) {
             action(s, "Back home");
         }
     }
-    if matches!(u.mode, Mode::Form | Mode::Records)
+    if matches!(u.mode, Mode::Form | Mode::Records | Mode::Table)
         && a.is_some_and(|a| a.spec.capability() == Capability::Records)
     {
         t::rect(s, 24, 146, 432, 36, 0x060908);
-        text(s, "[ records ]", 42, 154, QUIET);
-        text(s, "table", 184, 154, QUIET);
+        text(
+            s,
+            if u.mode == Mode::Records {
+                "[ records ]"
+            } else {
+                "records"
+            },
+            42,
+            154,
+            QUIET,
+        );
+        text(
+            s,
+            if u.mode == Mode::Table {
+                "[ table ]"
+            } else {
+                "table"
+            },
+            184,
+            154,
+            QUIET,
+        );
+        text(s, "import", 280, 154, LIME);
+        text(s, "export", 374, 154, LIME);
     }
     if !u.storage.text().is_empty() {
         center(s, u.storage.text(), 672, Size::Small, QUIET);

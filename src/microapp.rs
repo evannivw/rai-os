@@ -403,6 +403,64 @@ impl App {
         v
     }
 }
+/// Bounded, uncommitted import. A complete batch is validated before any write.
+pub struct ImportBatch {
+    rows: [Values; ROWS],
+    masks: [u8; ROWS],
+    len: usize,
+}
+impl ImportBatch {
+    pub const EMPTY: Self = Self {
+        rows: [[Text::EMPTY; FIELDS]; ROWS],
+        masks: [0; ROWS],
+        len: 0,
+    };
+    pub fn new(len: usize) -> Result<Self, &'static str> {
+        if len == 0 || len > ROWS {
+            return Err("app_import_size");
+        }
+        Ok(Self { len, ..Self::EMPTY })
+    }
+    pub fn len(&self) -> usize {
+        self.len
+    }
+    pub fn set(&mut self, row: usize, field: usize, value: Text<32>) -> Result<(), &'static str> {
+        if row >= self.len || field >= FIELDS {
+            return Err("app_import_index");
+        }
+        let bit = 1 << field;
+        if self.masks[row] & bit != 0 {
+            return Err("app_import_duplicate");
+        }
+        self.rows[row][field] = value;
+        self.masks[row] |= bit;
+        Ok(())
+    }
+    pub fn values(&self, spec: &Spec, row: usize) -> Result<Values, &'static str> {
+        if row >= self.len {
+            return Err("app_import_index");
+        }
+        let mask = self.masks[row];
+        if mask >> spec.fields().len() != 0 {
+            return Err("app_import_columns");
+        }
+        for (i, field) in spec.fields().iter().enumerate() {
+            if field.kind != Kind::Calculated && mask & (1 << i) == 0 {
+                return Err("app_import_incomplete");
+            }
+        }
+        let result = spec.materialize(&self.rows[row])?;
+        for (i, field) in spec.fields().iter().enumerate() {
+            if field.kind == Kind::Calculated
+                && mask & (1 << i) != 0
+                && result[i] != self.rows[row][i]
+            {
+                return Err("app_import_derived_mismatch");
+            }
+        }
+        Ok(result)
+    }
+}
 pub struct Runtime {
     apps: [App; APPS],
     revision: u32,
@@ -517,6 +575,50 @@ impl Runtime {
         if row.is_none() {
             app.count += 1;
         }
+        self.revision += 1;
+        Ok(())
+    }
+    pub fn validate_append(
+        &self,
+        index: usize,
+        base: u32,
+        batch: &ImportBatch,
+    ) -> Result<(), &'static str> {
+        if base != self.revision {
+            return Err("app_stale_revision");
+        }
+        self.revision
+            .checked_add(1)
+            .ok_or("app_revision_exhausted")?;
+        let app = self.app(index).ok_or("app_not_found")?;
+        if app.spec.capability() != Capability::Records {
+            return Err("app_records_unavailable");
+        }
+        if batch.len() == 0 {
+            return Err("app_import_size");
+        }
+        if batch.len() + app.count > ROWS {
+            return Err("app_row_limit");
+        }
+        for row in 0..batch.len() {
+            batch.values(&app.spec, row)?;
+        }
+        Ok(())
+    }
+    pub fn append(
+        &mut self,
+        index: usize,
+        base: u32,
+        batch: &ImportBatch,
+    ) -> Result<(), &'static str> {
+        self.validate_append(index, base, batch)?;
+        let app = &mut self.apps[index];
+        // No mutation occurs until every row passes; deterministic recomputation
+        // below uses the same immutable schema and batch as validation above.
+        for row in 0..batch.len() {
+            app.rows[app.count + row] = batch.values(&app.spec, row).expect("validated import row");
+        }
+        app.count += batch.len();
         self.revision += 1;
         Ok(())
     }
@@ -696,6 +798,75 @@ mod tests {
         row[2] = Text::EMPTY;
         r.save(i, Some(0), &row).unwrap();
         assert_eq!(r.app(i).unwrap().sum(2, false), Some(15_032_385_529));
+    }
+    #[test]
+    fn imports_validate_complete_batches_and_preserve_existing_rows() {
+        let mut spec = Spec::new("ratios", "Ratios", "records.local").unwrap();
+        spec.add(Field::new("a", "A", "number", true, "1").unwrap())
+            .unwrap();
+        spec.add(Field::new("b", "B", "number", true, "1").unwrap())
+            .unwrap();
+        spec.add(
+            Field::new("result", "Result", "calculated", true, "")
+                .unwrap()
+                .with_formula("$a/$b")
+                .unwrap(),
+        )
+        .unwrap();
+        let mut r = Runtime::new();
+        let index = r.install(&spec, 1, None).unwrap();
+        let inputs = r.app(index).unwrap().defaults();
+        r.save(index, None, &inputs).unwrap();
+        let revision = r.revision();
+        let before = format!("{}", Export(r.app(index).unwrap()));
+        let batch = |second: &str| {
+            let mut b = ImportBatch::new(2).unwrap();
+            for row in 0..2 {
+                b.set(row, 0, Text::new("12").unwrap()).unwrap();
+                b.set(
+                    row,
+                    1,
+                    Text::new(if row == 0 { "3" } else { second }).unwrap(),
+                )
+                .unwrap();
+            }
+            b
+        };
+        assert_eq!(
+            r.append(index, revision, &batch("0")),
+            Err("formula_div_zero")
+        );
+        assert_eq!(r.revision(), revision);
+        assert_eq!(format!("{}", Export(r.app(index).unwrap())), before);
+        let mut tampered = batch("4");
+        tampered.set(1, 2, Text::new("999").unwrap()).unwrap();
+        assert_eq!(
+            r.append(index, revision, &tampered),
+            Err("app_import_derived_mismatch")
+        );
+        assert_eq!(
+            tampered.set(1, 2, Text::new("3").unwrap()),
+            Err("app_import_duplicate")
+        );
+        assert_eq!(
+            r.append(index, revision, &ImportBatch::new(1).unwrap()),
+            Err("app_import_incomplete")
+        );
+        assert_eq!(
+            r.append(index, revision - 1, &batch("4")),
+            Err("app_stale_revision")
+        );
+        r.append(index, revision, &batch("4")).unwrap();
+        assert_eq!(r.revision(), revision + 1);
+        assert_eq!(r.app(index).unwrap().count(), 3);
+        assert_eq!(r.app(index).unwrap().row(0).unwrap()[2].text(), "1");
+        assert_eq!(r.app(index).unwrap().row(1).unwrap()[2].text(), "4");
+        assert_eq!(r.app(index).unwrap().row(2).unwrap()[2].text(), "3");
+        assert_eq!(
+            r.append(index, r.revision(), &ImportBatch::new(8).unwrap()),
+            Err("app_row_limit")
+        );
+        assert!(ImportBatch::new(0).is_err() && ImportBatch::new(9).is_err());
     }
     #[test]
     fn calculated_rows_and_migrations_are_atomic() {

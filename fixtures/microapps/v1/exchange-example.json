@@ -1,0 +1,42 @@
+{
+  "source_commit": "d20f98f08c794e309321ecdf8c812cd2b0235bd9",
+  "origin": "Actual Meta Quote proposal, development example; restoring it is not new inference.",
+  "spec": {
+    "capability": "records.local",
+    "fields": [
+      {
+        "default": "",
+        "key": "item",
+        "kind": "text",
+        "label": "Item",
+        "required": true
+      },
+      {
+        "default": "",
+        "key": "qty",
+        "kind": "number",
+        "label": "Quantity",
+        "required": true
+      },
+      {
+        "default": "",
+        "key": "unitc",
+        "kind": "number",
+        "label": "Unit cents",
+        "required": true
+      },
+      {
+        "default": "",
+        "formula": "$qty * $unitc",
+        "key": "total",
+        "kind": "calculated",
+        "label": "Total cents",
+        "required": true
+      }
+    ],
+    "filter_key": "",
+    "filter_label": "",
+    "id": "quote",
+    "title": "Quote"
+  }
+}

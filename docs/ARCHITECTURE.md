@@ -473,3 +473,14 @@ The guest controller skips computed fields during editing, while presentation
 shows a local preview and the complete formula before approval. The host catalog
 teaches Meta this generic vocabulary; replay fixtures live in a separate module
 that the live branch never consults. See APP_FORMULAS.md for limits and checks.
+
+## November 3: reviewed app data exchange
+
+ImportBatch stages bounded cells outside installed records. Complete-batch checks
+resolve the current schema, require every input, recompute formulas and optionally
+compare supplied derived values. Runtime append validates the whole batch before
+one revision update. Controller binds import to a selected app, request and base
+revision and requires native approval. The host adapter owns CSV and the explicit
+inbox/outbox; Meta receives neither paths nor records. Existing saved-session
+persistence runs after the guest commit. No unsafe or new privilege boundary.
+See APP_EXCHANGE.md and the reproducible workflow in DEMO_JOURNEY.md.
