@@ -1,6 +1,7 @@
 # Native interface directions for the final demo
 
-Status: design proposals, not implemented guest screens. November 3, 2026.
+Status: Column selected; compact spacing and color proposals under review.
+Not yet implemented as guest screens. November 3, 2026.
 The user requested a black, terminal-inspired phone interface with sparse text,
 keyboard-like linework and recognizable applications. Keep native QEMU rendering
 as the product target; conversational interactive mockups only explore layouts.
@@ -73,3 +74,25 @@ These are unselected design proposals with illustrative app metadata. They do no
 increase the current runtime capacity or implement a new guest launcher. Keep
 application identity dynamic when implementing the chosen layout. The preview
 script passed syntax validation; rendered browser verification was not performed.
+
+## Selected Column layout: compact spacing and cooler accents
+
+The user approved Column and requested smaller icons, less side padding and no
+yellow/lime accent, while keeping black. The next conversational preview uses
+40 px icons (previously 58), 12 px side insets (previously 24 plus an extra 12 for
+the list), and 60 px app rows. The whole row remains a generous interaction target.
+Applications start toward the top rather than occupying a centered decorative
+block. Create remains separate. Pixel values describe the browser concept and
+must be adapted to the actual guest resolution.
+
+Four color options share a near-black #090b0f background, #e7ebf1 primary text,
+#9fa9b8 secondary text and #303743 structural lines:
+
+- Glacier blue: #87bfff (recommended for review).
+- Ice: #dce5f2.
+- Cool mint: #79d8c1.
+- Lavender: #b8a6f4.
+
+Keep accents on launcher glyphs, focus and selected navigation. Do not fill every
+row with color. No palette is selected yet. Preview examples still contain three
+apps; denser layout does not increase runtime app capacity.
