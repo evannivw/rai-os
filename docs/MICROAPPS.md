@@ -184,3 +184,13 @@ layout or app behavior. Existing keyboard controls remain available.
 Creating an app installs a checked declarative description, not compiled native
 Rust machine code. The icon opens that description in the guest runtime. This
 keeps the real execution model distinct from the future native-code toolchain.
+
+## Tables and available capabilities
+
+Apps with numbers now have a paged table and local numeric totals. Press F5 or tap
+Table; Right changes column pages; F4 applies the pending filter to rows/totals.
+See [APP_CAPABILITIES.md](APP_CAPABILITIES.md) for the real model-facing catalog,
+the expense example, arithmetic limits and the sequence toward more expressive
+apps. The third exact replay prompt creates the documented expense table; earlier
+inspection create/update prompts remain supported. Formula execution, embedded
+AI and native machine-code generation remain unimplemented.

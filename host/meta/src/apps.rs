@@ -114,6 +114,10 @@ pub fn validate(p: &Plan, r: &Request) -> Result<(), &'static str> {
     }
     Ok(())
 }
+pub fn capabilities() -> serde_json::Value {
+    serde_json::from_str(include_str!("../../../fixtures/microapps/v1/runtime.json"))
+        .expect("committed runtime catalog")
+}
 pub fn run(path: &std::path::Path, replay: Option<&std::path::Path>) -> Result<(), String> {
     let r = request(&crate::config::bounded_file(path, 8192)?)?;
     let p = if let Some(path) = replay {
@@ -133,6 +137,16 @@ pub fn run(path: &std::path::Path, replay: Option<&std::path::Path>) -> Result<(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn advertised_limits_match_the_guest_domain() {
+        let c = capabilities();
+        assert_eq!(c["limits"]["apps"], microapp::APPS);
+        assert_eq!(c["limits"]["fields"], microapp::FIELDS);
+        assert_eq!(c["limits"]["rows_per_app"], microapp::ROWS);
+        for kind in c["field_kinds"].as_array().unwrap() {
+            assert!(microapp::Kind::parse(kind.as_str().unwrap()).is_ok());
+        }
+    }
     #[test]
     fn untrusted_specs_cannot_expand_authority() {
         let r=request(r#"{"request_id":2,"base_revision":1,"goal":"An inventory","target":null,"app_ids":[],"record_count":0}"#).unwrap();

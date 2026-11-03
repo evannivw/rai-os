@@ -21,6 +21,12 @@ SPEC=dict(id='inspection',title='Field inspections',capability='records.local',f
  dict(key='notes',label='Notes',kind='text',required=False,default=''),
  dict(key='done',label='Done',kind='check',required=True,default='false')],filter_key='done',filter_label='Pending')
 
+TABLE='Create an expense app with item, integer amount in cents, paid checkbox and an unpaid view. I want a table and totals.'
+TABLE_SPEC=dict(id='expenses',title='Expenses',capability='records.local',fields=[
+ dict(key='item',label='Item',kind='text',required=True,default=''),
+ dict(key='amount',label='Amount (cents)',kind='number',required=True,default='0'),
+ dict(key='paid',label='Paid',kind='check',required=True,default='false')],filter_key='paid',filter_label='Unpaid')
+
 def schema(g,app_id):
     row=g.fields('app.schema',app_id);fields=[]
     for item in row['fields'].split(','):
@@ -105,9 +111,10 @@ class Studio:
         if self.source=='replay':
             spec=None
             if r['goal']==CREATE and r['target'] is None:spec=copy.deepcopy(SPEC)
+            if r['goal']==TABLE and r['target'] is None:spec=copy.deepcopy(TABLE_SPEC)
             if r['goal']==EVOLVE and r['target'] is not None:
                 spec=copy.deepcopy(r['target']);spec['fields'].append(dict(key='priority',label='Priority',kind='number',required=True,default='1'))
-            plan=dict(request_id=rid,base_revision=r['base_revision'],decision='install' if spec else 'clarify',spec=spec,reason='Scripted offline proposal. Review before installing.' if spec else 'Offline replay supports the two documented prompts only. Select Meta for your own app.')
+            plan=dict(request_id=rid,base_revision=r['base_revision'],decision='install' if spec else 'clarify',spec=spec,reason='Scripted offline proposal. Review before installing.' if spec else 'Offline replay supports the documented prompts only. Select Meta for your own app.')
             supplied=folder/'supplied.json';supplied.write_text(json.dumps(plan)+'\n');cmd[2]='--app-plan-replay';cmd.append(str(supplied))
         try:
             env=dict(os.environ);env.pop('RAI_VNC_PASSWORD',None)

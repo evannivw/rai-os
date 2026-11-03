@@ -73,7 +73,7 @@ def verify(kernel,binary,output):
         for c in EVOLVE:app.press(ord(c))
         app.press(13);wait(app);assert records(g,'inspection')==before;g.capture(output/'update-review.ppm');app.press(13)
         assert records(g,'inspection')==[row+['1'] for row in before]
-        g.capture(output/'evolved.ppm');checks.append('Required input rejected; two records; pending view; additive schema update preserves every original byte and initializes priority')
+        g.capture(output/'evolved.ppm');g.request('app.key','1007');g.request('app.key','1008');g.capture(output/'table-columns.ppm');assert g.fields('app.totals','inspection:all')['totals']=='priority:2';checks.append('Required input rejected; two records; pending view; additive schema update preserves every original byte and initializes priority')
         # Invalid numeric data cannot partially change an existing row.
         g.request('app.key','1003');g.request('app.key','13');g.request('app.key','9');g.request('app.key','9');g.request('app.key','9');g.request('app.key','8');text(g,'bad')
         saved=records(g,'inspection');g.request('app.key','13',error='app_invalid_value');assert records(g,'inspection')==saved

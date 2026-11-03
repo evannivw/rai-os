@@ -82,6 +82,30 @@ fn wrap(s: &mut Display, value: &str, y: i32, lines: usize) {
         rest = rest[end..].trim_start();
     }
 }
+fn number(s: &mut Display, value: i64, x: i32, y: i32) {
+    let mut bytes = [0u8; 24];
+    let mut end = 24;
+    let mut n = value.unsigned_abs();
+    loop {
+        end -= 1;
+        bytes[end] = b'0' + (n % 10) as u8;
+        n /= 10;
+        if n == 0 {
+            break;
+        }
+    }
+    if value < 0 {
+        end -= 1;
+        bytes[end] = b'-';
+    }
+    text(
+        s,
+        core::str::from_utf8(&bytes[end..]).unwrap_or("?"),
+        x,
+        y,
+        LIME,
+    );
+}
 pub fn render(s: &mut Display, u: &Controller) {
     let a = u.runtime.app(u.selected);
     let title = match u.mode {
@@ -96,7 +120,7 @@ pub fn render(s: &mut Display, u: &Controller) {
         }
         Mode::Thinking => "Creating...",
         Mode::Review => "Ready to install.",
-        Mode::Form | Mode::Records => a.map_or("Your app", |a| a.spec.title.text()),
+        Mode::Form | Mode::Records | Mode::Table => a.map_or("Your app", |a| a.spec.title.text()),
         Mode::Notice => "One more thing.",
     };
     header(s, u, title);
@@ -278,7 +302,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                 if !u.message.text().is_empty() {
                     wrap(s, u.message.text(), 638, 2);
                 } else {
-                    text(s, "Tab fields   F3 records   F2 evolve", 42, 651, QUIET);
+                    text(s, "Tab fields   F3 records   F5 table", 42, 651, QUIET);
                 }
                 action(s, "Save record");
             }
@@ -318,14 +342,105 @@ pub fn render(s: &mut Display, u: &Controller) {
                 if visible == 0 {
                     center(s, "Nothing here yet_", 321, Size::Body, QUIET);
                 }
-                text(s, "N new   F4 filter   F2 evolve", 42, 651, QUIET);
+                text(
+                    s,
+                    "N new   F4 filter   F5 table   F2 evolve",
+                    42,
+                    651,
+                    QUIET,
+                );
                 action(s, "Open record");
+            }
+        }
+        Mode::Table => {
+            if let Some(a) = a {
+                text(s, "records", 42, 154, QUIET);
+                text(s, "[ table ]", 184, 154, LIME);
+                text(
+                    s,
+                    if a.spec.fields().len() <= 3 {
+                        "1 / 1"
+                    } else if u.columns == 0 {
+                        "1 / 2 >"
+                    } else {
+                        "< 2 / 2"
+                    },
+                    371,
+                    154,
+                    QUIET,
+                );
+                frame(s, 24, 192, 432, 446, QUIET);
+                for (column, f) in a
+                    .spec
+                    .fields()
+                    .iter()
+                    .skip(u.columns * 3)
+                    .take(3)
+                    .enumerate()
+                {
+                    let x = 67 + column as i32 * 128;
+                    let title = f.label.text();
+                    text(s, &title[..title.len().min(16)], x, 207, LIME);
+                }
+                let mut visible = 0;
+                for row in 0..a.count() {
+                    if !u.visible(row) {
+                        continue;
+                    }
+                    let y = 244 + visible * 40;
+                    visible += 1;
+                    let values = a.row(row).unwrap();
+                    if row == u.row {
+                        t::rect(s, 25, y - 2, 430, 35, 0x102019);
+                    }
+                    let number = [b'1' + row as u8];
+                    text(
+                        s,
+                        core::str::from_utf8(&number).unwrap_or("?"),
+                        39,
+                        y as i32 + 5,
+                        QUIET,
+                    );
+                    for (column, v) in values
+                        .iter()
+                        .skip(u.columns * 3)
+                        .take(a.spec.fields().len().saturating_sub(u.columns * 3).min(3))
+                        .enumerate()
+                    {
+                        let value = v.text();
+                        let x = 67 + column as i32 * 128;
+                        text(s, &value[..value.len().min(16)], x, y as i32 + 5, WHITE);
+                    }
+                }
+                text(
+                    s,
+                    if u.filtered {
+                        "Pending totals"
+                    } else {
+                        "All-row totals"
+                    },
+                    42,
+                    575,
+                    QUIET,
+                );
+                for column in 0..3 {
+                    if let Some(sum) = a.sum(u.columns * 3 + column, u.filtered) {
+                        number(s, sum, 67 + column as i32 * 128, 606);
+                    }
+                }
+                text(s, "N new   F4 filter   Right next columns", 42, 651, QUIET);
+                action(s, "Edit row");
             }
         }
         Mode::Notice => {
             wrap(s, u.message.text(), 260, 8);
             action(s, "Back home");
         }
+    }
+    if matches!(u.mode, Mode::Form | Mode::Records) {
+        t::rect(s, 24, 146, 432, 36, 0x060908);
+        text(s, "[ records ]", 42, 154, QUIET);
+        text(s, "table", 184, 154, QUIET);
     }
     if !u.storage.text().is_empty() {
         center(s, u.storage.text(), 672, Size::Small, QUIET);

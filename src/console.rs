@@ -250,6 +250,21 @@ impl Console<'_> {
             }
             return;
         }
+        if name == "app.totals" {
+            if let Some((app, scope)) = arg.and_then(|s| s.split_once(':'))
+                && matches!(scope, "all" | "pending")
+                && let Some(a) = self
+                    .apps
+                    .runtime
+                    .find(app)
+                    .and_then(|i| self.apps.runtime.app(i))
+            {
+                response(id, "ok", crate::microapp::Totals(a, scope == "pending"));
+            } else {
+                response(id, "err", "bad_args");
+            }
+            return;
+        }
         if matches!(name, "app.schema" | "app.export") {
             if let Some(a) = arg
                 .and_then(|s| self.apps.runtime.find(s))

@@ -2419,3 +2419,26 @@ Release restart/crash verification and the release RFB/app lifecycle also passed
 Headless guest and host Clippy passed. Captures and exact test reports are in
 evidence/2026-11-03-app-storage. The simulated failure is disclosed in those reports;
 no live API request was made for these checks.
+
+## 2026-11-03 — Local app tables, totals and model-facing capability catalog
+
+Added guest table views with three-column pages, row editing and totals over the
+selected all/pending scope. Numeric cells remain i32; sums accumulate in i64, so
+eight valid values cannot overflow. Optional blanks are omitted. The guest-owned
+pointer path and F5 open tables; columns paginate without changing data. A versioned
+JSON runtime catalog now accompanies app requests to Meta, describing actual
+operations and explicitly unavailable features. APP_CAPABILITIES.md separates
+implemented functions from calculated fields, file exchange, optional in-app AI
+and native-code execution that remain future work.
+
+Debug real-QEMU expense-table checks passed on an explicit offline schema: sums
+1800/1050 before editing, 1900/1150 after editing, exact row retention after reboot,
+and no inference during arithmetic or restore. The domain test covered eight
+maximum i32 values, optional blanks and the filter. Source HEAD in pre-commit
+reports identifies the baseline; working-tree changes supplied the new table code.
+No live Meta result for this new prompt is claimed before the frozen-source run.
+Release table/recovery checks and the release RFB app regression also passed,
+including the second column page after schema evolution. Guest display/headless
+and host Clippy passed; the shared-domain and capability-catalog tests passed.
+Offline table captures/reports are in evidence/2026-11-03-app-tables/offline.
+The source-note explicitly identifies their pre-commit provenance.

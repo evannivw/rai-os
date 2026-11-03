@@ -383,6 +383,55 @@ impl Runtime {
         self.save(index, Some(row), &values)
     }
 }
+/// Bounded aggregation over validated signed-32-bit cells. Eight cells fit i64.
+impl App {
+    pub fn sum(&self, field: usize, pending: bool) -> Option<i64> {
+        if self.spec.fields().get(field)?.kind != Kind::Number {
+            return None;
+        }
+        Some(
+            (0..self.count)
+                .filter_map(|row| {
+                    let values = self.row(row)?;
+                    if pending
+                        && self
+                            .spec
+                            .check_field()
+                            .is_some_and(|i| values[i].text() == "true")
+                    {
+                        return None;
+                    }
+                    values[field].text().parse::<i32>().ok().map(i64::from)
+                })
+                .sum(),
+        )
+    }
+}
+pub struct Totals<'a>(pub &'a App, pub bool);
+impl fmt::Display for Totals<'_> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "id={}; scope={}; totals=",
+            self.0.spec.id.text(),
+            if self.1 { "pending" } else { "all" }
+        )?;
+        let mut first = true;
+        for (i, field) in self.0.spec.fields().iter().enumerate() {
+            if let Some(value) = self.0.sum(i, self.1) {
+                if !first {
+                    f.write_str(",")?;
+                }
+                first = false;
+                write!(f, "{}:{value}", field.key.text())?;
+            }
+        }
+        if first {
+            f.write_str("-")?;
+        }
+        Ok(())
+    }
+}
 pub struct Catalog<'a>(pub &'a Runtime);
 impl fmt::Display for Catalog<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -437,6 +486,29 @@ mod tests {
             .unwrap();
         s.filter("done", "Pending").unwrap();
         s
+    }
+    #[test]
+    fn totals_use_wide_integer_arithmetic_and_the_selected_filter() {
+        let mut s = spec("sum");
+        s.add(Field::new("amount", "Amount", "number", false, "").unwrap())
+            .unwrap();
+        let mut r = Runtime::new();
+        let i = r.install(&s, r.revision(), None).unwrap();
+        for n in 0..8 {
+            let mut values = r.app(i).unwrap().defaults();
+            values[0] = Text::new("Row").unwrap();
+            values[2] = Text::new("2147483647").unwrap();
+            values[1] = Text::new(if n < 3 { "true" } else { "false" }).unwrap();
+            r.save(i, None, &values).unwrap();
+        }
+        let a = r.app(i).unwrap();
+        assert_eq!(a.sum(2, false), Some(17_179_869_176));
+        assert_eq!(a.sum(2, true), Some(10_737_418_235));
+        assert_eq!(a.sum(0, false), None);
+        let mut row = *a.row(0).unwrap();
+        row[2] = Text::EMPTY;
+        r.save(i, Some(0), &row).unwrap();
+        assert_eq!(r.app(i).unwrap().sum(2, false), Some(15_032_385_529));
     }
     #[test]
     fn scope_migration_and_failed_updates() {

@@ -1,0 +1,5 @@
+{
+  "source": "Pre-commit working tree; see the commit containing these files.",
+  "reported_source_commit": "The baseline HEAD printed by early offline verifier runs, not a frozen-source claim.",
+  "live_calls": 0
+}

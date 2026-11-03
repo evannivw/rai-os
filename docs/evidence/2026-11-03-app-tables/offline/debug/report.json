@@ -1,0 +1,68 @@
+{
+  "source": "replay",
+  "maximum_live_calls": 0,
+  "retries": 0,
+  "development_fixture": true,
+  "ai_advantage_measured": false,
+  "created": true,
+  "verified": true,
+  "source_commit": "5d126b9e4f3b495518ffdee82fd0daccb8385ec9",
+  "kernel_sha256": "3035a99bb6c97ee35941276fd34f33ae88987cd29bc63359626fc4a22e36c187",
+  "plan": {
+    "base_revision": 1,
+    "decision": "install",
+    "reason": "Scripted offline proposal. Review before installing.",
+    "request_id": 2,
+    "spec": {
+      "capability": "records.local",
+      "fields": [
+        {
+          "default": "",
+          "key": "item",
+          "kind": "text",
+          "label": "Item",
+          "required": true
+        },
+        {
+          "default": "0",
+          "key": "amount",
+          "kind": "number",
+          "label": "Amount (cents)",
+          "required": true
+        },
+        {
+          "default": "false",
+          "key": "paid",
+          "kind": "check",
+          "label": "Paid",
+          "required": true
+        }
+      ],
+      "filter_key": "paid",
+      "filter_label": "Unpaid",
+      "id": "expenses",
+      "title": "Expenses"
+    }
+  },
+  "final_rows": [
+    [
+      "Cable",
+      "1350",
+      "false"
+    ],
+    [
+      "Adapter",
+      "750",
+      "true"
+    ],
+    [
+      "Refund",
+      "-200",
+      "false"
+    ]
+  ],
+  "totals": {
+    "all": 1900,
+    "unpaid": 1150
+  }
+}

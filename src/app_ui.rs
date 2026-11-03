@@ -9,6 +9,7 @@ pub enum Mode {
     Review,
     Form,
     Records,
+    Table,
     Notice,
 }
 pub struct Controller {
@@ -19,6 +20,7 @@ pub struct Controller {
     pub selected: usize,
     pub focus: usize,
     pub row: usize,
+    pub columns: usize,
     pub filtered: bool,
     pub draft: Values,
     pub editing: Option<usize>,
@@ -100,6 +102,7 @@ impl Controller {
             selected: 0,
             focus: 0,
             row: 0,
+            columns: 0,
             filtered: false,
             draft: [Text::EMPTY; 6],
             editing: None,
@@ -126,6 +129,7 @@ impl Controller {
             Mode::Review => "review",
             Mode::Form => "form",
             Mode::Records => "records",
+            Mode::Table => "table",
             Mode::Notice => "notice",
         }
     }
@@ -164,6 +168,16 @@ impl Controller {
         }
         if (696..745).contains(&y) {
             return self.key(13);
+        }
+        if matches!(self.mode, Mode::Form | Mode::Records | Mode::Table) && (146..183).contains(&y)
+        {
+            return self.key(if x < 155 {
+                1003
+            } else if x < 320 {
+                1007
+            } else {
+                1008
+            });
         }
         match self.mode {
             Mode::Home | Mode::Search => {
@@ -207,6 +221,14 @@ impl Controller {
                     }
                 }
             }
+            Mode::Table => {
+                if (244..564).contains(&y)
+                    && let Some(index) = (0..8).filter(|r| self.visible(*r)).nth((y - 244) / 40)
+                {
+                    self.row = index;
+                    return self.key(13);
+                }
+            }
             Mode::Records => {
                 if (214..614).contains(&y) {
                     let row = (y - 214) / 50;
@@ -233,6 +255,7 @@ impl Controller {
         } else {
             a.defaults()
         };
+        self.columns = 0;
         self.editing = row;
         self.focus = 0;
         self.message = Text::EMPTY;
@@ -261,13 +284,28 @@ impl Controller {
             return Ok(Reply::State("home"));
         }
         if key == 1002 && !matches!(self.mode, Mode::Thinking | Mode::Review) {
-            let t = if matches!(self.mode, Mode::Form | Mode::Records) {
+            let t = if matches!(self.mode, Mode::Form | Mode::Records | Mode::Table) {
                 Some(self.selected)
             } else {
                 None
             };
             self.begin_prompt(t);
             return Ok(Reply::State("compose"));
+        }
+        if matches!(self.mode, Mode::Form | Mode::Records | Mode::Table) {
+            match key {
+                1007 => {
+                    self.mode = Mode::Table;
+                    self.normalize_row();
+                    return Ok(Reply::State("table"));
+                }
+                1003 => {
+                    self.mode = Mode::Records;
+                    self.normalize_row();
+                    return Ok(Reply::State("records"));
+                }
+                _ => {}
+            }
         }
         match self.mode {
             Mode::Search => match key {
@@ -377,14 +415,28 @@ impl Controller {
                     _ => {}
                 }
             }
-            Mode::Records => match key {
+            Mode::Records | Mode::Table => match key {
+                1008 if self.mode == Mode::Table => {
+                    if self
+                        .runtime
+                        .app(self.selected)
+                        .is_some_and(|a| a.spec.fields().len() > 3)
+                    {
+                        self.columns = 1 - self.columns;
+                    }
+                }
+                1009 if self.mode == Mode::Table => self.columns = 0,
                 110 | 78 => self.form(None)?,
                 13 if self.visible(self.row) => self.form(Some(self.row))?,
                 32 if self.visible(self.row) => {
                     self.runtime.toggle(self.selected, self.row)?;
                     self.normalize_row();
                 }
-                1004 => {
+                1004 if self
+                    .runtime
+                    .app(self.selected)
+                    .is_some_and(|a| a.spec.check_field().is_some()) =>
+                {
                     self.filtered = !self.filtered;
                     self.normalize_row();
                 }
