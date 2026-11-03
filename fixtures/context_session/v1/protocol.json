@@ -1,0 +1,29 @@
+{
+  "cases": [
+    "assigned",
+    "conflict",
+    "resolved"
+  ],
+  "policies": [
+    "rules",
+    "meta"
+  ],
+  "repetitions": 1,
+  "maximum_meta_calls": 3,
+  "retries": 0,
+  "fallback": false,
+  "event_kind": "context_updates",
+  "event_source": "controlled assignment observations, not user prompts or real sensors",
+  "goal": "Keep the Aurora handoff ready for the unit assigned by dispatch.",
+  "publication_cases": [
+    "assigned",
+    "resolved"
+  ],
+  "nonexecuting_cases": [
+    "conflict"
+  ],
+  "development_only": true,
+  "expected_total_worker_jobs": 4,
+  "expected_publications": 2,
+  "graphics": false
+}

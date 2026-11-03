@@ -1,0 +1,25 @@
+{
+  "assigned": {
+    "decision": "select",
+    "records": [
+      "brief@1",
+      "checklist@1",
+      "notes@1"
+    ],
+    "rationale": "Only dispatch assigns the unit; maintenance revision numbers cannot override it."
+  },
+  "conflict": {
+    "decision": "clarify",
+    "records": [],
+    "rationale": "Latest dispatch revision 2 contains conflicting A and B assignments; no arbitrary winner."
+  },
+  "resolved": {
+    "decision": "select",
+    "records": [
+      "brief@1",
+      "checklist@1",
+      "notes@2"
+    ],
+    "rationale": "Dispatch revision 3 unambiguously assigns B; prior conflicts and newer advisory maintenance do not supersede it."
+  }
+}

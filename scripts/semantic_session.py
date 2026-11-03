@@ -26,7 +26,11 @@ def audit(folder, fixture=FIXTURE):
     """
     events=[json.loads(s) for s in (folder/'stdout.jsonl').read_text().splitlines()]
     inputs=[json.loads(s) for s in (folder/'inputs.jsonl').read_text().splitlines()]
-    report=load(folder/'report.json');cases=load(fixture/'protocol.json')['cases']
+    report=load(folder/'report.json');protocol=load(fixture/'protocol.json');cases=protocol['cases']
+    contextual=protocol.get('event_kind')=='context_updates'
+    if contextual:
+        assert {load(fixture/(c+'.json'))['goal'] for c in cases}=={protocol['goal']}
+        assert report['event_source']=='controlled_context_updates'
     assert len(inputs)==len(cases)+1 and inputs[-1]=={'event':'stop'}
     assert events[0]['event']=='selection_stream_started'
     assert report['source'] in ['rules','meta','replay']
@@ -44,6 +48,10 @@ def audit(folder, fixture=FIXTURE):
             assert event['request']==request and inputs[cursor]['request']==request
             trace=[json.loads(s) for s in (folder/name/'interpret.stdout.jsonl').read_text().splitlines()]
             assert trace[0]['source']==report['source'] and trace[0]['request']==request
+            if contextual:
+                observation=load(fixture/'observations'/(name+'.json'))
+                assert trace[0]['observation']==observation and observation['version']==request['request_version']
+                assert trace[0]['trigger']=='controlled_context_update' and trace[0]['user_goal_changed'] is False
             selections=[e['selection'] for e in trace if e['event']=='semantic_selection']
             outcome=load(folder/name/'report.json');correct=False
             diagnostics=[e['diagnostic'] for e in trace if e['event']=='provider_diagnostic']
@@ -86,8 +94,10 @@ def audit(folder, fixture=FIXTURE):
     # A failed decision remains an observed failure, not a fabricated successful
     # lifecycle. Full guest lifecycle proof requires both exact selected outputs.
     lifecycle=None
-    if 'historical' in approved and 'latest' in approved:
-        assert no_work==([2] if 'ambiguous' in approved else []) and last_pub
+    publication_cases=protocol.get('publication_cases',['historical','latest'])
+    nonexecuting_cases=protocol.get('nonexecuting_cases',['ambiguous'])
+    if all(name in approved for name in publication_cases):
+        assert no_work==[cases.index(name)+1 for name in nonexecuting_cases if name in approved] and last_pub
         projection=[dict(event='semantic_sequence_started',source='recorded_approved_selections',live_inference=False)]
         for event in guest:
             if event['event']=='guest_exchange' and event['operation']=='coord.stop':
@@ -99,14 +109,17 @@ def audit(folder, fixture=FIXTURE):
     return dict(correct_decisions=len(approved),events=len(cases),all_decisions_correct=approved==cases,lifecycle=lifecycle,rejected=rejected)
 
 
-def interpret(binary,kernel,source,name,output,fixture):
+def interpret(binary,kernel,source,name,output,fixture,contextual=False):
     output.mkdir();request=load(fixture/(name+'.json'));expected=load(fixture/'expected.json')[name]
     command=[str(binary),str(kernel),'--resolve' if source=='rules' else '--interpret',str(fixture/(name+'.json'))]
+    if contextual:command=[str(binary),str(kernel),'--context',source,str(fixture/'observations'/(name+'.json'))]
     env=dict(os.environ)
     if source!='meta':env['MODEL_API_KEY']=''
     if source=='replay':
         plan=dict(request_goal=request['goal'],request_version=request['request_version'],catalog_version=1,permissions_version=1,decision=expected['decision'],records=expected['records'],reason='Oracle-supplied offline selection; not inference.')
-        supplied=output/'supplied.json';supplied.write_text(json.dumps(plan)+'\n');command[2]='--interpret-replay';command.append(str(supplied))
+        supplied=output/'supplied.json';supplied.write_text(json.dumps(plan)+'\n')
+        if not contextual:command[2]='--interpret-replay'
+        command.append(str(supplied))
     start=time.monotonic()
     result=subprocess.run(command,cwd=ROOT,env=env,capture_output=True,text=True,timeout=40)
     (output/'interpret.stdout.jsonl').write_text(result.stdout);(output/'interpret.stderr.jsonl').write_text(result.stderr)
@@ -124,7 +137,7 @@ def interpret(binary,kernel,source,name,output,fixture):
     (output/'report.json').write_text(json.dumps(report,indent=2)+'\n');return message,report
 
 
-def run(binary,kernel,source,output,graphics=False,fixture=FIXTURE):
+def run(binary,kernel,source,output,graphics=False,fixture=FIXTURE,contextual=False):
     output.mkdir();cases=load(fixture/'protocol.json')['cases'];messages=queue.Queue();results=[];sent=0
     start=time.monotonic()
     with (output/'stdout.jsonl').open('w') as log,(output/'stderr.jsonl').open('w') as err,(output/'inputs.jsonl').open('w') as inputs:
@@ -141,48 +154,48 @@ def run(binary,kernel,source,output,graphics=False,fixture=FIXTURE):
                 if event['event']=='stream_ready':
                     assert event['events_received']==sent
                     if sent<len(cases):
-                        name=cases[sent];message,result=interpret(binary,kernel,source,name,output/name,fixture);results.append(result);sent+=1
+                        name=cases[sent];message,result=interpret(binary,kernel,source,name,output/name,fixture,contextual);results.append(result);sent+=1
                     else:message={'event':'stop'}
                     text=json.dumps(message)+'\n';inputs.write(text);inputs.flush();process.stdin.write(text);process.stdin.flush()
             code=process.wait(timeout=10)
         finally:
             if process.poll() is None:process.kill();process.wait()
             reader.join(timeout=2);process.stdin.close();process.stdout.close()
-    report=dict(source=source,event_source='controlled_request_updates',events_delivered=sent,exit_code=code,correct_decisions=sum(r['accepted'] for r in results),all_decisions_correct=len(results)==len(cases) and all(r['accepted'] for r in results),end_to_end_ms=round((time.monotonic()-start)*1000),graphics=graphics,presentation_pause_ms=1500 if graphics else 0)
+    report=dict(source=source,event_source='controlled_context_updates' if contextual else 'controlled_request_updates',events_delivered=sent,exit_code=code,correct_decisions=sum(r['accepted'] for r in results),all_decisions_correct=len(results)==len(cases) and all(r['accepted'] for r in results),end_to_end_ms=round((time.monotonic()-start)*1000),graphics=graphics,presentation_pause_ms=1500 if graphics else 0)
     (output/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     checked=audit(output,fixture);(output/'audit.json').write_text(json.dumps(checked,indent=2)+'\n')
     return report,checked
 
 
-def summarize(output):
+def summarize(output,fixture=FIXTURE):
     manifest=load(output/'manifest.json')
-    assert manifest['protocol']==load(FIXTURE/'protocol.json')
-    assert manifest['fixture_hashes']=={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(FIXTURE.glob('*.json'))}
+    assert manifest['protocol']==load(fixture/'protocol.json')
+    assert manifest['fixture_hashes']=={str(p.relative_to(fixture)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(fixture.rglob('*.json'))}
     assert manifest['policies'] in [['rules','meta'],['rules'],['meta'],['replay']]
     summary={}
     for source in manifest['policies']:
-        folder=output/source;checked=audit(folder);report=load(folder/'report.json')
+        folder=output/source;checked=audit(folder,fixture);report=load(folder/'report.json')
         calls=[load(folder/case/'report.json') for case in manifest['protocol']['cases']]
         usage=[r.get('provider',{}).get('usage') for r in calls]
         summary[source]=dict(audit=checked,end_to_end_ms=report['end_to_end_ms'],interpret_ms=[r['interpret_ms'] for r in calls],provider_calls=len(calls) if source=='meta' else 0,known_total_tokens=sum(u['total_tokens'] for u in usage if u),calls_with_usage=sum(u is not None for u in usage))
     return summary
 
 
-def main():
+def main(fixture=FIXTURE,contextual=False):
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',choices=['replay','rules','meta','compare'],default='replay');p.add_argument('--output',type=Path,required=True);p.add_argument('--debug',action='store_true');p.add_argument('--graphics',action='store_true');p.add_argument('--audit-only',action='store_true');a=p.parse_args()
     output=a.output.resolve()
     if a.audit_only:
-        print(json.dumps(summarize(output),indent=2));return
+        print(json.dumps(summarize(output,fixture),indent=2));return
     dirty=bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True).strip())
     if a.source in ['meta','compare']:assert not dirty,'Commit frozen source before live calls'
     assert not output.exists();binary,kernel=build(a.debug,a.graphics);output.mkdir()
     sha=lambda path:hashlib.sha256(path.read_bytes()).hexdigest()
     policies=['rules','meta'] if a.source=='compare' else [a.source]
-    manifest=dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),dirty=dirty,observed_utc=datetime.now(timezone.utc).isoformat(),policies=policies,protocol=load(FIXTURE/'protocol.json'),fixture_hashes={p.name:sha(p) for p in sorted(FIXTURE.glob('*.json'))},binary_sha256=sha(binary),kernel_sha256=sha(kernel),model='muse-spark-1.3',max_tokens=1024,reasoning_effort='minimal',schema='rai_selection',maximum_meta_calls=3 if 'meta' in policies else 0,retries=0,fallback=False,graphics=a.graphics)
+    manifest=dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),dirty=dirty,observed_utc=datetime.now(timezone.utc).isoformat(),policies=policies,protocol=load(fixture/'protocol.json'),fixture_hashes={str(p.relative_to(fixture)):sha(p) for p in sorted(fixture.rglob('*.json'))},binary_sha256=sha(binary),kernel_sha256=sha(kernel),model='muse-spark-1.3',max_tokens=1024,reasoning_effort='minimal',schema='rai_context_selection' if contextual else 'rai_selection',maximum_meta_calls=3 if 'meta' in policies else 0,retries=0,fallback=False,graphics=a.graphics)
     (output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     for source in policies:
-        report,checked=run(binary,kernel,source,output/source,a.graphics);print(json.dumps(dict(report=report,audit=checked)),flush=True)
-    summary=summarize(output);(output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+        report,checked=run(binary,kernel,source,output/source,a.graphics,fixture,contextual);print(json.dumps(dict(report=report,audit=checked)),flush=True)
+    summary=summarize(output,fixture);(output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
 
 
 if __name__=='__main__':main()

@@ -309,3 +309,19 @@ Meta calls maximum before measurement. No kernel expansion, concurrent event
 handling, file discovery or resource-efficiency claims. The host-only offline
 mission remains separate. Prioritize final evidence/rehearsal/video/submission;
 preserve original deadlines and unresolved contribution eligibility.
+
+
+## November 2: constant objective with context-triggered decisions
+
+[CONTEXT_SESSION.md](CONTEXT_SESSION.md) keeps one fixed natural-language goal and
+supplies controlled structured assignment observations. Both policies resolve
+source authority, revision freshness and conflicting assignments before the same
+retained guest execution. Events are host-injected fixture data, not new user
+prompts, OS file watching or real telemetry. The text goal/context remain host
+responsibilities; guest required sets, jobs/cache and publication remain real.
+The native screen still shows the last accepted guest target during clarification.
+
+Freeze three development observations and expected outputs before a three-call
+Meta probe. This input-boundary increment does not establish an advantage on
+complex unseen tasks. No kernel/corpus expansion; deadlines and provenance limits
+are unchanged. Finish evidence and protect rehearsal/video/submission time.

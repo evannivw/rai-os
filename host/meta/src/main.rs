@@ -3,6 +3,8 @@ mod batch;
 mod batch_bridge;
 mod batch_publication;
 mod config;
+mod context;
+mod context_runner;
 mod coordinator;
 mod decision_source;
 mod domain;
@@ -33,7 +35,7 @@ fn run() -> Result<(), String> {
     let mut args: Vec<_> = std::env::args().skip(1).collect();
     if args.is_empty() {
         return Err(
-            "usage: rai-meta <kernel> [--graphics] --selection-stream | <kernel> --mission-plan <request.json> | --mission-plan-replay <request.json> <plan.json> | --mission-build <request.json> <plan.json> <new-output> | <kernel> [--graphics] --sequence-replay <approved.json> | --resolve <request.json> | --interpret <request.json> | --interpret-replay <request.json> <selection.json> | [--graphics] --execute-selection <request.json> <selection.json> | <kernel> [--graphics] --guest-batch <events.json> | [--graphics] --guest-batch-replay <events.json> <plans.json> | <kernel> --pilot <edf|value|meta|replay> <scenario.json> [replay.json] | <kernel> [--graphics] --guest-set <events.json> | [--graphics] --guest-set-replay <events.json> <proposals.json> | <kernel> <goal> | --replay <proposal.json> | --coordinate <events.json> | --coordinate-replay <events.json> <proposals.json> | [--graphics] --guest-index <events.json> | [--graphics] --guest-index-replay <events.json> <proposals.json> | --guest <events.json> | --guest-replay <events.json> <proposals.json>".into(),
+            "usage: rai-meta <kernel> --context <rules|meta|replay> <observation.json> [selection.json] | <kernel> [--graphics] --selection-stream | <kernel> --mission-plan <request.json> | --mission-plan-replay <request.json> <plan.json> | --mission-build <request.json> <plan.json> <new-output> | <kernel> [--graphics] --sequence-replay <approved.json> | --resolve <request.json> | --interpret <request.json> | --interpret-replay <request.json> <selection.json> | [--graphics] --execute-selection <request.json> <selection.json> | <kernel> [--graphics] --guest-batch <events.json> | [--graphics] --guest-batch-replay <events.json> <plans.json> | <kernel> --pilot <edf|value|meta|replay> <scenario.json> [replay.json] | <kernel> [--graphics] --guest-set <events.json> | [--graphics] --guest-set-replay <events.json> <proposals.json> | <kernel> <goal> | --replay <proposal.json> | --coordinate <events.json> | --coordinate-replay <events.json> <proposals.json> | [--graphics] --guest-index <events.json> | [--graphics] --guest-index-replay <events.json> <proposals.json> | --guest <events.json> | --guest-replay <events.json> <proposals.json>".into(),
         );
     }
     let graphics = args.get(1).is_some_and(|s| s == "--graphics");
@@ -64,6 +66,13 @@ fn run() -> Result<(), String> {
             kernel,
             &args[2],
             Path::new(&args[3]),
+            args.get(4).map(Path::new),
+        );
+    }
+    if (args.len() == 4 || args.len() == 5) && args[1] == "--context" {
+        return context_runner::interpret(
+            Path::new(&args[3]),
+            &args[2],
             args.get(4).map(Path::new),
         );
     }

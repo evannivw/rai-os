@@ -164,6 +164,24 @@ fn semantic_body(request: &crate::semantic::Request) -> Value {
         }}}
     })
 }
+pub fn interpret_context(
+    key: &Secret,
+    observation: &crate::context::Observation,
+) -> Result<Answer<crate::semantic::Selection>, Failure> {
+    let goal = observation.request();
+    request(
+        key,
+        &goal.goal,
+        || {
+            let mut body = semantic_body(&goal);
+            body["messages"][0]["content"] = json!(crate::context::POLICY);
+            body["messages"][1]["content"]=json!(json!({"request":goal,"catalog":crate::semantic::catalog(),"observation":observation}).to_string());
+            body["response_format"]["json_schema"]["name"] = json!("rai_context_selection");
+            body
+        },
+        crate::semantic::parse,
+    )
+}
 pub fn mission(
     key: &Secret,
     goal: &crate::semantic::Request,

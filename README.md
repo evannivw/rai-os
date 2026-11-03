@@ -56,6 +56,10 @@ interpreted request updates into one running QEMU guest. Both the fixed resolver
 and Meta share the same guest execution and independent checks. This is controlled
 sequential event delivery; a decision-quality advantage is not assumed.
 
+The [constant-goal context cycle](docs/CONTEXT_SESSION.md) keeps the same objective
+while simulated assignment reports change. Conflicting reports cause no guest
+work; a resolving report can update the result in the same running RAI-OS session.
+
 ## Run
 
 Install Rustup and QEMU (9.2 or newer with virt-9.2), then:

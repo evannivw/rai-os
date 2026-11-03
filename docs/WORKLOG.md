@@ -2133,3 +2133,40 @@ The next decision-quality study must use a separately specified meaningful task
 and reserved evaluation cases; another repetition of known tiny cases cannot
 establish the user's improvement hypothesis. Existing negative evidence remains
 unchanged. Final rehearsal/video/submission are still outstanding.
+
+
+## 2026-11-02 — Constant goal and structured context, before live probe
+
+Clarified to the user that prior events were scripted written requests, not
+spontaneous OS observation. The next increment retains one identical goal and
+separates structured assignment observations from user intent. The host delivers
+three fictional reports at ready boundaries: authoritative A assignment despite
+newer advisory B; a same-revision dispatch conflict; later dispatch B resolution
+despite old conflicting/advisory reports. Request version correlates with the
+observation version, while the goal text stays byte-identical. No new user prompt
+is produced in response to the clarification; the third observation resolves data.
+
+Added a pure bounded Rust context policy and adapter, plus a separate Meta schema/
+prompt. The competent rules baseline selects the highest dispatch revision,
+checks conflicts and delegates content selection/dependencies to the existing
+resolver. Both use the same trusted intent gate and actual retained guest worker/
+cache/publication. Text goal/context remain host-side; no claim that kernel logic
+interprets reports. Source labels are trusted fixture data, not authenticated
+reports. No kernel/corpus expansion, new unsafe/dependencies, file watcher or
+concurrent semantic event processing. Native display still shows last accepted
+guest target, with new question/context text in host logs.
+
+Verified 57 host unit tests and warnings-denied Clippy in debug/release. Both
+context suites passed real QEMU replay/rules, seven invalid contexts before API
+access, altered-context evidence rejection, five lifecycle corruptions, eight
+invalid stream suffixes and two fake-provider sessions. Exact goal/current
+observation are checked by fake transport; wrong meaning preserves old output.
+Native-display replay/rules and the old semantic-session suite passed in release.
+The untouched prior live archive still passes the shared auditor. Offline raw
+files/logs are preserved in evidence/2026-11-02-context-session.
+
+Next freeze source, policy and exact expected outputs, then run rules and three
+real Meta evaluations without retries/fallback or post-answer tuning. This is an
+input-boundary integration check on known development observations, not an unseen
+complexity or decision-quality win. Keep all earlier results and protect the
+November 4 rehearsal/video/submission deadline and provenance requirements.

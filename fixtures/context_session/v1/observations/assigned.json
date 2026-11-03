@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "reports": [
+    {
+      "source": "dispatch",
+      "revision": 1,
+      "unit": "A"
+    },
+    {
+      "source": "maintenance",
+      "revision": 99,
+      "unit": "B"
+    }
+  ]
+}
