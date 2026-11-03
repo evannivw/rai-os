@@ -2963,3 +2963,17 @@ separate. Evidence: evidence/2026-11-03-app-git/live.
 This follow-up only records evidence/documentation. No executable changes or
 further API calls. Non-kernel executable self-update remains future work requiring
 service isolation, tested packages, compatible state and independent recovery.
+
+## 2026-11-03 — Design proposals and explicit self-update deferral
+
+The user requested visual proposals and polishing priorities before proceeding.
+Recorded three directions: Tactile Terminal (recommended), Workbench and Canvas.
+Conversational mockups use illustrative apps and local simulated interactions;
+they are not guest screenshots or new runtime behavior. Documented the next polish
+sequence around consistent native screens and a complete app evolution journey.
+
+Executable non-kernel self-update is explicitly deferred. Added honest future-
+direction narration to DEMO_READY, with the required isolation/recovery distinction.
+No code/runtime changes or API calls. Checked local documentation links and diff
+whitespace. The mockup script passed a syntax check; browser preview was blocked by
+the browser URL policy, so no rendered-layout verification is claimed.

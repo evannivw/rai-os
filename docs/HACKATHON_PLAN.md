@@ -505,3 +505,12 @@ restores. Then freeze source and make three actual Meta Git requests at most one
 call each: save version one, save version two and restore the previous definition.
 These verify tool selection, not new model generation of the disclosed test apps.
 Preserve current records and history and keep final video/submission work visible.
+
+## November 3: defer executable self-update and choose visual polish
+
+The user explicitly deferred changing executable RAI-OS services through Meta.
+Keep this as future research in the demo, not an enabled capability. Current Git
+support versions declarative app definitions only. Prioritize a consistent native
+phone interface and one verified create/use/evolve/restore narrative. Design
+alternatives and the recommended Tactile Terminal direction are documented in
+DESIGN_DIRECTION.md; no native redesign has been selected or implemented yet.

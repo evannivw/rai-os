@@ -204,3 +204,21 @@ Meta. Show the restore approval and preserved current records, then execute the
 restored behavior. This demonstrates reversible app evolution, not arbitrary OS
 source editing or model-speed superiority. Use the normal live demo to create/evolve
 a supported app, then issue the git: prompts described in [APP_GIT.md](APP_GIT.md).
+
+### Future direction: adaptable system services
+
+The user explicitly deferred executable RAI-OS self-modification on November 3.
+It may appear as a brief future-direction statement, separate from the working
+app-definition versioning demonstration. Suggested English narration:
+
+> Today, RAI-OS creates and evolves supported apps with reviewed changes and Git
+> history. Our next research direction is applying that approach to system services,
+> with isolation, tested updates and recovery. Executable self-update is not enabled.
+
+This is a technically plausible direction, not demonstrated readiness: the current
+app runtime and UI share EL1, and Git alone cannot recover an unbootable system or
+reverse data migration. Keep the kernel outside the proposed model-editable scope.
+See [KERNEL_DECISION.md](KERNEL_DECISION.md) and [APP_GIT.md](APP_GIT.md).
+
+For the visual polish decision, see [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md).
+The interactive concepts are proposals; record the actual guest implementation.
