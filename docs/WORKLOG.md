@@ -2351,3 +2351,32 @@ No physical Windows/phone, persistence, full isolation, arbitrary generated
 applications or AI performance advantage is claimed. Next freeze this source and
 run up to two disclosed live Meta calls: create an inspection tool, use it, then
 add priority while retaining its records. Keep Nov 4 submission/video time intact.
+
+## 2026-11-03 — Two live Meta microapp proposals
+
+Frozen source 2996d516ed8099448908b6441a08d81f5efcd809 completed the disclosed
+create/use/evolve smoke test with exactly two Meta requests, no retry/fallback or
+post-response tuning. Meta generated Inspection Log (equipment, notes, done and
+pending filter), then appended a required numeric priority defaulting to 1.
+Before each confirmation the verifier checked the requested fields/compatibility
+and that preview had changed no app or row. The real guest stored Pump A / Check
+seal / false and Pump B / Ready / true; after migration both rows retained their
+original bytes and gained priority 1. Local form, list and pending interactions
+made no further model call.
+
+Both provider responses were HTTP 200 with the configured model matching:
+creation 4234 ms / 1077 reported tokens, evolution 2381 ms / 1028 tokens. These
+are observed provider latencies, not app execution timings or AI speed gains.
+The independent smoke check used scripted UART key events; actual RFB pixel,
+keyboard and pointer transport was separately verified offline. Exact requests,
+proposals, diagnostics, UART, framebuffer captures, source/binary hashes and
+report are archived in evidence/2026-11-03-microapps/live. No credential was
+included. This demonstrates bounded generative tool creation/update on known
+development examples, not arbitrary software generation or unseen reliability.
+
+The same offline app lifecycle additionally passed in a Linux AMD64 Docker image
+under emulation on this ARM64 Mac. Both container runs disabled networking and
+exercised actual guest RFB pixels/keys/approval, records/migration and rejection.
+Image IDs, build source digests, binary hashes and runtime versions are saved in
+evidence/2026-11-03-microapps/offline/portable.json, with platform test logs. This
+checks both Linux host architectures, not a physical Windows machine or phone.

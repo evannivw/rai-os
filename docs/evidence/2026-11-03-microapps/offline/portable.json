@@ -1,0 +1,24 @@
+[
+  {
+    "machine": "aarch64",
+    "source_digest": "2501d06597908f49ad7c334e8370fa76cd00a8aed0384210adc893b469bcb895",
+    "kernel_sha256": "5f6e7fde25b3fe4e0ecc8af9865da001838028180c260833bf8d9ebf1501e969",
+    "bridge_sha256": "60b4c7eeb957bc5cbbf9ccc85a679a8ad7363878d8af8dcce7016d14e31c951a",
+    "rust": "rustc 1.90.0 (1159e78c4 2025-09-14)",
+    "qemu": "QEMU emulator version 10.0.13 (Debian 1:10.0.13+ds-0+deb13u1)",
+    "image_id": "sha256:7c518799a3093cade3ca2d5f08122e09b5102d56f276cebe20d42281594faaf5",
+    "host": "macOS ARM64 Docker; AMD64 run uses emulation",
+    "native_windows_tested": false
+  },
+  {
+    "machine": "x86_64",
+    "source_digest": "2501d06597908f49ad7c334e8370fa76cd00a8aed0384210adc893b469bcb895",
+    "kernel_sha256": "5f6e7fde25b3fe4e0ecc8af9865da001838028180c260833bf8d9ebf1501e969",
+    "bridge_sha256": "9cae60e5003c0669e0d21a229af4374f2c54e3ac48a942ab19d453be1f730f11",
+    "rust": "rustc 1.90.0 (1159e78c4 2025-09-14)",
+    "qemu": "QEMU emulator version 10.0.13 (Debian 1:10.0.13+ds-0+deb13u1)",
+    "image_id": "sha256:b3ec4f1e7b208758f9e6d04322bf372b4187d29d48169ca6617d55728f2fa034",
+    "host": "macOS ARM64 Docker; AMD64 run uses emulation",
+    "native_windows_tested": false
+  }
+]

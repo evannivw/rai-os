@@ -1,0 +1,39 @@
+{
+  "request_id": 3,
+  "base_revision": 4,
+  "goal": "Add a required integer priority field with default 1. Preserve all existing fields, records and the pending view.",
+  "target": {
+    "id": "inspect",
+    "title": "Inspection Log",
+    "capability": "records.local",
+    "fields": [
+      {
+        "key": "equipment",
+        "kind": "text",
+        "required": true,
+        "label": "Equipment",
+        "default": ""
+      },
+      {
+        "key": "notes",
+        "kind": "text",
+        "required": false,
+        "label": "Notes",
+        "default": ""
+      },
+      {
+        "key": "done",
+        "kind": "check",
+        "required": false,
+        "label": "Done",
+        "default": "false"
+      }
+    ],
+    "filter_key": "done",
+    "filter_label": "Pending"
+  },
+  "app_ids": [
+    "inspect"
+  ],
+  "record_count": 2
+}

@@ -1,0 +1,29 @@
+{
+  "recorded_utc": "2026-11-03T06:39:53.856896+00:00",
+  "source_commit": "2996d516ed8099448908b6441a08d81f5efcd809",
+  "maximum_calls": 2,
+  "actual_calls": 2,
+  "retries": 0,
+  "fixture": "Known development prompts in scripts/apps.py; not a benchmark.",
+  "input": "Scripted key events through the same guest UART controller; RFB was separately verified offline.",
+  "sha256": {
+    "2/proposal.png": "19af00c4aa142aa22b1246fcc065275135c43bb6cf6fabf14b07eedf11f37af6",
+    "2/provider.stderr.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "2/provider.stdout.jsonl": "8dbe08419899be8355cf7064d11cf4ef493105cd319e0a4e9a605ba57c14d248",
+    "2/request.json": "6d3b2c34a1c7887ca75bd23b4263706588c4ba9ceb478167e78179245f94fcdc",
+    "3/proposal.png": "80deea38d5a80c8fd2c761505c6972a0e067e4a351b722572170dbc6f20b5929",
+    "3/provider.stderr.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "3/provider.stdout.jsonl": "a9af9ac2fdcec14585bcfcb4efe2af95ee49f7c5fdc22f16149c41a6eceb1d6c",
+    "3/request.json": "8ad3cffae2e27aaa58b18b3d6fe5283a4f0ec527c46a84b112ec4a35a610e533",
+    "create-review.png": "19af00c4aa142aa22b1246fcc065275135c43bb6cf6fabf14b07eedf11f37af6",
+    "evolved-record.png": "870dd4c944beb45d07070509f6124dfad3a36305c03b23cb25978b530d77f150",
+    "form.png": "e67b13232695d53ced7d9548fd96080f9de1953ceb667c332df91091adb213e8",
+    "live-report.json": "0a13ac2f741dae78d7d20a29815a4596faba9e2087be4c3301a03dad65c57beb",
+    "pending.png": "610b1bd0fb6316e5093089494e23688d91805420f7364d29e16aabd9dca49424",
+    "records.png": "80c6e6037fa72c7b471c34237f5a478b7a9c111db1fe1c3c13f47639678ecd6e",
+    "thinking-2.png": "7475d36d9f809a43bcd63b98520612f8eeaeda5c8e5c3847c6717611072b5fb9",
+    "thinking-3.png": "75ed6a0e60676cb45f7ce8c723434bc33581f8361799cf7f778f5303966fbfba",
+    "uart.log": "bee267a7bf2b79fd2b9ffbd10a52a18397fd69b8804910387da54f2fab2c15e9",
+    "update-review.png": "80deea38d5a80c8fd2c761505c6972a0e067e4a351b722572170dbc6f20b5929"
+  }
+}

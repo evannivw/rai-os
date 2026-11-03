@@ -148,3 +148,18 @@ service boundary. Do not offer location upload until location, transport, explic
 consent and enforceable capability boundaries exist. Preserve time for the Nov 4
 video/submission. The current demo story is prompt -> reviewed app -> usable
 records -> prompt update -> same records, not an unmeasured speed claim.
+
+## Observed live development result (November 3)
+
+[The recorded run](evidence/2026-11-03-microapps/live/live-report.json) on frozen
+source 2996d51 generated Inspection Log and then added priority, retaining both
+existing guest records exactly. Two HTTP 200 responses, no retry: creation 4234 ms,
+evolution 2381 ms. Guest UI/form/list/migration were real; input for this smoke test
+was scripted UART, with RFB verified separately offline. The screenshots are
+QEMU framebuffer captures, not mockups. No general success rate or superiority
+follows from these two disclosed development prompts.
+
+Offline lifecycle tests passed in native macOS ARM64 debug/release and Linux
+ARM64/AMD64 containers (AMD64 emulated on this Mac), with networking disabled in
+the containers. [Portable evidence](evidence/2026-11-03-microapps/offline/portable.json)
+records images, source digests and versions. Physical Windows remains untested.
