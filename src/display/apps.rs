@@ -1,235 +1,332 @@
-//! Declarative app presenter: observes state without mutating records or policy.
-use super::{Display, terminal as t};
+//! Phone-shaped launcher and app views. Geometry matches guest-owned hit testing.
+use super::{
+    Display,
+    font::{self, Size},
+    terminal as t,
+};
 use crate::{
     app_ui::{Controller, Mode},
     microapp::Kind,
 };
-pub fn render(s: &mut Display, u: &Controller) {
-    let app = u.runtime.app(u.selected);
-    let title = match u.mode {
-        Mode::Home => "Build what you need.",
-        Mode::Compose => "Describe a tool.",
-        Mode::Thinking => "Compiling intent_",
-        Mode::Review => "Inspect. Then install.",
-        Mode::Form | Mode::Records => app.map_or("Microapps", |a| a.spec.title.text()),
-        Mode::Notice => "A boundary, clearly.",
+const QUIET: u32 = 0x62716d;
+const WHITE: u32 = 0xe6ece7;
+const LIME: u32 = 0xc1f27d;
+fn text(s: &mut Display, v: &str, x: i32, y: i32, c: u32) {
+    t::text(s, v, x, y, c);
+}
+fn center(s: &mut Display, v: &str, y: i32, size: Size, c: u32) {
+    font::draw(s, v, (480 - font::width(v, size)) / 2, y, size, c);
+}
+/// Broken horizontal strokes, fine verticals and diagonal corners echo terminal
+/// line art without depending on Unicode font support or a host renderer.
+fn frame(s: &mut Display, x: usize, y: usize, w: usize, h: usize, c: u32) {
+    for dx in 9..w - 9 {
+        if dx % 12 < 9 {
+            s.pixel(x + dx, y, c);
+            s.pixel(x + dx, y + h - 1, c);
+        }
+    }
+    for dy in 9..h - 9 {
+        s.pixel(x, y + dy, c);
+        s.pixel(x + w - 1, y + dy, c);
+    }
+    for d in 0..9 {
+        s.pixel(x + 8 - d, y + d, c);
+        s.pixel(x + w - 9 + d, y + d, c);
+        s.pixel(x + 8 - d, y + h - 1 - d, c);
+        s.pixel(x + w - 9 + d, y + h - 1 - d, c);
+    }
+}
+fn icon(s: &mut Display, x: usize, y: usize, shape: usize, c: u32) {
+    frame(s, x, y, 70, 70, c);
+    let art = match shape % 4 {
+        0 => ["+---+", "| = |", "+---+"],
+        1 => ["[x] /", "[ ] /", "[ ] /"],
+        2 => ["+---+", "|# #|", "+---+"],
+        _ => ["  |  ", "--+--", "  |  "],
     };
-    t::base(
-        s,
-        "/ APPS     DECLARATIVE RUNTIME",
-        title,
-        "Your tools / local execution / records in RAM",
-        u.live,
-    );
+    for (i, line) in art.iter().enumerate() {
+        text(s, line, x as i32 + 18, y as i32 + 10 + i as i32 * 17, c);
+    }
+}
+fn header(s: &mut Display, u: &Controller, title: &str) {
+    s.fill(0x060908);
+    text(s, "rai", 26, 28, WHITE);
+    text(s, if u.live { "meta" } else { "replay" }, 406, 28, QUIET);
+    center(s, ". . .", 28, Size::Small, QUIET);
+    center(s, title, 83, Size::Title, WHITE);
+}
+fn nav(s: &mut Display) {
+    t::rect(s, 24, 750, 432, 1, 0x21302a);
+    text(s, "[ home ]", 49, 769, QUIET);
+    text(s, "[ + create ]", 198, 769, LIME);
+    text(s, "[ / find ]", 365, 769, QUIET);
+}
+fn action(s: &mut Display, label: &str) {
+    frame(s, 24, 696, 432, 48, LIME);
+    center(s, label, 708, Size::Body, LIME);
+}
+fn wrap(s: &mut Display, value: &str, y: i32, lines: usize) {
+    let mut rest = value;
+    for row in 0..lines {
+        if rest.is_empty() {
+            break;
+        }
+        let mut end = rest.len().min(54);
+        if end < rest.len()
+            && let Some(space) = rest[..end].rfind(' ').filter(|i| *i > 0)
+        {
+            end = space;
+        }
+        text(s, &rest[..end], 42, y + row as i32 * 21, WHITE);
+        rest = rest[end..].trim_start();
+    }
+}
+pub fn render(s: &mut Display, u: &Controller) {
+    let a = u.runtime.app(u.selected);
+    let title = match u.mode {
+        Mode::Home => "Your space.",
+        Mode::Search => "Find an app.",
+        Mode::Compose => {
+            if u.target().is_some() {
+                "Evolve your app."
+            } else {
+                "Make an app."
+            }
+        }
+        Mode::Thinking => "Creating...",
+        Mode::Review => "Ready to install.",
+        Mode::Form | Mode::Records => a.map_or("Your app", |a| a.spec.title.text()),
+        Mode::Notice => "One more thing.",
+    };
+    header(s, u, title);
     match u.mode {
-        Mode::Home => {
-            t::text(s, "INSTALLED / YOUR TOOLS", 26, 194, t::MUTED);
-            for (slot, a) in u.runtime.entries() {
-                let y = 224 + slot * 80;
-                if slot == u.selected {
-                    t::rect(s, 24, y, 432, 68, t::PANEL);
-                    t::rect(s, 24, y, 3, 68, t::ACCENT);
-                }
-                t::body(s, a.spec.title.text(), 42, y as i32 + 10, t::INK);
-                t::text(s, a.spec.id.text(), 42, y as i32 + 40, t::MUTED);
-            }
-            if u.runtime.entries().count() == 0 {
-                t::body(s, "[ ] No apps installed yet", 30, 252, t::INK);
-                t::wrap(
-                    s,
-                    "A prompt becomes a form, a record view and a small tool you can use without another AI call.",
-                    300,
-                    3,
-                    t::MUTED,
-                );
-            }
-            t::prompt(
+        Mode::Home | Mode::Search => {
+            frame(s, 24, 146, 432, 48, QUIET);
+            text(
                 s,
-                "> CREATE / F2",
-                "Describe a tool. Review its fields. Make it yours.",
+                if u.mode == Mode::Search && !u.search.text().is_empty() {
+                    u.search.text()
+                } else {
+                    "/ search your apps"
+                },
+                44,
+                161,
+                if u.mode == Mode::Search { LIME } else { QUIET },
             );
-            t::button(
+            let mut count = 0;
+            for (slot, app) in u.runtime.entries().filter(|(i, _)| u.app_matches(*i)) {
+                let x = 44 + count % 2 * 216;
+                let y = 242 + count / 2 * 178;
+                count += 1;
+                let c = if slot == u.selected { LIME } else { WHITE };
+                let shape = app
+                    .spec
+                    .id
+                    .text()
+                    .bytes()
+                    .fold(0usize, |n, b| n + usize::from(b))
+                    % 3;
+                icon(s, x + 53, y, shape, c);
+                let title = app.spec.title.text();
+                let split = title.len().min(23);
+                text(
+                    s,
+                    &title[..split],
+                    x as i32 + (176 - split as i32 * 7) / 2,
+                    y as i32 + 88,
+                    c,
+                );
+                if split < title.len() {
+                    text(s, &title[split..], x as i32 + 24, y as i32 + 106, QUIET);
+                }
+                if slot == u.selected {
+                    text(s, "_", x as i32 + 84, y as i32 + 125, LIME);
+                }
+            }
+            if count < 4 {
+                let x = 44 + count % 2 * 216;
+                let y = 242 + count / 2 * 178;
+                icon(s, x + 53, y, 3, QUIET);
+                text(s, "Create", x as i32 + 67, y as i32 + 88, QUIET);
+            }
+            if u.mode == Mode::Search && count == 0 {
+                center(s, "No matching apps", 622, Size::Small, QUIET);
+            }
+            action(
                 s,
-                "Enter / Open selected",
-                "F2 new app   Tab select   Esc home   RAM only",
+                if count == 0 {
+                    "+ Create your first app"
+                } else {
+                    "Enter / Open app"
+                },
             );
         }
         Mode::Compose | Mode::Thinking => {
-            t::text(
-                s,
-                if u.target().is_some() {
-                    "EVOLVE / EXISTING RECORDS PRESERVED"
-                } else {
-                    "CREATE / ONE PURPOSE, YOUR STRUCTURE"
-                },
-                26,
-                194,
-                t::ACCENT,
-            );
-            for (i, (n, v)) in [
-                ("01 / DEFINE", "Text, numbers, checks. Up to six fields."),
-                ("02 / REVIEW", "Only local records. No ambient access."),
-                ("03 / USE", "Save, edit and filter inside RAI-OS."),
+            // An original line-art spark: decorative, never fabricated telemetry.
+            for (i, line) in [
+                "      .      ",
+                "  .   |   .  ",
+                "   \\  |  /   ",
+                "----  +  ----",
+                "   /  |  \\   ",
+                "  '   |   '  ",
             ]
             .iter()
             .enumerate()
             {
-                let y = 240 + i as i32 * 82;
-                t::text(s, n, 30, y, t::MUTED);
-                t::body(s, v, 30, y + 24, t::INK);
+                center(
+                    s,
+                    line,
+                    162 + i as i32 * 18,
+                    Size::Small,
+                    if i == 3 { LIME } else { QUIET },
+                );
             }
-            t::prompt(
+            frame(
                 s,
-                "> YOUR INTENT",
+                24,
+                328,
+                432,
+                220,
+                if u.mode == Mode::Thinking {
+                    QUIET
+                } else {
+                    LIME
+                },
+            );
+            text(s, ">", 40, 350, LIME);
+            wrap(
+                s,
                 if u.prompt.text().is_empty() {
-                    "Create an inspection app with equipment, notes, a done checkbox and a pending view."
+                    "What do you want to create?_"
                 } else {
                     u.prompt.text()
                 },
+                389,
+                6,
             );
-            t::button(
+            center(
+                s,
+                if u.target().is_some() {
+                    "Your existing records stay."
+                } else {
+                    "Your idea. Your app."
+                },
+                588,
+                Size::Small,
+                QUIET,
+            );
+            action(
                 s,
                 if u.mode == Mode::Thinking {
-                    "Waiting for Meta proposal..."
+                    "Waiting for Meta..."
                 } else {
-                    "Enter / Generate app"
+                    "Enter / Create"
                 },
-                "Esc cancel    ASCII input / 128 characters",
             );
         }
         Mode::Review => {
-            t::body(s, u.pending.title.text(), 30, 193, t::ACCENT);
+            icon(s, 205, 152, 0, LIME);
+            center(s, u.pending.title.text(), 238, Size::Body, WHITE);
             for (i, f) in u.pending.fields().iter().enumerate() {
-                let y = 235 + i as i32 * 40;
-                t::text(s, f.kind.name(), 30, y, t::MUTED);
-                t::body(s, f.label.text(), 112, y - 4, t::INK);
-                t::divider(s, y as usize + 28);
+                let y = 292 + i as i32 * 43;
+                text(s, f.label.text(), 42, y, WHITE);
+                text(s, f.kind.name(), 371, y, QUIET);
             }
-            t::text(s, "CAPABILITY / records.local", 30, 490, t::ACCENT);
-            t::text(
-                s,
-                "Schema checked. Existing values retained.",
-                30,
-                516,
-                t::MUTED,
-            );
-            t::prompt(s, "> PLAN / AWAITING YOUR CONFIRMATION", u.message.text());
-            t::button(
-                s,
-                "Enter / Install this app",
-                "Esc discard    No installation before approval",
-            );
+            text(s, "Local records only", 42, 577, LIME);
+            wrap(s, u.message.text(), 606, 3);
+            action(s, "+ Install app");
         }
         Mode::Form => {
-            if let Some(a) = app {
-                t::text(
+            if let Some(a) = a {
+                text(
                     s,
                     if u.editing.is_some() {
-                        "EDIT RECORD / LOCAL EXECUTION"
+                        "/ edit record"
                     } else {
-                        "NEW RECORD / LOCAL EXECUTION"
+                        "/ new record"
                     },
                     26,
-                    184,
-                    t::ACCENT,
+                    154,
+                    QUIET,
                 );
                 for (i, f) in a.spec.fields().iter().enumerate() {
-                    let y = 214 + i * 52;
-                    if i == u.focus {
-                        t::rect(s, 24, y, 432, 48, t::PANEL);
-                        t::rect(s, 24, y, 3, 48, t::ACCENT);
-                    }
-                    t::text(s, f.label.text(), 36, y as i32 + 2, t::MUTED);
+                    let y = 190 + i * 72;
+                    frame(
+                        s,
+                        24,
+                        y,
+                        432,
+                        64,
+                        if i == u.focus { LIME } else { 0x26392e },
+                    );
+                    text(s, f.label.text(), 42, y as i32 + 6, QUIET);
                     let value = if f.kind == Kind::Check {
                         if u.draft[i].text() == "true" {
-                            "[x] true"
+                            "[x]"
                         } else {
-                            "[ ] false"
+                            "[ ]"
                         }
                     } else if u.draft[i].text().is_empty() {
                         "_"
                     } else {
                         u.draft[i].text()
                     };
-                    t::body(s, value, 36, y as i32 + 21, t::INK);
+                    t::body(s, value, 42, y as i32 + 28, WHITE);
                 }
-                t::prompt(
-                    s,
-                    "> APP / RECORDS STAY IN THIS NAMESPACE",
-                    if u.message.text().is_empty() {
-                        "Tab changes fields. Space toggles a checkbox. Enter validates and saves the complete record."
-                    } else {
-                        u.message.text()
-                    },
-                );
-                t::button(
-                    s,
-                    "Enter / Save record",
-                    "Tab field   F2 evolve   F3 records   Esc home",
-                );
+                if !u.message.text().is_empty() {
+                    wrap(s, u.message.text(), 638, 2);
+                } else {
+                    text(s, "Tab fields   F3 records   F2 evolve", 42, 651, QUIET);
+                }
+                action(s, "Save record");
             }
         }
         Mode::Records => {
-            if let Some(a) = app {
-                t::text(
+            if let Some(a) = a {
+                text(
                     s,
                     if u.filtered {
                         a.spec.filter_label.text()
                     } else {
-                        "ALL RECORDS"
+                        "/ all records"
                     },
                     26,
-                    184,
-                    t::ACCENT,
+                    154,
+                    LIME,
                 );
                 let mut visible = 0;
                 for row in 0..a.count() {
                     if !u.visible(row) {
                         continue;
                     }
-                    let values = a.row(row).unwrap();
-                    let y = 214 + visible * 39;
+                    let v = a.row(row).unwrap();
+                    let y = 214 + visible * 50;
                     visible += 1;
                     if row == u.row {
-                        t::rect(s, 24, y, 432, 35, t::PANEL);
-                        t::rect(s, 24, y, 3, 35, t::ACCENT);
+                        frame(s, 24, y, 432, 44, QUIET);
                     }
-                    let checked = a
-                        .spec
-                        .check_field()
-                        .is_some_and(|i| values[i].text() == "true");
-                    t::text(
-                        s,
-                        if checked { "[x]" } else { "[ ]" },
-                        36,
-                        y as i32 + 9,
-                        t::ACCENT,
-                    );
-                    t::body(s, values[0].text(), 70, y as i32 + 5, t::INK);
+                    let mark = if let Some(i) = a.spec.check_field() {
+                        if v[i].text() == "true" { "[x]" } else { "[ ]" }
+                    } else {
+                        ">"
+                    };
+                    text(s, mark, 39, y as i32 + 13, LIME);
+                    t::body(s, v[0].text(), 78, y as i32 + 8, WHITE);
                 }
                 if visible == 0 {
-                    t::body(s, "No records in this view_", 30, 244, t::MUTED);
+                    center(s, "Nothing here yet_", 321, Size::Body, QUIET);
                 }
-                t::prompt(
-                    s,
-                    "> RECORD / SELECTED DETAIL",
-                    if let Some(row) = a.row(u.row).filter(|_| u.visible(u.row)) {
-                        row.get(1).map_or("", |v| v.text())
-                    } else {
-                        "Press N to add a record."
-                    },
-                );
-                t::button(
-                    s,
-                    "Enter / Edit selected",
-                    "N new   Space status   F4 filter   F2 evolve",
-                );
+                text(s, "N new   F4 filter   F2 evolve", 42, 651, QUIET);
+                action(s, "Open record");
             }
         }
         Mode::Notice => {
-            t::wrap(s, u.message.text(), 220, 8, t::INK);
-            t::button(s, "Enter / Back home", "No app changed. Esc home");
+            wrap(s, u.message.text(), 260, 8);
+            action(s, "Back home");
         }
     }
+    nav(s);
     s.present();
 }

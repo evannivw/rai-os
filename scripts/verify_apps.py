@@ -38,7 +38,7 @@ def verify(kernel,binary,output):
         client,server=socket.socketpair();errors=[]
         def relay():
             try:
-                with server:session(server,g.vnc_socket,app.press)
+                with server:session(server,g.vnc_socket,app.press,app.tap)
             except (EOFError,OSError):pass
             except BaseException as e:errors.append(repr(e))
         worker=threading.Thread(target=relay,daemon=True);worker.start();client.settimeout(20)
@@ -81,6 +81,14 @@ def verify(kernel,binary,output):
         p=submit(g,'Second app');p['spec']['id']='stock';p['spec']['title']='Inventory';deliver(g,p);g.request('app.key','13');assert records(g,'stock')==[]
         text(g,'Cable');g.request('app.key','13');assert records(g,'stock')==[['Cable','','false']] and records(g,'inspection')==saved
         g.request('app.open');g.capture(output/'library.ppm');checks.append('Second app has independent records; rejected numeric edit has no side effects')
+        # Guest-owned touch targets and case-insensitive search select real apps.
+        app.tap(400,775);text(g,'INVENT');assert g.request('app.key','0')=='state=search';g.capture(output/'search.ppm')
+        app.tap(132,270);assert g.request('app.key','0')=='state=form'
+        app.tap(50,775);app.tap(350,270);assert g.request('app.key','0')=='state=form'
+        # Touch the checkbox field, then save to the selected Inventory app.
+        text(g,'Sensor');app.tap(150,350);app.tap(240,720)
+        assert records(g,'stock')[-1]==['Sensor','','true'] and records(g,'inspection')==saved
+        g.request('app.open');checks.append('Case-insensitive launcher search, app icon taps, form field taps and home navigation use guest state')
         # Malformed/unavailable capabilities, duplicate fields, old requests and destructive migrations.
         catalog=g.request('app.catalog');stock=records(g,'stock')
         p=submit(g,'Invalid update','inspection');rid=p['request_id'];rev=p['base_revision']

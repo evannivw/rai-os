@@ -3,6 +3,7 @@ use crate::microapp::{Field, Kind, Runtime, Spec, Text, Values};
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Mode {
     Home,
+    Search,
     Compose,
     Thinking,
     Review,
@@ -22,6 +23,7 @@ pub struct Controller {
     pub draft: Values,
     pub editing: Option<usize>,
     pub prompt: Text<128>,
+    pub search: Text<32>,
     pub message: Text<160>,
     pub pending: Spec,
     request: u32,
@@ -101,6 +103,7 @@ impl Controller {
             draft: [Text::EMPTY; 6],
             editing: None,
             prompt: Text::EMPTY,
+            search: Text::EMPTY,
             message: Text::EMPTY,
             pending: Spec::EMPTY,
             request: 0,
@@ -115,6 +118,7 @@ impl Controller {
     fn state(&self) -> &'static str {
         match self.mode {
             Mode::Home => "home",
+            Mode::Search => "search",
             Mode::Compose => "compose",
             Mode::Thinking => "thinking",
             Mode::Review => "review",
@@ -122,6 +126,97 @@ impl Controller {
             Mode::Records => "records",
             Mode::Notice => "notice",
         }
+    }
+    pub fn app_matches(&self, slot: usize) -> bool {
+        self.runtime.app(slot).is_some_and(|a| {
+            let query = self.search.text().as_bytes();
+            query.is_empty()
+                || [a.spec.title.text(), a.spec.id.text()].iter().any(|value| {
+                    value
+                        .as_bytes()
+                        .windows(query.len())
+                        .any(|part| part.eq_ignore_ascii_case(query))
+                })
+        })
+    }
+    fn select_match(&mut self) {
+        if !self.app_matches(self.selected) {
+            self.selected = (0..crate::microapp::APPS)
+                .find(|i| self.app_matches(*i))
+                .unwrap_or(0);
+        }
+    }
+    fn tap(&mut self, x: usize, y: usize) -> Result<Reply, &'static str> {
+        if x >= 480 || y >= 800 {
+            return Err("app_bad_pointer");
+        }
+        if y >= 754 {
+            if x < 160 {
+                return self.key(27);
+            }
+            if x < 320 {
+                return self.key(1002);
+            }
+            self.key(27)?;
+            return self.key(47);
+        }
+        if (696..745).contains(&y) {
+            return self.key(13);
+        }
+        match self.mode {
+            Mode::Home | Mode::Search => {
+                if (146..195).contains(&y) {
+                    self.mode = Mode::Search;
+                    return Ok(Reply::State("search"));
+                }
+                for cell in 0..4 {
+                    let left = 44 + (cell % 2) * 216;
+                    let top = 242 + (cell / 2) * 178;
+                    if (left..left + 176).contains(&x) && (top..top + 150).contains(&y) {
+                        if let Some(slot) = (0..crate::microapp::APPS)
+                            .filter(|i| self.app_matches(*i))
+                            .nth(cell)
+                        {
+                            self.selected = slot;
+                            self.form(None)?;
+                        } else if cell
+                            == self
+                                .runtime
+                                .entries()
+                                .filter(|(i, _)| self.app_matches(*i))
+                                .count()
+                        {
+                            self.begin_prompt(None);
+                        }
+                        return Ok(Reply::State(self.state()));
+                    }
+                }
+            }
+            Mode::Form => {
+                if let Some(a) = self.runtime.app(self.selected)
+                    && (190..622).contains(&y)
+                {
+                    let field = (y - 190) / 72;
+                    if field < a.spec.fields().len() {
+                        self.focus = field;
+                        if a.spec.fields()[field].kind == Kind::Check {
+                            return self.key(32);
+                        }
+                    }
+                }
+            }
+            Mode::Records => {
+                if (214..614).contains(&y) {
+                    let row = (y - 214) / 50;
+                    if let Some(index) = (0..8).filter(|r| self.visible(*r)).nth(row) {
+                        self.row = index;
+                        return self.key(13);
+                    }
+                }
+            }
+            _ => {}
+        }
+        Ok(Reply::State(self.state()))
     }
     fn begin_prompt(&mut self, target: Option<usize>) {
         self.target = target;
@@ -160,6 +255,7 @@ impl Controller {
             self.mode = Mode::Home;
             self.message = Text::EMPTY;
             self.pending = Spec::EMPTY;
+            self.search = Text::EMPTY;
             return Ok(Reply::State("home"));
         }
         if key == 1002 && !matches!(self.mode, Mode::Thinking | Mode::Review) {
@@ -172,7 +268,30 @@ impl Controller {
             return Ok(Reply::State("compose"));
         }
         match self.mode {
+            Mode::Search => match key {
+                8 | 127 => {
+                    self.search.pop();
+                    self.select_match();
+                }
+                32..=126 => {
+                    self.search.push(key as u8);
+                    self.select_match();
+                }
+                9 | 1006 => {
+                    self.selected = (self.selected + 1..crate::microapp::APPS)
+                        .chain(0..=self.selected)
+                        .find(|i| self.app_matches(*i))
+                        .unwrap_or(0);
+                }
+                13 if self.app_matches(self.selected) => self.form(None)?,
+                13 => self.begin_prompt(None),
+                _ => {}
+            },
             Mode::Home => match key {
+                47 => {
+                    self.search = Text::EMPTY;
+                    self.mode = Mode::Search;
+                }
                 9 | 1006 => {
                     let count = self.runtime.entries().count();
                     if count > 0 {
@@ -221,7 +340,7 @@ impl Controller {
                 self.filtered = false;
                 self.row = 0;
                 self.form(None)?;
-                self.message = Text::new("Installed. Runs locally; no AI per click.")?;
+                self.message = Text::new("App installed.")?;
             }
             Mode::Form => {
                 let a = self.runtime.app(self.selected).ok_or("app_not_found")?;
@@ -240,7 +359,7 @@ impl Controller {
                             .editing
                             .unwrap_or(self.runtime.app(self.selected).unwrap().count() - 1);
                         self.mode = Mode::Records;
-                        self.message = Text::new("Record saved in this app's private namespace.")?;
+                        self.message = Text::new("Saved.")?;
                         self.normalize_row();
                     }
                     32 if kind == Kind::Check => {
@@ -303,6 +422,7 @@ impl Controller {
                 self.form(None)?;
             } else {
                 self.mode = Mode::Home;
+                self.search = Text::EMPTY;
             }
             return Ok(Reply::State(self.state()));
         }
@@ -319,6 +439,13 @@ impl Controller {
                 }
             }
             "app.key" => return self.key(arg.parse().map_err(|_| "bad_args")?),
+            "app.tap" => {
+                let [x, y] = parts(arg)?;
+                return self.tap(
+                    x.parse().map_err(|_| "bad_args")?,
+                    y.parse().map_err(|_| "bad_args")?,
+                );
+            }
             "app.begin" => {
                 let [id, base, app, title, cap] = parts(arg)?;
                 self.check_request(id)?;

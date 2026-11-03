@@ -163,3 +163,19 @@ Offline lifecycle tests passed in native macOS ARM64 debug/release and Linux
 ARM64/AMD64 containers (AMD64 emulated on this Mac), with networking disabled in
 the containers. [Portable evidence](evidence/2026-11-03-microapps/offline/portable.json)
 records images, source digests and versions. Physical Windows remains untested.
+
+## November 3: launcher and line-art interface
+
+The native launcher now shows app icons and a separate create tile. The screen
+uses broken horizontal strokes, diagonal corners and small text glyphs, all
+rendered in the guest. Icons are deterministic decorations derived from app IDs;
+they do not imply new capabilities. Search is case-insensitive across app name
+and ID: press `/` at Home or tap Find, type, then Enter or tap a matching icon.
+Home, Create and Find are persistent navigation targets. Field taps select a form
+field (checkbox taps toggle); record taps open it. The guest app.tap x:y command
+owns hit testing. The RFB relay transports pointer coordinates without owning
+layout or app behavior. Existing keyboard controls remain available.
+
+Creating an app installs a checked declarative description, not compiled native
+Rust machine code. The icon opens that description in the guest runtime. This
+keeps the real execution model distinct from the future native-code toolchain.

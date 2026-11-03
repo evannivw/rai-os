@@ -16,7 +16,7 @@ def exact(s,n):
         data+=chunk
     return data
 
-def session(client,path,press):
+def session(client,path,press,tap=None):
     with socket.socket(socket.AF_UNIX) as backend:
         backend.connect(str(path));client.settimeout(15);backend.settimeout(15)
         banner=exact(backend,12);assert banner==b'RFB 003.008\n';client.sendall(banner)
@@ -67,7 +67,8 @@ def session(client,path,press):
                 elif kind==5:
                     mask,x,y=struct.unpack('!BHH',exact(client,5))
                     if mask&1 and not buttons&1:
-                        if 24<=x<456 and 706<=y<754:press(13)
+                        if tap is not None:tap(x,y)
+                        elif 24<=x<456 and 706<=y<754:press(13)
                         elif y>=765:press(27)
                         elif 490<=y<535:press(9)
                     buttons=mask
@@ -83,12 +84,12 @@ def session(client,path,press):
             except OSError:pass
             worker.join(timeout=2)
 
-def serve(path,press,port=5900,bind='127.0.0.1'):
+def serve(path,press,port=5900,bind='127.0.0.1',tap=None):
     with socket.socket() as listener:
         listener.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1);listener.bind((bind,port));listener.listen(1)
         print(f'RAI-OS workspace ready: VNC localhost:{port}. Type an instruction; Enter previews, Enter confirms, Esc cancels.',flush=True)
         while True:
             client,_=listener.accept()
             with client:
-                try:session(client,path,press)
+                try:session(client,path,press,tap)
                 except (OSError,EOFError,ValueError,AssertionError,queue.Full) as error:print(f'VNC viewer disconnected ({type(error).__name__}: {error}); guest workspace retained.',flush=True)

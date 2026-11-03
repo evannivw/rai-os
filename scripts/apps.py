@@ -52,9 +52,11 @@ class Studio:
         try:self.guest.request('app.open');self.guest.request('app.source',source)
         except BaseException:self.guest.close();raise
     def press(self,key):
+        return self.dispatch('app.key',str(key))
+    def dispatch(self,name,arg):
         with self.lock:
             if self.closed:return
-            reply=self.guest.request('app.key',str(key))
+            reply=self.guest.request(name,arg)
             if reply.startswith('submit='):
                 state=dict(p.split('=',1) for p in reply.split('; '));rid=int(state['submit'])
                 if any(t.is_alive() for t in self.threads) or len(self.threads)>=8:
@@ -67,6 +69,12 @@ class Studio:
                 request=dict(request_id=rid,base_revision=int(state['revision']),goal=bytes.fromhex(state['prompt']).decode('ascii'),target=None if state['target']=='-' else schema(self.guest,state['target']),app_ids=ids,record_count=count)
                 thread=threading.Thread(target=self.plan,args=(request,),daemon=False);self.threads.append(thread);thread.start()
             return reply
+    def tap(self,x,y):
+        with self.lock:
+            if self.closed:return
+            # Pointer geometry belongs to the guest. Submission has the same shape
+            # as a key reply; a click on Create needs the same planning path.
+            return self.dispatch('app.tap',f'{x}:{y}')
     def plan(self,r):
         folder=self.output/str(r['request_id']);folder.mkdir();path=folder/'request.json';path.write_text(json.dumps(r,indent=2)+'\n');rid=r['request_id']
         cmd=[str(self.binary),str(self.kernel),'--app-plan',str(path)]
@@ -103,10 +111,12 @@ def run(kernel,binary,output,source='meta',port=5900,bind='127.0.0.1'):
         while True:
             key=keys.get()
             if key is None:return
-            try:app.press(key)
+            try:
+                if isinstance(key,tuple):app.tap(*key)
+                else:app.press(key)
             except (AssertionError,OSError):print('Guest rejected input.',flush=True)
     worker=threading.Thread(target=keyboard,daemon=True);worker.start()
-    try:serve(app.guest.vnc_socket,press,port,bind)
+    try:serve(app.guest.vnc_socket,press,port,bind,tap=lambda x,y:keys.put_nowait((x,y)))
     finally:keys.put(None);worker.join(timeout=10);app.close()
 
 if __name__=='__main__':

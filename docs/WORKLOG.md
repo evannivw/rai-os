@@ -2380,3 +2380,20 @@ exercised actual guest RFB pixels/keys/approval, records/migration and rejection
 Image IDs, build source digests, binary hashes and runtime versions are saved in
 evidence/2026-11-03-microapps/offline/portable.json, with platform test logs. This
 checks both Linux host architectures, not a physical Windows machine or phone.
+
+## 2026-11-03 — App launcher, search and guest-owned touch targets
+
+Replaced verbose app screens with a phone-shaped app grid, deterministic line-art
+icons, a create tile and persistent Home/Create/Find navigation. Prompt/form
+boundaries use segmented horizontal lines, verticals and diagonal corners. Search
+matches app titles/IDs case-insensitively; pointer coordinates are interpreted by
+the guest controller, including icons, fields, checkbox toggles and record rows.
+No fake device telemetry or claim of native-code compilation was added.
+
+Real-QEMU release app checks passed, including search and direct pointer actions
+against actual records in separate apps. The RFB test now forwards coordinates
+to guest hit testing; it still verifies pixels, typed prompts and click approval.
+Clippy passed with the native display. No new live Meta call was required for
+this presentation/navigation change; the previous live evidence is preserved.
+Debug app verification and existing release workspace verification also passed.
+Launcher captures and reports are in evidence/2026-11-03-launcher.
