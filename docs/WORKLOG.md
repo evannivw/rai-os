@@ -2545,3 +2545,21 @@ under evidence/2026-11-03-app-formulas/offline and portable. Pre-commit reports
 honestly identify the modified worktree; these are offline results, not Meta
 success. Freeze these sources before the separate two-call live check; no retries
 or benchmark/AI-performance claims are authorized by these observations.
+
+## 2026-11-03 — Two live generated arithmetic apps verified
+
+Frozen clean source d20f98f08c794e309321ecdf8c812cd2b0235bd9 made exactly two
+Meta requests, without retry, fallback, prompt tuning or source changes. Both
+returned HTTP 200 and the configured model matched. Quote used `$qty * $unitc`
+(5605 ms provider latency, 1791 reported tokens); Travel Budget used
+`$budget-$spent` (7023 ms, 1983 tokens). These prompts are absent from the replay
+catalog. The guest installed the actual returned schemas after review and passed
+independent expected results, edits, read-only enforcement and numeric totals.
+Fresh QEMU recovered the exact generated schemas/rows with no model calls.
+
+Reports, complete sanitized provider diagnostics/proposals, fictional saved state
+and actual native framebuffer captures are under
+[evidence/2026-11-03-app-formulas/live](evidence/2026-11-03-app-formulas/live).
+This confirms these two development cases; it is not a general success-rate,
+novelty, isolation or runtime-speed claim. The final evidence commit changes only
+documentation/artifacts; executable sources remain the frozen tested version.

@@ -1,0 +1,10 @@
+{
+  "request_id": 5,
+  "base_revision": 5,
+  "goal": "Create a travel budget app: trip, integer budget cents, integer spent cents, calculated remaining cents = budget - spent.",
+  "target": null,
+  "app_ids": [
+    "quote"
+  ],
+  "record_count": 0
+}

@@ -90,3 +90,26 @@ recomputation after a compatible formula change. Domain tests cover chained
 calculations, precedence, depth limits, missing inputs and snapshot tampering.
 These are development integration checks, not general model reliability or a
 performance comparison. WORKLOG records actual outcomes and source provenance.
+
+## Observed live result, November 3
+
+From clean frozen source d20f98f, Meta generated Quote (`$qty * $unitc`) and Travel
+Budget (`$budget-$spent`) in two requests, both HTTP 200, with no retries. Real
+QEMU verified the expected rows, edits, totals and recovery. Provider latencies
+were 5605 and 7023 ms; subsequent local interactions made no further model calls.
+[Evidence](evidence/2026-11-03-app-formulas/live/report.json) and native captures
+identify these as declared development examples, not a general model benchmark.
+
+To inspect the saved result without generating it again, copy the fictional
+session to an ignored working file before opening it:
+
+```sh
+mkdir -p target
+cp docs/evidence/2026-11-03-app-formulas/live/device.json target/formula-device.json
+python3 -B scripts/apps.py --source replay --state target/formula-device.json --output target/formula-inspect-1
+```
+
+Connect the VNC viewer as described in MICROAPPS.md. This restores previously
+generated apps; the replay label does not claim new inference. Use `--source meta`
+with your own key to create or evolve apps from your own prompts. Keep a fresh
+output directory for each run. The saved examples occupy two of the three slots.

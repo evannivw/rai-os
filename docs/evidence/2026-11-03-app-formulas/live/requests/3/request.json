@@ -1,0 +1,8 @@
+{
+  "request_id": 3,
+  "base_revision": 1,
+  "goal": "Create a quote app: item, integer quantity, integer unit cents, and calculated total cents = quantity * unit cents.",
+  "target": null,
+  "app_ids": [],
+  "record_count": 0
+}
