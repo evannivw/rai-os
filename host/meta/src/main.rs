@@ -1,4 +1,5 @@
 //! Single-proposal, host-coordinated and guest-owned Meta bridge modes.
+mod apps;
 mod batch;
 mod batch_bridge;
 mod batch_publication;
@@ -13,6 +14,9 @@ mod guest_bridge;
 mod guest_index;
 mod guest_report;
 mod loop_runner;
+#[allow(dead_code)] // Identical validation rules in host and guest.
+#[path = "../../../src/microapp.rs"]
+mod microapp;
 mod mission;
 mod mission_runner;
 #[allow(dead_code)] // Share the established protocol without adding a second UART adapter.
@@ -62,6 +66,12 @@ fn run() -> Result<(), String> {
         return Err("graphics_requires_guest_index_mode".into());
     }
     let kernel = &args[0];
+    if args.len() == 3 && args[1] == "--app-plan" {
+        return apps::run(Path::new(&args[2]), None);
+    }
+    if args.len() == 4 && args[1] == "--app-plan-replay" {
+        return apps::run(Path::new(&args[2]), Some(Path::new(&args[3])));
+    }
     if args.len() == 3 && args[1] == "--file-plan" {
         return files::run(Path::new(&args[2]), None);
     }

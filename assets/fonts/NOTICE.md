@@ -23,3 +23,11 @@ https://github.com/emilk/egui/tree/0.32.3/crates/epaint_default_fonts/fonts
 
 The original geometric mark and constellation illustration are RAI-OS code,
 not assets from the font package. No endorsement by the font authors is implied.
+
+
+The current terminal interface uses unmodified UbuntuMono-Regular.ttf from
+https://github.com/google/fonts/blob/main/ufl/ubuntumono/UbuntuMono-Regular.ttf .
+Its license is retained in UbuntuMono-UFL.txt. Modified font name: **Ubuntu Mono
+derivative RAI ASCII**. scripts/generate_mono_font.py generates rai-mono.bin and
+src/display/mono_glyphs.rs at 14/20/32 pixels under that same font license. The
+original Light assets remain available for historical reproducibility.

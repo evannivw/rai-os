@@ -64,13 +64,28 @@ A [portable Linux container](docs/PORTABLE_RUN.md) packages compilation, QEMU an
 the bridge for use from Windows/Linux/macOS Docker environments. A new
 [guest RAM file store](docs/GUEST_FILES.md) accepts runtime bytes and supports
 checked read/copy/move with a native file-list view. It is limited to eight
-512-byte files, lost on reboot; AI file planning and persistent storage are pending.
+512-byte files, lost on reboot; persistent storage is pending; reviewed AI file plans are available below.
 
 A [prompt-driven native workspace](docs/PROMPT_WORKSPACE.md) now accepts keyboard
 input through a portable VNC relay, requests one whole-file plan from Meta,
 previews every copy/move, and applies the checked plan only after confirmation.
 Offline replay is clearly labeled. Guest RAM limits and host input/API adapters
 remain explicit; this is not a general desktop or an AI efficiency claim.
+
+A [prompt-generated microapp runtime](docs/MICROAPPS.md) now supports native forms,
+app-local records and compatible schema updates in a black, keyboard-first guest
+UI. Meta proposes a bounded schema; you approve it, then use the app without
+per-click inference. This runtime shares EL1 privilege and stores only volatile
+RAM data; it is not hardware-isolated generated software.
+
+```sh
+python3 -B scripts/apps.py --source meta --output target/apps-session-1
+# No key needed for the two disclosed scripted prompts:
+python3 -B scripts/apps.py --source replay --output target/apps-replay-1
+```
+
+Connect a VNC viewer to localhost:5900; see the microapp guide for macOS viewer
+password setup, Docker, controls and current limits.
 
 ## Run
 

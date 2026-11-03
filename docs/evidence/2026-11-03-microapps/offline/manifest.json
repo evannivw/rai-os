@@ -1,0 +1,10 @@
+{
+  "recorded_utc": "2026-11-03T06:38:14.783537+00:00",
+  "source": "Pre-commit working tree for the microapp increment; see the commit containing this manifest. No live Meta calls.",
+  "kernel_sha256": {
+    "debug": "832ac97021d0eadb4037cceb93f6c8f1702cf78d8bf8adca23408a1608a83234",
+    "release": "3dde0258b12c4cce5daba91c299c8b47f96f9d2056ff04bb6ebd47ccdef8a7b2"
+  },
+  "platform": "native macOS ARM64 and Linux ARM64 container on macOS",
+  "windows_physical_tested": false
+}

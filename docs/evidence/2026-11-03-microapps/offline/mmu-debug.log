@@ -1,0 +1,57 @@
+
+running 4 tests
+test tests::permissions_and_sparse_identity_mapping ... ok
+test tests::task_roots_share_only_read_only_user_regions_and_protect_all_tables ... ok
+test tests::rejects_invalid_user_regions_before_mutation ... ok
+test tests::rejects_bad_boundaries_and_table_aliases_before_mutating ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.01s
+   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.06s
+   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.07s
+   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.00s
+   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.13s
+   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.73s
+PASS (debug): enabled MMU register readback, identity root, 12 owned table pages, memory check preserves mappings, arguments and shell.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400cb000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	page_size=4096; total_pages=256; free_pages=244; used_pages=12; pool_start=0x00000000400cb000; pool_end=0x00000000401cb000
+@rai1	3	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	4	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400cb000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	5	err	bad_args
+@rai1	6	err	bad_args
+@rai1	7	ok	protected kernel alive
+mmu.info
+enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400cb000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+PASS (debug): write-text rejected by hardware; exact class/status, fault PC/address, diagnostic stack and halt.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+SELF-TEST: MMU write-text
+EXCEPTION: vector=4; esr=0x000000009600004f; ec=0x25; elr=0x0000000040081144; spsr=0x00000000600003c5; far_raw=0x0000000040080000; entry_sp=0x0000000040099f00; handler_sp=0x000000004009de70
+HALTED: exception is fatal; restart QEMU
+PASS (debug): write-rodata rejected by hardware; exact class/status, fault PC/address, diagnostic stack and halt.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+SELF-TEST: MMU write-rodata
+EXCEPTION: vector=4; esr=0x000000009600004f; ec=0x25; elr=0x0000000040081b94; spsr=0x00000000600003c5; far_raw=0x0000000040087000; entry_sp=0x0000000040099f00; handler_sp=0x000000004009de70
+HALTED: exception is fatal; restart QEMU
+PASS (debug): write-table rejected by hardware; exact class/status, fault PC/address, diagnostic stack and halt.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+SELF-TEST: MMU write-table
+EXCEPTION: vector=4; esr=0x000000009600004f; ec=0x25; elr=0x0000000040081f6c; spsr=0x00000000600003c5; far_raw=0x00000000400a6000; entry_sp=0x0000000040099f00; handler_sp=0x000000004009de70
+HALTED: exception is fatal; restart QEMU
+PASS (debug): execute-data rejected by hardware; exact class/status, fault PC/address, diagnostic stack and halt.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+SELF-TEST: MMU execute-data
+EXCEPTION: vector=4; esr=0x000000008600000f; ec=0x21; elr=0x000000004008a000; spsr=0x00000000600003c5; far_raw=0x000000004008a000; entry_sp=0x0000000040099f10; handler_sp=0x000000004009de80
+HALTED: exception is fatal; restart QEMU
+PASS (debug): unmapped rejected by hardware; exact class/status, fault PC/address, diagnostic stack and halt.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+SELF-TEST: MMU unmapped
+EXCEPTION: vector=4; esr=0x0000000096000007; ec=0x25; elr=0x0000000040082660; spsr=0x00000000600003c5; far_raw=0x0000000040000000; entry_sp=0x0000000040099ef0; handler_sp=0x000000004009de70
+HALTED: exception is fatal; restart QEMU

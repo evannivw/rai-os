@@ -423,3 +423,14 @@ with debug symbols. The linker assertion, map, pool and 64-KiB stack are unchang
 Earlier opt-level=0 frame measurements remain historical evidence, not current
 bounds. Debug/release workspace and coordinator checks and debug MMU/scheduler
 fault checks cover this configuration; a whole-kernel stack bound is still pending.
+
+## November 3: declarative microapp runtime
+
+[MICROAPPS.md](MICROAPPS.md) adds a bounded schema interpreter, app-local record
+namespaces, form/list/filter controller and append-only schema migrations. Meta
+proposes a full schema; explicit review and guest validation precede install.
+The pure domain has no I/O or generated code. Host JSON conversion shares its
+validation rules; guest execution additionally checks existing row values.
+Only records.local is supported. The interpreter/renderer run at EL1, so namespace
+separation is not process isolation. HTTPS and keyboard transport remain host-side.
+A dark Ubuntu Mono framebuffer presentation is shared with the file workspace.

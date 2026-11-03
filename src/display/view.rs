@@ -5,11 +5,11 @@ use super::{
 };
 use crate::records::RecordId;
 use core::fmt::{self, Write};
-const PAPER: u32 = 0xf6f7f2;
-const INK: u32 = 0x203b34;
-const MUTED: u32 = 0x657970;
-const GREEN: u32 = 0x367763;
-const LINE: u32 = 0xdce3da;
+const PAPER: u32 = 0x080a0d;
+const INK: u32 = 0xe4e9ef;
+const MUTED: u32 = 0x85919f;
+const GREEN: u32 = 0xc1f27d;
+const LINE: u32 = 0x27313c;
 #[derive(Clone, Copy)]
 pub enum View<'a> {
     Ready,
@@ -460,224 +460,81 @@ pub fn render_files(s: &mut Display, store: &crate::ramfs::Store, error: Option<
     );
 }
 
-fn rect(s: &mut Display, x: usize, y: usize, w: usize, h: usize, color: u32) {
-    for row in y..y + h {
-        for col in x..x + w {
-            s.pixel(col, row, color);
-        }
-    }
-}
-fn card(s: &mut Display, x: usize, y: usize, w: usize, h: usize, color: u32) {
-    let r = 12usize;
-    for dy in 0..h {
-        for dx in 0..w {
-            let cx = if dx < r {
-                r - dx
-            } else {
-                dx.saturating_sub(w - r - 1)
-            };
-            let cy = if dy < r {
-                r - dy
-            } else {
-                dy.saturating_sub(h - r - 1)
-            };
-            if cx * cx + cy * cy <= r * r {
-                s.pixel(x + dx, y + dy, color);
-            }
-        }
-    }
-}
-fn wrap(s: &mut Display, value: &str, x: i32, y: i32, width: i32, lines: usize, color: u32) {
-    let mut rest = value;
-    for n in 0..lines {
-        if rest.is_empty() {
-            break;
-        }
-        let mut end = 0;
-        for (i, c) in rest.char_indices() {
-            let next = i + c.len_utf8();
-            if font::width(&rest[..next], Size::Body) > width {
-                break;
-            }
-            end = next;
-        }
-        if end == 0 {
-            break;
-        }
-        if end < rest.len()
-            && let Some(space) = rest[..end].rfind(' ')
-            && space > 0
-        {
-            end = space;
-        }
-        font::draw(s, &rest[..end], x, y + n as i32 * 24, Size::Body, color);
-        rest = rest[end..].trim_start();
-    }
-}
-/// Guest-rendered interaction surface. The host only relays input/model proposals.
 pub fn render_workspace(
     s: &mut Display,
     store: &crate::ramfs::Store,
     ui: &crate::workspace::Workspace,
 ) {
+    use super::terminal as t;
     use crate::workspace::Phase;
-    let dark = 0x183e35;
-    let mint = 0xc9f078;
-    let paper = 0xf2f3ed;
-    let muted = 0x6c7b71;
-    s.fill(paper);
-    rect(s, 0, 0, 480, 196, dark);
-    for (x, y) in [(30, 30), (41, 30), (30, 41)] {
-        rect(s, x, y, 8, 8, mint);
-    }
-    font::draw(s, "rai / workspace", 62, 28, Size::Body, 0xf6f8ef);
-    card(s, 340, 24, 112, 30, 0x2b5145);
-    font::draw(
-        s,
-        if ui.live {
-            "META PLANNER"
-        } else {
-            "OFFLINE REPLAY"
-        },
-        350,
-        30,
-        Size::Small,
-        mint,
-    );
-    let (title, subtitle) = match ui.phase {
-        Phase::Compose => ("Less sorting.", "More doing. Tell your files where to go."),
-        Phase::Thinking => (
-            "Making a plan.",
-            "Your files stay unchanged while you wait.",
-        ),
-        Phase::Review => (
-            "Your call.",
-            "Review every change. Enter applies them together.",
-        ),
-        Phase::Done => ("Taken care of.", "The whole plan is now in your workspace."),
-        Phase::Notice => (
-            "Let's clarify.",
-            "No files changed. Refine your instruction.",
-        ),
-        Phase::Error => (
-            "Nothing changed.",
-            "The plan was not applied. You stay in control.",
-        ),
+    let title = match ui.phase {
+        Phase::Compose => "Files, with intent.",
+        Phase::Thinking => "Planning_",
+        Phase::Review => "Inspect the changes.",
+        Phase::Done => "Plan applied.",
+        Phase::Notice => "Clarify your intent.",
+        Phase::Error => "Operation blocked.",
     };
-    font::draw(s, title, 28, 86, Size::Title, 0xf6f8ef);
-    font::draw(s, subtitle, 30, 148, Size::Small, 0xc7d8ce);
-    let count = store.entries().count();
-    let mut label = Label::new();
-    let _ = write!(
-        label,
-        "YOUR FILES / {count}        REV {}",
-        store.generation()
+    t::base(
+        s,
+        "/ FILES     CONTENT WORKSPACE",
+        title,
+        "Guest-owned files / atomic plans / explicit approval",
+        ui.live,
     );
-    font::draw(
+    t::text(
         s,
         if ui.phase == Phase::Review {
-            "PROPOSED CHANGES"
+            "PROPOSED OPERATIONS"
         } else {
-            label.text()
+            "FILES / RAM STORAGE"
         },
-        30,
-        216,
-        Size::Small,
-        muted,
+        26,
+        194,
+        t::ACCENT,
     );
     if ui.phase == Phase::Review {
         for (i, (kind, source, destination)) in ui.plan.entries().enumerate() {
-            let y = 244 + i * 78;
-            card(s, 24, y, 432, 68, 0xffffff);
-            font::draw(s, kind, 38, y as i32 + 10, Size::Small, 0x32684e);
-            font::draw(s, source, 100, y as i32 + 10, Size::Small, dark);
-            let mut line = Label::new();
-            let _ = write!(line, "to {destination}");
-            font::draw(s, line.text(), 100, y as i32 + 36, Size::Small, muted);
+            let y = 232 + i * 78;
+            t::rect(s, 24, y, 432, 68, t::PANEL);
+            t::text(s, kind, 36, y as i32 + 8, t::ACCENT);
+            t::text(s, source, 90, y as i32 + 8, t::INK);
+            t::text(s, destination, 90, y as i32 + 36, t::MUTED);
         }
-        wrap(s, ui.reason(), 30, 487, 420, 2, dark);
+        t::wrap(s, ui.reason(), 488, 2, t::MUTED);
     } else if matches!(ui.phase, Phase::Notice | Phase::Error) {
-        card(s, 24, 244, 432, 180, 0xffffff);
-        wrap(s, ui.reason(), 40, 268, 396, 6, dark);
+        t::wrap(s, ui.reason(), 240, 6, t::INK);
     } else {
         for (i, (path, bytes)) in store.entries().skip(ui.page * 4).take(4).enumerate() {
-            let y = 244 + i * 62;
-            card(s, 24, y, 432, 54, 0xffffff);
-            card(s, 36, y + 10, 34, 34, 0xe9eedf);
-            font::draw(s, "F", 47, y as i32 + 17, Size::Small, 0x547348);
+            let y = 232 + i * 62;
             let (folder, name) = path.rsplit_once('/').unwrap_or(("", path));
-            font::draw(s, name, 84, y as i32 + 7, Size::Body, dark);
-            let mut line = Label::new();
-            let _ = write!(line, "{folder}/  /  {bytes} bytes");
-            font::draw(s, line.text(), 84, y as i32 + 31, Size::Small, muted);
+            t::text(s, "/", 30, y as i32 + 8, t::ACCENT);
+            t::body(s, name, 54, y as i32 + 2, t::INK);
+            let mut l = Label::new();
+            let _ = write!(l, "{folder}/ / {bytes} bytes");
+            t::text(s, l.text(), 54, y as i32 + 29, t::MUTED);
+            t::divider(s, y + 56);
         }
-        font::draw(
-            s,
-            if count == 0 {
-                "Import files to start."
-            } else if ui.page == 0 {
-                "Tab / next files"
-            } else {
-                "Tab / first files"
-            },
-            30,
-            503,
-            Size::Small,
-            muted,
-        );
+        t::text(s, "Tab / browse files", 30, 506, t::MUTED);
     }
-    font::draw(s, "YOUR INTENT", 30, 550, Size::Small, muted);
-    card(s, 24, 576, 432, 112, 0xffffff);
-    if ui.prompt().is_empty() {
-        wrap(
-            s,
-            "Collect the Aurora notes in /work. Keep my originals.",
-            40,
-            594,
-            396,
-            3,
-            0x819083,
-        );
-    } else {
-        wrap(s, ui.prompt(), 40, 594, 396, 3, dark);
-    }
-    card(
+    t::prompt(
         s,
-        24,
-        706,
-        432,
-        48,
-        if ui.phase == Phase::Thinking {
-            0xdce3d6
+        "> YOUR INTENT",
+        if ui.prompt().is_empty() {
+            "Collect approved Aurora notes in /work. Keep originals."
         } else {
-            dark
+            ui.prompt()
         },
     );
-    let button = match ui.phase {
-        Phase::Compose => "Enter / Make a plan",
-        Phase::Thinking => "Waiting for proposal...",
-        Phase::Review => "Enter / Apply this plan",
-        _ => "Enter / New instruction",
-    };
-    font::draw(
+    t::button(
         s,
-        button,
-        44,
-        719,
-        Size::Body,
-        if ui.phase == Phase::Thinking {
-            muted
-        } else {
-            mint
+        match ui.phase {
+            Phase::Compose => "Enter / Make a plan",
+            Phase::Thinking => "Waiting for proposal...",
+            Phase::Review => "Enter / Apply this plan",
+            _ => "Enter / New instruction",
         },
-    );
-    font::draw(
-        s,
-        "Esc / cancel     RAM only / resets on shutdown",
-        30,
-        774,
-        Size::Small,
-        muted,
+        "Esc cancel    Tab files    RAM only / no persistence",
     );
     s.present();
 }

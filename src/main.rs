@@ -1,6 +1,7 @@
 #![no_std]
 #![no_main]
 
+mod app_ui;
 mod bundle;
 mod clock;
 mod command;
@@ -13,6 +14,7 @@ mod index_cursor;
 mod index_stream;
 mod ipc;
 mod memory;
+mod microapp;
 mod mmu;
 mod protocol;
 mod publication;

@@ -19,7 +19,7 @@ def binaries():
     return ROOT/f'target/host-meta/{host}/release/rai-meta',ROOT/'target/display/aarch64-unknown-none-softfloat/release/rai-os'
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path);p.add_argument('action',choices=['build','verify','console','desktop','context-rules','context-meta','workspace','workspace-replay','workspace-verify'],default='verify',nargs='?');a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path);p.add_argument('action',choices=['build','verify','console','desktop','context-rules','context-meta','workspace','workspace-replay','workspace-verify','apps','apps-replay','apps-verify'],default='verify',nargs='?');a=p.parse_args()
     binary,kernel=binaries()
     if a.action=='build':
         subprocess.run(['cargo','build','--locked','--bin','rai-os','--features','guest-display','--target-dir','target/display','--release'],check=True)
@@ -42,6 +42,12 @@ def main():
     with (nullcontext(str(a.output.resolve())) if a.output else tempfile.TemporaryDirectory(prefix='rai-portable-')) as directory:
         output=Path(directory)
         (output/'build-info.json').write_bytes((ROOT/'target/portable-build-info.json').read_bytes())
+        if a.action in ['apps','apps-replay']:
+            from apps import run
+            run(kernel,binary,output/'apps','meta' if a.action=='apps' else 'replay',bind='0.0.0.0');return
+        if a.action=='apps-verify':
+            from verify_apps import verify
+            verify(kernel,binary,output/'apps');return
         if a.action in ['workspace','workspace-replay']:
             from workspace import run
             run(kernel,binary,output/'workspace','meta' if a.action=='workspace' else 'replay',bind='0.0.0.0');return

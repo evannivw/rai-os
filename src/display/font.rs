@@ -1,5 +1,5 @@
-//! Rasterized Ubuntu Light ASCII glyphs. No font engine or allocation in the guest.
-use super::{Display, glyphs::GLYPHS};
+//! Rasterized Ubuntu Mono ASCII glyphs. No font engine or allocation in the guest.
+use super::{Display, mono_glyphs::GLYPHS};
 pub struct Glyph {
     pub offset: usize,
     pub width: usize,
@@ -8,7 +8,7 @@ pub struct Glyph {
     pub top: i32,
     pub advance: i32,
 }
-static COVERAGE: &[u8] = include_bytes!("../../assets/fonts/rai-ascii.bin");
+static COVERAGE: &[u8] = include_bytes!("../../assets/fonts/rai-mono.bin");
 #[derive(Clone, Copy)]
 pub enum Size {
     Small,

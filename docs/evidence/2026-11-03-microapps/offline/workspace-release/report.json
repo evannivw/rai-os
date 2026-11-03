@@ -1,0 +1,11 @@
+{
+  "source": "replay",
+  "live_meta_calls": 0,
+  "graphics": "native_guest_framebuffer",
+  "input": "host_RFB_to_guest_UART",
+  "checks": [
+    "RFB 3.8 framebuffer, keyboard submission, real guest preview without writes, pointer confirmation; exact originals and selected copies",
+    "Invalid last action changes nothing; cancelled request rejected; changed catalog blocks whole commit",
+    "Unknown offline instruction produces an explicit replay clarification, not invented inference"
+  ]
+}

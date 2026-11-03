@@ -9,6 +9,7 @@ pub const INFO: &str =
     "RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected";
 
 pub enum Operation<'a> {
+    App(&'a str, Option<&'a str>),
     Ui(&'a str, Option<&'a str>),
     Files(crate::ramfs::Operation<'a>),
     Help,
@@ -56,6 +57,12 @@ pub enum Operation<'a> {
 }
 
 pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
+    if line.starts_with("app.") {
+        let (n, a) = line
+            .split_once(' ')
+            .map_or((line, None), |(n, a)| (n, Some(a)));
+        return Ok(Operation::App(n, a));
+    }
     if line.starts_with("ui.") {
         let (name, arg) = line
             .split_once(' ')
@@ -307,7 +314,9 @@ fn execute_system<'a>(
     sessions: &mut crate::schedule::Sessions,
 ) -> Result<Reply<'a>, &'static str> {
     Ok(match operation {
-        Operation::Files(_) | Operation::Ui(_, _) => return Err("fs_console_owner_required"),
+        Operation::Files(_) | Operation::Ui(_, _) | Operation::App(_, _) => {
+            return Err("fs_console_owner_required");
+        }
         Operation::WorkerStart => Reply::Worker(sessions.worker.start(timer, mmu)?),
         Operation::WorkerCount(id) => Reply::WorkerCount(sessions.worker.count(id, timer, mmu)?),
         Operation::WorkerStatus => Reply::Worker(sessions.worker.status()),

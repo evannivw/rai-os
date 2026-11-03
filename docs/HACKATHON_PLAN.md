@@ -355,3 +355,13 @@ Prioritize rehearsal, a concise three-minute video and submission over another
 kernel expansion. Use the real Meta role, measured outcome and current limits.
 The November 4 18:00 internal / 20:00 Guatemala submission targets, public repo,
 contribution timestamps and unresolved Oct 26/27 eligibility distinction stand.
+
+## November 3: prompt-to-tool product slice
+
+Implement [MICROAPPS.md](MICROAPPS.md): generate an inspection form, use its local
+records, then ask for a compatible schema extension preserving the same data.
+This demonstrates Meta's role in constructing a bounded usable tool, without
+placing inference in per-click execution. Disclose replay versus live generation,
+RAM-only storage, host transport and shared EL1 runtime. It is not a benchmark
+win or evidence of novelty. Keep November 4 rehearsal/video/submission protected;
+no phone port, general code generation or new hardware capability this increment.

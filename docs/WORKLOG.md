@@ -2318,3 +2318,36 @@ evidence/2026-11-03-prompt-workspace/live. This is an end-to-end integration res
 on a known development example, not an unseen benchmark or an AI speed/quality
 advantage. The model still takes seconds; one request proposes the complete plan.
 No persistent storage, new isolation or physical Windows/phone claim is added.
+
+## 2026-11-03 — Dark guest UI and declarative microapps
+
+Replaced the prompt workspace's light rounded treatment with a black Ubuntu Mono
+interface, thin dividers and restrained lime accents. Added a native guest app
+library, prompt/review flow, forms, record lists and pending filter. Font source,
+license and generated coverage are included; runtime needs no font engine.
+
+The pure bounded runtime supports three apps, six typed fields and eight rows
+per app. A compatible update preserves existing field identity/order/type and
+exact row values, with checked defaults for added columns. Only records.local
+exists; no generated code, location, file/network access or arbitrary execution.
+This is interpreter namespace separation at shared EL1, NOT process isolation.
+The host Meta adapter sends prompt/schema/count metadata, not row contents, and
+returns a strict proposal. Installation requires guest checks and Enter.
+
+Actual validation: 61 host tests passed (including shared runtime tests);
+Clippy passed for guest with/without display and host provider. Debug and release
+real-QEMU app tests passed: RFB pixels/keyboard/pointer approval, required values,
+two saved rows, pending filter, additive priority migration, independent second
+app, invalid numeric edit, denied capability, stale/cancelled requests, malformed
+hex/kind, duplicate fields, destructive migration and cross-app replacement.
+Existing release prompt workspace tests passed with the dark renderer; native
+guest context cycles passed debug/release, and debug scheduler/MMU fault checks
+passed. The app lifecycle also passed offline in the Linux ARM64 container.
+Evidence is in evidence/2026-11-03-microapps/offline. AMD64 and live generation
+results will be recorded separately; none are inferred from offline replay.
+
+The executable and UI remain bounded RAM-only prototypes with host input/HTTPS.
+No physical Windows/phone, persistence, full isolation, arbitrary generated
+applications or AI performance advantage is claimed. Next freeze this source and
+run up to two disclosed live Meta calls: create an inspection tool, use it, then
+add priority while retaining its records. Keep Nov 4 submission/video time intact.

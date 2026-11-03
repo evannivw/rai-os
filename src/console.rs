@@ -21,6 +21,7 @@ struct Console<'a> {
     task: Task,
     files: crate::ramfs::Store,
     workspace: crate::workspace::Workspace,
+    apps: crate::app_ui::Controller,
     memory: &'a mut Memory,
     mmu: &'a Mmu,
     timer: &'a mut Timer,
@@ -211,6 +212,9 @@ impl Console<'_> {
         let _ = (line, code);
     }
     fn workspace_command(&mut self, name: &str, arg: Option<&str>, id: Option<&str>) {
+        if name == "ui.open" {
+            self.apps.active = false;
+        }
         let result = self.workspace.execute(name, arg, &mut self.files);
         #[cfg(feature = "guest-display")]
         if let Some(display) = &mut self.display {
@@ -236,9 +240,52 @@ impl Console<'_> {
         }
     }
 
+    fn app_command(&mut self, name: &str, arg: Option<&str>, id: Option<&str>) {
+        let id = id.unwrap_or("0");
+        if name == "app.catalog" {
+            if arg.is_some() {
+                response(id, "err", "bad_args");
+            } else {
+                response(id, "ok", crate::microapp::Catalog(&self.apps.runtime));
+            }
+            return;
+        }
+        if matches!(name, "app.schema" | "app.export") {
+            if let Some(a) = arg
+                .and_then(|s| self.apps.runtime.find(s))
+                .and_then(|i| self.apps.runtime.app(i))
+            {
+                if name == "app.schema" {
+                    response(id, "ok", a.spec);
+                } else {
+                    response(id, "ok", crate::microapp::Export(a));
+                }
+            } else {
+                response(id, "err", "app_not_found");
+            }
+            return;
+        }
+        if name == "app.open" {
+            self.workspace.active = false;
+        }
+        let result = self.apps.execute(name, arg);
+        #[cfg(feature = "guest-display")]
+        if let Some(display) = &mut self.display {
+            crate::display::apps::render(display, &self.apps);
+        }
+        match result {
+            Ok(reply) => response(id, "ok", reply),
+            Err(error) => response(id, "err", error),
+        }
+    }
     fn dispatch(&mut self, line: &str) {
         if line.starts_with('@') {
             match protocol::parse(line) {
+                Ok(request) if matches!(request.operation, command::Operation::App(_, _)) => {
+                    if let command::Operation::App(n, a) = request.operation {
+                        self.app_command(n, a, Some(request.id));
+                    }
+                }
                 Ok(request) if matches!(request.operation, command::Operation::Ui(_, _)) => {
                     if let command::Operation::Ui(name, arg) = request.operation {
                         self.workspace_command(name, arg, Some(request.id));
@@ -255,6 +302,10 @@ impl Console<'_> {
             }
         } else if !line.is_empty() {
             let result = match command::parse_shell(line) {
+                Ok(command::Operation::App(n, a)) => {
+                    self.app_command(n, a, None);
+                    return;
+                }
                 Ok(command::Operation::Ui(name, arg)) => {
                     self.workspace_command(name, arg, None);
                     return;
@@ -301,6 +352,7 @@ pub fn run(clock: &Clock, memory: &mut Memory, mmu: &Mmu, timer: &mut Timer) -> 
         task: Task::new(),
         files: crate::ramfs::Store::new(),
         workspace: crate::workspace::Workspace::new(),
+        apps: crate::app_ui::Controller::new(),
         memory,
         mmu,
         timer,

@@ -1,0 +1,15 @@
+{
+  "source": "replay",
+  "live_meta_calls": 0,
+  "graphics": "native_guest_framebuffer",
+  "input": "RFB_to_UART",
+  "storage": "guest_RAM",
+  "isolation": "interpreter_namespaces_not_processes",
+  "checks": [
+    "Actual RFB pixels, typed prompt and pointer approval; no app installed before confirmation",
+    "Required input rejected; two records; pending view; additive schema update preserves every original byte and initializes priority",
+    "Second app has independent records; rejected numeric edit has no side effects",
+    "Capability, revision, kind, hex, duplicate field, destructive migration, cross-app replacement and cancelled reply rejected unchanged",
+    "Unsupported offline prompt explicitly clarified without installed app"
+  ]
+}

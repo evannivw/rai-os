@@ -8,3 +8,6 @@
 /host/panel/target/
 
 /host/meta/target/
+
+# Python development cache, never source or evidence.
+__pycache__/

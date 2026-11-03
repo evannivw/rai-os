@@ -1,6 +1,8 @@
 //! Optional guest display adapter. Presentation never touches device registers.
+pub mod apps;
 mod font;
-mod glyphs;
+mod mono_glyphs;
+mod terminal;
 use crate::mmu::display_memory as memory;
 mod summary;
 pub mod view;
@@ -53,7 +55,7 @@ impl Display {
             return Ok(None);
         };
         let mut display = Self { _exclusive: () };
-        display.fill(0xf6f7f2);
+        display.fill(0x080a0d);
         let words = [
             0,
             memory::START as u32,

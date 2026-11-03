@@ -1,0 +1,85 @@
+
+running 1 test
+test tests::absolute_deadline_boundary_rounding_and_overflow ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.59s
+   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.06s
+   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.08s
+PASS (debug/normal): real EL0 IRQ switching or expected rejection; observed counters, context/stack checks, repeat runs, timer cleanup and kernel/user/memory continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400cb000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=135; b_ms=140; progress=27895480,75722625,55169191,158348322,78219979,239755143,104987162,313227702,128859385,391574349,153692453,476875752; context=true; stacks=true
+@rai1	3	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	4	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	5	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=74
+@rai1	6	ok	resumption checked
+@rai1	7	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=136; b_ms=134; progress=26452039,76528287,52452214,155268504,79275035,231419364,102755123,305881677,128454033,391827978,157198762,464864295; context=true; stacks=true
+@rai1	8	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	9	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	10	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=71
+@rai1	11	ok	resumption checked
+@rai1	12	ok	tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=143; b_ms=137; progress=27299038,70445157,54196053,146683206,82979297,224928312,111784459,303093942,140443023,389335389,167449649,474716913; context=true; stacks=true
+@rai1	13	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	14	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	15	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=68
+@rai1	16	ok	resumption checked
+@rai1	17	ok	mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=105; vector=9; pc=0x00000000400c41cc; spsr=0x0000000000000340; sp=0x00000000400ca000; syscalls=0
+@rai1	18	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400cb000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	19	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	20	err	bad_args
+@rai1	21	err	bad_args
+schedule.check extra
+error: unknown_command
+schedule.check
+tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=136; b_ms=141; progress=23511147,72249351,52283319,146661570,79171187,232011780,104199814,316421910,132481884,398539791,157335807,483028125; context=true; stacks=true
+@rai1	22	ok	still alive
+PASS (debug/corrupt-register): real EL0 IRQ switching or expected rejection; observed counters, context/stack checks, repeat runs, timer cleanup and kernel/user/memory continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400cb000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	err	schedule_context_corrupt
+@rai1	3	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	4	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	5	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=75
+@rai1	6	ok	resumption checked
+@rai1	7	err	schedule_context_corrupt
+@rai1	8	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	9	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	10	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=73
+@rai1	11	ok	resumption checked
+@rai1	12	ok	mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=100; vector=9; pc=0x00000000400c41a8; spsr=0x0000000000000340; sp=0x00000000400ca000; syscalls=0
+@rai1	13	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400cb000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	14	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	15	err	bad_args
+@rai1	16	err	bad_args
+schedule.check extra
+error: unknown_command
+@rai1	17	ok	still alive
+PASS (debug/user-fault): real EL0 IRQ switching or expected rejection; observed counters, context/stack checks, repeat runs, timer cleanup and kernel/user/memory continuity.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400cb000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	2	err	schedule_user_fault
+@rai1	3	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	4	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	5	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=73
+@rai1	6	ok	resumption checked
+@rai1	7	err	schedule_user_fault
+@rai1	8	ok	mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+@rai1	9	ok	round_trips=2; registers=31; flags=true; stack=true; resumed=true
+@rai1	10	ok	irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=75
+@rai1	11	ok	resumption checked
+@rai1	12	ok	mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=102; vector=9; pc=0x00000000400c5594; spsr=0x0000000000000340; sp=0x00000000400ca000; syscalls=0
+@rai1	13	ok	enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400cb000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+@rai1	14	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	15	err	bad_args
+@rai1	16	err	bad_args
+schedule.check extra
+error: unknown_command
+@rai1	17	ok	still alive
