@@ -3039,3 +3039,24 @@ both profiles and host-console system checks passed. Linux ARM64 Docker passed
 pages and saved demo without network. Evidence: evidence/2026-11-03-app-pages.
 No Meta call yet. Next: frozen-source generation, at most one actual call, retaining
 the result with no retry or fixture substitution.
+
+
+## 2026-11-03 — Meta generates a live-data report in one call
+
+Clean source 0d436bc62a390bd9163766582533a3ecfd71cc5d completed one actual Meta
+request: HTTP 200, matching model, stop completion, 7715 ms provider latency, 4489
+tokens (3685 input / 804 output). No retry, correction or fixture replacement.
+Name Amount Report contains the model's two pages and all four supported block
+kinds. Its table uses Amount then Name; the schema is preserved exactly.
+
+The verifier required native page approval, entered eight fictional independent
+records, checked sum 36, changed -5 to 9 and checked sum 50 without more inference.
+Fresh QEMU boot restored exact pages/fields/rows. Offline filter/rejection, signed
+bar pixel and second-app tests remain separate evidence. Live captures, proposal,
+request, diagnostics, UART, checkpoint and hashes are in
+evidence/2026-11-03-app-pages/live. APP_PAGES explains how to reopen a copy without
+a key and how to use one's own key for new prompts.
+
+Documentation/evidence follow-up only; no executable change or further model call.
+The approved Column shell redesign, creation lock and richer document editing are
+still future work, and kernel/device/EL1 isolation limitations remain explicit.

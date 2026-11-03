@@ -222,3 +222,13 @@ See [KERNEL_DECISION.md](KERNEL_DECISION.md) and [APP_GIT.md](APP_GIT.md).
 
 For the visual polish decision, see [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md).
 The interactive concepts are proposals; record the actual guest implementation.
+
+
+### Composed live-data presentation
+
+[APP_PAGES.md](APP_PAGES.md) provides an actual one-call Meta-generated two-page
+report and a safe saved-session launch. It combines metrics, signed bars, text and
+a table over the same records. Edit an amount and show the report update without
+inference. Keep this a capability example: no spreadsheet/presentation file-format
+compatibility or arbitrary layout is implied. The conversational Column redesign
+remains separate from this actual guest page renderer.

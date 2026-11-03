@@ -1,0 +1,120 @@
+{
+  "verified": true,
+  "source": "meta",
+  "source_commit": "0d436bc62a390bd9163766582533a3ecfd71cc5d",
+  "source_worktree_dirty": false,
+  "provider_calls": 1,
+  "checks": [
+    "Four generic block kinds, two reviewed pages, signed/zero values, all eight records, real guest pixels, page navigation without data mutation",
+    "Editing input recomputes live metrics and derived data without another model request",
+    "Exact definitions, pages, rows and calculated values survive fresh QEMU boot without inference"
+  ],
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "reportapp",
+          "title": "Name Amount Report",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "amount",
+              "kind": "number",
+              "required": true,
+              "label": "Amount",
+              "default": ""
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "pages": [
+            {
+              "title": "Summary",
+              "blocks": [
+                {
+                  "kind": "metric",
+                  "title": "Total amount",
+                  "value": "amount",
+                  "label_field": "",
+                  "aggregate": "sum",
+                  "scope": "all"
+                },
+                {
+                  "kind": "bars",
+                  "title": "By name",
+                  "value": "amount",
+                  "label_field": "name",
+                  "aggregate": "",
+                  "scope": "all"
+                }
+              ]
+            },
+            {
+              "title": "Report",
+              "blocks": [
+                {
+                  "kind": "text",
+                  "title": "Intro",
+                  "value": "My report",
+                  "label_field": "",
+                  "aggregate": "",
+                  "scope": "all"
+                },
+                {
+                  "kind": "table",
+                  "title": "Details",
+                  "value": "name",
+                  "label_field": "amount",
+                  "aggregate": "",
+                  "scope": "all"
+                }
+              ]
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Item 1",
+            "9"
+          ],
+          [
+            "Item 2",
+            "0"
+          ],
+          [
+            "Item 3",
+            "10"
+          ],
+          [
+            "Item 4",
+            "20"
+          ],
+          [
+            "Item 5",
+            "7"
+          ],
+          [
+            "Item 6",
+            "2"
+          ],
+          [
+            "Item 7",
+            "3"
+          ],
+          [
+            "Item 8",
+            "-1"
+          ]
+        ]
+      }
+    ]
+  }
+}

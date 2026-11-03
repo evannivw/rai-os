@@ -135,3 +135,25 @@ mutation, editing/recomputation, cancellation, reviewed evolution, invalid bindi
 an unrelated min/max app and fresh-guest recovery. Live mode uses the actual model
 proposal, one call and no retry/fixture substitution. Actual outcomes belong in
 WORKLOG and evidence; these commands alone do not establish a successful live run.
+
+
+## Observed live result and saved exploration
+
+The [frozen-source live run](evidence/2026-11-03-app-pages/live/README.md) passed
+with one actual Meta call. Meta generated two pages combining all four block kinds.
+Eight independent test amounts summed to 36, then 50 after an edit. Native review,
+local recomputation and exact fresh-boot recovery passed. The accepted table placed
+Amount before Name; its actual declaration is retained unchanged.
+
+To inspect that saved app without a new provider request, copy the checkpoint:
+
+```sh
+cp -n docs/evidence/2026-11-03-app-pages/live/device.json target/pages-showcase.json
+python3 -B scripts/apps.py --source replay --state target/pages-showcase.json --output target/pages-showcase-session
+```
+
+Connect the VNC viewer, open Name Amount Report and tap pages > (or F11). The
+replay label is intentional: this is recovery of a prior actual result, not fresh
+generation. Use a new output directory for every session. For arbitrary supported
+creation/evolution, launch with --source meta and your own configured key; inference
+starts only after explicit prompt submission. Never edit tracked evidence in place.
