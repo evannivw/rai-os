@@ -1,0 +1,15 @@
+{
+  "kind": "assembled_saved_session",
+  "generated_at": "2026-11-03",
+  "description": "Unmodified apps and fictional records from two recorded live Meta runs. Assembly is not a new model request.",
+  "sources": [
+    {
+      "path": "docs/evidence/2026-11-03-app-workflows/live/device.json",
+      "sha256": "7649f9bd20811f34041819110e357ea160e579c2306662c6040d9f20c3e72b43"
+    },
+    {
+      "path": "docs/evidence/2026-11-03-app-exchange/live/device.json",
+      "sha256": "b1c87b69e691708a662e014433c15e38603b27d1fd17dfe74c04e3d4904a0404"
+    }
+  ]
+}

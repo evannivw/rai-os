@@ -1,5 +1,8 @@
 # Declarative app capabilities
 
+See [APP_LIMITS.md](APP_LIMITS.md) for why source ownership is not unlimited app
+capability, and [DEMO_READY.md](DEMO_READY.md) for the runnable presentation.
+
 Meta receives the versioned machine-readable catalog at
 [fixtures/microapps/v1/runtime.json](../fixtures/microapps/v1/runtime.json) with
 each app request. The catalog describes implemented fields, views, operations and

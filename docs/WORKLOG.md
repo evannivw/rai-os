@@ -2685,3 +2685,41 @@ physical phone support. The app permits an empty paid input in its field metadat
 but the balance formula requires a numeric value: enter 0 for no payment. No
 silent default or schema repair was applied to the live result. The final evidence
 commit changes only documentation/artifacts; executable sources remain frozen.
+
+
+## 2026-11-03 — Runnable demo kit, explicit app limits and video rehearsal
+
+The user asked what limits app creation despite owning the kernel and requested
+a compelling demo. APP_LIMITS.md distinguishes source ownership, the model's
+declarative language and implemented runtime/device capabilities. It orders
+capacity/stable record IDs, related data, richer presentation, isolated services
+and real hardware capabilities rather than claiming an unbounded complete OS.
+No guest limit, kernel mechanism or provider behavior changed this increment.
+
+Added demo.py saved/live/resume/verify: a new output folder prevents accidental
+reset, resume preserves data and creates a separate log, live starts empty, and
+saved combines the unmodified actual Meta workshop and evolved quote apps with
+fictional data and source hashes. Docker exposes demo/demo-verify. README now
+leads to DEMO_READY.md, a runnable tour and English three-minute script, while
+preserving earlier experiments and measurements. Saved mode says replay; creation
+in that mode remains the disclosed offline examples, not arbitrary inference.
+
+Verified real QEMU debug/release: both apps restored exactly, native pointer/key
+input blocks Phone C delivery while balance is 4000, recording paid=5000 allows
+delivery, a quote cost edit changes total profit 285 -> 260 without changing the
+workshop, CSV matches, and fresh QEMU recovers both apps and process states. The
+fixture stays unchanged and existing output directories cannot be reset. Actual
+CLI saved/resume/live RFB handshakes passed, with byte-identical resumed state,
+empty initial live state and clean shutdown. Zero Meta calls this increment.
+Linux ARM64 Docker with network disabled also passed the kit verification; this
+is not physical Windows or phone validation. No Rust logic changed, so the prior
+domain/Clippy results were not represented as new runs.
+
+Rendered and visually inspected a 1920x1080 silent preview from real QEMU still
+captures, with explicit historical-live versus saved-rehearsal labels. FFprobe
+confirmed 180 seconds and one video stream, no audio. Source frames and hashes
+are recorded; the renderer and narration/scene manifest are reproducible. This
+is a storyboard preview, not an uninterrupted interaction recording or submitted
+final video. Final narration, recording review, accessible video, eligibility
+clarification and submission confirmation remain outstanding. Evidence is under
+evidence/2026-11-03-demo-kit. Internal Nov 4 18:00 Guatemala target remains.

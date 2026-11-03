@@ -417,3 +417,16 @@ this is process depth, not a production workshop ERP. One frozen live creation
 request is enough to distinguish actual Meta generation from the offline fixture.
 Finish this proof before returning to the video. The own-kernel rationale and its
 cost are recorded in KERNEL_DECISION.md rather than claiming unsupported speed.
+
+
+## November 3: presentation entry point and platform limits
+
+DEMO_READY.md is the current runnable presentation entry point. It packages the
+actual saved workshop and evolved quote app together without another model call,
+with a separate fresh live mode. The three-minute story emphasizes app creation,
+local guarded execution, schema evolution and recovered work. Do not present the
+two original runs as one uninterrupted live generation. APP_LIMITS.md separates
+source ownership from implemented capabilities and orders post-submission work.
+No capacity increase, new driver, native code loader or process isolation is
+claimed in this demo packaging increment. Final narrated video, public-access
+review and submission confirmation remain delivery tasks.

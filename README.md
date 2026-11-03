@@ -1,15 +1,29 @@
 # RAI-OS
 
-An educational AArch64 operating-system prototype in Rust, exploring how an
-AI coordinator could adapt work to goals, events, and resource limits.
+An educational AArch64 operating-system prototype in Rust. Describe a small
+application, review Meta's proposal, and use its forms, calculations and processes
+locally in our QEMU guest.
+
+**Start here:** [Runnable demo and three-minute presentation](docs/DEMO_READY.md) ·
+[App capabilities and remaining limits](docs/APP_LIMITS.md).
+
+```sh
+# Two actual previously Meta-generated apps; no API key needed:
+python3 -B scripts/demo.py saved --output target/demo-visit-1
+```
+
+Connect a VNC viewer to localhost:5900. The demo guide includes authentication,
+Docker for Windows/Linux/macOS, a fresh live mode and saved-session recovery.
+The current slice is a bounded declarative runtime, not arbitrary native code
+generation or a phone-ready OS. Earlier experiments and foundations follow.
 
 **Working today:** an optional [native guest display](docs/GUEST_DISPLAY.md), an [exact EL0 record index with independent checking](docs/RECORD_INDEX.md), bare-metal boot in QEMU, fatal EL1 exception diagnostics, a checked EL1 context return, controlled EL1 timer interrupts, one EL0 Rust program with bounded syscalls and a timer-enforced deadline, a two-context scheduling diagnostic, bounded task completion and fault handling, task-private stack mappings, bounded scalar messages between two tasks, blocking receive with wakeup, a bounded EL0 record-count service, a persistent EL0 worker with protected session memory, a [guest EL0 coordinator](docs/GUEST_COORDINATOR.md) with versioned proposal admission and a [Meta transport bridge](docs/GUEST_META_BRIDGE.md), PL011 UART input/output, help/info/uptime/echo,
 a bounded structured protocol, a physical-page pool with diagnostics, active EL1 memory permissions, a cooperative word-count task, a Rust host terminal
 console, a graphical host control panel, a bounded priority host coordinator, a
 [bounded event-driven Meta coordinator](docs/META_COORDINATOR.md), and a
 [Meta host bridge](docs/META_BRIDGE.md) that validates one real model proposal and executes a guest record operation.
-**Not implemented:** a general autonomous OS coordinator, guest-resident agents, a window system or interactive guest desktop, general multi-task
-scheduling, dynamically created process address spaces, persistent storage, or measured efficiency gains.
+**Not implemented:** a general autonomous OS coordinator, guest-resident agents, a general window system/desktop, general multi-task
+scheduling, dynamically created process address spaces, guest-native persistent disk storage, or measured efficiency gains.
 
 A [retained index mode](docs/RETAINED_INDEX.md) now transfers exact EL0 results
 and reuses completed immutable revisions, with native created/reused views.

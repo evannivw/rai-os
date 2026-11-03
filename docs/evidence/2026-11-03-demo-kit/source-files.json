@@ -1,0 +1,8 @@
+{
+  "scripts/demo.py": "20d58d0f9dbd8dacc5cb75477dc0a23a0c13c74d1d97e40928550dde0dc84513",
+  "scripts/verify_demo_entry.py": "f6d09df60befccf5fc8bbd0b9da2a07f03b14b32039cd7a2043a59d906c63f9a",
+  "scripts/render_demo_preview.py": "64e0209500fa29fe277bc848c4814cc89843fc5d02ebbec48cdcd4bbe9387fc7",
+  "scripts/portable.py": "f0647b945b1e947b15ba4316e176186b881611763bfabfb9f2abd132726d35b2",
+  "fixtures/microapps/v1/demo-device.json": "9b85b18a7b7a797f7ba6a3264ba7a1fdb43296ce5cc7d653c5775ddf00ccdcac",
+  "fixtures/microapps/v1/demo-provenance.json": "0eafcf38cca16ec6a4b2a38de0c8786fb4e09d81738df8be950c2e2f84f4407a"
+}
