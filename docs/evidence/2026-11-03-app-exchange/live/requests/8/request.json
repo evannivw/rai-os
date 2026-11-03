@@ -1,0 +1,47 @@
+{
+  "request_id": 8,
+  "base_revision": 3,
+  "goal": "Add integer cost_cents default 100 and calculated profit = $totalc - $cost_cents. Keep existing fields and records.",
+  "target": {
+    "id": "quote",
+    "title": "Quote App",
+    "capability": "records.local",
+    "fields": [
+      {
+        "key": "item",
+        "kind": "text",
+        "required": true,
+        "label": "Item",
+        "default": ""
+      },
+      {
+        "key": "qty",
+        "kind": "number",
+        "required": true,
+        "label": "Quantity",
+        "default": ""
+      },
+      {
+        "key": "unitc",
+        "kind": "number",
+        "required": true,
+        "label": "Unit cents",
+        "default": ""
+      },
+      {
+        "key": "totalc",
+        "kind": "calculated",
+        "required": true,
+        "label": "Total cents",
+        "default": "",
+        "formula": "$qty * $unitc"
+      }
+    ],
+    "filter_key": "",
+    "filter_label": ""
+  },
+  "app_ids": [
+    "quote"
+  ],
+  "record_count": 2
+}

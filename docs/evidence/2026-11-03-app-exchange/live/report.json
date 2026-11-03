@@ -1,0 +1,141 @@
+{
+  "source": "meta",
+  "source_commit": "0de2acf7c239dc3fea6221be3b46fd930b641579",
+  "source_worktree_dirty": false,
+  "maximum_live_calls": 2,
+  "retries": 0,
+  "development_example": true,
+  "verified": true,
+  "kernel_sha256": "fc4332bffaf0bae2b7d1baf7321e8bcb0139b492bed4f04f98be443c052c10ed",
+  "plans": [
+    {
+      "goal": "Create a quote app: item, integer quantity, integer unit cents, and calculated total cents = quantity * unit cents.",
+      "plan": {
+        "base_revision": 1,
+        "decision": "install",
+        "reason": "Quote app fully expressible with text, number inputs and calculated total.",
+        "request_id": 3,
+        "spec": {
+          "capability": "records.local",
+          "fields": [
+            {
+              "default": "",
+              "key": "item",
+              "kind": "text",
+              "label": "Item",
+              "required": true
+            },
+            {
+              "default": "",
+              "key": "qty",
+              "kind": "number",
+              "label": "Quantity",
+              "required": true
+            },
+            {
+              "default": "",
+              "key": "unitc",
+              "kind": "number",
+              "label": "Unit cents",
+              "required": true
+            },
+            {
+              "default": "",
+              "formula": "$qty * $unitc",
+              "key": "totalc",
+              "kind": "calculated",
+              "label": "Total cents",
+              "required": true
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "id": "quote",
+          "title": "Quote App"
+        }
+      }
+    },
+    {
+      "goal": "Add integer cost_cents default 100 and calculated profit = $totalc - $cost_cents. Keep existing fields and records.",
+      "plan": {
+        "base_revision": 3,
+        "decision": "install",
+        "reason": "Added cost_cents and profit fields preserving order and formulas; validated migration with existing rows.",
+        "request_id": 8,
+        "spec": {
+          "capability": "records.local",
+          "fields": [
+            {
+              "default": "",
+              "key": "item",
+              "kind": "text",
+              "label": "Item",
+              "required": true
+            },
+            {
+              "default": "",
+              "key": "qty",
+              "kind": "number",
+              "label": "Quantity",
+              "required": true
+            },
+            {
+              "default": "",
+              "key": "unitc",
+              "kind": "number",
+              "label": "Unit cents",
+              "required": true
+            },
+            {
+              "default": "",
+              "formula": "$qty * $unitc",
+              "key": "totalc",
+              "kind": "calculated",
+              "label": "Total cents",
+              "required": true
+            },
+            {
+              "default": "100",
+              "key": "cost_cents",
+              "kind": "number",
+              "label": "Cost cents",
+              "required": true
+            },
+            {
+              "default": "",
+              "formula": "$totalc - $cost_cents",
+              "key": "profit",
+              "kind": "calculated",
+              "label": "Profit",
+              "required": true
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "id": "quote",
+          "title": "Quote App"
+        }
+      }
+    }
+  ],
+  "final_rows": [
+    [
+      "Cable",
+      "3",
+      "125",
+      "375",
+      "150",
+      "225"
+    ],
+    [
+      "Adapter",
+      "2",
+      "80",
+      "160",
+      "100",
+      "60"
+    ]
+  ],
+  "total_profit_cents": 285,
+  "export_file": "quote-r5.csv"
+}

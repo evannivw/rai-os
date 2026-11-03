@@ -67,3 +67,27 @@ After delivery, the next substantial product improvement is schema-aware data
 mapping and a broader action vocabulary, followed by actual process isolation.
 For this deadline, a reliable whole journey matters more than another simulated
 hardware feature or a collection of disconnected screens.
+
+## Observed live rehearsal, November 3
+
+The complete live journey passed from clean source 0de2acf: two Meta calls, no
+retries. Creation took 4682 ms provider time; evolution 4995 ms. Quote App used
+actual generated keys including totalc, which the CSV/header and evolution prompt
+followed dynamically. Imported rows survived adding cost/profit, local editing,
+export and restart. The final independent profit sum was 285 cents. These are
+measured development observations, not promised latencies for other requests.
+
+[Report and proposals](evidence/2026-11-03-app-exchange/live/report.json) and
+[native final screen](evidence/2026-11-03-app-exchange/live/08-restored-app.png)
+are available with the recorded source provenance. The generated fictional state
+can be inspected without a key; copy it before opening to preserve evidence:
+
+```sh
+mkdir -p target
+cp docs/evidence/2026-11-03-app-exchange/live/device.json target/journey-device.json
+python3 -B scripts/apps.py --source replay --state target/journey-device.json --exchange target/journey-exchange --output target/journey-inspect-1
+```
+
+This opens the prior result, not fresh generation. Use source meta and your own
+key to create/evolve tools. File templates must use the current exported header,
+including the new cost input. The video itself has not been recorded by this check.

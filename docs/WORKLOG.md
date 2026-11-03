@@ -2592,3 +2592,26 @@ cost/profit fields preserves them; editing one cost yields profits 225 and 60,
 285 cents total, preserved in CSV and after reboot. This offline run uses example
 schemas and is not live Meta evidence. Freeze sources before the capped two-call
 live rehearsal. The planned three-minute video is documented, not yet recorded.
+
+## 2026-11-03 — Live create/import/evolve/export/reboot journey passed
+
+Frozen clean source 0de2acf7c239dc3fea6221be3b46fd930b641579 made exactly two
+live Meta calls. Create returned Quote App with totalc = qty * unitc (HTTP 200,
+4682 ms provider latency, 1965 reported tokens). After the guest imported the two
+fictional CSV rows, the update added cost_cents and profit = totalc - cost_cents
+(HTTP 200, 4995 ms, 2245 tokens). Model identity matched both times. No retry,
+fallback, prompt adjustment or source modification occurred between calls.
+
+The independent verifier checked no installation/import before approval, unchanged
+original fields/data after evolution, local cost editing, expected profits 225 and
+60 cents, total 285, exact six-column CSV export and fresh-QEMU recovery with no
+further inference. The generated key totalc differed from the earlier development
+example; headers and the update request were derived from the actual installed
+schema rather than a hardcoded runtime app. Full proposals, diagnostics, native
+captures, CSVs and fictional saved state are under
+[evidence/2026-11-03-app-exchange/live](evidence/2026-11-03-app-exchange/live).
+
+This is one successful declared development journey, not a general reliability,
+performance or novelty claim. It validates the demonstration workflow; the actual
+three-minute video and submission remain outstanding. This final evidence commit
+changes documentation/artifacts only; executable sources remain the tested freeze.
