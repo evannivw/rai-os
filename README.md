@@ -95,6 +95,10 @@ app, execute locally, and survive saved-session recovery.
 [Reviewed CSV import/export](docs/APP_EXCHANGE.md) connects these tools to user
 data. The [three-minute demo journey](docs/DEMO_JOURNEY.md) covers creation, data,
 app evolution and recovery, with a reproducible QEMU verifier.
+[Generated processes](docs/APP_WORKFLOWS.md) add per-record states, guarded actions
+and terminal edit locks; an eight-order workshop checks the full lifecycle.
+[Kernel decision](docs/KERNEL_DECISION.md) explains the learning/control tradeoff
+and why kernel ownership alone is not a performance or AI advantage.
 A [ready-to-open saved showcase](docs/APP_CAPABILITIES.md#live-generation-and-a-ready-to-open-session)
 contains two previously Meta-generated apps and fictional data; restoration runs
 offline. It demonstrates usable local tools, not an Excel implementation or

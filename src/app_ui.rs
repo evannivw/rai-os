@@ -1,6 +1,6 @@
 //! Guest UI controller for a bounded interpreter. No model or transport dependency.
 use crate::microapp::{
-    Brightness, Capability, Field, ImportBatch, Kind, Runtime, Spec, Text, Values,
+    Action, Brightness, Capability, Field, ImportBatch, Kind, Runtime, Spec, Text, Values, Workflow,
 };
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Mode {
@@ -15,6 +15,8 @@ pub enum Mode {
     Notice,
     Transfer,
     ImportReview,
+    Workflow,
+    WorkflowReview,
 }
 pub struct Controller {
     pub active: bool,
@@ -37,6 +39,8 @@ pub struct Controller {
     pub pending: Spec,
     pub import: ImportBatch,
     importing: bool,
+    restoring: bool,
+    restore_started: bool,
     request: u32,
     base: u32,
     target: Option<usize>,
@@ -140,6 +144,8 @@ impl Controller {
             pending: Spec::EMPTY,
             import: ImportBatch::EMPTY,
             importing: false,
+            restoring: false,
+            restore_started: false,
             request: 0,
             base: 0,
             target: None,
@@ -162,6 +168,8 @@ impl Controller {
             Mode::Notice => "notice",
             Mode::Transfer => "transfer",
             Mode::ImportReview => "import_review",
+            Mode::Workflow => "workflow",
+            Mode::WorkflowReview => "workflow_review",
         }
     }
     pub fn app_matches(&self, slot: usize) -> bool {
@@ -215,23 +223,38 @@ impl Controller {
         {
             return self.key(1010);
         }
-        if matches!(self.mode, Mode::Form | Mode::Records | Mode::Table) && (146..183).contains(&y)
+        if matches!(
+            self.mode,
+            Mode::Form | Mode::Records | Mode::Table | Mode::Workflow
+        ) && (146..183).contains(&y)
         {
-            if x >= 270
-                && self
+            return self.key(if x < 110 {
+                1003
+            } else if x < 190 {
+                1007
+            } else if x < 280 {
+                1013
+            } else if x < 370 {
+                1011
+            } else {
+                1012
+            });
+        }
+        if self.mode == Mode::Workflow && (238..574).contains(&y) {
+            let index = (y - 238) / 84;
+            if index
+                < self
                     .runtime
                     .app(self.selected)
-                    .is_some_and(|a| a.spec.capability() == Capability::Records)
+                    .ok_or("app_not_found")?
+                    .spec
+                    .workflow
+                    .actions()
+                    .len()
             {
-                return self.key(if x < 360 { 1011 } else { 1012 });
+                self.focus = index;
+                return self.key(13);
             }
-            return self.key(if x < 155 {
-                1003
-            } else if x < 320 {
-                1007
-            } else {
-                1008
-            });
         }
         match self.mode {
             Mode::Home | Mode::Search => {
@@ -367,10 +390,17 @@ impl Controller {
         if key == 1002
             && !matches!(
                 self.mode,
-                Mode::Thinking | Mode::Review | Mode::Transfer | Mode::ImportReview
+                Mode::Thinking
+                    | Mode::Review
+                    | Mode::Transfer
+                    | Mode::ImportReview
+                    | Mode::WorkflowReview
             )
         {
-            let t = if matches!(self.mode, Mode::Form | Mode::Records | Mode::Table) {
+            let t = if matches!(
+                self.mode,
+                Mode::Form | Mode::Records | Mode::Table | Mode::Workflow
+            ) {
                 Some(self.selected)
             } else {
                 None
@@ -378,13 +408,35 @@ impl Controller {
             self.begin_prompt(t);
             return Ok(Reply::State("compose"));
         }
-        if matches!(self.mode, Mode::Form | Mode::Records | Mode::Table)
-            && self
-                .runtime
-                .app(self.selected)
-                .is_some_and(|a| a.spec.capability() == Capability::Records)
+        if matches!(
+            self.mode,
+            Mode::Form | Mode::Records | Mode::Table | Mode::Workflow
+        ) && self
+            .runtime
+            .app(self.selected)
+            .is_some_and(|a| a.spec.capability() == Capability::Records)
         {
             match key {
+                1013 => {
+                    let a = self.runtime.app(self.selected).unwrap();
+                    if !a.spec.workflow.enabled() {
+                        return Err("workflow_unavailable");
+                    }
+                    if self.mode == Mode::Form {
+                        self.row = self.editing.ok_or("workflow_saved_row_required")?;
+                    }
+                    a.row(self.row).ok_or("app_row_not_found")?;
+                    self.mode = Mode::Workflow;
+                    self.focus = a
+                        .spec
+                        .workflow
+                        .actions()
+                        .iter()
+                        .position(|act| Some(act.from) == a.state(self.row))
+                        .unwrap_or(0);
+                    self.message = Text::EMPTY;
+                    return Ok(Reply::State("workflow"));
+                }
                 1011 | 1012 => {
                     self.request = self.request.checked_add(1).ok_or("app_request_exhausted")?;
                     self.base = self.runtime.revision();
@@ -478,7 +530,10 @@ impl Controller {
                 }
                 _ => {}
             },
-            Mode::Review if key == 13 => {
+            Mode::Review if key == 13 && self.pending.workflow.enabled() => {
+                self.mode = Mode::WorkflowReview;
+            }
+            Mode::Review | Mode::WorkflowReview if key == 13 => {
                 self.selected = self
                     .runtime
                     .install(&self.pending, self.base, self.target)?;
@@ -489,6 +544,14 @@ impl Controller {
             }
             Mode::Form => {
                 let a = self.runtime.app(self.selected).ok_or("app_not_found")?;
+                if self
+                    .editing
+                    .and_then(|row| a.state(row))
+                    .is_some_and(|state| a.spec.workflow.terminal(state))
+                    && matches!(key, 8 | 13 | 32..=127)
+                {
+                    return Err("workflow_closed");
+                }
                 let kind = a.spec.fields()[self.focus].kind;
                 match key {
                     9 | 1006 | 1005 => {
@@ -588,6 +651,18 @@ impl Controller {
                     self.row = self.row.saturating_sub(1);
                 }
             }
+            Mode::Workflow => {
+                let a = self.runtime.app(self.selected).ok_or("app_not_found")?;
+                match key {
+                    9 | 1006 => self.focus = (self.focus + 1) % a.spec.workflow.actions().len(),
+                    1005 => self.focus = self.focus.saturating_sub(1),
+                    13 => {
+                        let id = a.spec.workflow.actions()[self.focus].id;
+                        self.run_action(id.text(), self.runtime.revision())?;
+                    }
+                    _ => {}
+                }
+            }
             Mode::Notice if key == 13 => self.mode = Mode::Home,
             _ => {}
         }
@@ -599,6 +674,23 @@ impl Controller {
         } else {
             Ok(())
         }
+    }
+    fn run_action(&mut self, id: &str, base: u32) -> Result<(), &'static str> {
+        if self.mode != Mode::Workflow {
+            return Err("workflow_view_required");
+        }
+        self.runtime
+            .apply_action(self.selected, self.row, id, base)?;
+        let a = self.runtime.app(self.selected).unwrap();
+        self.focus = a
+            .spec
+            .workflow
+            .actions()
+            .iter()
+            .position(|act| Some(act.from) == a.state(self.row))
+            .unwrap_or(0);
+        self.message = Text::new("Action applied locally.")?;
+        Ok(())
     }
     fn check_transfer(&self, id: &str, import: bool) -> Result<(), &'static str> {
         if id.parse::<u32>().ok() != Some(self.request)
@@ -637,6 +729,53 @@ impl Controller {
         }
         let arg = arg.ok_or("bad_args")?;
         match name {
+            "app.restore.begin" => {
+                if arg != "1" || self.restore_started || self.runtime.revision() != 1 {
+                    return Err("app_restore_denied");
+                }
+                self.restore_started = true;
+                self.restoring = true;
+            }
+            "app.restore.state" => {
+                if !self.restoring {
+                    return Err("app_restore_denied");
+                }
+                let [id, row, state] = parts(arg)?;
+                let index = self.runtime.find(id).ok_or("app_not_found")?;
+                self.runtime
+                    .restore_state(index, row.parse().map_err(|_| "bad_args")?, state)?;
+            }
+            "app.restore.end" => {
+                if arg != "1" || !self.restoring {
+                    return Err("app_restore_denied");
+                }
+                self.restoring = false;
+            }
+            "app.workflow.run" => {
+                let [base, id] = parts(arg)?;
+                self.run_action(id, base.parse().map_err(|_| "bad_args")?)?;
+            }
+            "app.flow" => {
+                let [id, initial] = parts(arg)?;
+                self.check_request(id)?;
+                if self.pending.workflow.enabled() {
+                    return Err("workflow_duplicate");
+                }
+                self.pending.workflow = Workflow::new(initial)?;
+            }
+            "app.action" => {
+                let [id, action, label, from, to, guard, op, value] = parts(arg)?;
+                self.check_request(id)?;
+                self.pending.workflow.add(Action::new(
+                    action,
+                    decode::<22>(label)?.text(),
+                    from,
+                    to,
+                    guard,
+                    op,
+                    value.parse().map_err(|_| "bad_args")?,
+                )?)?;
+            }
             "app.import.begin" => {
                 let [id, count] = parts(arg)?;
                 self.check_transfer(id, true)?;
@@ -688,6 +827,13 @@ impl Controller {
                 }
                 if app.spec.fields()[index].kind == Kind::Calculated {
                     return Err("app_read_only");
+                }
+                if self
+                    .editing
+                    .and_then(|row| app.state(row))
+                    .is_some_and(|state| app.spec.workflow.terminal(state))
+                {
+                    return Err("workflow_closed");
                 }
                 self.draft[index] = decode(value)?;
             }

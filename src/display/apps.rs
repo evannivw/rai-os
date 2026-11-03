@@ -120,6 +120,8 @@ pub fn render(s: &mut Display, u: &Controller) {
         }
         Mode::Thinking => "Creating...",
         Mode::Review => "Ready to install.",
+        Mode::WorkflowReview => "Review the process.",
+        Mode::Workflow => a.map_or("Process", |a| a.spec.title.text()),
         Mode::Form | Mode::Records | Mode::Table => a.map_or("Your app", |a| a.spec.title.text()),
         Mode::Notice => "One more thing.",
         Mode::Transfer => "Moving your data.",
@@ -276,7 +278,14 @@ pub fn render(s: &mut Display, u: &Controller) {
                 LIME,
             );
             wrap(s, u.message.text(), 606, 3);
-            action(s, "+ Install app");
+            action(
+                s,
+                if u.pending.workflow.enabled() {
+                    "Review process >"
+                } else {
+                    "+ Install app"
+                },
+            );
         }
         Mode::Form => {
             if let Some(a) = a {
@@ -346,7 +355,17 @@ pub fn render(s: &mut Display, u: &Controller) {
                     text(s, "QEMU pixels / no physical backlight", 42, 503, QUIET);
                     action(s, "Apply brightness");
                 } else {
-                    action(s, "Save record");
+                    action(
+                        s,
+                        if u.editing
+                            .and_then(|row| a.state(row))
+                            .is_some_and(|state| a.spec.workflow.terminal(state))
+                        {
+                            "Final state / record locked"
+                        } else {
+                            "Save record"
+                        },
+                    );
                 }
             }
         }
@@ -380,7 +399,21 @@ pub fn render(s: &mut Display, u: &Controller) {
                         ">"
                     };
                     text(s, mark, 39, y as i32 + 13, LIME);
-                    t::body(s, v[0].text(), 78, y as i32 + 8, WHITE);
+                    let headline = v[0].text();
+                    t::body(
+                        s,
+                        if a.spec.workflow.enabled() {
+                            &headline[..headline.len().min(20)]
+                        } else {
+                            headline
+                        },
+                        78,
+                        y as i32 + 8,
+                        WHITE,
+                    );
+                    if a.spec.workflow.enabled() {
+                        text(s, a.state(row).unwrap().text(), 345, y as i32 + 13, LIME);
+                    }
                 }
                 if visible == 0 {
                     center(s, "Nothing here yet_", 321, Size::Body, QUIET);
@@ -479,6 +512,105 @@ pub fn render(s: &mut Display, u: &Controller) {
                 action(s, "Edit row");
             }
         }
+        Mode::Workflow | Mode::WorkflowReview => {
+            let review = u.mode == Mode::WorkflowReview;
+            let spec = if review {
+                Some(&u.pending)
+            } else {
+                a.map(|a| &a.spec)
+            };
+            if let Some(spec) = spec {
+                let state = if review {
+                    spec.workflow.initial
+                } else {
+                    a.and_then(|a| a.state(u.row))
+                        .unwrap_or(spec.workflow.initial)
+                };
+                if !review && let Some(values) = a.and_then(|a| a.row(u.row)) {
+                    center(s, values[0].text(), 192, Size::Body, WHITE);
+                }
+                text(
+                    s,
+                    if review {
+                        "Initial state:"
+                    } else {
+                        "Current state:"
+                    },
+                    42,
+                    213,
+                    QUIET,
+                );
+                text(s, state.text(), 180, 213, LIME);
+                for (i, step) in spec.workflow.actions().iter().enumerate() {
+                    let y = 238 + i * 84;
+                    let allowed = review
+                        || a.and_then(|a| a.row(u.row))
+                            .is_some_and(|v| step.allowed(spec, v, state).is_ok());
+                    frame(
+                        s,
+                        24,
+                        y,
+                        432,
+                        74,
+                        if !review && i == u.focus { LIME } else { QUIET },
+                    );
+                    text(
+                        s,
+                        step.label.text(),
+                        42,
+                        y as i32 + 7,
+                        if allowed { WHITE } else { QUIET },
+                    );
+                    text(s, step.from.text(), 42, y as i32 + 29, QUIET);
+                    text(s, "->", 140, y as i32 + 29, QUIET);
+                    text(s, step.to.text(), 165, y as i32 + 29, QUIET);
+                    if step.guard_op.text() != "none" {
+                        text(s, step.guard_field.text(), 42, y as i32 + 49, LIME);
+                        text(
+                            s,
+                            match step.guard_op.text() {
+                                "le" => "<=",
+                                "ge" => ">=",
+                                _ => "=",
+                            },
+                            140,
+                            y as i32 + 49,
+                            LIME,
+                        );
+                        number(s, i64::from(step.guard_value), 180, y as i32 + 49);
+                        if !review
+                            && let Some(values) = a.and_then(|a| a.row(u.row))
+                            && let Some(field) =
+                                spec.fields().iter().position(|f| f.key == step.guard_field)
+                            && let Ok(value) = values[field].text().parse::<i32>()
+                        {
+                            text(s, "now", 270, y as i32 + 49, QUIET);
+                            number(s, i64::from(value), 304, y as i32 + 49);
+                        }
+                    }
+                }
+                if review {
+                    wrap(
+                        s,
+                        "Actions change this record's state. Final states lock record editing.",
+                        590,
+                        3,
+                    );
+                    action(s, "+ Install app");
+                } else {
+                    let message = match u.message.text() {
+                        "workflow_guard_failed" => "Condition not met. Update the record first.",
+                        "workflow_wrong_state" => {
+                            "This action is not available in the current state."
+                        }
+                        "" => "Tap an action. F3 returns to records.",
+                        other => other,
+                    };
+                    wrap(s, message, 590, 3);
+                    action(s, "Run selected action");
+                }
+            }
+        }
         Mode::Transfer => {
             wrap(
                 s,
@@ -515,34 +647,39 @@ pub fn render(s: &mut Display, u: &Controller) {
             action(s, "Back home");
         }
     }
-    if matches!(u.mode, Mode::Form | Mode::Records | Mode::Table)
-        && a.is_some_and(|a| a.spec.capability() == Capability::Records)
+    if matches!(
+        u.mode,
+        Mode::Form | Mode::Records | Mode::Table | Mode::Workflow
+    ) && a.is_some_and(|a| a.spec.capability() == Capability::Records)
     {
         t::rect(s, 24, 146, 432, 36, 0x060908);
         text(
             s,
             if u.mode == Mode::Records {
-                "[ records ]"
+                "[records]"
             } else {
                 "records"
             },
-            42,
+            30,
             154,
             QUIET,
         );
         text(
             s,
             if u.mode == Mode::Table {
-                "[ table ]"
+                "[table]"
             } else {
                 "table"
             },
-            184,
+            125,
             154,
             QUIET,
         );
-        text(s, "import", 280, 154, LIME);
-        text(s, "export", 374, 154, LIME);
+        if a.is_some_and(|a| a.spec.workflow.enabled()) {
+            text(s, "actions", 210, 154, LIME);
+        }
+        text(s, "import", 300, 154, LIME);
+        text(s, "export", 390, 154, LIME);
     }
     if !u.storage.text().is_empty() {
         center(s, u.storage.text(), 672, Size::Small, QUIET);

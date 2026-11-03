@@ -2,6 +2,9 @@
 use core::fmt::{self, Write};
 #[path = "microapp_formula.rs"]
 mod formula;
+#[path = "microapp_workflow.rs"]
+mod workflow;
+pub use workflow::{Action, Workflow};
 pub const APPS: usize = 3;
 pub const FIELDS: usize = 6;
 pub const ROWS: usize = 8;
@@ -181,6 +184,7 @@ pub struct Spec {
     len: usize,
     pub filter_key: Text<12>,
     pub filter_label: Text<18>,
+    pub workflow: Workflow,
 }
 impl Spec {
     pub const EMPTY: Self = Self {
@@ -191,6 +195,7 @@ impl Spec {
         len: 0,
         filter_key: Text::EMPTY,
         filter_label: Text::EMPTY,
+        workflow: Workflow::EMPTY,
     };
     pub fn new(id: &str, title: &str, capability: &str) -> Result<Self, &'static str> {
         let capability = Capability::parse(capability)?;
@@ -299,6 +304,7 @@ impl Spec {
             }
             Brightness::parse(self.fields[0].default.text())?;
         }
+        self.workflow.check(self)?;
         if !self.filter_key.text().is_empty() && self.check_field().is_none() {
             return Err("app_bad_filter");
         }
@@ -310,6 +316,9 @@ impl Spec {
             .position(|f| f.kind == Kind::Check && f.key == self.filter_key)
     }
     pub fn compatible(&self, old: &Spec) -> Result<(), &'static str> {
+        if self.workflow != old.workflow {
+            return Err("workflow_change_denied");
+        }
         if self.capability != old.capability {
             return Err("app_capability_change");
         }
@@ -353,6 +362,23 @@ impl fmt::Display for Spec {
             f.write_str("~")?;
             a.formula.hex(f)?;
         }
+        write!(f, "; initial={}; actions=", self.workflow.initial.text())?;
+        for (i, a) in self.workflow.actions().iter().enumerate() {
+            if i > 0 {
+                f.write_str(",")?;
+            }
+            write!(f, "{}~", a.id.text())?;
+            a.label.hex(f)?;
+            write!(
+                f,
+                "~{}~{}~{}~{}~{}",
+                a.from.text(),
+                a.to.text(),
+                a.guard_field.text(),
+                a.guard_op.text(),
+                a.guard_value
+            )?;
+        }
         Ok(())
     }
 }
@@ -380,6 +406,7 @@ pub struct App {
     pub spec: Spec,
     pub version: u32,
     rows: [Values; ROWS],
+    states: [Text<12>; ROWS],
     count: usize,
 }
 impl App {
@@ -387,6 +414,7 @@ impl App {
         spec: Spec::EMPTY,
         version: 0,
         rows: [[Text::EMPTY; FIELDS]; ROWS],
+        states: [Text::EMPTY; ROWS],
         count: 0,
     };
     pub fn count(&self) -> usize {
@@ -394,6 +422,9 @@ impl App {
     }
     pub fn row(&self, index: usize) -> Option<&Values> {
         self.rows[..self.count].get(index)
+    }
+    pub fn state(&self, row: usize) -> Option<Text<12>> {
+        self.states[..self.count].get(row).copied()
     }
     pub fn defaults(&self) -> Values {
         let mut v = [Text::EMPTY; FIELDS];
@@ -559,6 +590,9 @@ impl Runtime {
             if r >= app.count {
                 return Err("app_row_not_found");
             }
+            if app.spec.workflow.terminal(app.states[r]) {
+                return Err("workflow_closed");
+            }
             r
         } else {
             if app.count == ROWS {
@@ -573,6 +607,7 @@ impl Runtime {
         let app = &mut self.apps[index];
         app.rows[slot] = values;
         if row.is_none() {
+            app.states[slot] = app.spec.workflow.initial;
             app.count += 1;
         }
         self.revision += 1;
@@ -617,8 +652,57 @@ impl Runtime {
         // below uses the same immutable schema and batch as validation above.
         for row in 0..batch.len() {
             app.rows[app.count + row] = batch.values(&app.spec, row).expect("validated import row");
+            app.states[app.count + row] = app.spec.workflow.initial;
         }
         app.count += batch.len();
+        self.revision += 1;
+        Ok(())
+    }
+    pub fn apply_action(
+        &mut self,
+        index: usize,
+        row: usize,
+        id: &str,
+        base: u32,
+    ) -> Result<(), &'static str> {
+        if base != self.revision {
+            return Err("app_stale_revision");
+        }
+        self.revision
+            .checked_add(1)
+            .ok_or("app_revision_exhausted")?;
+        let app = self.app(index).ok_or("app_not_found")?;
+        let values = app.row(row).ok_or("app_row_not_found")?;
+        let action = app
+            .spec
+            .workflow
+            .actions()
+            .iter()
+            .find(|a| a.id.text() == id)
+            .ok_or("workflow_unknown_action")?;
+        action.allowed(&app.spec, values, app.states[row])?;
+        self.apps[index].states[row] = action.to;
+        self.revision += 1;
+        Ok(())
+    }
+    /// Trusted saved-session restoration only. The controller exposes this solely
+    /// during a fresh-device restore, never as an ordinary app action.
+    pub fn restore_state(
+        &mut self,
+        index: usize,
+        row: usize,
+        state: &str,
+    ) -> Result<(), &'static str> {
+        let state = Text::new(state)?;
+        let app = self.app(index).ok_or("app_not_found")?;
+        app.row(row).ok_or("app_row_not_found")?;
+        if !app.spec.workflow.enabled() || !app.spec.workflow.known(state) {
+            return Err("workflow_bad_state");
+        }
+        self.revision
+            .checked_add(1)
+            .ok_or("app_revision_exhausted")?;
+        self.apps[index].states[row] = state;
         self.revision += 1;
         Ok(())
     }
@@ -726,6 +810,13 @@ impl fmt::Display for Export<'_> {
                 value.hex(f)?;
             }
         }
+        f.write_str("; states=")?;
+        for (i, state) in self.0.states[..self.0.count].iter().enumerate() {
+            if i > 0 {
+                f.write_str(",")?;
+            }
+            f.write_str(state.text())?;
+        }
         Ok(())
     }
 }
@@ -798,6 +889,89 @@ mod tests {
         row[2] = Text::EMPTY;
         r.save(i, Some(0), &row).unwrap();
         assert_eq!(r.app(i).unwrap().sum(2, false), Some(15_032_385_529));
+    }
+    #[test]
+    fn workflows_guard_transitions_and_lock_terminal_records() {
+        let mut s = Spec::new("jobs", "Jobs", "records.local").unwrap();
+        s.add(Field::new("remaining", "Remaining", "number", true, "10").unwrap())
+            .unwrap();
+        s.workflow = Workflow::new("new").unwrap();
+        s.workflow
+            .add(Action::new("begin", "Begin", "new", "active", "", "none", 0).unwrap())
+            .unwrap();
+        s.workflow
+            .add(Action::new("close", "Close", "active", "closed", "remaining", "le", 0).unwrap())
+            .unwrap();
+        let mut r = Runtime::new();
+        let index = r.install(&s, 1, None).unwrap();
+        let mut values = r.app(index).unwrap().defaults();
+        r.save(index, None, &values).unwrap();
+        let base = r.revision();
+        assert_eq!(
+            r.apply_action(index, 0, "close", base),
+            Err("workflow_wrong_state")
+        );
+        assert_eq!(
+            r.apply_action(index, 0, "absent", base),
+            Err("workflow_unknown_action")
+        );
+        assert_eq!(r.revision(), base);
+        r.apply_action(index, 0, "begin", base).unwrap();
+        assert_eq!(
+            r.apply_action(index, 0, "begin", base),
+            Err("app_stale_revision")
+        );
+        assert_eq!(
+            r.apply_action(index, 0, "close", base + 1),
+            Err("workflow_guard_failed")
+        );
+        assert_eq!(r.app(index).unwrap().state(0).unwrap().text(), "active");
+        values[0] = Text::new("0").unwrap();
+        r.save(index, Some(0), &values).unwrap();
+        r.apply_action(index, 0, "close", r.revision()).unwrap();
+        let base = r.revision();
+        assert_eq!(r.save(index, Some(0), &values), Err("workflow_closed"));
+        assert_eq!(
+            r.apply_action(index, 0, "close", base),
+            Err("workflow_wrong_state")
+        );
+        assert_eq!(
+            r.restore_state(index, 0, "unknown"),
+            Err("workflow_bad_state")
+        );
+        assert_eq!(r.revision(), base);
+        let mut changed = s;
+        changed.workflow = Workflow::new("other").unwrap();
+        assert_eq!(changed.compatible(&s), Err("workflow_change_denied"));
+        let mut unreachable = s;
+        unreachable
+            .workflow
+            .add(Action::new("orphan", "Orphan", "missing", "new", "", "none", 0).unwrap())
+            .unwrap();
+        assert_eq!(unreachable.check(), Err("workflow_unreachable"));
+        let mut bad = s;
+        bad.workflow
+            .add(Action::new("bad", "Bad", "closed", "new", "missing", "eq", 0).unwrap())
+            .unwrap();
+        assert_eq!(bad.check(), Err("workflow_bad_guard"));
+        // A second vocabulary and ge comparison use the identical executor.
+        let mut other = Spec::new("stock", "Stock", "records.local").unwrap();
+        other
+            .add(Field::new("units", "Units", "number", true, "2").unwrap())
+            .unwrap();
+        other.workflow = Workflow::new("draft").unwrap();
+        other
+            .workflow
+            .add(Action::new("reserve", "Reserve", "draft", "reserved", "units", "ge", 3).unwrap())
+            .unwrap();
+        let j = r.install(&other, r.revision(), None).unwrap();
+        let v = r.app(j).unwrap().defaults();
+        r.save(j, None, &v).unwrap();
+        assert_eq!(
+            r.apply_action(j, 0, "reserve", r.revision()),
+            Err("workflow_guard_failed")
+        );
+        assert_eq!(r.app(index).unwrap().state(0).unwrap().text(), "closed");
     }
     #[test]
     fn imports_validate_complete_batches_and_preserve_existing_rows() {

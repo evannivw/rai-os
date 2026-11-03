@@ -356,7 +356,15 @@ impl Console<'_> {
     }
 }
 
-pub fn run(clock: &Clock, memory: &mut Memory, mmu: &Mmu, timer: &mut Timer) -> ! {
+// Keep large initialization temporaries off the permanently retained command-loop
+// frame. The fixed 64 KiB kernel stack must also accommodate command handlers.
+#[inline(never)]
+fn create_console<'a>(
+    clock: &'a Clock,
+    memory: &'a mut Memory,
+    mmu: &'a Mmu,
+    timer: &'a mut Timer,
+) -> Console<'a> {
     #[cfg(feature = "guest-display")]
     // SAFETY: sole owner at boot, fixed mappings active, one CPU/IRQs masked.
     let display = match unsafe { crate::display::Display::initialize() } {
@@ -375,7 +383,7 @@ pub fn run(clock: &Clock, memory: &mut Memory, mmu: &Mmu, timer: &mut Timer) -> 
             None
         }
     };
-    let mut console = Console {
+    Console {
         clock,
         task: Task::new(),
         files: crate::ramfs::Store::new(),
@@ -387,7 +395,11 @@ pub fn run(clock: &Clock, memory: &mut Memory, mmu: &Mmu, timer: &mut Timer) -> 
         sessions: crate::schedule::Sessions::new(),
         #[cfg(feature = "guest-display")]
         display,
-    };
+    }
+}
+
+pub fn run(clock: &Clock, memory: &mut Memory, mmu: &Mmu, timer: &mut Timer) -> ! {
+    let mut console = create_console(clock, memory, mmu, timer);
     let mut buffer = [0u8; CAPACITY];
     let mut length = 0;
     let mut rejected = None;

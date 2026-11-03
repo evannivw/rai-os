@@ -104,3 +104,7 @@ fixtures/microapps/v1/exchange-example.json), then checks native review/cancel,
 quoted/reordered CSV, exact exported bytes, no-overwrite behavior, invalid batches,
 late/duplicate/incomplete staging and exact recovery after a fresh guest boot.
 Restoring that example is explicitly not a new model invocation.
+
+For [workflow apps](APP_WORKFLOWS.md), CSV covers fields only. Imported rows start
+in the initial state; CSV does not preserve a process history or current state.
+Use the saved-device JSON for full process recovery.

@@ -405,3 +405,15 @@ a three-minute sequence and a verifier with two capped live calls. Complete the
 live rehearsal before claiming it works, then prioritize the actual video and
 submission. User-mediated CSV exchange does not add model file access or guest
 persistent storage.
+
+
+## November 3: user-selected workshop process proof
+
+The user asked for a more substantial capability example before polish and chose
+a workshop manager. Extend generic apps with states and guarded actions, then
+verify eight fictional orders at four stages, denied unpaid delivery, payment,
+terminal editing locks and reboot recovery. Keep the quantitative limits visible;
+this is process depth, not a production workshop ERP. One frozen live creation
+request is enough to distinguish actual Meta generation from the offline fixture.
+Finish this proof before returning to the video. The own-kernel rationale and its
+cost are recorded in KERNEL_DECISION.md rather than claiming unsupported speed.

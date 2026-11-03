@@ -2615,3 +2615,45 @@ This is one successful declared development journey, not a general reliability,
 performance or novelty claim. It validates the demonstration workflow; the actual
 three-minute video and submission remain outstanding. This final evidence commit
 changes documentation/artifacts only; executable sources remain the tested freeze.
+
+## 2026-11-03 — Generic guarded processes and workshop capability proof
+
+The user asked for a more substantial example before polish and selected a repair
+workshop. Added optional per-record workflows with up to four user-triggered
+actions. Each action checks revision, source state and an optional numeric guard
+before one state change. Terminal states reject normal editing. Model-generated
+graphs must be reachable and use existing numeric fields; existing workflow
+schemas are immutable on update. Fields/formulas and the full process are reviewed
+on two screens before installation. States appear in the native list/actions view.
+No workshop-specific logic was added to the kernel/runtime or live bridge.
+
+State is separate from editable fields. Snapshot validation requires known states
+for every row; a one-time fresh-device restore gate closes before user input.
+The host and saved-file owner remain trusted; recovery is not an action-history
+proof. CSV covers field data only and imported orders start a new process. App
+runtime/validation remains shared EL1, not hardware-isolated services. Limits
+remain three apps, six fields, eight rows. No new unsafe or hardware capability.
+
+The first debug install failed with a fatal exception. Inspection found a 55856-
+byte retained console frame competing with handlers on the fixed 64 KiB stack.
+Moving construction into a non-inlined helper reduced the retained loop frame to
+32272 bytes. The stack reservation and MMU mapping window were not enlarged.
+Improved verifier/close log retention for failures. Initial failure observations
+and compiler frame data are preserved in evidence/2026-11-03-app-workflows/offline.
+Individual frame measurements are not a full worst-case call-stack proof.
+
+Verified 72 host/shared-domain tests; formatting and kernel/host Clippy; real QEMU
+debug/release workshop execution with native action-card clicks; eight imported
+orders, denied out-of-order/unpaid/stale/repeated actions, locked final records,
+exact CSV fields and reboot restoration of every state. Existing release app/RFB,
+storage and exchange checks passed. Console/protocol passed 37 checks in each
+profile; physical-memory bookkeeping/zeroing/reuse checks passed in debug. Normal
+EL0 coordinator regression passed 140 requests per profile, including task and
+isolation recovery; fault-injection variants were not rerun. Linux ARM64 Docker
+passed the workshop check with network disabled; no physical Windows/phone test.
+
+These workshop checks used disclosed verifier schemas, not Meta generation. The
+next frozen-source check permits one live request with no retry or fallback.
+APP_WORKFLOWS.md documents usage/limits; KERNEL_DECISION.md answers the own-kernel
+tradeoff: direct systems ownership and learning at substantial infrastructure cost,
+without claiming that this app experience requires our kernel or is faster.

@@ -9,6 +9,8 @@ use serde::Deserialize;
 struct StoredApp {
     spec: Spec,
     rows: Vec<Vec<String>>,
+    #[serde(default)]
+    states: Vec<String>,
 }
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -28,7 +30,12 @@ fn validate(text: &str) -> Result<usize, &'static str> {
         if a.rows.len() > ROWS {
             return Err("app_row_limit");
         }
-        for row in &a.rows {
+        if (spec.workflow.enabled() && a.states.len() != a.rows.len())
+            || (!spec.workflow.enabled() && !a.states.is_empty())
+        {
+            return Err("snapshot_workflow_states");
+        }
+        for (rowno, row) in a.rows.iter().enumerate() {
             if row.len() != spec.fields().len() {
                 return Err("invalid_snapshot_columns");
             }
@@ -41,6 +48,9 @@ fn validate(text: &str) -> Result<usize, &'static str> {
                 return Err("snapshot_derived_mismatch");
             }
             runtime.save(index, None, &values)?;
+            if spec.workflow.enabled() {
+                runtime.restore_state(index, rowno, &a.states[rowno])?;
+            }
         }
     }
     Ok(s.apps.len())
@@ -57,6 +67,15 @@ pub fn run(path: &std::path::Path) -> Result<(), String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn workflow_snapshot_requires_complete_known_states() {
+        let mut s = serde_json::json!({"version":1,"apps":[{"spec":{"id":"jobs","title":"Jobs","capability":"records.local","fields":[{"key":"name","label":"Name","kind":"text","required":true,"default":""}],"filter_key":"","filter_label":"","workflow":{"initial":"new","actions":[{"id":"close","label":"Close","from":"new","to":"closed","guard_field":"","guard_op":"none","guard_value":0}]}},"rows":[["Job A"]],"states":["closed"]}]});
+        assert_eq!(validate(&s.to_string()), Ok(1));
+        s["apps"][0]["states"] = serde_json::json!([]);
+        assert_eq!(validate(&s.to_string()), Err("snapshot_workflow_states"));
+        s["apps"][0]["states"] = serde_json::json!(["forged"]);
+        assert_eq!(validate(&s.to_string()), Err("workflow_bad_state"));
+    }
     #[test]
     fn derived_snapshot_values_must_match_recomputation() {
         let mut s = serde_json::json!({"version":1,"apps":[{"spec":{"id":"custom","title":"Custom","capability":"records.local","fields":[{"key":"x","label":"Input","kind":"number","required":true,"default":"1"},{"key":"y","label":"Result","kind":"calculated","required":true,"default":"","formula":"$x*2"}],"filter_key":"","filter_label":""},"rows":[["3","6"]]}]});

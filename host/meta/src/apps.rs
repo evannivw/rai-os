@@ -14,6 +14,23 @@ pub struct Field {
 }
 #[derive(Deserialize, Serialize, Clone)]
 #[serde(deny_unknown_fields)]
+pub struct Action {
+    pub id: String,
+    pub label: String,
+    pub from: String,
+    pub to: String,
+    pub guard_field: String,
+    pub guard_op: String,
+    pub guard_value: i32,
+}
+#[derive(Deserialize, Serialize, Clone)]
+#[serde(deny_unknown_fields)]
+pub struct Workflow {
+    pub initial: String,
+    pub actions: Vec<Action>,
+}
+#[derive(Deserialize, Serialize, Clone)]
+#[serde(deny_unknown_fields)]
 pub struct Spec {
     pub id: String,
     pub title: String,
@@ -21,6 +38,8 @@ pub struct Spec {
     pub fields: Vec<Field>,
     pub filter_key: String,
     pub filter_label: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub workflow: Option<Workflow>,
 }
 impl Spec {
     pub fn checked(&self) -> Result<microapp::Spec, &'static str> {
@@ -32,6 +51,20 @@ impl Spec {
             )?;
         }
         s.filter(&self.filter_key, &self.filter_label)?;
+        if let Some(flow) = &self.workflow {
+            s.workflow = microapp::Workflow::new(&flow.initial)?;
+            for a in &flow.actions {
+                s.workflow.add(microapp::Action::new(
+                    &a.id,
+                    &a.label,
+                    &a.from,
+                    &a.to,
+                    &a.guard_field,
+                    &a.guard_op,
+                    a.guard_value,
+                )?)?;
+            }
+        }
         s.check()?;
         Ok(s)
     }

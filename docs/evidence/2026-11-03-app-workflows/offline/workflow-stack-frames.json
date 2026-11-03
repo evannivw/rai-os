@@ -1,0 +1,15 @@
+{
+  "debug_cfa_offsets": {
+    "_ZN6rai_os7console7Console11app_command17h59cffb1de753b4aeE:": [
+      4528
+    ],
+    "_ZN6rai_os7console14create_console17h51bc5a130b41ba2dE:": [
+      28176
+    ],
+    "_ZN6rai_os7console3run17hb09ed72be43c82a2E:": [
+      32272
+    ]
+  },
+  "previous_console_run_cfa_bytes": 55856,
+  "kernel_stack_bytes": 65536
+}

@@ -1,0 +1,7 @@
+The first uncommitted debug workflow test failed during final app installation.
+Observed UART diagnostic reported EXCEPTION vector=4, ec=0x00, elr=0, entry_sp=0x9000f40, followed by HALTED.
+The original close path attempted another UART request and masked report writing; no complete verifier report or UART log was retained for this failed attempt.
+Compiler inspection found the retained console loop frame at 55856 bytes.
+Separating create_console from the retained loop reduced that frame to 32272 bytes, preserving the 65536-byte linker stack reservation. Subsequent debug/release QEMU checks passed.
+Close now retains its UART log even if final persistence fails, and this verifier writes its report before closing.
+These frame sizes are compiler observations, not a complete worst-case stack proof.

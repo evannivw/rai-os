@@ -1,0 +1,2 @@
+PASS guest coordinator normal (debug): 140 requests; retained EL0 state, admission, IPC and recovery
+PASS guest coordinator normal (release): 140 requests; retained EL0 state, admission, IPC and recovery

@@ -484,3 +484,19 @@ revision and requires native approval. The host adapter owns CSV and the explici
 inbox/outbox; Meta receives neither paths nor records. Existing saved-session
 persistence runs after the guest commit. No unsafe or new privilege boundary.
 See APP_EXCHANGE.md and the reproducible workflow in DEMO_JOURNEY.md.
+
+
+## November 3: bounded per-record workflows
+
+The app schema optionally contains a reachable graph of up to four actions.
+Generic domain code checks source state, revision and an optional numeric guard,
+then changes one row state. Terminal records reject ordinary saves. State is kept
+separately from editable values and persisted in validated snapshots; CSV imports
+start new processes. Trusted fresh-device restoration is a distinct boot-only
+controller phase, closed before interactive input. The host and saved-file owner
+remain trusted; restore validates state membership, not historical action proofs.
+
+No new unsafe, device operation or process isolation was added. The console
+initializer was separated to release its large temporary stack frame before the
+retained event loop handles actions. The linker stack size remains 64 KiB.
+APP_WORKFLOWS.md and KERNEL_DECISION.md document the limits and tradeoffs.

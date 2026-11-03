@@ -19,6 +19,8 @@ for a RAM-only session. A separate output folder holds each session's logs.
 Changing the model source to replay does not change stored apps. Restore never
 contacts Meta. Each installed app retains its schema and exact saved record bytes;
 calculated values are independently recomputed and must match those saved bytes.
+Workflow apps also retain one validated process state per row; recovery uses a
+one-time fresh-guest restore phase that closes before interactive input.
 Only editable values are sent through app.value during restore;
 transient drafts, UI selection, request IDs and runtime revision numbers are not
 persistent and are rebuilt for the new session.

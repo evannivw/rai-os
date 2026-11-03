@@ -61,20 +61,33 @@ class Checkpoint:
 
 def collect(g,schema,records):
     entries=g.fields('app.catalog')['apps']
-    return dict(version=1,apps=[dict(spec=schema(g,item.split(':')[0]),rows=records(g,item.split(':')[0])) for item in entries.split(',') if item!='-'])
+    apps=[]
+    for item in entries.split(','):
+        if item=='-':continue
+        app_id=item.split(':')[0];app=dict(spec=schema(g,app_id),rows=records(g,app_id))
+        if app['spec'].get('workflow'):app['states']=[] if not app['rows'] else g.fields('app.export',app_id)['states'].split(',')
+        apps.append(app)
+    return dict(version=1,apps=apps)
 
 def restore(g,state,deliver,schema,records):
     assert g.fields('app.catalog')['apps']=='-','Restore is only allowed in a fresh guest'
+    g.request('app.restore.begin','1')
     for app in state['apps']:
         g.request('app.open');g.request('app.key','1002')
         for c in 'Restore saved app':g.request('app.key',str(ord(c)))
         reply=dict(p.split('=',1) for p in g.request('app.key','13').split('; '))
         deliver(g,dict(request_id=int(reply['submit']),base_revision=int(reply['revision']),decision='install',spec=app['spec'],reason='Restore a previously saved app.'))
         g.request('app.key','13')
+        if app['spec'].get('workflow'):g.request('app.key','13')
         for rowno,row in enumerate(app['rows']):
             if rowno:g.request('app.key','110')
             for index,value in enumerate(row):
                 if app['spec']['fields'][index]['kind']!='calculated':g.request('app.value',f'{index}:{value.encode("ascii").hex()}')
             g.request('app.key','13')
+            if app['spec'].get('workflow'):g.request('app.restore.state',f"{app['spec']['id']}:{rowno}:{app['states'][rowno]}")
+        if app['spec'].get('workflow'):
+            actual=[] if not app['rows'] else g.fields('app.export',app['spec']['id'])['states'].split(',')
+            assert actual==app['states'],'Restored states differ'
         assert schema(g,app['spec']['id'])==app['spec'] and records(g,app['spec']['id'])==app['rows'],'Restored bytes differ'
+    g.request('app.restore.end','1')
     g.request('app.open')

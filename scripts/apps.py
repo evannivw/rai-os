@@ -20,7 +20,18 @@ def schema(g,app_id):
         key,kind,required,label,default,formula=item.split('~')
         fields.append(dict(key=key,kind=kind,required=required=='1',label=bytes.fromhex(label).decode('ascii'),default=bytes.fromhex(default).decode('ascii')))
         if formula:fields[-1]['formula']=bytes.fromhex(formula).decode('ascii')
-    return dict(id=row['id'],title=bytes.fromhex(row['title']).decode('ascii'),capability=row['capability'],fields=fields,filter_key=row['filter'],filter_label=bytes.fromhex(row['filter_label']).decode('ascii'))
+    result=dict(id=row['id'],title=bytes.fromhex(row['title']).decode('ascii'),capability=row['capability'],fields=fields,filter_key=row['filter'],filter_label=bytes.fromhex(row['filter_label']).decode('ascii'))
+    if row['initial']:
+        actions=[]
+        for item in row['actions'].split(','):
+            key,label,frm,to,guard,op,value=item.split('~')
+            actions.append(dict(id=key,label=bytes.fromhex(label).decode('ascii'),**{'from':frm},to=to,guard_field=guard,guard_op=op,guard_value=int(value)))
+        result['workflow']=dict(initial=row['initial'],actions=actions)
+    return result
+
+def states(g,app_id):
+    data=g.fields('app.export',app_id)
+    return [] if data['count']=='0' else data['states'].split(',')
 
 def records(g,app_id):
     data=g.fields('app.export',app_id)
@@ -35,6 +46,9 @@ def deliver(g,p):
     for f in s['fields']:
         g.request('app.field',f"{rid}:{f['key']}:{f['kind']}:{int(f['required'])}:{f['label'].encode().hex()}:{f['default'].encode().hex()}")
         if f.get('formula'):g.request('app.formula',f"{rid}:{f['key']}:{f['formula'].encode().hex()}")
+    if s.get('workflow'):
+        flow=s['workflow'];g.request('app.flow',f"{rid}:{flow['initial']}")
+        for a in flow['actions']:g.request('app.action',f"{rid}:{a['id']}:{a['label'].encode().hex()}:{a['from']}:{a['to']}:{a['guard_field']}:{a['guard_op']}:{a['guard_value']}")
     g.request('app.filter',f"{rid}:{s['filter_key']}:{s['filter_label'].encode().hex()}")
     g.request('app.ready',f"{rid}:{p['reason']}")
 
@@ -135,10 +149,11 @@ class Studio:
         try:
             with self.lock:
                 if self.guest.process.poll() is None:self.persist()
-            (self.output/'uart.log').write_text('\n'.join(self.guest.log)+'\n')
         finally:
-            self.guest.close()
-            if self.checkpoint:self.checkpoint.close()
+            try:(self.output/'uart.log').write_text('\n'.join(self.guest.log)+'\n')
+            finally:
+                self.guest.close()
+                if self.checkpoint:self.checkpoint.close()
 
 def run(kernel,binary,output,source='meta',port=5900,bind='127.0.0.1',state=None,exchange=None):
     app=Studio(kernel,binary,output,source,vnc=True,state=state,exchange=exchange);keys=queue.Queue(maxsize=256)

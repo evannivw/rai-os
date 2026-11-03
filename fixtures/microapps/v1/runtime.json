@@ -1,5 +1,5 @@
 {
-  "runtime": "rai-declarative-4",
+  "runtime": "rai-declarative-5",
   "limits": {
     "apps": 3,
     "fields": 6,
@@ -67,5 +67,12 @@
     "import": "User-selected host exchange folder, inbox/<installed-app-id>.csv; guest previews then appends a validated batch only after confirmation. No model access to file paths or data.",
     "export": "Explicit user action exports all saved rows and computed values to a new outbox/<installed-app-id>-r<revision>.csv file; existing files are never overwritten.",
     "limits": "1..8 incoming rows, existing per-app capacity still eight, exact input or full-field header, printable ASCII values up to 32 bytes. This adds no schema properties or model-callable file operations."
+  },
+  "workflow": {
+    "scope": "Optional records.local process. State is separate per record, not a field. No background actions or external effects.",
+    "limits": "1..4 actions; initial/from/to/action IDs max12; labels max22. Reachable graph. Existing workflow is immutable on update.",
+    "guards": "none (empty field, value 0), eq/le/ge compare an existing numeric/calculated column with an i32 literal. Checked on every user action.",
+    "persistence": "New/imported records start in initial state. Terminal states lock ordinary edits. Trusted saved-session restoration retains known states; CSV contains field data only, not process state.",
+    "execution": "Every successful action advances the runtime revision once; invalid/stale/out-of-order actions do nothing."
   }
 }

@@ -1,0 +1,166 @@
+{
+  "source": "offline",
+  "maximum_live_calls": 0,
+  "retries": 0,
+  "source_commit": "2c559dcb5e3d04bf0890ca4f788dd393a100f6c2",
+  "source_worktree_dirty": true,
+  "kernel_sha256": "5b78c8dadf763ec95a65b8486e9a00313f22ac345b58e3604d48c01458f2721d",
+  "verified": true,
+  "development_example": true,
+  "checks": [
+    "Generated fields and full process reviewed before install; eight imported orders start in the initial state",
+    "Out-of-order, stale, unpaid delivery, duplicate completion, terminal edits and runtime restore bypass rejected without mutation",
+    "CSV field data exported exactly; fresh QEMU restores all process states and data without inference; restoration gate closes"
+  ],
+  "plan": {
+    "request_id": 3,
+    "base_revision": 1,
+    "decision": "install",
+    "reason": "Verifier proposal.",
+    "spec": {
+      "id": "workshop",
+      "title": "Repair workshop",
+      "capability": "records.local",
+      "fields": [
+        {
+          "key": "device",
+          "label": "Device",
+          "kind": "text",
+          "required": true,
+          "default": ""
+        },
+        {
+          "key": "job",
+          "label": "Job",
+          "kind": "text",
+          "required": true,
+          "default": ""
+        },
+        {
+          "key": "quote",
+          "label": "Quote",
+          "kind": "number",
+          "required": true,
+          "default": "0"
+        },
+        {
+          "key": "paid",
+          "label": "Paid",
+          "kind": "number",
+          "required": true,
+          "default": "0"
+        },
+        {
+          "key": "balance",
+          "label": "Balance",
+          "kind": "calculated",
+          "required": true,
+          "default": "",
+          "formula": "$quote-$paid"
+        }
+      ],
+      "filter_key": "",
+      "filter_label": "",
+      "workflow": {
+        "initial": "received",
+        "actions": [
+          {
+            "id": "start",
+            "label": "Start repair",
+            "from": "received",
+            "to": "repairing",
+            "guard_field": "",
+            "guard_op": "none",
+            "guard_value": 0
+          },
+          {
+            "id": "finish",
+            "label": "Finish repair",
+            "from": "repairing",
+            "to": "ready",
+            "guard_field": "",
+            "guard_op": "none",
+            "guard_value": 0
+          },
+          {
+            "id": "deliver",
+            "label": "Deliver device",
+            "from": "ready",
+            "to": "delivered",
+            "guard_field": "balance",
+            "guard_op": "le",
+            "guard_value": 0
+          }
+        ]
+      }
+    }
+  },
+  "final_rows": [
+    [
+      "Phone A",
+      "Screen",
+      "12000",
+      "12000",
+      "0"
+    ],
+    [
+      "Tablet B",
+      "Battery",
+      "8000",
+      "8000",
+      "0"
+    ],
+    [
+      "Phone C",
+      "Port",
+      "5000",
+      "1000",
+      "4000"
+    ],
+    [
+      "Laptop D",
+      "Keyboard",
+      "15000",
+      "0",
+      "15000"
+    ],
+    [
+      "Watch E",
+      "Battery",
+      "3000",
+      "0",
+      "3000"
+    ],
+    [
+      "Tablet F",
+      "Screen",
+      "18000",
+      "4000",
+      "14000"
+    ],
+    [
+      "Phone G",
+      "Speaker",
+      "6000",
+      "0",
+      "6000"
+    ],
+    [
+      "Laptop H",
+      "Hinge",
+      "9000",
+      "3000",
+      "6000"
+    ]
+  ],
+  "final_states": [
+    "delivered",
+    "delivered",
+    "ready",
+    "repairing",
+    "received",
+    "received",
+    "received",
+    "received"
+  ]
+}

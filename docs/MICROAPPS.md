@@ -202,3 +202,7 @@ AI and native machine-code generation remain unimplemented.
 
 A fourth exact replay prompt creates the [brightness control app](DISPLAY_CONTROL.md).
 It has an Apply action and explicit display permission instead of record storage.
+
+[Generated workflows](APP_WORKFLOWS.md) now add an actions toolbar/F9 view for
+saved rows. Apps can have states and guarded user-triggered transitions. A
+second review screen exposes the entire process before installation.
