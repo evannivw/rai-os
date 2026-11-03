@@ -88,6 +88,13 @@ python3 -B scripts/apps.py --source replay --output target/apps-replay-1
 Connect a VNC viewer to localhost:5900; see the microapp guide for macOS viewer
 password setup, Docker, controls and current limits.
 
+The launcher now includes app icons, search and guest-owned pointer navigation.
+Apps have a [table view with exact numeric totals](docs/APP_CAPABILITIES.md).
+A [ready-to-open saved showcase](docs/APP_CAPABILITIES.md#live-generation-and-a-ready-to-open-session)
+contains two previously Meta-generated apps and fictional data; restoration runs
+offline. It demonstrates usable local tools, not an Excel implementation or
+arbitrary native-code generation.
+
 ## Run
 
 Install Rustup and QEMU (9.2 or newer with virt-9.2), then:

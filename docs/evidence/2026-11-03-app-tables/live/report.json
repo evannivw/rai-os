@@ -1,0 +1,69 @@
+{
+  "source": "meta",
+  "maximum_live_calls": 1,
+  "retries": 0,
+  "development_fixture": true,
+  "ai_advantage_measured": false,
+  "created": true,
+  "verified": true,
+  "source_commit": "d99eda552a46b0b2928625800dcc250c448f3ac5",
+  "source_worktree_dirty": false,
+  "kernel_sha256": "4dbdf7ff62fe2a0289ac2f1ff447b13c62870b141d1e287f3936832bea5567a7",
+  "plan": {
+    "base_revision": 1,
+    "decision": "install",
+    "reason": "Expense tracker with item, amount cents, paid flag and unpaid filter; table and totals automatic.",
+    "request_id": 2,
+    "spec": {
+      "capability": "records.local",
+      "fields": [
+        {
+          "default": "",
+          "key": "item",
+          "kind": "text",
+          "label": "Item",
+          "required": true
+        },
+        {
+          "default": "",
+          "key": "amount",
+          "kind": "number",
+          "label": "Amount cents",
+          "required": true
+        },
+        {
+          "default": "false",
+          "key": "paid",
+          "kind": "check",
+          "label": "Paid",
+          "required": false
+        }
+      ],
+      "filter_key": "paid",
+      "filter_label": "Unpaid",
+      "id": "expenses",
+      "title": "Expense Tracker"
+    }
+  },
+  "final_rows": [
+    [
+      "Cable",
+      "1350",
+      "false"
+    ],
+    [
+      "Adapter",
+      "750",
+      "true"
+    ],
+    [
+      "Refund",
+      "-200",
+      "false"
+    ]
+  ],
+  "totals": {
+    "all": 1900,
+    "unpaid": 1150
+  }
+}

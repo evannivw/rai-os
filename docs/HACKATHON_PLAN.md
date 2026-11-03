@@ -365,3 +365,14 @@ placing inference in per-click execution. Disclose replay versus live generation
 RAM-only storage, host transport and shared EL1 runtime. It is not a benchmark
 win or evidence of novelty. Keep November 4 rehearsal/video/submission protected;
 no phone port, general code generation or new hardware capability this increment.
+
+## November 3: playable app showcase
+
+The current product slice now includes a phone-shaped line-art launcher, icons,
+search, host-backed saved-session recovery and guest table totals. A public
+showcase restores two previously Meta-generated apps (inspections and expenses)
+without inference. Rehearse create/approve/use, edit a record and observe totals,
+then reopen the saved device. Explain native QEMU rendering, the model's limited
+schema role, shared EL1 runtime and host storage/API boundary. Do not claim Excel
+compatibility, native-code compilation or phone installation. The next capability
+sequence is in APP_CAPABILITIES.md; delivery/video time still takes precedence.

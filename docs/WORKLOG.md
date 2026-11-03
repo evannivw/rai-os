@@ -2442,3 +2442,26 @@ including the second column page after schema evolution. Guest display/headless
 and host Clippy passed; the shared-domain and capability-catalog tests passed.
 Offline table captures/reports are in evidence/2026-11-03-app-tables/offline.
 The source-note explicitly identifies their pre-commit provenance.
+
+## 2026-11-03 — Live expense app and multi-app restored showcase
+
+Frozen source d99eda552a46b0b2928625800dcc250c448f3ac5 generated Expense Tracker
+with one live Meta call: HTTP 200, 3903 ms provider latency, 1312 reported tokens,
+no retry. The independent check confirmed the requested types and cents unit
+before approval, then exact records, all/unpaid totals, edits and recovery in a
+fresh guest with zero further inference. Evidence is in
+ evidence/2026-11-03-app-tables/live (requests, diagnostics, plan, UART and guest
+captures). The source checkout was clean before the request.
+
+A public showcase checkpoint combines that accepted schema/data with the prior
+live Inspection Log schema/data. Both were restored together into QEMU without
+inference, giving a usable app-grid demonstration. Captures explicitly show replay
+and restored status. This does not claim new generation during restoration or
+arbitrary code compilation. APP_CAPABILITIES.md documents a non-overwriting copy
+into target/ and the launch command. Linux ARM64 container storage/table checks
+also passed offline; the failure line in the storage log is an injected test.
+Linux AMD64 emulation also passed both storage and table verification with network
+access disabled. Both platform logs and image/build hashes are archived under
+evidence/2026-11-03-app-tables/portable. Those images contain the frozen executable
+code and were built before the final documentation/evidence/showcase fixture.
+Physical Windows and phone hardware remain untested.

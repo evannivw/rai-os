@@ -1,0 +1,71 @@
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+{
+  "source": "replay",
+  "maximum_live_calls": 0,
+  "retries": 0,
+  "development_fixture": true,
+  "ai_advantage_measured": false,
+  "created": true,
+  "verified": true,
+  "source_commit": null,
+  "source_worktree_dirty": null,
+  "kernel_sha256": "d7cb132c66bf263a9483f7de4368871b325bf3bdb7331c91f222d611e150a467",
+  "plan": {
+    "base_revision": 1,
+    "decision": "install",
+    "reason": "Scripted offline proposal. Review before installing.",
+    "request_id": 2,
+    "spec": {
+      "capability": "records.local",
+      "fields": [
+        {
+          "default": "",
+          "key": "item",
+          "kind": "text",
+          "label": "Item",
+          "required": true
+        },
+        {
+          "default": "0",
+          "key": "amount",
+          "kind": "number",
+          "label": "Amount (cents)",
+          "required": true
+        },
+        {
+          "default": "false",
+          "key": "paid",
+          "kind": "check",
+          "label": "Paid",
+          "required": true
+        }
+      ],
+      "filter_key": "paid",
+      "filter_label": "Unpaid",
+      "id": "expenses",
+      "title": "Expenses"
+    }
+  },
+  "final_rows": [
+    [
+      "Cable",
+      "1350",
+      "false"
+    ],
+    [
+      "Adapter",
+      "750",
+      "true"
+    ],
+    [
+      "Refund",
+      "-200",
+      "false"
+    ]
+  ],
+  "totals": {
+    "all": 1900,
+    "unpaid": 1150
+  }
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "machine": "aarch64",
+    "source_digest": "e5f4e5ca715230eedce5598268990ad6bf501c787d7ccc7ac2d475c1ff3b47ac",
+    "kernel_sha256": "d7cb132c66bf263a9483f7de4368871b325bf3bdb7331c91f222d611e150a467",
+    "bridge_sha256": "99d5d01e16e3fca8cef077ada8b220224d298d3a50277fe30d938ce23875681e",
+    "image_id": "sha256:fad043d218125753f4076cdea6a827e769b8b61e4fd9925bec14c4d786448f68",
+    "host": "macOS ARM64; AMD64 container emulated",
+    "code_commit": "d99eda552a46b0b2928625800dcc250c448f3ac5",
+    "note": "Image built before final evidence/docs and public showcase fixture were added."
+  },
+  {
+    "machine": "x86_64",
+    "source_digest": "e5f4e5ca715230eedce5598268990ad6bf501c787d7ccc7ac2d475c1ff3b47ac",
+    "kernel_sha256": "d7cb132c66bf263a9483f7de4368871b325bf3bdb7331c91f222d611e150a467",
+    "bridge_sha256": "0399754505ea16a3cf32934f1f9566d7c77c0bc63c9f9512cb734dae362a3186",
+    "image_id": "sha256:b5a5da04510dd1284a248f0ef6dac87ed05d5778649c30dd47ba52bcee8bf174",
+    "host": "macOS ARM64; AMD64 container emulated",
+    "code_commit": "d99eda552a46b0b2928625800dcc250c448f3ac5",
+    "note": "Image built before final evidence/docs and public showcase fixture were added."
+  }
+]

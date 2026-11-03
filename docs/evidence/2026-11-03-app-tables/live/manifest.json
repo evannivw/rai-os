@@ -1,0 +1,28 @@
+{
+  "recorded_utc": "2026-11-03T07:03:44.462586+00:00",
+  "source_commit": "d99eda552a46b0b2928625800dcc250c448f3ac5",
+  "live_calls": 1,
+  "retries": 0,
+  "showcase": "Two previously accepted live-generated app schemas and fictional rows, restored offline without inference.",
+  "showcase_sources": [
+    "2996d516ed8099448908b6441a08d81f5efcd809",
+    "d99eda552a46b0b2928625800dcc250c448f3ac5"
+  ],
+  "sha256": {
+    "home.png": "ea383a8d9c8a2c187dbfdb79d0347b0a61d785dc01549a6a159db091f449ca03",
+    "report.json": "9d153f3d0830edd3e25bd94e5cf8b467d60423dedea76c4f4e092d641dbcffd2",
+    "restored/uart.log": "a136eedf2db007ae64d5601b4ffad808d49daf1f4e4a8afe1fd74c793b3909f3",
+    "restored-table.png": "893915ae47d799e8db23993b12e3039399c165a8ff28472e9fb90cb64214b51e",
+    "review.png": "1216e337b3e486dec68f22680a225f1c2380b1e0a969b0ef5c4e4a335f16a983",
+    "session/2/proposal.png": "1216e337b3e486dec68f22680a225f1c2380b1e0a969b0ef5c4e4a335f16a983",
+    "session/2/provider.stderr.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "session/2/provider.stdout.jsonl": "5d89797707204be6ad2f90e977b5999f733e5cc7efe1641db8171e463703711d",
+    "session/2/request.json": "687497099e3fa97f1a2e1ccefc7f6a93021d93576b52053b5e62cbac91a2973e",
+    "session/uart.log": "53efd8d42061008c04624bbe426a82c74ce4a1f530bf27a831e33f58f1816dad",
+    "showcase-home.png": "e86d6025473f804e969cfc5316432e27eb33a072338ccbcf692d3fc7a5f05fa4",
+    "showcase-table.png": "893915ae47d799e8db23993b12e3039399c165a8ff28472e9fb90cb64214b51e",
+    "table-all.png": "3bf129c28bb8234b3ff0fec8da8a05fa61543c239b5e23f80e133da810f3082c",
+    "table-unpaid.png": "6f95a360e4de001a5469512cd08740d7270e73be0cf290e834554eabbda237ce",
+    "table-updated.png": "7e1c800229f1d25147100ff3a228445d8c411766b204a4d54fbc92c3dd999198"
+  }
+}

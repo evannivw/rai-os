@@ -1,0 +1,8 @@
+{
+  "request_id": 2,
+  "base_revision": 1,
+  "goal": "Create an expense app with item, integer amount in cents, paid checkbox and an unpaid view. I want a table and totals.",
+  "target": null,
+  "app_ids": [],
+  "record_count": 0
+}

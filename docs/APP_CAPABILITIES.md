@@ -87,3 +87,33 @@ them. Unsupported intent must produce clarification/decline, not a partial app
 presented as complete. Protect Nov 4 demonstration/submission time; the current
 product slice is create -> install -> use -> evolve -> recover, with measured
 outcomes rather than unsupported speed or novelty claims.
+
+## Live generation and a ready-to-open session
+
+On November 3, frozen source d99eda5 made one live Meta request for the expense
+example. HTTP 200, 3903 ms provider latency, 1312 reported tokens, no retry. Meta
+returned Expense Tracker with explicit cents, a paid flag and an unpaid filter.
+The verifier installed it only after checking the requested fields, entered the
+three fictional rows, checked exact totals/edits, then restored the app in a new
+QEMU instance without another inference request. This is a known development
+integration example, not a comparative speed claim.
+
+[Showcase state](../fixtures/microapps/v1/showcase.json) combines two actual
+previously accepted Meta schemas: Inspection Log (source 2996d51) and Expense
+Tracker (d99eda5), with their independently checked fictional records. The
+showcase restores them offline; it does not pretend to generate them again.
+Copy it to a writable, untracked device file before opening it:
+
+```sh
+mkdir -p target
+cp -n fixtures/microapps/v1/showcase.json target/showcase-device.json
+python3 -B scripts/apps.py --source replay --state target/showcase-device.json --output target/showcase-session-1
+```
+
+Then connect the VNC viewer as documented in MICROAPPS.md. `cp -n` preserves an
+existing saved device instead of resetting it. Use a new output folder on each
+launch. To create a new app with Meta, choose `--source meta` and supply your own
+key; restored apps need no key. Home shows both app icons, Find searches them,
+and clicking an icon opens the actual guest app. Table is available inside each.
+The fixture/checkpoint is deliberately public sample data; never replace it with
+private records in Git.

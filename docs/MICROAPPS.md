@@ -43,7 +43,7 @@ python3 -B scripts/apps.py --source replay --output target/apps-replay-1
 ```
 
 Or use `apps-replay` instead of `apps` in Docker, omitting --env-file. The screen
-explicitly says REPLAY / OFFLINE. It recognizes these two exact prompts only:
+explicitly says replay. For the inspection example it recognizes these exact prompts:
 
 ```text
 Create an inspection app with equipment, notes, a done checkbox and a pending view.
