@@ -1,0 +1,2 @@
+{"diagnostic":{"choice_count":1,"finish_reason":"stop","http_status":200,"latency_ms":6450,"model_matches":true,"refusal_present":false,"role":"assistant","stage":"proposal","tool_calls_present":false,"transport_exit_code":0,"usage":{"completion_tokens":697,"prompt_tokens":2879,"total_tokens":3576}},"error":null,"event":"provider_diagnostic","outcome":"decoded","source":"meta","state_version":2}
+{"code":"formula_syntax","event":"app_validation_failed","execution":false,"request_id":2}

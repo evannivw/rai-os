@@ -128,8 +128,15 @@ def verify(kernel, binary, output, source='offline'):
             request_id = dict(part.split('=', 1) for part in response.split('; '))['submit']
             for thread in app.threads:
                 thread.join(timeout=45); assert not thread.is_alive()
-            plans = [event['plan'] for event in map(json.loads, (output / 'session' / request_id / 'provider.stdout.jsonl').read_text().splitlines()) if event.get('event') == 'app_plan']
-            assert len(plans) == 1 and plans[0]['decision'] == 'install'
+            events = [json.loads(line) for line in (output / 'session' / request_id / 'provider.stdout.jsonl').read_text().splitlines()]
+            report['provider_diagnostics'] = [event for event in events if event.get('event') == 'provider_diagnostic']
+            failures = [event for event in events if event.get('event') == 'app_validation_failed']
+            if failures:
+                report['validation_failures'] = failures
+                raise AssertionError('Meta proposal rejected: ' + failures[-1]['code'])
+            plans = [event['plan'] for event in events if event.get('event') == 'app_plan']
+            assert len(plans) == 1, 'No accepted model proposal; inspect retained provider diagnostics'
+            assert plans[0]['decision'] == 'install', 'Model did not propose installation: ' + plans[0]['reason']
             spec = plans[0]['spec']; report['plan'] = plans[0]
             assert [f['kind'] for f in spec['fields']] == ['text', 'number', 'number']
             assert len(spec.get('behaviors', [])) == 1 and not spec.get('workflow')

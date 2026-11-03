@@ -166,3 +166,24 @@ language, network, location, camera, native executable or new privilege boundary
 A records.local behavior cannot silently acquire display.brightness or another
 capability. These primitives extend app behavior; they do not create drivers or
 make arbitrary untrusted code safe to run with kernel privileges.
+
+
+## Observed verification and live limitation, November 3
+
+The typed executor passed 83 shared/host tests and real QEMU debug/release
+verification with disclosed generic schemas. Linux ARM64 Docker offline checks
+and previous-app regressions also passed. These establish the runtime behavior,
+not successful generation by Meta for this extension.
+
+The sole live request from clean a237959 returned HTTP 200 (6450 ms; 3576 tokens),
+but host validation rejected formula_syntax. No app was installed; no retry or
+fallback occurred. The response's exact bad expression was not retained by that
+revision, so no specific syntax repair is inferred. See the
+[rejected-live evidence](evidence/2026-11-03-app-behaviors/live-rejected/README.md).
+
+The subsequent diagnostic fix retains the full decoded rejected proposal under
+app_validation_failed and still emits no accepted app_plan. A synthetic invalid
+formula replay verified this and the host/shared suite now passes 84 tests. This
+was not another model call. The runtime is verified; a successful live model
+generation with composed behaviors remains unverified. A bounded correction
+cycle is the next integration step, not a capability claimed by this increment.

@@ -1,0 +1,12 @@
+{
+  "verified": false,
+  "source": "meta",
+  "maximum_live_calls": 1,
+  "retries": 0,
+  "source_commit": "a23795927a456acb5d58fd8d8918b5e518d39eab",
+  "source_worktree_dirty": false,
+  "kernel_sha256": "ae7560e2013983ea4883abe5c746cfd0aab7b55adc9ee76c881e45f57f200987",
+  "development_example": true,
+  "checks": [],
+  "error": "AssertionError"
+}

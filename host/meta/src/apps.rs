@@ -186,6 +186,17 @@ pub fn capabilities() -> serde_json::Value {
     serde_json::from_str(include_str!("../../../fixtures/microapps/v1/runtime.json"))
         .expect("committed runtime catalog")
 }
+fn validation_failure(p: &Plan, r: &Request, code: &str) -> serde_json::Value {
+    // Retain the decoded, untrusted declaration for diagnosis. This is not an
+    // executable app_plan; record contents and provider configuration are absent.
+    serde_json::json!({
+        "event":"app_validation_failed",
+        "request_id":r.request_id,
+        "code":code,
+        "proposal":p,
+        "execution":false
+    })
+}
 pub fn run(path: &std::path::Path, replay: Option<&std::path::Path>) -> Result<(), String> {
     let r = request(&crate::config::bounded_file(path, 16384)?)?;
     let p = if let Some(path) = replay {
@@ -196,12 +207,9 @@ pub fn run(path: &std::path::Path, replay: Option<&std::path::Path>) -> Result<(
             .proposal
     };
     if let Err(code) = validate(&p, &r) {
-        // Stable machine-readable feedback, without rows, credentials or an
-        // automatic retry. A future explicit repair loop can consume this.
-        println!(
-            "{}",
-            serde_json::json!({"event":"app_validation_failed","request_id":r.request_id,"code":code,"execution":false})
-        );
+        // Stop before emitting app_plan. Diagnosis must preserve the proposal
+        // that failed, rather than require another paid call to reproduce it.
+        println!("{}", validation_failure(&p, &r, code));
         return Err(code.into());
     }
     println!(
@@ -230,6 +238,35 @@ mod tests {
                 {"op":"toggle","field":"done","value":"","compare":"","skip":0}
             ]}]
         })
+    }
+    #[test]
+    fn rejected_behavior_diagnostic_retains_invalid_expression_without_app_plan() {
+        let request = request(r#"{"request_id":2,"base_revision":7,"goal":"A composed operation","target":null,"app_ids":[],"record_count":0}"#).unwrap();
+        let mut spec = behavior_spec();
+        spec["behaviors"][0]["steps"][1]["value"] = serde_json::json!("$amount +");
+        let proposal = Plan {
+            request_id: 2,
+            base_revision: 7,
+            decision: "install".into(),
+            spec: Some(serde_json::from_value(spec).unwrap()),
+            reason: "This synthetic proposal must be rejected.".into(),
+        };
+        assert_eq!(validate(&proposal, &request), Err("formula_syntax"));
+        // Exercise the actual serialization used by the diagnostic log.
+        let encoded = validation_failure(&proposal, &request, "formula_syntax").to_string();
+        let event: serde_json::Value = serde_json::from_str(&encoded).unwrap();
+        assert_eq!(event["event"], "app_validation_failed");
+        assert_eq!(event["request_id"], 2);
+        assert_eq!(event["code"], "formula_syntax");
+        assert_eq!(event["execution"], false);
+        assert_eq!(event["proposal"], serde_json::to_value(&proposal).unwrap());
+        assert_eq!(
+            event["proposal"]["spec"]["behaviors"][0]["steps"][1]["value"],
+            "$amount +"
+        );
+        assert!(event.get("plan").is_none());
+        assert!(event.get("request").is_none());
+        assert_eq!(event.as_object().unwrap().len(), 5);
     }
     #[test]
     fn behavior_json_uses_shared_validation_and_strict_fields() {

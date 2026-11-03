@@ -2770,3 +2770,31 @@ verifier schemas and made no Meta calls. Next: one clean-source live generation
 request, no retry/fallback, before reporting actual model integration for the
 new language. General native programs, events, cross-row data and hardware
 capabilities remain separate extensions; this is composition, not a complete OS.
+
+
+## 2026-11-03 — Live proposal rejected; retain future rejection diagnostics
+
+Clean source a23795927a456acb5d58fd8d8918b5e518d39eab made exactly one live
+request for a generic conditional two-field update. HTTP 200, model matched,
+6450 ms provider latency, 3576 tokens (2879 input / 697 output). The proposal
+decoded, then shared host validation returned formula_syntax. No app_plan was
+emitted, no app was installed, and the final guest catalog remained revision 1
+with no apps. No checkpoint file was created because nothing changed. No retry
+or fallback occurred. This is a failed live generation, not successful end-to-end
+Meta evidence for the new language. Offline runtime results remain valid.
+
+The diagnostic path then recorded only the failure code, discarding the rejected
+proposal; its exact invalid formula cannot now be reconstructed. Fixed that path
+to retain the decoded proposal in app_validation_failed with execution=false;
+updated the verifier to expose rejection codes instead of a generic assertion.
+An actual offline --app-plan-replay check with synthetic '$stock -' confirmed
+nonzero exit, formula_syntax, exact retained proposal and no accepted app_plan.
+The updated host/shared suite passes 84 tests; host formatting and Clippy pass.
+No guest executable changed in this diagnostic follow-up, so QEMU regressions
+were not repeated. Raw logs preserve their original CRLF/trailing protocol tabs
+through narrowly scoped Git attributes.
+
+Evidence: evidence/2026-11-03-app-behaviors/live-rejected and rejection-diagnostics.
+The next model-integration increment should implement a bounded correction cycle
+with diagnostic feedback, preserving request/revision binding and explicit call
+limits. It is not implemented here, and no successful live composed app is claimed.

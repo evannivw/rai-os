@@ -1,0 +1,9 @@
+{
+  "verified": true,
+  "source": "synthetic_invalid_replay",
+  "live_calls": 0,
+  "exit_code": 1,
+  "checks": [
+    "Invalid formula rejected before app_plan; exact rejected proposal retained; no provider or guest execution"
+  ]
+}
