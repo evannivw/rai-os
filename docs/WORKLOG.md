@@ -2397,3 +2397,25 @@ Clippy passed with the native display. No new live Meta call was required for
 this presentation/navigation change; the previous live evidence is preserved.
 Debug app verification and existing release workspace verification also passed.
 Launcher captures and reports are in evidence/2026-11-03-launcher.
+
+## 2026-11-03 — Save and restore app sessions
+
+Added explicit host checkpoints for confirmed app schemas and records, with
+versioned/checksummed JSON, shared Rust validation, exclusive writer lock and
+flush/atomic replacement. The native launcher defaults to target/device.json;
+Docker uses /state/device.json with a documented persistent volume. A fresh
+QEMU validates and reconstructs saved apps without any model call, then reads
+back exact schemas/rows before input starts. UI status distinguishes saved,
+restored, RAM only and save failed. No guest disk driver or MMU isolation is implied.
+
+Debug real-QEMU restart tests passed: records and schema evolution survive fresh
+boots; an injected replacement failure leaves the previous bytes unchanged;
+retry saves successfully; a second writer is denied; malformed values, checksum
+corruption and a matching-checksum unavailable capability are rejected. Rust
+snapshot validation tests passed. Release/crash checks are recorded below after
+completion. Host files remain private, ignored by Git; sample evidence uses only
+fictional records.
+Release restart/crash verification and the release RFB/app lifecycle also passed.
+Headless guest and host Clippy passed. Captures and exact test reports are in
+evidence/2026-11-03-app-storage. The simulated failure is disclosed in those reports;
+no live API request was made for these checks.

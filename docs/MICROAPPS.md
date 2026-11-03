@@ -28,7 +28,7 @@ RFB clients on Windows/Linux can use the same packaged Linux environment:
 
 ```text
 docker build -t rai-os-demo -f portable/Dockerfile .
-docker run --rm -it -p 127.0.0.1:5900:5900 --env-file .env.local rai-os-demo apps
+docker run --rm -it -p 127.0.0.1:5900:5900 -v rai-device:/state --env-file .env.local rai-os-demo apps
 ```
 
 Pass `-e RAI_VNC_PASSWORD` too if set on the host. Docker Desktop supplies Linux
@@ -87,8 +87,10 @@ and the existing Tab hotspot; text fields are selected with Tab, not a mouse.
   Added fields get valid defaults; incompatible migration changes nothing.
 - Request IDs, target app and global revision bind review to the intended
   installation. Duplicate/cancelled/stale responses cannot install silently.
-- All app schemas and records are **volatile guest RAM**, lost on QEMU shutdown.
-  No persistence/import/export UX is claimed. Diagnostic app.export exposes
+- The runtime holds schemas and records in guest RAM. The launcher now saves
+  confirmed state to an explicit host checkpoint and restores it on startup;
+  see [APP_STORAGE.md](APP_STORAGE.md). Without that adapter, RAM is lost on
+  QEMU shutdown. Diagnostic app.export exposes
   records to the trusted host harness and UART console, not generated apps.
 
 The pure runtime owns bounded arrays and validates before mutation. A declarative
@@ -96,7 +98,7 @@ app is **not a process**: runtime, controller and renderer currently share EL1
 privilege and address space with the kernel. App namespaces and denied operations
 are interpreter controls, not MMU isolation, confidentiality from the host, or
 protection against a kernel/runtime bug. EL0 worker mechanisms elsewhere in this
-repo are not yet wired to this runtime. Hardware-isolated services, persistent
+repo are not yet wired to this runtime. Hardware-isolated services, guest-native persistent
 storage and real device drivers remain future work.
 
 Meta receives only the prompt, existing schema if updating, installed app IDs,
@@ -165,6 +167,9 @@ the containers. [Portable evidence](evidence/2026-11-03-microapps/offline/portab
 records images, source digests and versions. Physical Windows remains untested.
 
 ## November 3: launcher and line-art interface
+
+The [saved-session adapter](APP_STORAGE.md) now restores installed apps and
+records across QEMU restarts without a model call.
 
 The native launcher now shows app icons and a separate create tile. The screen
 uses broken horizontal strokes, diagonal corners and small text glyphs, all

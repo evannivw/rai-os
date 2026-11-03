@@ -13,6 +13,7 @@ sys.dont_write_bytecode=True
 from files_demo import Guest,ROOT,build
 from workspace import host_build
 from workspace_vnc import serve
+from app_storage import Checkpoint,collect,restore
 CREATE='Create an inspection app with equipment, notes, a done checkbox and a pending view.'
 EVOLVE='Add a required integer priority field with default 1. Preserve all existing fields, records and the pending view.'
 SPEC=dict(id='inspection',title='Field inspections',capability='records.local',fields=[
@@ -43,14 +44,36 @@ def deliver(g,p):
     g.request('app.ready',f"{rid}:{p['reason']}")
 
 class Studio:
-    def __init__(self,kernel,binary,output,source='meta',vnc=False):
+    def __init__(self,kernel,binary,output,source='meta',vnc=False,state=None):
         self.output=output;output.mkdir(parents=True,exist_ok=False)
         password=os.environ.get('RAI_VNC_PASSWORD')
         if password and (not password.isascii() or not 1<=len(password)<=8):raise ValueError('RAI_VNC_PASSWORD must be 1 to 8 ASCII characters')
-        self.guest=Guest(kernel,vnc=vnc,vnc_password=password if vnc else None);self.binary=binary;self.kernel=kernel;self.source=source
+        self.checkpoint=Checkpoint(state,binary,kernel) if state else None
+        self.saved_revision=None;self.storage_error=None
         self.lock=threading.RLock();self.threads=[];self.closed=False
-        try:self.guest.request('app.open');self.guest.request('app.source',source)
-        except BaseException:self.guest.close();raise
+        self.binary=binary;self.kernel=kernel;self.source=source
+        try:
+            saved=self.checkpoint.load() if self.checkpoint else None
+            self.guest=Guest(kernel,vnc=vnc,vnc_password=password if vnc else None)
+            self.guest.request('app.open');self.guest.request('app.source',source)
+            if saved is not None:restore(self.guest,saved,deliver,schema,records)
+            self.saved_revision=self.guest.fields('app.catalog')['revision']
+            self.guest.request('app.storage','restored' if saved is not None else 'RAM only')
+        except BaseException:
+            if hasattr(self,'guest'):self.guest.close()
+            if self.checkpoint:self.checkpoint.close()
+            raise
+    def persist(self):
+        if not self.checkpoint:return
+        revision=self.guest.fields('app.catalog')['revision']
+        if revision==self.saved_revision:return
+        self.guest.request('app.storage','unsaved')
+        try:
+            self.checkpoint.save(collect(self.guest,schema,records))
+            self.saved_revision=revision;self.storage_error=None;self.guest.request('app.storage','saved')
+        except (OSError,ValueError,subprocess.TimeoutExpired):
+            self.storage_error='Checkpoint failed; current changes remain in RAM.'
+            self.guest.request('app.storage','save failed');print(self.storage_error,flush=True)
     def press(self,key):
         return self.dispatch('app.key',str(key))
     def dispatch(self,name,arg):
@@ -68,6 +91,7 @@ class Studio:
                     if app_id==state['target']:count=int(rows)
                 request=dict(request_id=rid,base_revision=int(state['revision']),goal=bytes.fromhex(state['prompt']).decode('ascii'),target=None if state['target']=='-' else schema(self.guest,state['target']),app_ids=ids,record_count=count)
                 thread=threading.Thread(target=self.plan,args=(request,),daemon=False);self.threads.append(thread);thread.start()
+            self.persist()
             return reply
     def tap(self,x,y):
         with self.lock:
@@ -102,10 +126,16 @@ class Studio:
     def close(self):
         with self.lock:self.closed=True
         for t in self.threads:t.join(timeout=45)
-        (self.output/'uart.log').write_text('\n'.join(self.guest.log)+'\n');self.guest.close()
+        try:
+            with self.lock:
+                if self.guest.process.poll() is None:self.persist()
+            (self.output/'uart.log').write_text('\n'.join(self.guest.log)+'\n')
+        finally:
+            self.guest.close()
+            if self.checkpoint:self.checkpoint.close()
 
-def run(kernel,binary,output,source='meta',port=5900,bind='127.0.0.1'):
-    app=Studio(kernel,binary,output,source,vnc=True);keys=queue.Queue(maxsize=256)
+def run(kernel,binary,output,source='meta',port=5900,bind='127.0.0.1',state=None):
+    app=Studio(kernel,binary,output,source,vnc=True,state=state);keys=queue.Queue(maxsize=256)
     def press(key):keys.put_nowait(key)
     def keyboard():
         while True:
@@ -120,6 +150,6 @@ def run(kernel,binary,output,source='meta',port=5900,bind='127.0.0.1'):
     finally:keys.put(None);worker.join(timeout=10);app.close()
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',choices=['meta','replay'],default='meta');p.add_argument('--output',type=Path,required=True);p.add_argument('--port',type=int,default=5900);p.add_argument('--debug',action='store_true');a=p.parse_args()
-    try:run(build(a.debug),host_build(a.debug),a.output.resolve(),a.source,a.port)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',choices=['meta','replay'],default='meta');p.add_argument('--output',type=Path,required=True);p.add_argument('--port',type=int,default=5900);p.add_argument('--debug',action='store_true');p.add_argument('--state',type=Path,default=ROOT/'target/device.json');p.add_argument('--temporary',action='store_true');a=p.parse_args()
+    try:run(build(a.debug),host_build(a.debug),a.output.resolve(),a.source,a.port,state=None if a.temporary else a.state)
     except KeyboardInterrupt:pass

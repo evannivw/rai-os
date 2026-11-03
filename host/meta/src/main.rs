@@ -34,6 +34,7 @@ mod semantic_runner;
 mod semantic_stream;
 mod set_bridge;
 mod set_report;
+mod snapshot;
 use serde_json::json;
 use std::{path::Path, time::Instant};
 fn run() -> Result<(), String> {
@@ -66,6 +67,9 @@ fn run() -> Result<(), String> {
         return Err("graphics_requires_guest_index_mode".into());
     }
     let kernel = &args[0];
+    if args.len() == 3 && args[1] == "--app-state-check" {
+        return snapshot::run(Path::new(&args[2]));
+    }
     if args.len() == 3 && args[1] == "--app-plan" {
         return apps::run(Path::new(&args[2]), None);
     }

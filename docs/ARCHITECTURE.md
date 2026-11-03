@@ -434,3 +434,14 @@ validation rules; guest execution additionally checks existing row values.
 Only records.local is supported. The interpreter/renderer run at EL1, so namespace
 separation is not process isolation. HTTPS and keyboard transport remain host-side.
 A dark Ubuntu Mono framebuffer presentation is shared with the file workspace.
+
+## November 3: saved-session adapter
+
+[APP_STORAGE.md](APP_STORAGE.md) adds host-backed checkpoints after committed app
+revision changes. The domain remains unaware of paths/files: the bridge reads
+schemas/rows, a Rust validator reuses the domain, and the host adapter writes a
+checksummed versioned JSON envelope via flush/atomic replace. An exclusive lock
+prevents concurrent launcher writers. Fresh-guest restore validates all input
+before boot and reads back exact data before input starts; failure preserves the
+checkpoint. There is no guest block driver, storage capability for generated apps,
+encryption or new process isolation. Runtime revisions are session-local.

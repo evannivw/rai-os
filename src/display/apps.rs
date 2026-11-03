@@ -327,6 +327,9 @@ pub fn render(s: &mut Display, u: &Controller) {
             action(s, "Back home");
         }
     }
+    if !u.storage.text().is_empty() {
+        center(s, u.storage.text(), 672, Size::Small, QUIET);
+    }
     nav(s);
     s.present();
 }

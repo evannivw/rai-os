@@ -75,8 +75,9 @@ remain explicit; this is not a general desktop or an AI efficiency claim.
 A [prompt-generated microapp runtime](docs/MICROAPPS.md) now supports native forms,
 app-local records and compatible schema updates in a black, keyboard-first guest
 UI. Meta proposes a bounded schema; you approve it, then use the app without
-per-click inference. This runtime shares EL1 privilege and stores only volatile
-RAM data; it is not hardware-isolated generated software.
+per-click inference. This runtime shares EL1 privilege; it is not hardware-isolated generated software.
+The [saved-session adapter](docs/APP_STORAGE.md) now checkpoints apps/records on
+the host and restores them across QEMU restarts without calling Meta.
 
 ```sh
 python3 -B scripts/apps.py --source meta --output target/apps-session-1

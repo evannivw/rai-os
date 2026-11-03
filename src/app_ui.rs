@@ -24,6 +24,7 @@ pub struct Controller {
     pub editing: Option<usize>,
     pub prompt: Text<128>,
     pub search: Text<32>,
+    pub storage: Text<16>,
     pub message: Text<160>,
     pub pending: Spec,
     request: u32,
@@ -104,6 +105,7 @@ impl Controller {
             editing: None,
             prompt: Text::EMPTY,
             search: Text::EMPTY,
+            storage: Text::EMPTY,
             message: Text::EMPTY,
             pending: Spec::EMPTY,
             request: 0,
@@ -431,6 +433,27 @@ impl Controller {
         }
         let arg = arg.ok_or("bad_args")?;
         match name {
+            "app.storage" => {
+                if !matches!(
+                    arg,
+                    "saved" | "restored" | "unsaved" | "save failed" | "RAM only"
+                ) {
+                    return Err("bad_args");
+                }
+                self.storage = Text::new(arg)?;
+            }
+            "app.value" => {
+                if self.mode != Mode::Form {
+                    return Err("app_form_required");
+                }
+                let [index, value] = parts(arg)?;
+                let index = index.parse::<usize>().map_err(|_| "bad_args")?;
+                let app = self.runtime.app(self.selected).ok_or("app_not_found")?;
+                if index >= app.spec.fields().len() {
+                    return Err("app_bad_field_index");
+                }
+                self.draft[index] = decode(value)?;
+            }
             "app.source" => {
                 self.live = match arg {
                     "meta" => true,
