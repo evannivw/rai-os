@@ -530,3 +530,26 @@ of file/workspace/app initial values reduces the constructor frame from 35808 to
 Known behavior action frames sum to 58464 before parser/indirect callees; this is
 not a whole-kernel worst-case bound. Real debug/release regressions remain essential.
 See APP_BEHAVIORS.md and the evidence/2026-11-03-app-behaviors stack report.
+
+
+## November 3: bounded proposal correction
+
+app_repair.rs owns the narrow repair policy. It reproduces the rejected proposal's
+arithmetic error using the original request and masks only calculated expressions
+when comparing structure. All other fields, permissions, guards and branch/step
+structure must match before full validation can accept a correction. Clarification
+or refusal remains possible. Provider code sends one HTTPS request per invocation;
+it treats prior proposal strings as untrusted data, not new instructions.
+
+The Python Studio coordinates at most three attempts per goal and eight per
+session. A read-only app.planning diagnostic exposes only request/base/current
+revision and mode. The bridge checks it before every attempt and delivery;
+app.progress validates the same binding and shows a bounded attempt count.
+Cancellation discards late results and prevents later calls, but an already sent
+call can still incur provider usage. Per-attempt evidence retains both rejected
+and accepted definitions. The guest's ordinary proposal validation and human
+approval remain the installation boundary. No new unsafe or kernel mechanism.
+
+This verifies permitted syntax and structure, not the meaning of arbitrary user
+goals. The app controller/interpreter still share EL1, and the host is trusted.
+See [APP_REPAIR.md](APP_REPAIR.md) for bounds, stopping conditions and reproduction.

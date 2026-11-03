@@ -22,7 +22,7 @@ def verify(kernel,binary,out,source='offline'):
     if source=='meta':assert not dirty,'Freeze before the two live calls'
     out.mkdir(parents=True,exist_ok=False);state=out/'device.json';exchange=out/'exchange'
     report=dict(source=source,source_commit=commit,source_worktree_dirty=dirty,maximum_live_calls=2 if source=='meta' else 0,retries=0,development_example=True,verified=False,kernel_sha256=hashlib.sha256(kernel.read_bytes()).hexdigest(),plans=[])
-    app=Studio(kernel,binary,out/'session','meta' if source=='meta' else 'replay',state=state,exchange=exchange);g=app.guest
+    app=Studio(kernel,binary,out/'session','meta' if source=='meta' else 'replay',state=state,exchange=exchange);g=app.guest;app.repair_enabled=False # Preserve this verifier's original paid-call cap.
     def propose(goal,offline,target=None):
         if source=='meta':
             g.request('app.open',target);app.press(1002)

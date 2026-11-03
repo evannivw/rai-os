@@ -148,3 +148,10 @@ scene manifest with English narration. Its source labels remain visible.
 No new performance superiority, general reliability, novelty or phone support is
 claimed. Prior live evidence is in APP_WORKFLOWS and DEMO_JOURNEY; current-kit
 verification outcomes are recorded in WORKLOG.
+
+
+Fresh live app creation uses the [bounded correction loop](APP_REPAIR.md): at most
+three attempts per goal and eight per session, with every response retained.
+Eligible expression errors may be corrected; changed guards or permissions are
+rejected, and a valid result still requires approval. The saved showcase remains
+offline and unchanged. Do not present its recovery as a new model generation.

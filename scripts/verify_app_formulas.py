@@ -31,7 +31,7 @@ def verify(kernel,binary,out,source='offline'):
     if source=='meta':assert commit and dirty is False,'Freeze source before two live calls'
     out.mkdir(parents=True,exist_ok=False);state=out/'device.json'
     report=dict(source=source,maximum_live_calls=2 if source=='meta' else 0,retries=0,source_commit=commit,source_worktree_dirty=dirty,kernel_sha256=hashlib.sha256(kernel.read_bytes()).hexdigest(),development_cases=True,ai_advantage_measured=False,verified=False,apps=[])
-    app=Studio(kernel,binary,out/'session','meta' if source=='meta' else 'replay',state=state);g=app.guest
+    app=Studio(kernel,binary,out/'session','meta' if source=='meta' else 'replay',state=state);g=app.guest;app.repair_enabled=False # Preserve this verifier's original paid-call cap.
     try:
         for n,c in enumerate(CASES):
             if source=='meta':

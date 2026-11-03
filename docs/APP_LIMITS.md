@@ -17,9 +17,10 @@ kinds of control. A model proposal never grants itself additional authority.
 | Durability | Host checkpoint; reviewed CSV import/export | No guest disk driver/database; CSV omits process states |
 | Execution | Generic Rust interpreter and native QEMU framebuffer | App runtime/UI still share EL1; existing EL0 worker isolation is not wired into apps |
 | Generation | Meta returns a strict schema; user reviews before installation | No native executable compiler, dynamic loader or app syscall ABI |
-| Input | 128 ASCII prompt characters; 1 model request at a time, 8 per session | Not an unrestricted long-form app specification; no automatic retry |
+| Input | 128 ASCII prompt characters; 1 request at a time; 3 attempts per goal, 8 per session | Corrections cover eligible expression errors only; no unrestricted long-form app specification |
 
-The complete catalog is [APP_CAPABILITIES.md](APP_CAPABILITIES.md). A supported
+The complete catalog is [APP_CAPABILITIES.md](APP_CAPABILITIES.md);
+[APP_REPAIR.md](APP_REPAIR.md) defines the narrow correction policy. A supported
 workshop demonstrates a complete small process, not a complete mobile platform.
 Increasing a constant is not a sufficient scaling implementation: arrays, copies,
 wire sizes, snapshots, CSV staging, screen rows and tests all depend on the bounds.

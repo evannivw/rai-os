@@ -1,0 +1,16 @@
+{
+  "source": "replay",
+  "max_attempts": 3,
+  "session_limit": 8,
+  "attempts": [
+    {
+      "attempt": 1,
+      "kind": "initial",
+      "state": "rejected",
+      "exit_code": 1,
+      "code": "app_capability_denied"
+    }
+  ],
+  "state": "not_repairable",
+  "session_attempts_used": 1
+}

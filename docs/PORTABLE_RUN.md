@@ -130,3 +130,16 @@ native prompt UI through standard VNC keyboard/button events. `workspace-verify`
 checks the real RFB input and guest transaction path without network access.
 See [PROMPT_WORKSPACE.md](PROMPT_WORKSPACE.md) for complete commands and limits.
 The earlier `desktop` action remains a static file demonstration.
+
+
+The bounded app correction verifier is also available without credentials or
+network access:
+
+```sh
+docker run --rm --network none rai-os-demo apps-repair-verify
+```
+
+It supplies disclosed invalid/corrected proposals to the real Rust validator and
+QEMU guest. This checks correction limits, stale/cancelled requests, guarded
+execution and recovery; it does not make live Meta calls. See
+[APP_REPAIR.md](APP_REPAIR.md) for native commands and the separate live check.

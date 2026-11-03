@@ -104,10 +104,11 @@ commit. Snapshot recovery validates and restores the schema with its behaviors;
 apps saved before this extension have an empty behavior collection by default.
 No model call is needed for preview, execution, ordinary editing or recovery.
 
-This slice adds no automatic repair loop. Rejected model proposals are not
-silently rewritten or retried. A future bounded propose -> validate -> report ->
-correct loop must preserve validation authority, request/revision binding and
-clear attempt/cost limits. Formal validity alone cannot prove user intent.
+The subsequent [bounded correction loop](APP_REPAIR.md) can return eligible
+arithmetic errors to Meta, allowing up to two corrections after the original
+proposal. It preserves app structure, permissions and conditions, checks the
+request/revision before each attempt and still requires approval. Formal
+validity alone cannot prove user intent.
 
 ## Wire and code map
 
@@ -187,3 +188,7 @@ formula replay verified this and the host/shared suite now passes 84 tests. This
 was not another model call. The runtime is verified; a successful live model
 generation with composed behaviors remains unverified. A bounded correction
 cycle is the next integration step, not a capability claimed by this increment.
+
+The follow-up in [APP_REPAIR.md](APP_REPAIR.md) implements the previously planned
+bounded correction cycle. The failed single-call result above remains historical
+evidence; new verification results are recorded separately.

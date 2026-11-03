@@ -1,0 +1,8 @@
+{
+  "request_id": 2,
+  "base_revision": 1,
+  "goal": "App: name, stock, moved. Add Move: require stock>=1, stock=stock-1, moved=moved+1. Numeric defaults 0.",
+  "target": null,
+  "app_ids": [],
+  "record_count": 0
+}

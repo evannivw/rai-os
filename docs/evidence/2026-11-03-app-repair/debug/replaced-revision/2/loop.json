@@ -1,0 +1,15 @@
+{
+  "source": "replay",
+  "max_attempts": 3,
+  "session_limit": 8,
+  "attempts": [
+    {
+      "attempt": 1,
+      "kind": "initial",
+      "state": "discarded",
+      "exit_code": 1
+    }
+  ],
+  "state": "cancelled_or_stale",
+  "session_attempts_used": 1
+}

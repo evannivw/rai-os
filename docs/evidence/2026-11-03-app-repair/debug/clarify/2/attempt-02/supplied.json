@@ -1,0 +1,7 @@
+{
+  "request_id": 2,
+  "base_revision": 1,
+  "decision": "clarify",
+  "spec": null,
+  "reason": "Clarify the intended arithmetic."
+}

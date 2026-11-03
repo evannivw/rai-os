@@ -17,8 +17,10 @@ python3 -B scripts/apps.py --source meta --output target/apps-session-1
 Set your own MODEL_API_KEY as described in [META_BRIDGE.md](META_BRIDGE.md).
 Do not put it in prompts, source, screenshots or commits. The Rust provider alone
 uses it for HTTPS; neither QEMU nor the VNC viewer receives it. Output paths must
-be new. Ctrl-C stops the session. A maximum of eight proposals and one in-flight
-request bounds each session. There are no automatic retries or silent fallbacks.
+be new. Ctrl-C stops the session. One in-flight request and eight provider attempts
+bound each session. A goal allows up to three attempts, including two corrections
+for eligible arithmetic errors; transport failures stop without retry. There are
+no silent fallbacks. See [APP_REPAIR.md](APP_REPAIR.md) for the exact scope.
 
 Connect a VNC viewer to localhost:5900. On macOS set a temporary
 RAI_VNC_PASSWORD (1–8 ASCII characters) in the launch environment first, then
@@ -207,3 +209,14 @@ It has an Apply action and explicit display permission instead of record storage
 [Generated workflows](APP_WORKFLOWS.md) now add an actions toolbar/F9 view for
 saved rows. Apps can have states and guarded user-triggered transitions. A
 second review screen exposes the entire process before installation.
+
+
+## Bounded generation correction
+
+The live Studio now allows up to three attempts per goal and eight provider
+attempts per session. Eligible arithmetic syntax/reference/size failures may be
+returned to Meta with the rejected definition. A correction may change only
+arithmetic expressions and its reason; it cannot remove guards, change permissions
+or alter application structure. Cancellation and stale state stop further calls,
+and installation still requires guest validation and review. See
+[APP_REPAIR.md](APP_REPAIR.md) for the exact limits and independent checks.

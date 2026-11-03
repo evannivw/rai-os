@@ -1,0 +1,23 @@
+{
+  "source": "replay",
+  "max_attempts": 3,
+  "session_limit": 8,
+  "attempts": [
+    {
+      "attempt": 1,
+      "kind": "initial",
+      "state": "rejected",
+      "exit_code": 1,
+      "code": "formula_syntax"
+    },
+    {
+      "attempt": 2,
+      "kind": "repair",
+      "state": "accepted",
+      "exit_code": 0
+    }
+  ],
+  "state": "clarify",
+  "accepted_attempt": 2,
+  "session_attempts_used": 2
+}

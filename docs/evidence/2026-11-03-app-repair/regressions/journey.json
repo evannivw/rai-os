@@ -1,0 +1,141 @@
+{
+  "source": "offline",
+  "source_commit": "a20bf4716be151643eae22f87a705649ef45a8a5",
+  "source_worktree_dirty": true,
+  "maximum_live_calls": 0,
+  "retries": 0,
+  "development_example": true,
+  "verified": true,
+  "kernel_sha256": "14d09a49a07a1dadd886b0d78d962adc1f545e64586dda1c848ff4b86158f864",
+  "plans": [
+    {
+      "goal": "Create a quote app: item, integer quantity, integer unit cents, and calculated total cents = quantity * unit cents.",
+      "plan": {
+        "request_id": 3,
+        "base_revision": 1,
+        "decision": "install",
+        "reason": "Verifier proposal.",
+        "spec": {
+          "capability": "records.local",
+          "fields": [
+            {
+              "default": "",
+              "key": "item",
+              "kind": "text",
+              "label": "Item",
+              "required": true
+            },
+            {
+              "default": "",
+              "key": "qty",
+              "kind": "number",
+              "label": "Quantity",
+              "required": true
+            },
+            {
+              "default": "",
+              "key": "unitc",
+              "kind": "number",
+              "label": "Unit cents",
+              "required": true
+            },
+            {
+              "default": "",
+              "formula": "$qty * $unitc",
+              "key": "total",
+              "kind": "calculated",
+              "label": "Total cents",
+              "required": true
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "id": "quote",
+          "title": "Quote"
+        }
+      }
+    },
+    {
+      "goal": "Add integer cost_cents default 100 and calculated profit = $total - $cost_cents. Keep existing fields and records.",
+      "plan": {
+        "request_id": 8,
+        "base_revision": 3,
+        "decision": "install",
+        "reason": "Verifier proposal.",
+        "spec": {
+          "capability": "records.local",
+          "fields": [
+            {
+              "default": "",
+              "key": "item",
+              "kind": "text",
+              "label": "Item",
+              "required": true
+            },
+            {
+              "default": "",
+              "key": "qty",
+              "kind": "number",
+              "label": "Quantity",
+              "required": true
+            },
+            {
+              "default": "",
+              "key": "unitc",
+              "kind": "number",
+              "label": "Unit cents",
+              "required": true
+            },
+            {
+              "default": "",
+              "formula": "$qty * $unitc",
+              "key": "total",
+              "kind": "calculated",
+              "label": "Total cents",
+              "required": true
+            },
+            {
+              "key": "cost_cents",
+              "label": "Cost cents",
+              "kind": "number",
+              "required": true,
+              "default": "100"
+            },
+            {
+              "key": "profit",
+              "label": "Profit cents",
+              "kind": "calculated",
+              "required": true,
+              "default": "",
+              "formula": "$total-$cost_cents"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "id": "quote",
+          "title": "Quote"
+        }
+      }
+    }
+  ],
+  "final_rows": [
+    [
+      "Cable",
+      "3",
+      "125",
+      "375",
+      "150",
+      "225"
+    ],
+    [
+      "Adapter",
+      "2",
+      "80",
+      "160",
+      "100",
+      "60"
+    ]
+  ],
+  "total_profit_cents": 285,
+  "export_file": "quote-r5.csv"
+}

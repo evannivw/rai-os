@@ -24,7 +24,7 @@ def verify(kernel,binary,out,source='replay'):
     if source=='meta':assert commit and dirty is False,'Freeze source before the single live call'
     out.mkdir(parents=True,exist_ok=False);state=out/'device.json';checks=[]
     report=dict(source=source,maximum_live_calls=1 if source=='meta' else 0,retries=0,source_commit=commit,source_worktree_dirty=dirty,kernel_sha256=hashlib.sha256(kernel.read_bytes()).hexdigest(),mode='guest software RGB attenuation; not physical backlight',verified=False,checks=checks)
-    app=Studio(kernel,binary,out/'session',source,state=state);g=app.guest
+    app=Studio(kernel,binary,out/'session',source,state=state);g=app.guest;app.repair_enabled=False # Preserve this verifier's original paid-call cap.
     try:
         for c in BRIGHTNESS:app.press(ord(c))
         app.press(13)

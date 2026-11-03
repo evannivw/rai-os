@@ -29,7 +29,7 @@ def verify(kernel,binary,out,source='offline'):
     if source=='meta':assert commit and not dirty,'Freeze sources before the one live request'
     out.mkdir(parents=True,exist_ok=False);state=out/'device.json';exchange=out/'exchange'
     report=dict(source=source,maximum_live_calls=1 if source=='meta' else 0,retries=0,source_commit=commit,source_worktree_dirty=dirty,kernel_sha256=hashlib.sha256(kernel.read_bytes()).hexdigest(),verified=False,development_example=True,checks=[])
-    app=Studio(kernel,binary,out/'session','meta' if source=='meta' else 'replay',state=state,exchange=exchange);g=app.guest
+    app=Studio(kernel,binary,out/'session','meta' if source=='meta' else 'replay',state=state,exchange=exchange);g=app.guest;app.repair_enabled=False # Preserve this verifier's original paid-call cap.
     try:
         if source=='meta':
             for c in GOAL:app.press(ord(c))

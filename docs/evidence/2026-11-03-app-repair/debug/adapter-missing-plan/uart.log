@@ -1,0 +1,223 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Display ready: 480x800 guest framebuffer
+Console ready: type help for commands
+@rai1	1	ok	state=home
+@rai1	2	ok	state=home
+@rai1	3	ok	revision=1; apps=-
+@rai1	4	ok	state=home
+@rai1	5	ok	state=compose
+@rai1	6	ok	revision=1; apps=-
+@rai1	7	ok	state=compose
+@rai1	8	ok	revision=1; apps=-
+@rai1	9	ok	state=compose
+@rai1	10	ok	revision=1; apps=-
+@rai1	11	ok	state=compose
+@rai1	12	ok	revision=1; apps=-
+@rai1	13	ok	state=compose
+@rai1	14	ok	revision=1; apps=-
+@rai1	15	ok	state=compose
+@rai1	16	ok	revision=1; apps=-
+@rai1	17	ok	state=compose
+@rai1	18	ok	revision=1; apps=-
+@rai1	19	ok	state=compose
+@rai1	20	ok	revision=1; apps=-
+@rai1	21	ok	state=compose
+@rai1	22	ok	revision=1; apps=-
+@rai1	23	ok	state=compose
+@rai1	24	ok	revision=1; apps=-
+@rai1	25	ok	state=compose
+@rai1	26	ok	revision=1; apps=-
+@rai1	27	ok	state=compose
+@rai1	28	ok	revision=1; apps=-
+@rai1	29	ok	state=compose
+@rai1	30	ok	revision=1; apps=-
+@rai1	31	ok	state=compose
+@rai1	32	ok	revision=1; apps=-
+@rai1	33	ok	state=compose
+@rai1	34	ok	revision=1; apps=-
+@rai1	35	ok	state=compose
+@rai1	36	ok	revision=1; apps=-
+@rai1	37	ok	state=compose
+@rai1	38	ok	revision=1; apps=-
+@rai1	39	ok	state=compose
+@rai1	40	ok	revision=1; apps=-
+@rai1	41	ok	state=compose
+@rai1	42	ok	revision=1; apps=-
+@rai1	43	ok	state=compose
+@rai1	44	ok	revision=1; apps=-
+@rai1	45	ok	state=compose
+@rai1	46	ok	revision=1; apps=-
+@rai1	47	ok	state=compose
+@rai1	48	ok	revision=1; apps=-
+@rai1	49	ok	state=compose
+@rai1	50	ok	revision=1; apps=-
+@rai1	51	ok	state=compose
+@rai1	52	ok	revision=1; apps=-
+@rai1	53	ok	state=compose
+@rai1	54	ok	revision=1; apps=-
+@rai1	55	ok	state=compose
+@rai1	56	ok	revision=1; apps=-
+@rai1	57	ok	state=compose
+@rai1	58	ok	revision=1; apps=-
+@rai1	59	ok	state=compose
+@rai1	60	ok	revision=1; apps=-
+@rai1	61	ok	state=compose
+@rai1	62	ok	revision=1; apps=-
+@rai1	63	ok	state=compose
+@rai1	64	ok	revision=1; apps=-
+@rai1	65	ok	state=compose
+@rai1	66	ok	revision=1; apps=-
+@rai1	67	ok	state=compose
+@rai1	68	ok	revision=1; apps=-
+@rai1	69	ok	state=compose
+@rai1	70	ok	revision=1; apps=-
+@rai1	71	ok	state=compose
+@rai1	72	ok	revision=1; apps=-
+@rai1	73	ok	state=compose
+@rai1	74	ok	revision=1; apps=-
+@rai1	75	ok	state=compose
+@rai1	76	ok	revision=1; apps=-
+@rai1	77	ok	state=compose
+@rai1	78	ok	revision=1; apps=-
+@rai1	79	ok	state=compose
+@rai1	80	ok	revision=1; apps=-
+@rai1	81	ok	state=compose
+@rai1	82	ok	revision=1; apps=-
+@rai1	83	ok	state=compose
+@rai1	84	ok	revision=1; apps=-
+@rai1	85	ok	state=compose
+@rai1	86	ok	revision=1; apps=-
+@rai1	87	ok	state=compose
+@rai1	88	ok	revision=1; apps=-
+@rai1	89	ok	state=compose
+@rai1	90	ok	revision=1; apps=-
+@rai1	91	ok	state=compose
+@rai1	92	ok	revision=1; apps=-
+@rai1	93	ok	state=compose
+@rai1	94	ok	revision=1; apps=-
+@rai1	95	ok	state=compose
+@rai1	96	ok	revision=1; apps=-
+@rai1	97	ok	state=compose
+@rai1	98	ok	revision=1; apps=-
+@rai1	99	ok	state=compose
+@rai1	100	ok	revision=1; apps=-
+@rai1	101	ok	state=compose
+@rai1	102	ok	revision=1; apps=-
+@rai1	103	ok	state=compose
+@rai1	104	ok	revision=1; apps=-
+@rai1	105	ok	state=compose
+@rai1	106	ok	revision=1; apps=-
+@rai1	107	ok	state=compose
+@rai1	108	ok	revision=1; apps=-
+@rai1	109	ok	state=compose
+@rai1	110	ok	revision=1; apps=-
+@rai1	111	ok	state=compose
+@rai1	112	ok	revision=1; apps=-
+@rai1	113	ok	state=compose
+@rai1	114	ok	revision=1; apps=-
+@rai1	115	ok	state=compose
+@rai1	116	ok	revision=1; apps=-
+@rai1	117	ok	state=compose
+@rai1	118	ok	revision=1; apps=-
+@rai1	119	ok	state=compose
+@rai1	120	ok	revision=1; apps=-
+@rai1	121	ok	state=compose
+@rai1	122	ok	revision=1; apps=-
+@rai1	123	ok	state=compose
+@rai1	124	ok	revision=1; apps=-
+@rai1	125	ok	state=compose
+@rai1	126	ok	revision=1; apps=-
+@rai1	127	ok	state=compose
+@rai1	128	ok	revision=1; apps=-
+@rai1	129	ok	state=compose
+@rai1	130	ok	revision=1; apps=-
+@rai1	131	ok	state=compose
+@rai1	132	ok	revision=1; apps=-
+@rai1	133	ok	state=compose
+@rai1	134	ok	revision=1; apps=-
+@rai1	135	ok	state=compose
+@rai1	136	ok	revision=1; apps=-
+@rai1	137	ok	state=compose
+@rai1	138	ok	revision=1; apps=-
+@rai1	139	ok	state=compose
+@rai1	140	ok	revision=1; apps=-
+@rai1	141	ok	state=compose
+@rai1	142	ok	revision=1; apps=-
+@rai1	143	ok	state=compose
+@rai1	144	ok	revision=1; apps=-
+@rai1	145	ok	state=compose
+@rai1	146	ok	revision=1; apps=-
+@rai1	147	ok	state=compose
+@rai1	148	ok	revision=1; apps=-
+@rai1	149	ok	state=compose
+@rai1	150	ok	revision=1; apps=-
+@rai1	151	ok	state=compose
+@rai1	152	ok	revision=1; apps=-
+@rai1	153	ok	state=compose
+@rai1	154	ok	revision=1; apps=-
+@rai1	155	ok	state=compose
+@rai1	156	ok	revision=1; apps=-
+@rai1	157	ok	state=compose
+@rai1	158	ok	revision=1; apps=-
+@rai1	159	ok	state=compose
+@rai1	160	ok	revision=1; apps=-
+@rai1	161	ok	state=compose
+@rai1	162	ok	revision=1; apps=-
+@rai1	163	ok	state=compose
+@rai1	164	ok	revision=1; apps=-
+@rai1	165	ok	state=compose
+@rai1	166	ok	revision=1; apps=-
+@rai1	167	ok	state=compose
+@rai1	168	ok	revision=1; apps=-
+@rai1	169	ok	state=compose
+@rai1	170	ok	revision=1; apps=-
+@rai1	171	ok	state=compose
+@rai1	172	ok	revision=1; apps=-
+@rai1	173	ok	state=compose
+@rai1	174	ok	revision=1; apps=-
+@rai1	175	ok	state=compose
+@rai1	176	ok	revision=1; apps=-
+@rai1	177	ok	state=compose
+@rai1	178	ok	revision=1; apps=-
+@rai1	179	ok	state=compose
+@rai1	180	ok	revision=1; apps=-
+@rai1	181	ok	state=compose
+@rai1	182	ok	revision=1; apps=-
+@rai1	183	ok	state=compose
+@rai1	184	ok	revision=1; apps=-
+@rai1	185	ok	state=compose
+@rai1	186	ok	revision=1; apps=-
+@rai1	187	ok	state=compose
+@rai1	188	ok	revision=1; apps=-
+@rai1	189	ok	state=compose
+@rai1	190	ok	revision=1; apps=-
+@rai1	191	ok	state=compose
+@rai1	192	ok	revision=1; apps=-
+@rai1	193	ok	state=compose
+@rai1	194	ok	revision=1; apps=-
+@rai1	195	ok	state=compose
+@rai1	196	ok	revision=1; apps=-
+@rai1	197	ok	state=compose
+@rai1	198	ok	revision=1; apps=-
+@rai1	199	ok	state=compose
+@rai1	200	ok	revision=1; apps=-
+@rai1	201	ok	state=compose
+@rai1	202	ok	revision=1; apps=-
+@rai1	203	ok	state=compose
+@rai1	204	ok	revision=1; apps=-
+@rai1	205	ok	state=compose
+@rai1	206	ok	revision=1; apps=-
+@rai1	207	ok	state=compose
+@rai1	208	ok	revision=1; apps=-
+@rai1	209	ok	submit=2; revision=1; target=-; prompt=4170703a206e616d652c2073746f636b2c206d6f7665642e20416464204d6f76653a20726571756972652073746f636b3e3d312c2073746f636b3d73746f636b2d312c206d6f7665643d6d6f7665642b312e204e756d657269632064656661756c747320302e
+@rai1	210	ok	revision=1; apps=-
+@rai1	211	ok	revision=1; apps=-
+@rai1	212	ok	request=2; base=1; revision=1; state=thinking
+@rai1	213	ok	state=thinking
+@rai1	214	ok	request=2; base=1; revision=1; state=thinking
+@rai1	215	ok	request=2; base=1; revision=1; state=thinking
+@rai1	216	ok	state=notice
+@rai1	217	ok	revision=1; apps=-
+@rai1	218	ok	state=notice
+@rai1	219	ok	revision=1; apps=-
+@rai1	220	ok	revision=1; apps=-

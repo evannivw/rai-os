@@ -17,7 +17,7 @@ def verify(kernel,binary,out,source='replay'):
     if source=='meta':assert commit and dirty is False,'Freeze before the single live call'
     out.mkdir(parents=True,exist_ok=False);state=out/'device.json'
     report=dict(source=source,maximum_live_calls=1 if source=='meta' else 0,retries=0,development_fixture=True,ai_advantage_measured=False,created=False,verified=False,source_commit=commit,source_worktree_dirty=dirty,kernel_sha256=hashlib.sha256(kernel.read_bytes()).hexdigest())
-    app=Studio(kernel,binary,out/'session',source,state=state);g=app.guest
+    app=Studio(kernel,binary,out/'session',source,state=state);g=app.guest;app.repair_enabled=False # Preserve this verifier's original paid-call cap.
     try:
         for c in TABLE:app.press(ord(c))
         app.press(13)

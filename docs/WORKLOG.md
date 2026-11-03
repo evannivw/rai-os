@@ -2798,3 +2798,37 @@ Evidence: evidence/2026-11-03-app-behaviors/live-rejected and rejection-diagnost
 The next model-integration increment should implement a bounded correction cycle
 with diagnostic feedback, preserving request/revision binding and explicit call
 limits. It is not implemented here, and no successful live composed app is claimed.
+
+
+## 2026-11-03 — Bounded correction of generated app expressions
+
+Implemented the next requested integration step after the prior formula_syntax
+failure. Meta receives the original request/catalog, the exact rejected proposal
+and trusted diagnostic guidance. Rust reproduces feedback before any key/provider
+access and allows only formula_syntax, formula_unknown_field and formula_limit.
+Corrections can change calculated formulas and calculate-step expressions plus
+the reason. Guards, fields, defaults, permissions and step/branch structure must
+remain identical; scope is checked even before ordinary validation. Clarify/decline
+can stop the process. No general semantic verifier or automatic arbitrary redesign.
+
+Studio bounds the loop to three attempts per goal and eight per session. Every
+attempt/delivery checks request, base/current revision and guest planning mode.
+Cancellation stops later attempts and discards late results; an already sent call
+may still incur provider usage. Each attempt retains its diagnostics, with partial
+output on timeout and a final trace. Malformed adapter output and output setup
+failures terminate with notice rather than leaving the guest waiting. The native
+screen shows attempt progress; the existing validation and approval flow remains.
+No new unsafe, kernel mechanism or app isolation was added. Existing live verifiers
+explicitly retain their original one/two-call budgets; the new verifier owns its
+separate three-call bound.
+
+Verified 90 host/shared Rust tests, host/kernel Clippy, formatting and Python syntax.
+Real QEMU debug/release passed independent three-row arithmetic and reboot plus
+13 adversarial cases covering attempt/session limits, scope, cancellation/staleness,
+transport, clarification, unsupported capability, malformed output and timeout.
+Existing apps/RFB, behavior, evolving journey and saved/live entry regressions passed;
+console boot/protocol passed 37 checks per profile. Linux ARM64 Docker passed the
+new verifier and saved demo with network disabled. No Meta calls in these checks.
+Evidence: evidence/2026-11-03-app-repair. The tested tree was modified relative to
+a20bf47; exact hashes are retained. Next: freeze source, then one bounded live goal
+with every attempt retained. Syntax validity still does not establish user intent.

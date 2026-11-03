@@ -1,0 +1,59 @@
+{
+  "request_id": 2,
+  "base_revision": 1,
+  "decision": "install",
+  "spec": {
+    "id": "movement",
+    "title": "Movement",
+    "capability": "records.local",
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "kind": "text",
+        "required": true,
+        "default": ""
+      },
+      {
+        "key": "stock",
+        "label": "Stock",
+        "kind": "number",
+        "required": true,
+        "default": "0"
+      },
+      {
+        "key": "moved",
+        "label": "Moved",
+        "kind": "number",
+        "required": true,
+        "default": "0"
+      }
+    ],
+    "filter_key": "",
+    "filter_label": "",
+    "behaviors": [
+      {
+        "id": "move",
+        "label": "Move one",
+        "event": "press",
+        "steps": [
+          {
+            "op": "calculate",
+            "field": "stock",
+            "value": "$stock-1",
+            "compare": "",
+            "skip": 0
+          },
+          {
+            "op": "calculate",
+            "field": "moved",
+            "value": "$moved+1",
+            "compare": "",
+            "skip": 0
+          }
+        ]
+      }
+    ]
+  },
+  "reason": "Disclosed offline proposal for correction verification."
+}

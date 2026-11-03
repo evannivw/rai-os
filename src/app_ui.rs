@@ -1093,6 +1093,20 @@ impl Controller {
                 self.message = Text::new(reason)?;
                 self.mode = Mode::Review;
             }
+            "app.progress" => {
+                let [id, base, attempt] = parts(arg)?;
+                self.check_request(id)?;
+                let base = base.parse::<u32>().map_err(|_| "bad_args")?;
+                if base != self.base || base != self.runtime.revision() {
+                    return Err("app_stale_revision");
+                }
+                self.message = Text::new(match attempt {
+                    "1" => "Attempt 1 of 3: creating a proposal.",
+                    "2" => "Attempt 2 of 3: correcting expressions.",
+                    "3" => "Attempt 3 of 3: final correction.",
+                    _ => return Err("app_attempt_limit"),
+                })?;
+            }
             "app.notice" => {
                 let (id, reason) = arg.split_once(':').ok_or("bad_args")?;
                 self.check_request(id)?;
@@ -1134,6 +1148,21 @@ impl core::fmt::Display for BehaviorStatus<'_> {
             "step={}; error={}",
             error.map_or(0, |e| e.step),
             error.map_or("", |e| e.code)
+        )
+    }
+}
+
+/// Read-only admission metadata for the host planning loop; contains no records.
+pub struct PlanningState<'a>(pub &'a Controller);
+impl core::fmt::Display for PlanningState<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(
+            f,
+            "request={}; base={}; revision={}; state={}",
+            self.0.request,
+            self.0.base,
+            self.0.runtime.revision(),
+            self.0.state()
         )
     }
 }

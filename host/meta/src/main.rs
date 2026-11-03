@@ -1,4 +1,5 @@
 //! Single-proposal, host-coordinated and guest-owned Meta bridge modes.
+mod app_repair;
 mod apps;
 mod batch;
 mod batch_bridge;
@@ -75,6 +76,16 @@ fn run() -> Result<(), String> {
     }
     if args.len() == 4 && args[1] == "--app-plan-replay" {
         return apps::run(Path::new(&args[2]), Some(Path::new(&args[3])));
+    }
+    if args.len() == 4 && args[1] == "--app-repair" {
+        return apps::run_repair(Path::new(&args[2]), Path::new(&args[3]), None);
+    }
+    if args.len() == 5 && args[1] == "--app-repair-replay" {
+        return apps::run_repair(
+            Path::new(&args[2]),
+            Path::new(&args[3]),
+            Some(Path::new(&args[4])),
+        );
     }
     if args.len() == 3 && args[1] == "--file-plan" {
         return files::run(Path::new(&args[2]), None);

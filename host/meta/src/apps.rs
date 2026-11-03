@@ -194,7 +194,9 @@ fn validation_failure(p: &Plan, r: &Request, code: &str) -> serde_json::Value {
         "request_id":r.request_id,
         "code":code,
         "proposal":p,
-        "execution":false
+        "execution":false,
+        "repairable":crate::app_repair::repairable(code),
+        "repair_hint":crate::app_repair::hint(code)
     })
 }
 pub fn run(path: &std::path::Path, replay: Option<&std::path::Path>) -> Result<(), String> {
@@ -206,15 +208,54 @@ pub fn run(path: &std::path::Path, replay: Option<&std::path::Path>) -> Result<(
         crate::decision_source::report(crate::provider::apps(&key, &r), u64::from(r.request_id))?
             .proposal
     };
-    if let Err(code) = validate(&p, &r) {
-        // Stop before emitting app_plan. Diagnosis must preserve the proposal
-        // that failed, rather than require another paid call to reproduce it.
-        println!("{}", validation_failure(&p, &r, code));
+    finish(&p, &r, replay.is_some(), 1, None)
+}
+pub fn run_repair(
+    path: &std::path::Path,
+    feedback_path: &std::path::Path,
+    replay: Option<&std::path::Path>,
+) -> Result<(), String> {
+    let r = request(&crate::config::bounded_file(path, 16384)?)?;
+    let feedback = crate::app_repair::read(feedback_path, &r)?;
+    let p = if let Some(path) = replay {
+        parse(&crate::config::bounded_file(path, 16384)?)?
+    } else {
+        // Feedback admission happens before credentials are loaded or any model
+        // request starts. This command always makes at most one provider call.
+        let key = crate::config::load()?;
+        crate::decision_source::report(
+            crate::provider::apps_repair(&key, &r, &feedback),
+            u64::from(r.request_id),
+        )?
+        .proposal
+    };
+    finish(
+        &p,
+        &r,
+        replay.is_some(),
+        feedback.attempt,
+        Some(&feedback.proposal),
+    )
+}
+fn finish(
+    p: &Plan,
+    r: &Request,
+    replay: bool,
+    attempt: usize,
+    previous: Option<&Plan>,
+) -> Result<(), String> {
+    // Scope precedes ordinary validation: a still-malformed correction must not
+    // erase a condition and become a repairable proposal for the next attempt.
+    let checked = previous
+        .map_or(Ok(()), |old| crate::app_repair::check_scope(old, p))
+        .and_then(|()| validate(p, r));
+    if let Err(code) = checked {
+        println!("{}", validation_failure(p, r, code));
         return Err(code.into());
     }
     println!(
         "{}",
-        serde_json::json!({"event":"app_plan","source":if replay.is_some(){"replay"}else{"meta"},"plan":p,"execution":false})
+        serde_json::json!({"event":"app_plan","source":if replay {"replay"}else{"meta"},"attempt":attempt,"plan":p,"execution":false})
     );
     Ok(())
 }
@@ -259,6 +300,10 @@ mod tests {
         assert_eq!(event["request_id"], 2);
         assert_eq!(event["code"], "formula_syntax");
         assert_eq!(event["execution"], false);
+        assert_eq!(event["repairable"], true);
+        let hint = event["repair_hint"].as_str().unwrap();
+        assert!(hint.contains("$field references"));
+        assert!(hint.contains("Do not put an assignment"));
         assert_eq!(event["proposal"], serde_json::to_value(&proposal).unwrap());
         assert_eq!(
             event["proposal"]["spec"]["behaviors"][0]["steps"][1]["value"],
@@ -266,7 +311,11 @@ mod tests {
         );
         assert!(event.get("plan").is_none());
         assert!(event.get("request").is_none());
-        assert_eq!(event.as_object().unwrap().len(), 5);
+        assert_eq!(event.as_object().unwrap().len(), 7);
+        let denied = validation_failure(&proposal, &request, "app_repair_scope_denied");
+        assert_eq!(denied["repairable"], false);
+        assert_eq!(denied["repair_hint"], "");
+        assert_eq!(denied["execution"], false);
     }
     #[test]
     fn behavior_json_uses_shared_validation_and_strict_fields() {

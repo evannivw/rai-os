@@ -1,0 +1,16 @@
+{
+  "source": "replay",
+  "max_attempts": 3,
+  "session_limit": 8,
+  "attempts": [
+    {
+      "attempt": 1,
+      "kind": "initial",
+      "state": "failed",
+      "code": "adapter_timeout"
+    }
+  ],
+  "state": "failed",
+  "error": "TimeoutExpired",
+  "session_attempts_used": 1
+}

@@ -444,3 +444,21 @@ live generation call for this increment without retries. No unsupported claim
 that a model can implement unavailable drivers or arbitrary native programs.
 The new structured rejection reports prepare a future bounded correction cycle;
 that cycle and general semantic verification are not implemented here.
+
+
+## November 3: bounded correction after a rejected live proposal
+
+The previous behavior-language live request failed formula_syntax safely. Add a
+bounded propose -> validate -> correct cycle rather than silently altering model
+output or choosing successful runs. Limit one goal to three total attempts and a
+Studio session to eight, preserving request/revision binding and approval.
+Only arithmetic grammar/reference/size errors may be corrected; model repair
+cannot weaken guards, change permissions or replace app structure. Independent
+execution checks remain necessary because syntax cannot prove semantic intent.
+
+Verify the loop with disclosed offline responses and real Rust/QEMU, then freeze
+the source and run one live goal with at most three calls. Preserve every attempt,
+including failures, and report whether live correction was actually needed.
+Do not run until success or substitute a replay fixture. After this increment,
+return to the runnable demo, narration and submission; the internal November 4
+18:00 Guatemala target and final 20:00 deadline remain unchanged.

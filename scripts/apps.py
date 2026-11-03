@@ -8,12 +8,18 @@ import queue
 import subprocess
 import sys
 import threading
+import time
 sys.dont_write_bytecode=True
 from files_demo import Guest,ROOT,build
 from workspace import host_build
 from workspace_vnc import serve
 from app_storage import Checkpoint,collect,restore
 from app_exchange import Exchange
+
+MAX_ATTEMPTS = 3
+MAX_SESSION_ATTEMPTS = 8
+REQUEST_TIMEOUT = 110
+ATTEMPT_TIMEOUT = 40
 def schema(g,app_id):
     row=g.fields('app.schema',app_id);fields=[]
     for item in row['fields'].split(','):
@@ -76,6 +82,9 @@ class Studio:
         self.saved_revision=None;self.storage_error=None
         self.lock=threading.RLock();self.threads=[];self.closed=False
         self.binary=binary;self.kernel=kernel;self.source=source
+        self.repair_enabled = source == 'meta'
+        self.provider_calls = 0
+        self._attempt_timeout = ATTEMPT_TIMEOUT
         try:
             saved=self.checkpoint.load() if self.checkpoint else None
             self.guest=Guest(kernel,vnc=vnc,vnc_password=password if vnc else None)
@@ -119,8 +128,8 @@ class Studio:
                     self.guest.request('app.transfer.notice',f"{event['request']}:Transfer rejected. Check file access, values, formulas and available row slots. No rows were imported.")
             if reply.startswith('submit='):
                 state=dict(p.split('=',1) for p in reply.split('; '));rid=int(state['submit'])
-                if any(t.is_alive() for t in self.threads) or len(self.threads)>=8:
-                    self.guest.request('app.notice',f'{rid}:A request is running or this session reached its eight-request limit.');return reply
+                if any(t.is_alive() for t in self.threads) or self.provider_calls >= MAX_SESSION_ATTEMPTS:
+                    self.guest.request('app.notice',f'{rid}:A request is running or this session reached its eight-attempt limit.');return reply
                 catalog=self.guest.fields('app.catalog');ids=[];count=0
                 for entry in catalog['apps'].split(','):
                     if entry=='-':continue
@@ -136,27 +145,153 @@ class Studio:
             # Pointer geometry belongs to the guest. Submission has the same shape
             # as a key reply; a click on Create needs the same planning path.
             return self.dispatch('app.tap',f'{x}:{y}')
-    def plan(self,r):
-        folder=self.output/str(r['request_id']);folder.mkdir();path=folder/'request.json';path.write_text(json.dumps(r,indent=2)+'\n');rid=r['request_id']
-        cmd=[str(self.binary),str(self.kernel),'--app-plan',str(path)]
-        if self.source=='replay':
-            from app_replay import propose
-            plan=propose(r)
-            supplied=folder/'supplied.json';supplied.write_text(json.dumps(plan)+'\n');cmd[2]='--app-plan-replay';cmd.append(str(supplied))
+    def _planning_active(self, r):
+        # Read-only check before any progress update, call, or response delivery.
+        # A cancelled/new request must not receive an old attempt's message.
+        if self.closed:
+            return False
+        pending = self.guest.fields('app.planning')
+        return (pending['state'] == 'thinking'
+                and pending['request'] == str(r['request_id'])
+                and pending['base'] == str(r['base_revision'])
+                and pending['revision'] == str(r['base_revision']))
+
+    def _provider_attempt(self, r, request_path, feedback_path, attempt_dir):
+        """One process, one possible API request; validation stays in Rust."""
+        if feedback_path is not None:
+            cmd = [str(self.binary), str(self.kernel), '--app-repair', str(request_path), str(feedback_path)]
+        else:
+            cmd = [str(self.binary), str(self.kernel), '--app-plan', str(request_path)]
+            if self.source == 'replay':
+                from app_replay import propose
+                supplied = attempt_dir / 'supplied.json'
+                supplied.write_text(json.dumps(propose(r)) + '\n')
+                cmd[2] = '--app-plan-replay'
+                cmd.append(str(supplied))
+        env = dict(os.environ)
+        env.pop('RAI_VNC_PASSWORD', None)
+        return subprocess.run(cmd, cwd=ROOT, env=env, capture_output=True,
+                              text=True, timeout=self._attempt_timeout)
+
+    def plan(self, r):
+        folder = self.output / str(r['request_id'])
+        request_path = folder / 'request.json'
+        rid = r['request_id']
+        trace = dict(source=self.source, max_attempts=MAX_ATTEMPTS if self.repair_enabled else 1,
+                     session_limit=MAX_SESSION_ATTEMPTS, attempts=[], state='running')
+        deadline = time.monotonic() + REQUEST_TIMEOUT
+        feedback_path = None
+        message = 'No app installed. The proposal was unavailable or invalid. See the session log.'
+        # Aggregate logs preserve older tooling, while each attempt has its own files.
+        stdout_log = folder / 'provider.stdout.jsonl'
+        stderr_log = folder / 'provider.stderr.jsonl'
         try:
-            env=dict(os.environ);env.pop('RAI_VNC_PASSWORD',None)
-            result=subprocess.run(cmd,cwd=ROOT,env=env,capture_output=True,text=True,timeout=40)
-            (folder/'provider.stdout.jsonl').write_text(result.stdout);(folder/'provider.stderr.jsonl').write_text(result.stderr)
-            if result.returncode:raise ValueError('provider_rejected')
-            events=[json.loads(line) for line in result.stdout.splitlines()];plans=[e['plan'] for e in events if e.get('event')=='app_plan'];assert len(plans)==1
+            folder.mkdir()
+            request_path.write_text(json.dumps(r, indent=2) + '\n')
+            stdout_log.write_text(''); stderr_log.write_text('')
+            for attempt in range(1, trace['max_attempts'] + 1):
+                with self.lock:
+                    if not self._planning_active(r):
+                        trace['state'] = 'cancelled_or_stale'; return
+                    if self.provider_calls >= MAX_SESSION_ATTEMPTS:
+                        trace['state'] = 'session_limit'
+                        message = 'Session attempt limit reached. No app installed.'
+                        break
+                    # Reserve a complete bounded call; never kill a Rust process
+                    # early while its separately bounded HTTPS child is still active.
+                    if deadline - time.monotonic() < ATTEMPT_TIMEOUT:
+                        trace['state'] = 'deadline'
+                        message = 'Planning time limit reached. No app installed.'
+                        break
+                    self.guest.request('app.progress', f"{rid}:{r['base_revision']}:{attempt}")
+                    self.provider_calls += 1
+                attempt_dir = folder / f'attempt-{attempt:02d}'
+                attempt_dir.mkdir()
+                entry = dict(attempt=attempt, kind='repair' if feedback_path else 'initial', state='started')
+                trace['attempts'].append(entry)
+                (folder / 'loop.json').write_text(json.dumps(trace, indent=2) + '\n')
+                try:
+                    result = self._provider_attempt(r, request_path, feedback_path, attempt_dir)
+                except subprocess.TimeoutExpired as error:
+                    # TimeoutExpired can carry bytes even when text=True. Preserve
+                    # partial adapter output without pretending a response finished.
+                    for stream, raw in [('stdout', error.stdout), ('stderr', error.stderr)]:
+                        data = raw or b''
+                        if isinstance(data, str): data = data.encode('utf-8')
+                        (attempt_dir / f'provider.{stream}.jsonl').write_bytes(data)
+                    entry['code'] = 'adapter_timeout'
+                    raise
+                (attempt_dir / 'provider.stdout.jsonl').write_text(result.stdout)
+                (attempt_dir / 'provider.stderr.jsonl').write_text(result.stderr)
+                entry['exit_code'] = result.returncode
+                with stderr_log.open('a') as log:
+                    # Raw per-attempt bytes remain above; aggregate stderr stays JSONL.
+                    for line in result.stderr.splitlines():
+                        try: event = json.loads(line)
+                        except json.JSONDecodeError: event = dict(event='adapter_error', message=line)
+                        if not isinstance(event, dict): raise ValueError('invalid_diagnostic_event')
+                        event['attempt'] = attempt
+                        log.write(json.dumps(event) + '\n')
+                events = [json.loads(line) for line in result.stdout.splitlines()]
+                if any(not isinstance(event, dict) for event in events):
+                    raise ValueError('invalid_planner_event')
+                with stdout_log.open('a') as log:
+                    for event in events:
+                        event['attempt'] = attempt
+                        log.write(json.dumps(event) + '\n')
+                with self.lock:
+                    if not self._planning_active(r):
+                        entry['state'] = 'discarded'; trace['state'] = 'cancelled_or_stale'; return
+                plans = [event['plan'] for event in events if event.get('event') == 'app_plan']
+                failures = [event for event in events if event.get('event') == 'app_validation_failed']
+                if result.returncode == 0:
+                    if len(plans) != 1 or failures:
+                        raise ValueError('invalid_planner_result')
+                    with self.lock:
+                        if not self._planning_active(r):
+                            entry['state'] = 'discarded'; trace['state'] = 'cancelled_or_stale'; return
+                        deliver(self.guest, plans[0])
+                        self.guest.capture(folder / 'proposal.ppm')
+                    entry['state'] = 'accepted'; trace['state'] = 'review' if plans[0]['decision'] == 'install' else plans[0]['decision']
+                    trace['accepted_attempt'] = attempt
+                    return
+                entry['state'] = 'rejected'
+                if len(failures) != 1 or plans:
+                    trace['state'] = 'provider_failed'; break
+                failure = failures[0]
+                code = failure['code']
+                entry['code'] = code
+                if not isinstance(code, str) or not code.replace('_', '').isalnum() or len(code) > 64:
+                    raise ValueError('invalid_failure_code')
+                message = f'Proposal rejected: {code}. No app installed.'
+                if not self.repair_enabled or failure.get('repairable') is not True:
+                    trace['state'] = 'not_repairable'; break
+                if attempt == trace['max_attempts']:
+                    trace['state'] = 'exhausted'
+                    message = f'Stopped after {attempt} attempts: {code}. No app installed.'
+                    break
+                # Only rejected definitions and trusted validator feedback; no rows.
+                feedback = dict(attempt=attempt + 1, code=code, proposal=failure['proposal'])
+                feedback_path = folder / f'feedback-{attempt + 1:02d}.json'
+                feedback_path.write_text(json.dumps(feedback, indent=2) + '\n')
             with self.lock:
-                if self.closed:return
-                deliver(self.guest,plans[0]);self.guest.capture(folder/'proposal.ppm')
-        except (ValueError,AssertionError,subprocess.TimeoutExpired,OSError):
+                if self._planning_active(r):
+                    self.guest.request('app.notice', f'{rid}:{message}')
+        except (ValueError, KeyError, TypeError, AttributeError, AssertionError, subprocess.TimeoutExpired, OSError) as error:
+            trace['state'] = 'failed'
+            trace['error'] = type(error).__name__
+            if trace['attempts'] and trace['attempts'][-1]['state'] == 'started':
+                trace['attempts'][-1]['state'] = 'failed'
             with self.lock:
                 if not self.closed:
-                    try:self.guest.request('app.notice',f'{rid}:No app installed. The proposal was unavailable, invalid or outside this runtime. See the local session log.')
-                    except AssertionError:pass # A cancelled request cannot be revived.
+                    try:
+                        if self._planning_active(r): self.guest.request('app.notice', f'{rid}:{message}')
+                    except (AssertionError, OSError, KeyError, TypeError, ValueError): pass
+        finally:
+            trace['session_attempts_used'] = self.provider_calls
+            try: (folder / 'loop.json').write_text(json.dumps(trace, indent=2) + '\n')
+            except OSError: print('Unable to save the final app planning log.', file=sys.stderr)
+
     def close(self):
         with self.lock:self.closed=True
         for t in self.threads:t.join(timeout=45)

@@ -246,6 +246,14 @@ impl Console<'_> {
         {
             self.apps.display_available = self.display.is_some();
         }
+        if name == "app.planning" {
+            if arg.is_some() {
+                response(id, "err", "bad_args");
+            } else {
+                response(id, "ok", crate::app_ui::PlanningState(&self.apps));
+            }
+            return;
+        }
         if name == "app.behavior.status" {
             if arg.is_some() {
                 response(id, "err", "bad_args");

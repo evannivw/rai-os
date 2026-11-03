@@ -26,3 +26,4 @@ portable/Dockerfile text eol=lf
 
 # Preserve verbatim UART/tool output, including CRLF and trailing empty lines.
 docs/evidence/2026-11-03-app-behaviors/**/*.log -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+docs/evidence/2026-11-03-app-repair/**/*.log -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol

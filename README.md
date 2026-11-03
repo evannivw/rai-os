@@ -115,6 +115,9 @@ and terminal edit locks; an eight-order workshop checks the full lifecycle.
 using typed assignments, calculations, conditions and forward branches. RAI-OS
 previews and validates all changes, then commits one row atomically after approval.
 These are reusable operations, not hardcoded applications.
+[Bounded correction](docs/APP_REPAIR.md) sends eligible formula errors back to Meta
+for up to two corrections, preserves app structure and permissions, and still
+requires guest validation and explicit approval before installation.
 [Kernel decision](docs/KERNEL_DECISION.md) explains the learning/control tradeoff
 and why kernel ownership alone is not a performance or AI advantage.
 A [ready-to-open saved showcase](docs/APP_CAPABILITIES.md#live-generation-and-a-ready-to-open-session)

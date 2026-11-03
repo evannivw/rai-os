@@ -14,7 +14,7 @@ from verify_apps import text
 def main():
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     assert not subprocess.check_output(['git','status','--porcelain'],text=True).strip(),'Freeze source before live calls'
-    kernel=build();binary=host_build();out=a.output.resolve();app=Studio(kernel,binary,out,'meta');g=app.guest
+    kernel=build();binary=host_build();out=a.output.resolve();app=Studio(kernel,binary,out,'meta');g=app.guest;app.repair_enabled=False # Preserve this verifier's original paid-call cap.
     report=dict(source='meta',maximum_calls=2,retries=0,development_fixture=True,ai_advantage_measured=False,created=False,evolved=False,source_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),kernel_sha256=hashlib.sha256(kernel.read_bytes()).hexdigest(),bridge_sha256=hashlib.sha256(binary.read_bytes()).hexdigest())
     def plan(prompt):
         for c in prompt:app.press(ord(c))

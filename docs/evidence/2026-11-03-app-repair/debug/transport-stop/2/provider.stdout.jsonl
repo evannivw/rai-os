@@ -1,0 +1,1 @@
+{"event": "provider_diagnostic", "source": "synthetic_transport_fault", "outcome": "rejected", "error": "meta_transport_failed", "attempt": 1}

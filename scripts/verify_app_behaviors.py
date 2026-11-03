@@ -81,6 +81,7 @@ def verify(kernel, binary, output, source='offline'):
     app = None
     try:
         app = Studio(kernel, binary, output / 'session', 'meta' if source == 'meta' else 'replay', state=checkpoint)
+        app.repair_enabled = False  # This historical verifier permits one live call.
         g = app.guest
 
         def approve(spec, capture=None):

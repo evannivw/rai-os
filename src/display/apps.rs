@@ -248,6 +248,9 @@ pub fn render(s: &mut Display, u: &Controller) {
                 Size::Small,
                 QUIET,
             );
+            if u.mode == Mode::Thinking && !u.message.text().is_empty() {
+                wrap(s, u.message.text(), 628, 2);
+            }
             action(
                 s,
                 if u.mode == Mode::Thinking {
