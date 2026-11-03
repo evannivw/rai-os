@@ -162,3 +162,26 @@ beat: describe a conditional action, inspect different row previews, apply once,
 then change the program by prompt while retaining data. Existing saved showcase
 fixtures remain unchanged. Live evidence for this extension belongs to its own
 reports, not the earlier saved workshop generation.
+
+
+The new extension now has [actual two-prompt evidence](evidence/2026-11-03-app-batches/live/README.md):
+Meta creates an all-row conditional action, then changes its threshold and
+arithmetic on the same eight saved records. Both calls passed first attempt.
+A useful visible contrast is Item 4: the first action skips its stock=1 value;
+the revised action processes it. This is a change in generated program behavior,
+not a hidden application-specific Rust branch or a benchmark claim.
+
+To inspect that exact saved result without inference, copy its checkpoint to a
+new local working file before opening it. Do not use tracked evidence as writable
+session storage:
+
+```sh
+cp -n docs/evidence/2026-11-03-app-batches/live/device.json target/batch-showcase.json
+python3 -B scripts/apps.py --source replay --state target/batch-showcase.json --output target/batch-showcase-session
+```
+
+Connect the VNC viewer as described above. This restores the actual prior model
+result and labels the session replay; it is not a new generation. For a fresh live
+creation, use the existing live entry point with your own key and the two prompts
+in the linked evidence. Keep generation, human review, local execution and saved
+recovery visibly distinct in the three-minute narration.

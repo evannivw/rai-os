@@ -1,0 +1,70 @@
+{
+  "request_id": 7,
+  "base_revision": 11,
+  "goal": "Change Move all: for each row, if stock>=1, stock=stock-1 and moved=moved+1. Keep fields and data.",
+  "target": {
+    "id": "stockmove",
+    "title": "Stock Move",
+    "capability": "records.local",
+    "fields": [
+      {
+        "key": "name",
+        "kind": "text",
+        "required": true,
+        "label": "Name",
+        "default": ""
+      },
+      {
+        "key": "stock",
+        "kind": "number",
+        "required": true,
+        "label": "Stock",
+        "default": "0"
+      },
+      {
+        "key": "moved",
+        "kind": "number",
+        "required": true,
+        "label": "Moved",
+        "default": "0"
+      }
+    ],
+    "filter_key": "",
+    "filter_label": "",
+    "behaviors": [
+      {
+        "id": "moveall",
+        "label": "Move all",
+        "event": "press",
+        "steps": [
+          {
+            "op": "if",
+            "field": "stock",
+            "value": "2",
+            "compare": "ge",
+            "skip": 2
+          },
+          {
+            "op": "calculate",
+            "field": "stock",
+            "value": "$stock-2",
+            "compare": "",
+            "skip": 0
+          },
+          {
+            "op": "calculate",
+            "field": "moved",
+            "value": "$moved+2",
+            "compare": "",
+            "skip": 0
+          }
+        ],
+        "scope": "all"
+      }
+    ]
+  },
+  "app_ids": [
+    "stockmove"
+  ],
+  "record_count": 8
+}

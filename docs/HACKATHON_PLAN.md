@@ -485,3 +485,10 @@ goal to three attempts (six total), retain all failures and use no fixture fallb
 The demo should show the user's changed intent becoming a different local program,
 with review and data continuity. Final video/submission remains necessary; do not
 claim an unlimited app platform, real phone support or a measured performance win.
+
+
+The two-goal check from clean e384bca passed with exactly two actual Meta calls,
+both initial attempts. Conditional whole-table generation, reviewed program change
+with retained rows, independent results and reboot are demonstrated. Existing
+saved fixtures were not changed. Use this evidence as a short creation/evolution
+beat in the final video; it does not remove the need to finish recording and submit.

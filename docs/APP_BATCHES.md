@@ -115,3 +115,17 @@ restart. Explain that inference constructs the program; subsequent local actions
 need no model call. Keep the existing workflow/CSV showcase as a separate example.
 Do not present an offline fixture as a live model response or claim performance
 superiority from this small prototype.
+
+
+## Observed results, November 3
+
+94 Rust tests passed, as did the full eight-row QEMU debug/release verifier,
+existing behavior/correction/demo checks, and Linux ARM64 Docker with network
+disabled. Clean source e384bca then completed actual Meta generation and evolution
+in exactly two calls, both on their first attempt. The second proposal changed
+the condition and arithmetic while retaining all eight rows. Independent oracles
+verified both executions, explicit review and exact restart recovery.
+
+See [retained live evidence](evidence/2026-11-03-app-batches/live/README.md).
+The earlier offline adversarial cases remain separate from these actual model
+responses. No unseen-workload success rate or general semantic guarantee is claimed.

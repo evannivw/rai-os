@@ -2885,3 +2885,27 @@ demo offline. Measured debug frame details and caveats are retained, not a unive
 stack safety claim. Evidence: evidence/2026-11-03-app-batches. No Meta calls yet in
 this increment. Next: frozen-source generation and evolution, at most three
 attempts per goal and six calls total, with all outcomes retained.
+
+
+## 2026-11-03 — Two live prompts evolve one whole-table program
+
+Clean e384bcae83820704010977a81a880f78c6fde39d completed generation and evolution
+with exactly two Meta calls, both first-attempt successes. Creation: HTTP 200,
+5437 ms provider latency, 3869 tokens (3108 input / 761 output). Evolution:
+HTTP 200, 3800 ms, 3784 tokens (3272 input / 512 output). No correction, fixture
+fallback or additional API calls. Both reported matching model and stop completion.
+
+The actual Stock Move app first conditionally transformed rows with stock>=2 by
+subtracting two and increasing moved by two. The second actual proposal retained
+app/field/button identities and all saved rows, changing the threshold and amounts
+to one. Both required native field/program approval. Eight fictional records were
+entered locally; independent arithmetic verified every row after each action and
+one revision per confirmation. Preview/cancel preserved data, and reboot restored
+the exact final program and rows without inference. Item 4, initially stock=1,
+illustrates the changed behavior: initially skipped, then processed after evolution.
+
+Evidence: evidence/2026-11-03-app-batches/live, with both requests/proposals,
+per-attempt logs, UART, screenshots, checkpoint, report and hashes. The offline
+last-row rollback and unrelated-app checks remain distinct from this live run.
+DEMO_READY.md links an inspectable saved result without modifying tracked evidence.
+No executable change or further model call occurs in this documentation follow-up.

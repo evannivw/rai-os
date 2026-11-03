@@ -1,0 +1,356 @@
+{
+  "verified": true,
+  "source": "meta",
+  "source_commit": "e384bcae83820704010977a81a880f78c6fde39d",
+  "source_worktree_dirty": false,
+  "maximum_live_calls": 6,
+  "generation_calls": 2,
+  "checks": [
+    "Eight rows; preview/cancel changes nothing; native approval applies independent branch oracle atomically with one revision; no further inference",
+    "Second live prompt changes the existing whole-table program; approval retains all rows; new independent oracle matches every record without hardcoded app logic",
+    "Exact schemas, scopes, all rows and computed values recover after reboot without inference"
+  ],
+  "kernel_sha256": "822e6c8cf069ed50250dabf40aef3fc74beab6cb4243666edce2b5d267f9e691",
+  "loop": {
+    "source": "meta",
+    "max_attempts": 3,
+    "session_limit": 8,
+    "attempts": [
+      {
+        "attempt": 1,
+        "kind": "initial",
+        "state": "accepted",
+        "exit_code": 0
+      }
+    ],
+    "state": "review",
+    "accepted_attempt": 1,
+    "session_attempts_used": 1
+  },
+  "events": [
+    {
+      "diagnostic": {
+        "choice_count": 1,
+        "finish_reason": "stop",
+        "http_status": 200,
+        "latency_ms": 5437,
+        "model_matches": true,
+        "refusal_present": false,
+        "role": "assistant",
+        "stage": "proposal",
+        "tool_calls_present": false,
+        "transport_exit_code": 0,
+        "usage": {
+          "completion_tokens": 761,
+          "prompt_tokens": 3108,
+          "total_tokens": 3869
+        }
+      },
+      "error": null,
+      "event": "provider_diagnostic",
+      "outcome": "decoded",
+      "source": "meta",
+      "state_version": 2,
+      "attempt": 1
+    },
+    {
+      "attempt": 1,
+      "event": "app_plan",
+      "execution": false,
+      "plan": {
+        "base_revision": 1,
+        "decision": "install",
+        "reason": "New records.local app with 3 fields and one scope=all button implementing conditional move.",
+        "request_id": 2,
+        "spec": {
+          "behaviors": [
+            {
+              "event": "press",
+              "id": "moveall",
+              "label": "Move all",
+              "scope": "all",
+              "steps": [
+                {
+                  "compare": "ge",
+                  "field": "stock",
+                  "op": "if",
+                  "skip": 2,
+                  "value": "2"
+                },
+                {
+                  "compare": "",
+                  "field": "stock",
+                  "op": "calculate",
+                  "skip": 0,
+                  "value": "$stock-2"
+                },
+                {
+                  "compare": "",
+                  "field": "moved",
+                  "op": "calculate",
+                  "skip": 0,
+                  "value": "$moved+2"
+                }
+              ]
+            }
+          ],
+          "capability": "records.local",
+          "fields": [
+            {
+              "default": "",
+              "key": "name",
+              "kind": "text",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "default": "0",
+              "key": "stock",
+              "kind": "number",
+              "label": "Stock",
+              "required": true
+            },
+            {
+              "default": "0",
+              "key": "moved",
+              "kind": "number",
+              "label": "Moved",
+              "required": true
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "id": "stockmove",
+          "title": "Stock Move"
+        }
+      },
+      "source": "meta"
+    }
+  ],
+  "evolution_loop": {
+    "source": "meta",
+    "max_attempts": 3,
+    "session_limit": 8,
+    "attempts": [
+      {
+        "attempt": 1,
+        "kind": "initial",
+        "state": "accepted",
+        "exit_code": 0
+      }
+    ],
+    "state": "review",
+    "accepted_attempt": 1,
+    "session_attempts_used": 2
+  },
+  "evolution_events": [
+    {
+      "diagnostic": {
+        "choice_count": 1,
+        "finish_reason": "stop",
+        "http_status": 200,
+        "latency_ms": 3800,
+        "model_matches": true,
+        "refusal_present": false,
+        "role": "assistant",
+        "stage": "proposal",
+        "tool_calls_present": false,
+        "transport_exit_code": 0,
+        "usage": {
+          "completion_tokens": 512,
+          "prompt_tokens": 3272,
+          "total_tokens": 3784
+        }
+      },
+      "error": null,
+      "event": "provider_diagnostic",
+      "outcome": "decoded",
+      "source": "meta",
+      "state_version": 7,
+      "attempt": 1
+    },
+    {
+      "attempt": 1,
+      "event": "app_plan",
+      "execution": false,
+      "plan": {
+        "base_revision": 11,
+        "decision": "install",
+        "reason": "Updated Move all to decrement stock by 1 and increment moved by 1 when stock>=1.",
+        "request_id": 7,
+        "spec": {
+          "behaviors": [
+            {
+              "event": "press",
+              "id": "moveall",
+              "label": "Move all",
+              "scope": "all",
+              "steps": [
+                {
+                  "compare": "ge",
+                  "field": "stock",
+                  "op": "if",
+                  "skip": 2,
+                  "value": "1"
+                },
+                {
+                  "compare": "",
+                  "field": "stock",
+                  "op": "calculate",
+                  "skip": 0,
+                  "value": "$stock-1"
+                },
+                {
+                  "compare": "",
+                  "field": "moved",
+                  "op": "calculate",
+                  "skip": 0,
+                  "value": "$moved+1"
+                }
+              ]
+            }
+          ],
+          "capability": "records.local",
+          "fields": [
+            {
+              "default": "",
+              "key": "name",
+              "kind": "text",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "default": "0",
+              "key": "stock",
+              "kind": "number",
+              "label": "Stock",
+              "required": true
+            },
+            {
+              "default": "0",
+              "key": "moved",
+              "kind": "number",
+              "label": "Moved",
+              "required": true
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "id": "stockmove",
+          "title": "Stock Move"
+        }
+      },
+      "source": "meta"
+    }
+  ],
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "stockmove",
+          "title": "Stock Move",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "stock",
+              "kind": "number",
+              "required": true,
+              "label": "Stock",
+              "default": "0"
+            },
+            {
+              "key": "moved",
+              "kind": "number",
+              "required": true,
+              "label": "Moved",
+              "default": "0"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "behaviors": [
+            {
+              "id": "moveall",
+              "label": "Move all",
+              "event": "press",
+              "steps": [
+                {
+                  "op": "if",
+                  "field": "stock",
+                  "value": "1",
+                  "compare": "ge",
+                  "skip": 2
+                },
+                {
+                  "op": "calculate",
+                  "field": "stock",
+                  "value": "$stock-1",
+                  "compare": "",
+                  "skip": 0
+                },
+                {
+                  "op": "calculate",
+                  "field": "moved",
+                  "value": "$moved+1",
+                  "compare": "",
+                  "skip": 0
+                }
+              ],
+              "scope": "all"
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Item 1",
+            "1",
+            "3"
+          ],
+          [
+            "Item 2",
+            "0",
+            "1"
+          ],
+          [
+            "Item 3",
+            "4",
+            "5"
+          ],
+          [
+            "Item 4",
+            "0",
+            "4"
+          ],
+          [
+            "Item 5",
+            "2",
+            "7"
+          ],
+          [
+            "Item 6",
+            "0",
+            "7"
+          ],
+          [
+            "Item 7",
+            "5",
+            "9"
+          ],
+          [
+            "Blocked",
+            "0",
+            "10"
+          ]
+        ]
+      }
+    ]
+  }
+}

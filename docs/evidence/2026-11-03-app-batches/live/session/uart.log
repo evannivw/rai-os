@@ -1,0 +1,680 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Display ready: 480x800 guest framebuffer
+Console ready: type help for commands
+@rai1	1	ok	state=home
+@rai1	2	ok	state=home
+@rai1	3	ok	revision=1; apps=-
+@rai1	4	ok	state=home
+@rai1	5	ok	state=compose
+@rai1	6	ok	revision=1; apps=-
+@rai1	7	ok	state=compose
+@rai1	8	ok	revision=1; apps=-
+@rai1	9	ok	state=compose
+@rai1	10	ok	revision=1; apps=-
+@rai1	11	ok	state=compose
+@rai1	12	ok	revision=1; apps=-
+@rai1	13	ok	state=compose
+@rai1	14	ok	revision=1; apps=-
+@rai1	15	ok	state=compose
+@rai1	16	ok	revision=1; apps=-
+@rai1	17	ok	state=compose
+@rai1	18	ok	revision=1; apps=-
+@rai1	19	ok	state=compose
+@rai1	20	ok	revision=1; apps=-
+@rai1	21	ok	state=compose
+@rai1	22	ok	revision=1; apps=-
+@rai1	23	ok	state=compose
+@rai1	24	ok	revision=1; apps=-
+@rai1	25	ok	state=compose
+@rai1	26	ok	revision=1; apps=-
+@rai1	27	ok	state=compose
+@rai1	28	ok	revision=1; apps=-
+@rai1	29	ok	state=compose
+@rai1	30	ok	revision=1; apps=-
+@rai1	31	ok	state=compose
+@rai1	32	ok	revision=1; apps=-
+@rai1	33	ok	state=compose
+@rai1	34	ok	revision=1; apps=-
+@rai1	35	ok	state=compose
+@rai1	36	ok	revision=1; apps=-
+@rai1	37	ok	state=compose
+@rai1	38	ok	revision=1; apps=-
+@rai1	39	ok	state=compose
+@rai1	40	ok	revision=1; apps=-
+@rai1	41	ok	state=compose
+@rai1	42	ok	revision=1; apps=-
+@rai1	43	ok	state=compose
+@rai1	44	ok	revision=1; apps=-
+@rai1	45	ok	state=compose
+@rai1	46	ok	revision=1; apps=-
+@rai1	47	ok	state=compose
+@rai1	48	ok	revision=1; apps=-
+@rai1	49	ok	state=compose
+@rai1	50	ok	revision=1; apps=-
+@rai1	51	ok	state=compose
+@rai1	52	ok	revision=1; apps=-
+@rai1	53	ok	state=compose
+@rai1	54	ok	revision=1; apps=-
+@rai1	55	ok	state=compose
+@rai1	56	ok	revision=1; apps=-
+@rai1	57	ok	state=compose
+@rai1	58	ok	revision=1; apps=-
+@rai1	59	ok	state=compose
+@rai1	60	ok	revision=1; apps=-
+@rai1	61	ok	state=compose
+@rai1	62	ok	revision=1; apps=-
+@rai1	63	ok	state=compose
+@rai1	64	ok	revision=1; apps=-
+@rai1	65	ok	state=compose
+@rai1	66	ok	revision=1; apps=-
+@rai1	67	ok	state=compose
+@rai1	68	ok	revision=1; apps=-
+@rai1	69	ok	state=compose
+@rai1	70	ok	revision=1; apps=-
+@rai1	71	ok	state=compose
+@rai1	72	ok	revision=1; apps=-
+@rai1	73	ok	state=compose
+@rai1	74	ok	revision=1; apps=-
+@rai1	75	ok	state=compose
+@rai1	76	ok	revision=1; apps=-
+@rai1	77	ok	state=compose
+@rai1	78	ok	revision=1; apps=-
+@rai1	79	ok	state=compose
+@rai1	80	ok	revision=1; apps=-
+@rai1	81	ok	state=compose
+@rai1	82	ok	revision=1; apps=-
+@rai1	83	ok	state=compose
+@rai1	84	ok	revision=1; apps=-
+@rai1	85	ok	state=compose
+@rai1	86	ok	revision=1; apps=-
+@rai1	87	ok	state=compose
+@rai1	88	ok	revision=1; apps=-
+@rai1	89	ok	state=compose
+@rai1	90	ok	revision=1; apps=-
+@rai1	91	ok	state=compose
+@rai1	92	ok	revision=1; apps=-
+@rai1	93	ok	state=compose
+@rai1	94	ok	revision=1; apps=-
+@rai1	95	ok	state=compose
+@rai1	96	ok	revision=1; apps=-
+@rai1	97	ok	state=compose
+@rai1	98	ok	revision=1; apps=-
+@rai1	99	ok	state=compose
+@rai1	100	ok	revision=1; apps=-
+@rai1	101	ok	state=compose
+@rai1	102	ok	revision=1; apps=-
+@rai1	103	ok	state=compose
+@rai1	104	ok	revision=1; apps=-
+@rai1	105	ok	state=compose
+@rai1	106	ok	revision=1; apps=-
+@rai1	107	ok	state=compose
+@rai1	108	ok	revision=1; apps=-
+@rai1	109	ok	state=compose
+@rai1	110	ok	revision=1; apps=-
+@rai1	111	ok	state=compose
+@rai1	112	ok	revision=1; apps=-
+@rai1	113	ok	state=compose
+@rai1	114	ok	revision=1; apps=-
+@rai1	115	ok	state=compose
+@rai1	116	ok	revision=1; apps=-
+@rai1	117	ok	state=compose
+@rai1	118	ok	revision=1; apps=-
+@rai1	119	ok	state=compose
+@rai1	120	ok	revision=1; apps=-
+@rai1	121	ok	state=compose
+@rai1	122	ok	revision=1; apps=-
+@rai1	123	ok	state=compose
+@rai1	124	ok	revision=1; apps=-
+@rai1	125	ok	state=compose
+@rai1	126	ok	revision=1; apps=-
+@rai1	127	ok	state=compose
+@rai1	128	ok	revision=1; apps=-
+@rai1	129	ok	state=compose
+@rai1	130	ok	revision=1; apps=-
+@rai1	131	ok	state=compose
+@rai1	132	ok	revision=1; apps=-
+@rai1	133	ok	state=compose
+@rai1	134	ok	revision=1; apps=-
+@rai1	135	ok	state=compose
+@rai1	136	ok	revision=1; apps=-
+@rai1	137	ok	state=compose
+@rai1	138	ok	revision=1; apps=-
+@rai1	139	ok	state=compose
+@rai1	140	ok	revision=1; apps=-
+@rai1	141	ok	state=compose
+@rai1	142	ok	revision=1; apps=-
+@rai1	143	ok	state=compose
+@rai1	144	ok	revision=1; apps=-
+@rai1	145	ok	state=compose
+@rai1	146	ok	revision=1; apps=-
+@rai1	147	ok	state=compose
+@rai1	148	ok	revision=1; apps=-
+@rai1	149	ok	state=compose
+@rai1	150	ok	revision=1; apps=-
+@rai1	151	ok	state=compose
+@rai1	152	ok	revision=1; apps=-
+@rai1	153	ok	state=compose
+@rai1	154	ok	revision=1; apps=-
+@rai1	155	ok	state=compose
+@rai1	156	ok	revision=1; apps=-
+@rai1	157	ok	state=compose
+@rai1	158	ok	revision=1; apps=-
+@rai1	159	ok	state=compose
+@rai1	160	ok	revision=1; apps=-
+@rai1	161	ok	state=compose
+@rai1	162	ok	revision=1; apps=-
+@rai1	163	ok	state=compose
+@rai1	164	ok	revision=1; apps=-
+@rai1	165	ok	state=compose
+@rai1	166	ok	revision=1; apps=-
+@rai1	167	ok	state=compose
+@rai1	168	ok	revision=1; apps=-
+@rai1	169	ok	state=compose
+@rai1	170	ok	revision=1; apps=-
+@rai1	171	ok	state=compose
+@rai1	172	ok	revision=1; apps=-
+@rai1	173	ok	state=compose
+@rai1	174	ok	revision=1; apps=-
+@rai1	175	ok	state=compose
+@rai1	176	ok	revision=1; apps=-
+@rai1	177	ok	state=compose
+@rai1	178	ok	revision=1; apps=-
+@rai1	179	ok	state=compose
+@rai1	180	ok	revision=1; apps=-
+@rai1	181	ok	state=compose
+@rai1	182	ok	revision=1; apps=-
+@rai1	183	ok	state=compose
+@rai1	184	ok	revision=1; apps=-
+@rai1	185	ok	state=compose
+@rai1	186	ok	revision=1; apps=-
+@rai1	187	ok	state=compose
+@rai1	188	ok	revision=1; apps=-
+@rai1	189	ok	state=compose
+@rai1	190	ok	revision=1; apps=-
+@rai1	191	ok	state=compose
+@rai1	192	ok	revision=1; apps=-
+@rai1	193	ok	state=compose
+@rai1	194	ok	revision=1; apps=-
+@rai1	195	ok	state=compose
+@rai1	196	ok	revision=1; apps=-
+@rai1	197	ok	state=compose
+@rai1	198	ok	revision=1; apps=-
+@rai1	199	ok	state=compose
+@rai1	200	ok	revision=1; apps=-
+@rai1	201	ok	state=compose
+@rai1	202	ok	revision=1; apps=-
+@rai1	203	ok	state=compose
+@rai1	204	ok	revision=1; apps=-
+@rai1	205	ok	state=compose
+@rai1	206	ok	revision=1; apps=-
+@rai1	207	ok	state=compose
+@rai1	208	ok	revision=1; apps=-
+@rai1	209	ok	state=compose
+@rai1	210	ok	revision=1; apps=-
+@rai1	211	ok	state=compose
+@rai1	212	ok	revision=1; apps=-
+@rai1	213	ok	state=compose
+@rai1	214	ok	revision=1; apps=-
+@rai1	215	ok	state=compose
+@rai1	216	ok	revision=1; apps=-
+@rai1	217	ok	state=compose
+@rai1	218	ok	revision=1; apps=-
+@rai1	219	ok	state=compose
+@rai1	220	ok	revision=1; apps=-
+@rai1	221	ok	state=compose
+@rai1	222	ok	revision=1; apps=-
+@rai1	223	ok	state=compose
+@rai1	224	ok	revision=1; apps=-
+@rai1	225	ok	state=compose
+@rai1	226	ok	revision=1; apps=-
+@rai1	227	ok	state=compose
+@rai1	228	ok	revision=1; apps=-
+@rai1	229	ok	state=compose
+@rai1	230	ok	revision=1; apps=-
+@rai1	231	ok	state=compose
+@rai1	232	ok	revision=1; apps=-
+@rai1	233	ok	submit=2; revision=1; target=-; prompt=4170703a206e616d652c2073746f636b2c206d6f7665642e20427574746f6e204d6f766520616c6c3a20666f7220657665727920726f772c2069662073746f636b3e3d322c2073746f636b3d73746f636b2d3220616e64206d6f7665643d6d6f7665642b322e2044656661756c747320302e
+@rai1	234	ok	revision=1; apps=-
+@rai1	235	ok	revision=1; apps=-
+@rai1	236	ok	request=2; base=1; revision=1; state=thinking
+@rai1	237	ok	state=thinking
+@rai1	238	ok	request=2; base=1; revision=1; state=thinking
+@rai1	239	ok	request=2; base=1; revision=1; state=thinking
+@rai1	240	ok	state=thinking
+@rai1	241	ok	state=thinking
+@rai1	242	ok	state=thinking
+@rai1	243	ok	state=thinking
+@rai1	244	ok	state=thinking
+@rai1	245	ok	state=thinking
+@rai1	246	ok	state=thinking
+@rai1	247	ok	state=thinking
+@rai1	248	ok	state=thinking
+@rai1	249	ok	state=thinking
+@rai1	250	ok	state=review
+@rai1	251	ok	revision=1; apps=-
+@rai1	252	ok	state=review
+@rai1	253	ok	state=behavior_review
+@rai1	254	ok	revision=1; apps=-
+@rai1	255	ok	state=behavior_review
+@rai1	256	ok	revision=1; apps=-
+@rai1	257	ok	state=form
+@rai1	258	ok	revision=2; apps=stockmove:1:0:53746f636b204d6f7665
+@rai1	259	ok	state=form
+@rai1	260	ok	revision=2; apps=stockmove:1:0:53746f636b204d6f7665
+@rai1	261	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	262	ok	id=stockmove; version=1; count=0; rows=; states=
+@rai1	263	ok	state=form
+@rai1	264	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	265	ok	state=form
+@rai1	266	ok	state=form
+@rai1	267	ok	state=form
+@rai1	268	ok	state=records
+@rai1	269	ok	revision=3; apps=stockmove:1:1:53746f636b204d6f7665
+@rai1	270	ok	state=records
+@rai1	271	ok	revision=3; apps=stockmove:1:1:53746f636b204d6f7665
+@rai1	272	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	273	ok	id=stockmove; version=1; count=1; rows=4974656d2031,34,30; states=
+@rai1	274	ok	state=records
+@rai1	275	ok	state=form
+@rai1	276	ok	revision=3; apps=stockmove:1:1:53746f636b204d6f7665
+@rai1	277	ok	state=form
+@rai1	278	ok	state=form
+@rai1	279	ok	state=form
+@rai1	280	ok	state=records
+@rai1	281	ok	revision=4; apps=stockmove:1:2:53746f636b204d6f7665
+@rai1	282	ok	state=records
+@rai1	283	ok	revision=4; apps=stockmove:1:2:53746f636b204d6f7665
+@rai1	284	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	285	ok	id=stockmove; version=1; count=2; rows=4974656d2031,34,30|4974656d2032,30,31; states=,
+@rai1	286	ok	state=records
+@rai1	287	ok	state=form
+@rai1	288	ok	revision=4; apps=stockmove:1:2:53746f636b204d6f7665
+@rai1	289	ok	state=form
+@rai1	290	ok	state=form
+@rai1	291	ok	state=form
+@rai1	292	ok	state=records
+@rai1	293	ok	revision=5; apps=stockmove:1:3:53746f636b204d6f7665
+@rai1	294	ok	state=records
+@rai1	295	ok	revision=5; apps=stockmove:1:3:53746f636b204d6f7665
+@rai1	296	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	297	ok	id=stockmove; version=1; count=3; rows=4974656d2031,34,30|4974656d2032,30,31|4974656d2033,37,32; states=,,
+@rai1	298	ok	state=records
+@rai1	299	ok	state=form
+@rai1	300	ok	revision=5; apps=stockmove:1:3:53746f636b204d6f7665
+@rai1	301	ok	state=form
+@rai1	302	ok	state=form
+@rai1	303	ok	state=form
+@rai1	304	ok	state=records
+@rai1	305	ok	revision=6; apps=stockmove:1:4:53746f636b204d6f7665
+@rai1	306	ok	state=records
+@rai1	307	ok	revision=6; apps=stockmove:1:4:53746f636b204d6f7665
+@rai1	308	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	309	ok	id=stockmove; version=1; count=4; rows=4974656d2031,34,30|4974656d2032,30,31|4974656d2033,37,32|4974656d2034,31,33; states=,,,
+@rai1	310	ok	state=records
+@rai1	311	ok	state=form
+@rai1	312	ok	revision=6; apps=stockmove:1:4:53746f636b204d6f7665
+@rai1	313	ok	state=form
+@rai1	314	ok	state=form
+@rai1	315	ok	state=form
+@rai1	316	ok	state=records
+@rai1	317	ok	revision=7; apps=stockmove:1:5:53746f636b204d6f7665
+@rai1	318	ok	state=records
+@rai1	319	ok	revision=7; apps=stockmove:1:5:53746f636b204d6f7665
+@rai1	320	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	321	ok	id=stockmove; version=1; count=5; rows=4974656d2031,34,30|4974656d2032,30,31|4974656d2033,37,32|4974656d2034,31,33|4974656d2035,35,34; states=,,,,
+@rai1	322	ok	state=records
+@rai1	323	ok	state=form
+@rai1	324	ok	revision=7; apps=stockmove:1:5:53746f636b204d6f7665
+@rai1	325	ok	state=form
+@rai1	326	ok	state=form
+@rai1	327	ok	state=form
+@rai1	328	ok	state=records
+@rai1	329	ok	revision=8; apps=stockmove:1:6:53746f636b204d6f7665
+@rai1	330	ok	state=records
+@rai1	331	ok	revision=8; apps=stockmove:1:6:53746f636b204d6f7665
+@rai1	332	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	333	ok	id=stockmove; version=1; count=6; rows=4974656d2031,34,30|4974656d2032,30,31|4974656d2033,37,32|4974656d2034,31,33|4974656d2035,35,34|4974656d2036,32,35; states=,,,,,
+@rai1	334	ok	state=records
+@rai1	335	ok	state=form
+@rai1	336	ok	revision=8; apps=stockmove:1:6:53746f636b204d6f7665
+@rai1	337	ok	state=form
+@rai1	338	ok	state=form
+@rai1	339	ok	state=form
+@rai1	340	ok	state=records
+@rai1	341	ok	revision=9; apps=stockmove:1:7:53746f636b204d6f7665
+@rai1	342	ok	state=records
+@rai1	343	ok	revision=9; apps=stockmove:1:7:53746f636b204d6f7665
+@rai1	344	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	345	ok	id=stockmove; version=1; count=7; rows=4974656d2031,34,30|4974656d2032,30,31|4974656d2033,37,32|4974656d2034,31,33|4974656d2035,35,34|4974656d2036,32,35|4974656d2037,38,36; states=,,,,,,
+@rai1	346	ok	state=records
+@rai1	347	ok	state=form
+@rai1	348	ok	revision=9; apps=stockmove:1:7:53746f636b204d6f7665
+@rai1	349	ok	state=form
+@rai1	350	ok	state=form
+@rai1	351	ok	state=form
+@rai1	352	ok	state=records
+@rai1	353	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	354	ok	state=records
+@rai1	355	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	356	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	357	ok	id=stockmove; version=1; count=8; rows=4974656d2031,34,30|4974656d2032,30,31|4974656d2033,37,32|4974656d2034,31,33|4974656d2035,35,34|4974656d2036,32,35|4974656d2037,38,36|426c6f636b6564,33,37; states=,,,,,,,
+@rai1	358	ok	state=records
+@rai1	359	ok	id=stockmove; version=1; count=8; rows=4974656d2031,34,30|4974656d2032,30,31|4974656d2033,37,32|4974656d2034,31,33|4974656d2035,35,34|4974656d2036,32,35|4974656d2037,38,36|426c6f636b6564,33,37; states=,,,,,,,
+@rai1	360	ok	state=form
+@rai1	361	ok	state=records
+@rai1	362	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	363	ok	state=form
+@rai1	364	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	365	ok	state=behaviors
+@rai1	366	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	367	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	368	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	369	ok	id=stockmove; version=1; count=8; rows=4974656d2031,34,30|4974656d2032,30,31|4974656d2033,37,32|4974656d2034,31,33|4974656d2035,35,34|4974656d2036,32,35|4974656d2037,38,36|426c6f636b6564,33,37; states=,,,,,,,
+@rai1	370	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	371	err	behavior_preview_required
+@rai1	372	ok	state=behavior_preview
+@rai1	373	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	374	ok	state=behavior_preview
+@rai1	375	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	376	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	377	ok	id=stockmove; version=1; count=8; rows=4974656d2031,34,30|4974656d2032,30,31|4974656d2033,37,32|4974656d2034,31,33|4974656d2035,35,34|4974656d2036,32,35|4974656d2037,38,36|426c6f636b6564,33,37; states=,,,,,,,
+@rai1	378	ok	state=behavior_preview
+@rai1	379	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	380	ok	state=behavior_preview
+@rai1	381	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	382	ok	state=behavior_preview
+@rai1	383	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	384	ok	state=behavior_preview
+@rai1	385	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	386	ok	state=behavior_preview
+@rai1	387	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	388	ok	state=behavior_preview
+@rai1	389	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	390	ok	state=behavior_preview
+@rai1	391	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	392	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	393	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	394	ok	id=stockmove; version=1; count=8; rows=4974656d2031,34,30|4974656d2032,30,31|4974656d2033,37,32|4974656d2034,31,33|4974656d2035,35,34|4974656d2036,32,35|4974656d2037,38,36|426c6f636b6564,33,37; states=,,,,,,,
+@rai1	395	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	396	ok	state=home
+@rai1	397	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	398	err	behavior_preview_required
+@rai1	399	ok	state=form
+@rai1	400	ok	state=records
+@rai1	401	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	402	ok	state=form
+@rai1	403	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	404	ok	state=behaviors
+@rai1	405	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	406	ok	state=behavior_preview
+@rai1	407	ok	revision=10; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	408	ok	state=behavior_preview
+@rai1	409	ok	state=behaviors
+@rai1	410	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	411	ok	state=behaviors
+@rai1	412	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	413	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	414	ok	id=stockmove; version=1; count=8; rows=4974656d2031,32,32|4974656d2032,30,31|4974656d2033,35,34|4974656d2034,31,33|4974656d2035,33,36|4974656d2036,30,37|4974656d2037,36,38|426c6f636b6564,31,39; states=,,,,,,,
+@rai1	415	ok	state=behaviors
+@rai1	416	ok	id=stockmove; version=1; count=8; rows=4974656d2031,32,32|4974656d2032,30,31|4974656d2033,35,34|4974656d2034,31,33|4974656d2035,33,36|4974656d2036,30,37|4974656d2037,36,38|426c6f636b6564,31,39; states=,,,,,,,
+@rai1	417	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	418	ok	state=table
+@rai1	419	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	420	ok	state=form
+@rai1	421	ok	state=compose
+@rai1	422	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	423	ok	state=compose
+@rai1	424	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	425	ok	state=compose
+@rai1	426	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	427	ok	state=compose
+@rai1	428	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	429	ok	state=compose
+@rai1	430	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	431	ok	state=compose
+@rai1	432	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	433	ok	state=compose
+@rai1	434	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	435	ok	state=compose
+@rai1	436	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	437	ok	state=compose
+@rai1	438	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	439	ok	state=compose
+@rai1	440	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	441	ok	state=compose
+@rai1	442	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	443	ok	state=compose
+@rai1	444	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	445	ok	state=compose
+@rai1	446	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	447	ok	state=compose
+@rai1	448	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	449	ok	state=compose
+@rai1	450	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	451	ok	state=compose
+@rai1	452	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	453	ok	state=compose
+@rai1	454	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	455	ok	state=compose
+@rai1	456	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	457	ok	state=compose
+@rai1	458	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	459	ok	state=compose
+@rai1	460	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	461	ok	state=compose
+@rai1	462	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	463	ok	state=compose
+@rai1	464	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	465	ok	state=compose
+@rai1	466	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	467	ok	state=compose
+@rai1	468	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	469	ok	state=compose
+@rai1	470	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	471	ok	state=compose
+@rai1	472	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	473	ok	state=compose
+@rai1	474	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	475	ok	state=compose
+@rai1	476	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	477	ok	state=compose
+@rai1	478	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	479	ok	state=compose
+@rai1	480	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	481	ok	state=compose
+@rai1	482	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	483	ok	state=compose
+@rai1	484	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	485	ok	state=compose
+@rai1	486	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	487	ok	state=compose
+@rai1	488	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	489	ok	state=compose
+@rai1	490	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	491	ok	state=compose
+@rai1	492	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	493	ok	state=compose
+@rai1	494	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	495	ok	state=compose
+@rai1	496	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	497	ok	state=compose
+@rai1	498	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	499	ok	state=compose
+@rai1	500	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	501	ok	state=compose
+@rai1	502	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	503	ok	state=compose
+@rai1	504	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	505	ok	state=compose
+@rai1	506	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	507	ok	state=compose
+@rai1	508	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	509	ok	state=compose
+@rai1	510	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	511	ok	state=compose
+@rai1	512	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	513	ok	state=compose
+@rai1	514	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	515	ok	state=compose
+@rai1	516	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	517	ok	state=compose
+@rai1	518	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	519	ok	state=compose
+@rai1	520	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	521	ok	state=compose
+@rai1	522	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	523	ok	state=compose
+@rai1	524	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	525	ok	state=compose
+@rai1	526	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	527	ok	state=compose
+@rai1	528	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	529	ok	state=compose
+@rai1	530	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	531	ok	state=compose
+@rai1	532	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	533	ok	state=compose
+@rai1	534	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	535	ok	state=compose
+@rai1	536	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	537	ok	state=compose
+@rai1	538	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	539	ok	state=compose
+@rai1	540	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	541	ok	state=compose
+@rai1	542	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	543	ok	state=compose
+@rai1	544	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	545	ok	state=compose
+@rai1	546	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	547	ok	state=compose
+@rai1	548	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	549	ok	state=compose
+@rai1	550	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	551	ok	state=compose
+@rai1	552	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	553	ok	state=compose
+@rai1	554	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	555	ok	state=compose
+@rai1	556	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	557	ok	state=compose
+@rai1	558	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	559	ok	state=compose
+@rai1	560	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	561	ok	state=compose
+@rai1	562	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	563	ok	state=compose
+@rai1	564	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	565	ok	state=compose
+@rai1	566	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	567	ok	state=compose
+@rai1	568	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	569	ok	state=compose
+@rai1	570	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	571	ok	state=compose
+@rai1	572	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	573	ok	state=compose
+@rai1	574	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	575	ok	state=compose
+@rai1	576	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	577	ok	state=compose
+@rai1	578	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	579	ok	state=compose
+@rai1	580	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	581	ok	state=compose
+@rai1	582	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	583	ok	state=compose
+@rai1	584	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	585	ok	state=compose
+@rai1	586	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	587	ok	state=compose
+@rai1	588	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	589	ok	state=compose
+@rai1	590	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	591	ok	state=compose
+@rai1	592	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	593	ok	state=compose
+@rai1	594	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	595	ok	state=compose
+@rai1	596	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	597	ok	state=compose
+@rai1	598	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	599	ok	state=compose
+@rai1	600	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	601	ok	state=compose
+@rai1	602	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	603	ok	state=compose
+@rai1	604	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	605	ok	state=compose
+@rai1	606	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	607	ok	state=compose
+@rai1	608	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	609	ok	state=compose
+@rai1	610	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	611	ok	state=compose
+@rai1	612	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	613	ok	state=compose
+@rai1	614	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	615	ok	state=compose
+@rai1	616	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	617	ok	state=compose
+@rai1	618	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	619	ok	submit=7; revision=11; target=stockmove; prompt=4368616e6765204d6f766520616c6c3a20666f72206561636820726f772c2069662073746f636b3e3d312c2073746f636b3d73746f636b2d3120616e64206d6f7665643d6d6f7665642b312e204b656570206669656c647320616e6420646174612e
+@rai1	620	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	621	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^32^ge^2/calculate^stock^2473746f636b2d32^^0/calculate^moved^246d6f7665642b32^^0~all
+@rai1	622	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	623	ok	request=7; base=11; revision=11; state=thinking
+@rai1	624	ok	state=thinking
+@rai1	625	ok	request=7; base=11; revision=11; state=thinking
+@rai1	626	ok	request=7; base=11; revision=11; state=thinking
+@rai1	627	ok	state=thinking
+@rai1	628	ok	state=thinking
+@rai1	629	ok	state=thinking
+@rai1	630	ok	state=thinking
+@rai1	631	ok	state=thinking
+@rai1	632	ok	state=thinking
+@rai1	633	ok	state=thinking
+@rai1	634	ok	state=thinking
+@rai1	635	ok	state=thinking
+@rai1	636	ok	state=thinking
+@rai1	637	ok	state=review
+@rai1	638	ok	id=stockmove; version=1; count=8; rows=4974656d2031,32,32|4974656d2032,30,31|4974656d2033,35,34|4974656d2034,31,33|4974656d2035,33,36|4974656d2036,30,37|4974656d2037,36,38|426c6f636b6564,31,39; states=,,,,,,,
+@rai1	639	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	640	ok	state=review
+@rai1	641	ok	state=behavior_review
+@rai1	642	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	643	ok	state=behavior_review
+@rai1	644	ok	revision=11; apps=stockmove:1:8:53746f636b204d6f7665
+@rai1	645	ok	state=form
+@rai1	646	ok	revision=12; apps=stockmove:2:8:53746f636b204d6f7665
+@rai1	647	ok	state=form
+@rai1	648	ok	revision=12; apps=stockmove:2:8:53746f636b204d6f7665
+@rai1	649	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^31^ge^2/calculate^stock^2473746f636b2d31^^0/calculate^moved^246d6f7665642b31^^0~all
+@rai1	650	ok	id=stockmove; version=2; count=8; rows=4974656d2031,32,32|4974656d2032,30,31|4974656d2033,35,34|4974656d2034,31,33|4974656d2035,33,36|4974656d2036,30,37|4974656d2037,36,38|426c6f636b6564,31,39; states=,,,,,,,
+@rai1	651	ok	state=form
+@rai1	652	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^31^ge^2/calculate^stock^2473746f636b2d31^^0/calculate^moved^246d6f7665642b31^^0~all
+@rai1	653	ok	id=stockmove; version=2; count=8; rows=4974656d2031,32,32|4974656d2032,30,31|4974656d2033,35,34|4974656d2034,31,33|4974656d2035,33,36|4974656d2036,30,37|4974656d2037,36,38|426c6f636b6564,31,39; states=,,,,,,,
+@rai1	654	ok	state=form
+@rai1	655	ok	state=records
+@rai1	656	ok	revision=12; apps=stockmove:2:8:53746f636b204d6f7665
+@rai1	657	ok	state=form
+@rai1	658	ok	revision=12; apps=stockmove:2:8:53746f636b204d6f7665
+@rai1	659	ok	state=behaviors
+@rai1	660	ok	revision=12; apps=stockmove:2:8:53746f636b204d6f7665
+@rai1	661	ok	state=behavior_preview
+@rai1	662	ok	revision=12; apps=stockmove:2:8:53746f636b204d6f7665
+@rai1	663	ok	state=behavior_preview
+@rai1	664	ok	revision=12; apps=stockmove:2:8:53746f636b204d6f7665
+@rai1	665	ok	state=behaviors
+@rai1	666	ok	revision=13; apps=stockmove:2:8:53746f636b204d6f7665
+@rai1	667	ok	state=behaviors
+@rai1	668	ok	revision=13; apps=stockmove:2:8:53746f636b204d6f7665
+@rai1	669	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^31^ge^2/calculate^stock^2473746f636b2d31^^0/calculate^moved^246d6f7665642b31^^0~all
+@rai1	670	ok	id=stockmove; version=2; count=8; rows=4974656d2031,31,33|4974656d2032,30,31|4974656d2033,34,35|4974656d2034,30,34|4974656d2035,32,37|4974656d2036,30,37|4974656d2037,35,39|426c6f636b6564,30,3130; states=,,,,,,,
+@rai1	671	ok	state=behaviors
+@rai1	672	ok	id=stockmove; version=2; count=8; rows=4974656d2031,31,33|4974656d2032,30,31|4974656d2033,34,35|4974656d2034,30,34|4974656d2035,32,37|4974656d2036,30,37|4974656d2037,35,39|426c6f636b6564,30,3130; states=,,,,,,,
+@rai1	673	ok	revision=13; apps=stockmove:2:8:53746f636b204d6f7665
+@rai1	674	ok	revision=13; apps=stockmove:2:8:53746f636b204d6f7665
+@rai1	675	ok	id=stockmove; title=53746f636b204d6f7665; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,stock~number~1~53746f636b~30~,moved~number~1~4d6f766564~30~; initial=; actions=; behaviors=moveall~4d6f766520616c6c~press~if^stock^31^ge^2/calculate^stock^2473746f636b2d31^^0/calculate^moved^246d6f7665642b31^^0~all
+@rai1	676	ok	id=stockmove; version=2; count=8; rows=4974656d2031,31,33|4974656d2032,30,31|4974656d2033,34,35|4974656d2034,30,34|4974656d2035,32,37|4974656d2036,30,37|4974656d2037,35,39|426c6f636b6564,30,3130; states=,,,,,,,
+@rai1	677	ok	revision=13; apps=stockmove:2:8:53746f636b204d6f7665
