@@ -1,0 +1,426 @@
+{
+  "verified": true,
+  "source": "offline",
+  "maximum_live_calls": 0,
+  "retries": 0,
+  "source_commit": null,
+  "source_worktree_dirty": null,
+  "kernel_sha256": "e7beb3db96eb365fe17758cf65ae4bb0da32e4d6abf2e676f025f3fd73aeef7c",
+  "development_example": true,
+  "checks": [
+    "Preview has no side effects; direct run, canceled/mismatched confirmation and stale preview rejected; native confirmation commits exactly once; sequential calculations match independent oracle",
+    "Both forward-branch outcomes, checkbox toggle and text set checked; step-two failure after a staged write rolls back every value and revision",
+    "Unknown field in skipped branch, derived-field write, invalid skip and malformed boolean rejected before installation",
+    "Reviewed behavior update preserves records; late arithmetic overflow rolls back; unrelated text/boolean app runs same executor without touching first app; terminal workflow rejects behavior",
+    "Fresh QEMU restores exact behavior definitions, every field and workflow state without another model call"
+  ],
+  "plan": {
+    "request_id": 3,
+    "base_revision": 1,
+    "decision": "install",
+    "reason": "Verifier proposal.",
+    "spec": {
+      "id": "movement",
+      "title": "Movement",
+      "capability": "records.local",
+      "filter_key": "",
+      "filter_label": "",
+      "fields": [
+        {
+          "key": "name",
+          "label": "Name",
+          "kind": "text",
+          "required": true,
+          "default": ""
+        },
+        {
+          "key": "stock",
+          "label": "Stock",
+          "kind": "number",
+          "required": true,
+          "default": "0"
+        },
+        {
+          "key": "moved",
+          "label": "Moved",
+          "kind": "number",
+          "required": true,
+          "default": "0"
+        },
+        {
+          "key": "flag",
+          "label": "Flag",
+          "kind": "check",
+          "required": true,
+          "default": "false"
+        },
+        {
+          "key": "status",
+          "label": "Status",
+          "kind": "text",
+          "required": true,
+          "default": "ready"
+        },
+        {
+          "key": "total",
+          "label": "Total",
+          "kind": "calculated",
+          "required": true,
+          "default": "",
+          "formula": "$stock+$moved"
+        }
+      ],
+      "behaviors": [
+        {
+          "id": "move",
+          "label": "Move one",
+          "event": "press",
+          "steps": [
+            {
+              "op": "require",
+              "field": "stock",
+              "value": "1",
+              "compare": "ge",
+              "skip": 0
+            },
+            {
+              "op": "calculate",
+              "field": "stock",
+              "value": "$stock-1",
+              "compare": "",
+              "skip": 0
+            },
+            {
+              "op": "calculate",
+              "field": "moved",
+              "value": "$moved+1",
+              "compare": "",
+              "skip": 0
+            },
+            {
+              "op": "toggle",
+              "field": "flag",
+              "value": "",
+              "compare": "",
+              "skip": 0
+            },
+            {
+              "op": "if",
+              "field": "stock",
+              "value": "2",
+              "compare": "lt",
+              "skip": 1
+            },
+            {
+              "op": "set",
+              "field": "status",
+              "value": "low",
+              "compare": "",
+              "skip": 0
+            }
+          ]
+        },
+        {
+          "id": "reject",
+          "label": "Check rollback",
+          "event": "press",
+          "steps": [
+            {
+              "op": "calculate",
+              "field": "moved",
+              "value": "$moved+7",
+              "compare": "",
+              "skip": 0
+            },
+            {
+              "op": "require",
+              "field": "stock",
+              "value": "100",
+              "compare": "ge",
+              "skip": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "movement",
+          "title": "Movement",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "stock",
+              "kind": "number",
+              "required": true,
+              "label": "Stock",
+              "default": "0"
+            },
+            {
+              "key": "moved",
+              "kind": "number",
+              "required": true,
+              "label": "Moved",
+              "default": "0"
+            },
+            {
+              "key": "flag",
+              "kind": "check",
+              "required": true,
+              "label": "Flag",
+              "default": "false"
+            },
+            {
+              "key": "status",
+              "kind": "text",
+              "required": true,
+              "label": "Status",
+              "default": "ready"
+            },
+            {
+              "key": "total",
+              "kind": "calculated",
+              "required": true,
+              "label": "Total",
+              "default": "",
+              "formula": "$stock+$moved"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "behaviors": [
+            {
+              "id": "move",
+              "label": "Move one",
+              "event": "press",
+              "steps": [
+                {
+                  "op": "require",
+                  "field": "stock",
+                  "value": "1",
+                  "compare": "ge",
+                  "skip": 0
+                },
+                {
+                  "op": "calculate",
+                  "field": "stock",
+                  "value": "$stock-1",
+                  "compare": "",
+                  "skip": 0
+                },
+                {
+                  "op": "calculate",
+                  "field": "moved",
+                  "value": "$moved+1",
+                  "compare": "",
+                  "skip": 0
+                },
+                {
+                  "op": "toggle",
+                  "field": "flag",
+                  "value": "",
+                  "compare": "",
+                  "skip": 0
+                },
+                {
+                  "op": "if",
+                  "field": "stock",
+                  "value": "2",
+                  "compare": "lt",
+                  "skip": 1
+                },
+                {
+                  "op": "set",
+                  "field": "status",
+                  "value": "low",
+                  "compare": "",
+                  "skip": 0
+                }
+              ]
+            },
+            {
+              "id": "reject",
+              "label": "Check rollback",
+              "event": "press",
+              "steps": [
+                {
+                  "op": "set",
+                  "field": "status",
+                  "value": "staging",
+                  "compare": "",
+                  "skip": 0
+                },
+                {
+                  "op": "calculate",
+                  "field": "moved",
+                  "value": "2147483647+1",
+                  "compare": "",
+                  "skip": 0
+                }
+              ]
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Widget",
+            "1",
+            "2",
+            "false",
+            "low",
+            "3"
+          ],
+          [
+            "Empty",
+            "0",
+            "0",
+            "false",
+            "ready",
+            "0"
+          ],
+          [
+            "Other",
+            "6",
+            "5",
+            "true",
+            "ready",
+            "11"
+          ]
+        ]
+      },
+      {
+        "spec": {
+          "id": "reviewer",
+          "title": "Review desk",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "points",
+              "kind": "number",
+              "required": true,
+              "label": "Points",
+              "default": "5"
+            },
+            {
+              "key": "accepted",
+              "kind": "check",
+              "required": true,
+              "label": "Accepted",
+              "default": "false"
+            },
+            {
+              "key": "label",
+              "kind": "text",
+              "required": true,
+              "label": "Label",
+              "default": "draft"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "workflow": {
+            "initial": "open",
+            "actions": [
+              {
+                "id": "close",
+                "label": "Close review",
+                "from": "open",
+                "to": "closed",
+                "guard_field": "",
+                "guard_op": "none",
+                "guard_value": 0
+              }
+            ]
+          },
+          "behaviors": [
+            {
+              "id": "accept",
+              "label": "Accept",
+              "event": "press",
+              "steps": [
+                {
+                  "op": "require",
+                  "field": "label",
+                  "value": "draft",
+                  "compare": "eq",
+                  "skip": 0
+                },
+                {
+                  "op": "require",
+                  "field": "points",
+                  "value": "5",
+                  "compare": "ge",
+                  "skip": 0
+                },
+                {
+                  "op": "set",
+                  "field": "accepted",
+                  "value": "true",
+                  "compare": "",
+                  "skip": 0
+                },
+                {
+                  "op": "set",
+                  "field": "label",
+                  "value": "accepted",
+                  "compare": "",
+                  "skip": 0
+                }
+              ]
+            },
+            {
+              "id": "revise",
+              "label": "Revise",
+              "event": "press",
+              "steps": [
+                {
+                  "op": "toggle",
+                  "field": "accepted",
+                  "value": "",
+                  "compare": "",
+                  "skip": 0
+                },
+                {
+                  "op": "set",
+                  "field": "label",
+                  "value": "draft",
+                  "compare": "",
+                  "skip": 0
+                }
+              ]
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Document",
+            "5",
+            "false",
+            "draft"
+          ]
+        ],
+        "states": [
+          "closed"
+        ]
+      }
+    ]
+  }
+}

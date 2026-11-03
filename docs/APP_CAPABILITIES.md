@@ -22,6 +22,7 @@ unavailable. An app chooses one capability, and updates cannot change it.
 | Capability | What an app can do | Execution |
 | --- | --- | --- |
 | Software display brightness | Apply 20..100%; explicit permission, user action and reset | Guest Rust framebuffer |
+| [Composed behavior](APP_BEHAVIORS.md) | User buttons combine typed writes, arithmetic, conditions and forward branches; preview and atomic one-row commit | Guest Rust |
 | [Processes](APP_WORKFLOWS.md) | Per-record states, up to four guarded actions, final-state editing lock | Guest Rust |
 | Typed fields | Text, signed integer, checkbox; labels, required values and defaults | Guest Rust |
 | [Calculated fields](APP_FORMULAS.md) | Per-app integer expressions over earlier numeric fields | Guest Rust, checked i32 |
@@ -82,7 +83,10 @@ maximum i32 values without overflow and checks optional blanks and filtering.
 
 ## Next capabilities, in order
 
-Calculated fields are implemented; see [APP_FORMULAS.md](APP_FORMULAS.md).
+Calculated fields and [composed button programs](APP_BEHAVIORS.md) are implemented.
+The latter extends the language, not a list of built-in business apps. Two buttons
+with up to six steps each operate on one saved row; they do not grant cross-row,
+background or hardware capabilities.
 
 1. **Guest-private app files:** scoped file handles and quotas, building on the
    existing guest file store. User-mediated CSV exchange is already available;

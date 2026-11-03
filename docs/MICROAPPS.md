@@ -63,6 +63,7 @@ cannot implement unavailable operations; inspect the proposed fields carefully.
 | Form | Tab/Down/Up: field. Type/Backspace: edit. Space: checkbox. Enter: save. F3: records. |
 | Records | Up/Down/Tab: select. Enter: edit. N: new. Space: toggle configured status. F4: pending/all. |
 | Form or records | F2: evolve this app, preserving records. |
+| Saved row/list | F10 or do: preview a composed button; confirm to apply all changes. See [APP_BEHAVIORS.md](APP_BEHAVIORS.md). |
 | Any screen | Esc or F1: home and invalidate outstanding response. |
 
 On keyboards that reserve function keys, use Fn with the key. Clipboard paste
@@ -80,7 +81,7 @@ selects editable fields. F7 imports and F8 exports; see [APP_EXCHANGE.md](APP_EX
   28, field label up to 22. Required fields are checked on complete-record save.
 - One optional filter references a checkbox and shows false records (pending).
   Its label is at most 18 bytes. The first field is the record-list headline;
-  open a row to see/edit all fields. No sort/loops/deletion yet. [Calculated fields](APP_FORMULAS.md) support bounded integer expressions.
+  open a row to see/edit all fields. No sort/unbounded loops/deletion yet. [Composable buttons](APP_BEHAVIORS.md) add typed writes, conditions and forward branches on one saved row. [Calculated fields](APP_FORMULAS.md) support bounded integer expressions.
 - Choose `records.local` or the separate [display.brightness](DISPLAY_CONTROL.md)
   control capability. No file, location, network, timer, native code or arbitrary
   memory capability. Schemas cannot name another app as a data source.

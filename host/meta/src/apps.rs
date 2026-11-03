@@ -31,6 +31,23 @@ pub struct Workflow {
 }
 #[derive(Deserialize, Serialize, Clone)]
 #[serde(deny_unknown_fields)]
+pub struct Step {
+    pub op: String,
+    pub field: String,
+    pub value: String,
+    pub compare: String,
+    pub skip: usize,
+}
+#[derive(Deserialize, Serialize, Clone)]
+#[serde(deny_unknown_fields)]
+pub struct Button {
+    pub id: String,
+    pub label: String,
+    pub event: String,
+    pub steps: Vec<Step>,
+}
+#[derive(Deserialize, Serialize, Clone)]
+#[serde(deny_unknown_fields)]
 pub struct Spec {
     pub id: String,
     pub title: String,
@@ -40,6 +57,8 @@ pub struct Spec {
     pub filter_label: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub workflow: Option<Workflow>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub behaviors: Vec<Button>,
 }
 impl Spec {
     pub fn checked(&self) -> Result<microapp::Spec, &'static str> {
@@ -64,6 +83,19 @@ impl Spec {
                     a.guard_value,
                 )?)?;
             }
+        }
+        for button in &self.behaviors {
+            let mut b = microapp::Button::new(&button.id, &button.label, &button.event)?;
+            for step in &button.steps {
+                b.add(microapp::Step::new(
+                    &step.op,
+                    &step.field,
+                    &step.value,
+                    &step.compare,
+                    step.skip,
+                )?)?;
+            }
+            s.behaviors.add(b)?;
         }
         s.check()?;
         Ok(s)
@@ -155,15 +187,23 @@ pub fn capabilities() -> serde_json::Value {
         .expect("committed runtime catalog")
 }
 pub fn run(path: &std::path::Path, replay: Option<&std::path::Path>) -> Result<(), String> {
-    let r = request(&crate::config::bounded_file(path, 8192)?)?;
+    let r = request(&crate::config::bounded_file(path, 16384)?)?;
     let p = if let Some(path) = replay {
-        parse(&crate::config::bounded_file(path, 8192)?)?
+        parse(&crate::config::bounded_file(path, 16384)?)?
     } else {
         let key = crate::config::load()?;
         crate::decision_source::report(crate::provider::apps(&key, &r), u64::from(r.request_id))?
             .proposal
     };
-    validate(&p, &r)?;
+    if let Err(code) = validate(&p, &r) {
+        // Stable machine-readable feedback, without rows, credentials or an
+        // automatic retry. A future explicit repair loop can consume this.
+        println!(
+            "{}",
+            serde_json::json!({"event":"app_validation_failed","request_id":r.request_id,"code":code,"execution":false})
+        );
+        return Err(code.into());
+    }
     println!(
         "{}",
         serde_json::json!({"event":"app_plan","source":if replay.is_some(){"replay"}else{"meta"},"plan":p,"execution":false})
@@ -173,6 +213,101 @@ pub fn run(path: &std::path::Path, replay: Option<&std::path::Path>) -> Result<(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn behavior_spec() -> serde_json::Value {
+        serde_json::json!({
+            "id":"dynamic","title":"Dynamic tool","capability":"records.local",
+            "fields":[
+                {"key":"name","label":"Name","kind":"text","required":true,"default":"Item"},
+                {"key":"amount","label":"Amount","kind":"number","required":true,"default":"0"},
+                {"key":"done","label":"Done","kind":"check","required":true,"default":"false"},
+                {"key":"doubled","label":"Doubled","kind":"calculated","required":true,"default":"","formula":"$amount*2"}
+            ],
+            "filter_key":"","filter_label":"",
+            "behaviors":[{"id":"change","label":"Change","event":"press","steps":[
+                {"op":"if","field":"amount","value":"0","compare":"ge","skip":1},
+                {"op":"calculate","field":"amount","value":"$amount+1","compare":"","skip":0},
+                {"op":"toggle","field":"done","value":"","compare":"","skip":0}
+            ]}]
+        })
+    }
+    #[test]
+    fn behavior_json_uses_shared_validation_and_strict_fields() {
+        let value = behavior_spec();
+        let spec: Spec = serde_json::from_value(value.clone()).unwrap();
+        spec.checked().unwrap();
+        assert_eq!(serde_json::to_value(&spec).unwrap(), value);
+        let invalid = [
+            ("op", serde_json::json!("shell")),
+            ("field", serde_json::json!("missing")),
+            ("compare", serde_json::json!("unknown")),
+            ("skip", serde_json::json!(6)),
+        ];
+        for (field, replacement) in invalid {
+            let mut bad = value.clone();
+            bad["behaviors"][0]["steps"][0][field] = replacement;
+            assert!(
+                serde_json::from_value::<Spec>(bad)
+                    .unwrap()
+                    .checked()
+                    .is_err()
+            );
+        }
+        let mut bad = value.clone();
+        // Even a potentially skipped branch cannot write a calculated field.
+        bad["behaviors"][0]["steps"][1]["field"] = serde_json::json!("doubled");
+        assert!(
+            serde_json::from_value::<Spec>(bad)
+                .unwrap()
+                .checked()
+                .is_err()
+        );
+        let mut bad = value.clone();
+        bad["behaviors"][0]["steps"][0]["field"] = serde_json::json!("name");
+        assert!(
+            serde_json::from_value::<Spec>(bad)
+                .unwrap()
+                .checked()
+                .is_err()
+        );
+        let mut bad = value.clone();
+        bad["behaviors"][0]["steps"][0]["code"] = serde_json::json!("arbitrary");
+        assert!(serde_json::from_value::<Spec>(bad).is_err());
+        let mut bad = value.clone();
+        bad["behaviors"] = serde_json::Value::Null;
+        assert!(serde_json::from_value::<Spec>(bad).is_err());
+        let mut old = value.clone();
+        old.as_object_mut().unwrap().remove("behaviors");
+        let spec: Spec = serde_json::from_value(old.clone()).unwrap();
+        spec.checked().unwrap();
+        assert!(spec.behaviors.is_empty());
+        assert_eq!(serde_json::to_value(spec).unwrap(), old);
+    }
+    #[test]
+    fn behavior_updates_are_reviewable_without_changing_existing_field_identity() {
+        let value = behavior_spec();
+        let original: Spec = serde_json::from_value(value.clone()).unwrap();
+        let r = Request {
+            request_id: 2,
+            base_revision: 7,
+            goal: "Change the calculation".into(),
+            target: Some(original),
+            app_ids: vec!["dynamic".into()],
+            record_count: 2,
+        };
+        let mut revised = value;
+        revised["behaviors"][0]["steps"][1]["value"] = serde_json::json!("$amount+2");
+        let mut p = Plan {
+            request_id: 2,
+            base_revision: 7,
+            decision: "install".into(),
+            spec: Some(serde_json::from_value(revised).unwrap()),
+            reason: "A reviewed replacement behavior.".into(),
+        };
+        validate(&p, &r).unwrap();
+        p.spec.as_mut().unwrap().fields[1].key = "different".into();
+        assert!(validate(&p, &r).is_err());
+    }
     #[test]
     fn display_schema_is_bounded_and_updates_cannot_escalate() {
         let old:Spec=serde_json::from_value(serde_json::json!({"id":"screen","title":"Screen","capability":"display.brightness","fields":[{"key":"level","label":"Brightness %","kind":"number","required":true,"default":"50"}],"filter_key":"","filter_label":""})).unwrap();

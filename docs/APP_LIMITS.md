@@ -10,9 +10,9 @@ kinds of control. A model proposal never grants itself additional authority.
 
 | Layer | Available | Missing / consequence |
 | --- | --- | --- |
-| App language | Typed forms, integer formulas, tables/totals, checkbox filtering, guarded manual workflows | No general algorithm, custom layout, relations, timers, embedded AI or arbitrary code |
+| App language | Typed forms, integer formulas, tables/totals, guarded workflows, composed conditional button programs | No unbounded algorithms, custom layout, relations, timers, embedded AI or native code |
 | Data | 3 apps; 6 fields; 8 rows per app; 32 printable ASCII bytes per cell | No deletion, pagination, scalable database, Unicode input or decimal type |
-| Process | Up to 4 actions; numeric guards; local per-row state; terminal edit lock | No cross-record transaction, action history, background execution or editable process graph |
+| Process | Up to 4 workflow actions; 2 behavior buttons with 6 steps each; typed conditions and atomic one-row writes | No cross-record transaction, action history, background execution or editable process graph |
 | System effects | User-applied software framebuffer brightness | No generated-app camera, GPS, network, notifications, arbitrary file or physical backlight access |
 | Durability | Host checkpoint; reviewed CSV import/export | No guest disk driver/database; CSV omits process states |
 | Execution | Generic Rust interpreter and native QEMU framebuffer | App runtime/UI still share EL1; existing EL0 worker isolation is not wired into apps |

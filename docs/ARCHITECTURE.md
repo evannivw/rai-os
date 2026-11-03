@@ -500,3 +500,33 @@ No new unsafe, device operation or process isolation was added. The console
 initializer was separated to release its large temporary stack frame before the
 retained event loop handles actions. The linker stack size remains 64 KiB.
 APP_WORKFLOWS.md and KERNEL_DECISION.md document the limits and tradeoffs.
+
+
+## November 3: composable button programs
+
+The app schema now includes up to two six-step programs triggered by explicit
+user buttons. microapp_behavior.rs is a pure typed interpreter: set, calculate,
+toggle, require and forward-only if. It has no I/O, pointers or ambient authority.
+Steps read/write one candidate row and refresh derived fields; all references and
+branches are checked before installation. Preview returns a candidate without
+mutating runtime state. Confirmation re-evaluates against the same current
+revision and commits one row once; any error leaves row/revision unchanged.
+Terminal workflow state remains enforced. Programs may change through reviewed
+compatible schema updates; existing workflow definitions remain immutable.
+
+The model receives the versioned catalog and strict JSON schema; the host checks
+proposals using the shared domain, then the guest validates actual state. App
+controller/UI stages every behavior review and shows before/after values. The
+host only transports definitions, input and checkpoints. This adds no background
+events, external side effects, cross-row transactions or isolated process. The
+interpreter/controller still share EL1 with the kernel. Kernel boot/MMU/interrupt/
+IPC mechanisms are the existing foundation, not a claim of a finished OS.
+
+Increasing schema size exposed a nested debug constructor stack issue even though
+the first QEMU behavior run passed: retained console plus constructor and caller
+used 75904 known frame bytes versus the 65536-byte stack. Explicit const evaluation
+of file/workspace/app initial values reduces the constructor frame from 35808 to
+3520 and the known startup sum to 43616. No new unsafe, stack-size or MMU change.
+Known behavior action frames sum to 58464 before parser/indirect callees; this is
+not a whole-kernel worst-case bound. Real debug/release regressions remain essential.
+See APP_BEHAVIORS.md and the evidence/2026-11-03-app-behaviors stack report.

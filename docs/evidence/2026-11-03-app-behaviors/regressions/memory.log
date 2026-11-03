@@ -1,0 +1,33 @@
+
+running 3 tests
+test tests::rejects_invalid_frees_without_changing_ownership ... ok
+test tests::validates_ranges_and_partial_bitmap_capacity ... ok
+test tests::exhaustion_uniqueness_and_reuse_cross_bitmap_words ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.00s
+PASS (debug): 15 structured + 3 shell exchanges; ELF reservations, 244 available physical pages, exhaustion, zeroing/reuse, invalid requests, task/echo recovery.
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Console ready: type help for commands
+@rai1	1	ok	page_size=4096; total_pages=256; free_pages=244; used_pages=12; pool_start=0x00000000400e4000; pool_end=0x00000000401e4000
+@rai1	2	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	3	ok	page_size=4096; total_pages=256; free_pages=244; used_pages=12; pool_start=0x00000000400e4000; pool_end=0x00000000401e4000
+@rai1	4	ok	checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+@rai1	5	ok	page_size=4096; total_pages=256; free_pages=244; used_pages=12; pool_start=0x00000000400e4000; pool_end=0x00000000401e4000
+@rai1	6	err	bad_args
+@rai1	7	err	bad_args
+@rai1	8	err	bad_args
+@rai1	9	err	bad_args
+@rai1	10	err	unknown_operation
+@rai1	11	ok	page_size=4096; total_pages=256; free_pages=244; used_pages=12; pool_start=0x00000000400e4000; pool_end=0x00000000401e4000
+memory.info
+page_size=4096; total_pages=256; free_pages=244; used_pages=12; pool_start=0x00000000400e4000; pool_end=0x00000000401e4000
+memory.check
+checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+memory.check extra
+error: unknown_command
+@rai1	12	ok	task_id=1; state=running; processed=0; total=7; words=0
+@rai1	13	ok	task_id=1; state=completed; processed=7; total=7; words=2
+@rai1	14	ok	memory remains usable
+@rai1	15	ok	page_size=4096; total_pages=256; free_pages=244; used_pages=12; pool_start=0x00000000400e4000; pool_end=0x00000000401e4000

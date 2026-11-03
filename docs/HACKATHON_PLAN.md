@@ -430,3 +430,17 @@ source ownership from implemented capabilities and orders post-submission work.
 No capacity increase, new driver, native code loader or process isolation is
 claimed in this demo packaging increment. Final narrated video, public-access
 review and submission confirmation remain delivery tasks.
+
+
+## November 3: user-prioritized capability composition
+
+The user clarified that the development unit should be reusable OS/app-runtime
+capabilities, not more example business apps. APP_BEHAVIORS.md extends the language
+with typed conditional button programs, previews and atomic one-row writes. Keep
+the kernel mechanisms as the underlying foundation; the shared-EL1 interpreter
+is not a new isolated service. Verify unrelated definitions with independent
+expected outcomes, preserve the existing demo, then make at most one clean-source
+live generation call for this increment without retries. No unsupported claim
+that a model can implement unavailable drivers or arbitrary native programs.
+The new structured rejection reports prepare a future bounded correction cycle;
+that cycle and general semantic verification are not implemented here.

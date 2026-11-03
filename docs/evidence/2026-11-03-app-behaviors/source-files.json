@@ -1,0 +1,15 @@
+{
+  "src/microapp_behavior.rs": "76f665628fcc1331b98aca109710a4893a413ac1e5fb6280f62d1996a0f5d22d",
+  "src/microapp.rs": "12ece7da9e0f13a3f880da4240c8407b54b871389401b3404565958a2db9a95f",
+  "src/app_ui.rs": "3f2b4048d25e6aae3f4bdb649df1ff6de1e28f0e63bac9e0390556019bddcc90",
+  "src/console.rs": "0b798d78bd41fb7a86982862bf11e2f7538d71097eaab0cd2c039a1d119acad6",
+  "src/display/apps.rs": "bede3f2223744b4979b81a30edde8714a964574edc9896ac0aea8255d02f48aa",
+  "host/meta/src/apps.rs": "7b94b1c76418792667a681e7c5db5c0ac81993ed5857b1f6c2604d7d397ce3f9",
+  "host/meta/src/provider.rs": "6f9ac0554660b1e86b78a7ffa4b2287bea0949f7399e7bf337218230c658ce17",
+  "scripts/apps.py": "19487bdd9f0602dd72edad503b534285c5ca9c5374013b35a88f2231f9cb9d5d",
+  "scripts/app_storage.py": "120e351b6221bbd53bba57ee2ff3d204b6726fe106813a8eeaa574d17e69719c",
+  "scripts/workspace_vnc.py": "c62c866b0a97c7c3e65382cd3b469730e590c107d7d25b6d5258208e800442e4",
+  "scripts/verify_app_behaviors.py": "0ce2a4677e159c5c2fb73f905c1d57363e6884f794f7853840e4e8096e771554",
+  "scripts/portable.py": "42bd5b9c662df2eaa3d741144ed84a4c95a643de90703179b4ecbcb42050effd",
+  "fixtures/microapps/v1/runtime.json": "d99c86ede6060a2314c7303a37e1124cf7ae57a677977ae9e1e9fec239a937cf"
+}

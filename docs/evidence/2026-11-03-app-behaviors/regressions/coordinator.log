@@ -1,0 +1,6 @@
+   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.53s
+   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)
+    Finished `release` profile [optimized] target(s) in 1.13s
+PASS guest coordinator normal (debug): 140 requests; retained EL0 state, admission, IPC and recovery
+PASS guest coordinator normal (release): 140 requests; retained EL0 state, admission, IPC and recovery

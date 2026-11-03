@@ -2723,3 +2723,50 @@ is a storyboard preview, not an uninterrupted interaction recording or submitted
 final video. Final narration, recording review, accessible video, eligibility
 clarification and submission confirmation remain outstanding. Evidence is under
 evidence/2026-11-03-demo-kit. Internal Nov 4 18:00 Guatemala target remains.
+
+
+## 2026-11-03 — Compose behavior from reusable app capabilities
+
+The user prioritized general OS/app-runtime abilities over additional example
+apps. Added a bounded typed program language: set, calculate, toggle, require
+and forward-only if; two user buttons with up to six steps each. Programs act
+on one saved row. Numeric expressions can reference any current numeric/derived
+field; derived values refresh after each write. Every branch is checked at schema
+admission, even if current data would skip it. A preview evaluates a staged copy
+without changing records/revision; matching confirmation rechecks revision and
+commits exactly one final row. Any failure preserves every original value.
+Terminal workflow locks remain enforced, and reviewed compatible schema updates
+may replace behavior definitions while retaining field/data migration rules.
+
+The guest shows every program during installation and before/after values before
+execution. Structured runtime failures identify the failing step; host proposal
+validation emits a machine-readable rejection code. These are deterministic
+checks, not general verification of natural-language intent or an automatic model
+repair loop. Meta receives runtime catalog v6 plus a strict program schema, with
+no record rows sent. Proposal transport and checkpoint recovery preserve full
+program definitions. Older apps/saved sessions remain compatible.
+
+No new kernel mechanism or unsafe was added. Growing definitions exposed a debug
+startup stack overlap despite the first QEMU run passing: known retained plus
+constructor/caller frames totaled 75904 bytes against the fixed 65536-byte stack.
+Explicit const construction removes aggregate runtime temporaries, reducing the
+constructor from 35808 to 3520 bytes and known startup sum to 43616. Known action
+frames total 58464 before parser/indirect callees; no universal stack bound is
+claimed. Kernel boot/MMU/IRQ/IPC foundations remain, and apps still share EL1.
+
+Verified 83 host/shared-domain tests, kernel Clippy with/without display, host
+Clippy and formatting. Final real QEMU debug/release checks cover three-row
+independent arithmetic, both branch outcomes, text/check changes, preview without
+mutation, cancellation/stale/direct-run rejection, late condition/overflow
+rollback, invalid skipped instructions, reviewed updates, a separate app, terminal
+workflow locks and exact reboot recovery. Existing app/RFB, storage corruption/
+recovery, brightness and saved-demo checks passed. Console/protocol passed 37
+checks per profile; physical-memory checks and normal EL0 coordinator 140 requests
+per profile passed. Fault-injection variants were not rerun. Linux ARM64 Docker
+with network disabled passed new behaviors and the previous saved demo.
+
+Evidence is in evidence/2026-11-03-app-behaviors. These checks used disclosed
+verifier schemas and made no Meta calls. Next: one clean-source live generation
+request, no retry/fallback, before reporting actual model integration for the
+new language. General native programs, events, cross-row data and hardware
+capabilities remain separate extensions; this is composition, not a complete OS.

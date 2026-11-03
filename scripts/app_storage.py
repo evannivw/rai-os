@@ -79,6 +79,7 @@ def restore(g,state,deliver,schema,records):
         deliver(g,dict(request_id=int(reply['submit']),base_revision=int(reply['revision']),decision='install',spec=app['spec'],reason='Restore a previously saved app.'))
         g.request('app.key','13')
         if app['spec'].get('workflow'):g.request('app.key','13')
+        for _ in app['spec'].get('behaviors',[]):g.request('app.key','13')
         for rowno,row in enumerate(app['rows']):
             if rowno:g.request('app.key','110')
             for index,value in enumerate(row):

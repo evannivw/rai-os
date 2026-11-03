@@ -121,6 +121,9 @@ pub fn render(s: &mut Display, u: &Controller) {
         Mode::Thinking => "Creating...",
         Mode::Review => "Ready to install.",
         Mode::WorkflowReview => "Review the process.",
+        Mode::BehaviorReview => "Review behavior.",
+        Mode::Behaviors => "Do more.",
+        Mode::BehaviorPreview => "Review changes.",
         Mode::Workflow => a.map_or("Process", |a| a.spec.title.text()),
         Mode::Form | Mode::Records | Mode::Table => a.map_or("Your app", |a| a.spec.title.text()),
         Mode::Notice => "One more thing.",
@@ -282,6 +285,8 @@ pub fn render(s: &mut Display, u: &Controller) {
                 s,
                 if u.pending.workflow.enabled() {
                     "Review process >"
+                } else if !u.pending.behaviors.is_empty() {
+                    "Review behavior >"
                 } else {
                     "+ Install app"
                 },
@@ -596,7 +601,14 @@ pub fn render(s: &mut Display, u: &Controller) {
                         590,
                         3,
                     );
-                    action(s, "+ Install app");
+                    action(
+                        s,
+                        if spec.behaviors.is_empty() {
+                            "+ Install app"
+                        } else {
+                            "Review behavior >"
+                        },
+                    );
                 } else {
                     let message = match u.message.text() {
                         "workflow_guard_failed" => "Condition not met. Update the record first.",
@@ -609,6 +621,113 @@ pub fn render(s: &mut Display, u: &Controller) {
                     wrap(s, message, 590, 3);
                     action(s, "Run selected action");
                 }
+            }
+        }
+        Mode::BehaviorReview => {
+            if let Some(button) = u.pending.behaviors.buttons().get(u.focus) {
+                text(s, "Button", 42, 147, QUIET);
+                number(s, (u.focus + 1) as i64, 102, 147);
+                text(s, "of", 125, 147, QUIET);
+                number(s, u.pending.behaviors.buttons().len() as i64, 150, 147);
+                center(s, button.label.text(), 174, Size::Body, WHITE);
+                for (i, step) in button.steps().iter().enumerate() {
+                    let y = 210 + i * 64;
+                    frame(s, 24, y, 432, 60, QUIET);
+                    number(s, (i + 1) as i64, 38, y as i32 + 5);
+                    text(s, step.op.text(), 65, y as i32 + 5, WHITE);
+                    text(s, step.field.text(), 163, y as i32 + 5, LIME);
+                    text(s, step.compare.text(), 275, y as i32 + 5, WHITE);
+                    if step.skip != 0 {
+                        text(s, "skip", 335, y as i32 + 5, QUIET);
+                        number(s, step.skip as i64, 383, y as i32 + 5);
+                    }
+                    let value = step.value.text();
+                    let split = value.len().min(48);
+                    text(s, &value[..split], 42, y as i32 + 23, LIME);
+                    text(s, &value[split..], 42, y as i32 + 40, LIME);
+                }
+                wrap(
+                    s,
+                    "One saved record. In order. False if skips steps. Any failure saves nothing.",
+                    613,
+                    3,
+                );
+                action(
+                    s,
+                    if u.focus + 1 < u.pending.behaviors.buttons().len() {
+                        "Review next button >"
+                    } else {
+                        "+ Install app"
+                    },
+                );
+            }
+        }
+        Mode::Behaviors => {
+            if let Some(a) = a {
+                if let Some(values) = a.row(u.row) {
+                    center(s, values[0].text(), 194, Size::Body, WHITE);
+                }
+                for (i, button) in a.spec.behaviors.buttons().iter().enumerate() {
+                    let y = 238 + i * 94;
+                    frame(s, 24, y, 432, 84, if i == u.focus { LIME } else { QUIET });
+                    text(s, button.label.text(), 42, y as i32 + 13, WHITE);
+                    number(s, button.steps().len() as i64, 42, y as i32 + 44);
+                    text(
+                        s,
+                        "steps / preview before applying",
+                        65,
+                        y as i32 + 44,
+                        QUIET,
+                    );
+                }
+                wrap(
+                    s,
+                    if u.message.text().is_empty() {
+                        "Choose a button. Changes are checked together before they are saved."
+                    } else {
+                        u.message.text()
+                    },
+                    490,
+                    4,
+                );
+                if let Some(error) = u.behavior_error {
+                    text(s, "Failed step:", 42, 590, QUIET);
+                    number(s, i64::from(error.step), 160, 590);
+                    text(s, "Nothing saved.", 42, 614, WHITE);
+                }
+                action(s, "Preview changes >");
+            }
+        }
+        Mode::BehaviorPreview => {
+            if let Some(a) = a
+                && let Some(before) = a.row(u.row)
+            {
+                text(s, u.behavior_label(), 42, 194, LIME);
+                for (i, field) in a.spec.fields().iter().enumerate() {
+                    let y = 224 + i as i32 * 64;
+                    text(s, field.label.text(), 42, y, WHITE);
+                    text(s, "was", 42, y + 19, QUIET);
+                    text(s, before[i].text(), 84, y + 19, QUIET);
+                    text(s, "now", 42, y + 36, LIME);
+                    text(
+                        s,
+                        u.draft[i].text(),
+                        84,
+                        y + 36,
+                        if before[i] == u.draft[i] { QUIET } else { LIME },
+                    );
+                }
+                wrap(
+                    s,
+                    if u.message.text().is_empty() {
+                        "No changes saved yet. Confirm together, or leave this screen to cancel."
+                    } else {
+                        u.message.text()
+                    },
+                    617,
+                    3,
+                );
+                action(s, "Apply all changes");
             }
         }
         Mode::Transfer => {
@@ -649,37 +768,53 @@ pub fn render(s: &mut Display, u: &Controller) {
     }
     if matches!(
         u.mode,
-        Mode::Form | Mode::Records | Mode::Table | Mode::Workflow
+        Mode::Form
+            | Mode::Records
+            | Mode::Table
+            | Mode::Workflow
+            | Mode::Behaviors
+            | Mode::BehaviorPreview
     ) && a.is_some_and(|a| a.spec.capability() == Capability::Records)
     {
         t::rect(s, 24, 146, 432, 36, 0x060908);
-        text(
-            s,
-            if u.mode == Mode::Records {
-                "[records]"
-            } else {
-                "records"
-            },
-            30,
-            154,
-            QUIET,
-        );
-        text(
-            s,
-            if u.mode == Mode::Table {
-                "[table]"
-            } else {
-                "table"
-            },
-            125,
-            154,
-            QUIET,
-        );
-        if a.is_some_and(|a| a.spec.workflow.enabled()) {
-            text(s, "actions", 210, 154, LIME);
+        if a.is_some_and(|a| !a.spec.behaviors.is_empty()) {
+            text(s, "records", 30, 154, QUIET);
+            text(s, "table", 110, 154, QUIET);
+            if a.is_some_and(|a| a.spec.workflow.enabled()) {
+                text(s, "flow", 180, 154, LIME);
+            }
+            text(s, "do", 252, 154, LIME);
+            text(s, "import", 309, 154, LIME);
+            text(s, "export", 390, 154, LIME);
+        } else {
+            text(
+                s,
+                if u.mode == Mode::Records {
+                    "[records]"
+                } else {
+                    "records"
+                },
+                30,
+                154,
+                QUIET,
+            );
+            text(
+                s,
+                if u.mode == Mode::Table {
+                    "[table]"
+                } else {
+                    "table"
+                },
+                125,
+                154,
+                QUIET,
+            );
+            if a.is_some_and(|a| a.spec.workflow.enabled()) {
+                text(s, "actions", 210, 154, LIME);
+            }
+            text(s, "import", 300, 154, LIME);
+            text(s, "export", 390, 154, LIME);
         }
-        text(s, "import", 300, 154, LIME);
-        text(s, "export", 390, 154, LIME);
     }
     if !u.storage.text().is_empty() {
         center(s, u.storage.text(), 672, Size::Small, QUIET);

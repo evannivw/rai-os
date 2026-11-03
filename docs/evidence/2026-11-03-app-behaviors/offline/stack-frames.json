@@ -1,0 +1,69 @@
+{
+  "profile": "dev opt-level=1 guest-display, Rust 1.90.0",
+  "kernel_stack_bytes": 65536,
+  "frames": {
+    "console3run": {
+      "before": 39904,
+      "after": 39904
+    },
+    "console14create_console": {
+      "before": 35808,
+      "after": 3520
+    },
+    "Console11app_command": {
+      "before": 4032,
+      "after": 4032
+    },
+    "Controller7execute": {
+      "before": 7888,
+      "after": 7888
+    },
+    "Controller3key": {
+      "before": 928,
+      "after": 928
+    },
+    "Controller12run_behavior": {
+      "before": 736,
+      "after": 736
+    },
+    "Runtime16preview_behavior": {
+      "before": 80,
+      "after": 80
+    },
+    "Button7preview": {
+      "before": 2112,
+      "after": 2112
+    },
+    "Button5check": {
+      "before": 1232,
+      "after": 1232
+    },
+    "Spec11materialize": {
+      "before": 1984,
+      "after": 1984
+    },
+    "Spec7program": {
+      "before": 608,
+      "after": 608
+    },
+    "Step7program": {
+      "before": 592,
+      "after": 592
+    }
+  },
+  "kernel_main_frame": 192,
+  "before_known_startup_sum": 75904,
+  "after_known_startup_sum": 43616,
+  "known_action_frame_sum_before_parser_or_indirect_callees": 58464,
+  "notes": [
+    "CFA frame measurements from emitted AArch64 assembly, not a whole-program worst-case stack proof.",
+    "Known action sum excludes recursive expression parser, indirect/stdlib callees, and per-path differences; Runtime preview may tail-call Button preview, so summing both is conservative.",
+    "The formula parser bounds nesting; separate parser frames are 64 bytes in this build.",
+    "Constant-evaluated app/workspace/file defaults remove constructor aggregate temporaries without new unsafe, linker changes, or stack enlargement."
+  ],
+  "source_files": {
+    "src/console.rs": "0b798d78bd41fb7a86982862bf11e2f7538d71097eaab0cd2c039a1d119acad6",
+    "src/microapp.rs": "12ece7da9e0f13a3f880da4240c8407b54b871389401b3404565958a2db9a95f",
+    "src/microapp_behavior.rs": "76f665628fcc1331b98aca109710a4893a413ac1e5fb6280f62d1996a0f5d22d"
+  }
+}

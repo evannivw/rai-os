@@ -1,6 +1,7 @@
 //! Guest UI controller for a bounded interpreter. No model or transport dependency.
 use crate::microapp::{
-    Action, Brightness, Capability, Field, ImportBatch, Kind, Runtime, Spec, Text, Values, Workflow,
+    Action, BehaviorError, Brightness, Button, Capability, Field, ImportBatch, Kind, Runtime, Spec,
+    Step, Text, Values, Workflow,
 };
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Mode {
@@ -17,6 +18,9 @@ pub enum Mode {
     ImportReview,
     Workflow,
     WorkflowReview,
+    Behaviors,
+    BehaviorReview,
+    BehaviorPreview,
 }
 pub struct Controller {
     pub active: bool,
@@ -38,6 +42,9 @@ pub struct Controller {
     pub message: Text<160>,
     pub pending: Spec,
     pub import: ImportBatch,
+    pub behavior_error: Option<BehaviorError>,
+    behavior_base: u32,
+    behavior_id: Text<12>,
     importing: bool,
     restoring: bool,
     restore_started: bool,
@@ -143,6 +150,9 @@ impl Controller {
             message: Text::EMPTY,
             pending: Spec::EMPTY,
             import: ImportBatch::EMPTY,
+            behavior_error: None,
+            behavior_base: 0,
+            behavior_id: Text::EMPTY,
             importing: false,
             restoring: false,
             restore_started: false,
@@ -154,6 +164,19 @@ impl Controller {
     #[cfg(feature = "guest-display")]
     pub fn target(&self) -> Option<usize> {
         self.target
+    }
+    #[cfg(feature = "guest-display")]
+    pub fn behavior_label(&self) -> &str {
+        self.runtime
+            .app(self.selected)
+            .and_then(|a| {
+                a.spec
+                    .behaviors
+                    .buttons()
+                    .iter()
+                    .find(|b| b.id == self.behavior_id)
+            })
+            .map_or("Button", |b| b.label.text())
     }
     fn state(&self) -> &'static str {
         match self.mode {
@@ -170,6 +193,9 @@ impl Controller {
             Mode::ImportReview => "import_review",
             Mode::Workflow => "workflow",
             Mode::WorkflowReview => "workflow_review",
+            Mode::Behaviors => "behaviors",
+            Mode::BehaviorReview => "behavior_review",
+            Mode::BehaviorPreview => "behavior_preview",
         }
     }
     pub fn app_matches(&self, slot: usize) -> bool {
@@ -225,9 +251,33 @@ impl Controller {
         }
         if matches!(
             self.mode,
-            Mode::Form | Mode::Records | Mode::Table | Mode::Workflow
+            Mode::Form
+                | Mode::Records
+                | Mode::Table
+                | Mode::Workflow
+                | Mode::Behaviors
+                | Mode::BehaviorPreview
         ) && (146..183).contains(&y)
         {
+            if self
+                .runtime
+                .app(self.selected)
+                .is_some_and(|a| !a.spec.behaviors.is_empty())
+            {
+                return self.key(if x < 100 {
+                    1003
+                } else if x < 170 {
+                    1007
+                } else if x < 235 {
+                    1013
+                } else if x < 295 {
+                    1014
+                } else if x < 370 {
+                    1011
+                } else {
+                    1012
+                });
+            }
             return self.key(if x < 110 {
                 1003
             } else if x < 190 {
@@ -239,6 +289,22 @@ impl Controller {
             } else {
                 1012
             });
+        }
+        if self.mode == Mode::Behaviors && (238..426).contains(&y) {
+            let index = (y - 238) / 94;
+            if index
+                < self
+                    .runtime
+                    .app(self.selected)
+                    .ok_or("app_not_found")?
+                    .spec
+                    .behaviors
+                    .buttons()
+                    .len()
+            {
+                self.focus = index;
+                return self.key(13);
+            }
         }
         if self.mode == Mode::Workflow && (238..574).contains(&y) {
             let index = (y - 238) / 84;
@@ -395,11 +461,17 @@ impl Controller {
                     | Mode::Transfer
                     | Mode::ImportReview
                     | Mode::WorkflowReview
+                    | Mode::BehaviorReview
             )
         {
             let t = if matches!(
                 self.mode,
-                Mode::Form | Mode::Records | Mode::Table | Mode::Workflow
+                Mode::Form
+                    | Mode::Records
+                    | Mode::Table
+                    | Mode::Workflow
+                    | Mode::Behaviors
+                    | Mode::BehaviorPreview
             ) {
                 Some(self.selected)
             } else {
@@ -410,13 +482,33 @@ impl Controller {
         }
         if matches!(
             self.mode,
-            Mode::Form | Mode::Records | Mode::Table | Mode::Workflow
+            Mode::Form
+                | Mode::Records
+                | Mode::Table
+                | Mode::Workflow
+                | Mode::Behaviors
+                | Mode::BehaviorPreview
         ) && self
             .runtime
             .app(self.selected)
             .is_some_and(|a| a.spec.capability() == Capability::Records)
         {
             match key {
+                1014 => {
+                    let a = self.runtime.app(self.selected).unwrap();
+                    if a.spec.behaviors.is_empty() {
+                        return Err("behavior_unavailable");
+                    }
+                    if self.mode == Mode::Form {
+                        self.row = self.editing.ok_or("behavior_saved_row_required")?;
+                    }
+                    a.row(self.row).ok_or("app_row_not_found")?;
+                    self.mode = Mode::Behaviors;
+                    self.focus = 0;
+                    self.message = Text::EMPTY;
+                    self.behavior_error = None;
+                    return Ok(Reply::State("behaviors"));
+                }
                 1013 => {
                     let a = self.runtime.app(self.selected).unwrap();
                     if !a.spec.workflow.enabled() {
@@ -534,13 +626,19 @@ impl Controller {
                 self.mode = Mode::WorkflowReview;
             }
             Mode::Review | Mode::WorkflowReview if key == 13 => {
-                self.selected = self
-                    .runtime
-                    .install(&self.pending, self.base, self.target)?;
-                self.filtered = false;
-                self.row = 0;
-                self.form(None)?;
-                self.message = Text::new("App installed.")?;
+                if self.pending.behaviors.is_empty() {
+                    self.install_pending()?;
+                } else {
+                    self.focus = 0;
+                    self.mode = Mode::BehaviorReview;
+                }
+            }
+            Mode::BehaviorReview if key == 13 => {
+                if self.focus + 1 < self.pending.behaviors.buttons().len() {
+                    self.focus += 1;
+                } else {
+                    self.install_pending()?;
+                }
             }
             Mode::Form => {
                 let a = self.runtime.app(self.selected).ok_or("app_not_found")?;
@@ -663,10 +761,81 @@ impl Controller {
                     _ => {}
                 }
             }
+            Mode::Behaviors => {
+                let a = self.runtime.app(self.selected).ok_or("app_not_found")?;
+                match key {
+                    9 | 1006 => self.focus = (self.focus + 1) % a.spec.behaviors.buttons().len(),
+                    1005 => self.focus = self.focus.saturating_sub(1),
+                    13 => {
+                        let id = a.spec.behaviors.buttons()[self.focus].id;
+                        self.preview_behavior(id.text(), self.runtime.revision())?;
+                    }
+                    _ => {}
+                }
+            }
+            Mode::BehaviorPreview if key == 13 => {
+                let id = self.behavior_id;
+                self.run_behavior(id.text(), self.behavior_base)?;
+            }
             Mode::Notice if key == 13 => self.mode = Mode::Home,
             _ => {}
         }
         Ok(Reply::State(self.state()))
+    }
+    fn install_pending(&mut self) -> Result<(), &'static str> {
+        self.selected = self
+            .runtime
+            .install(&self.pending, self.base, self.target)?;
+        self.filtered = false;
+        self.row = 0;
+        self.form(None)?;
+        self.message = Text::new("App installed.")?;
+        Ok(())
+    }
+    fn preview_behavior(&mut self, id: &str, base: u32) -> Result<(), &'static str> {
+        self.behavior_error = None;
+        if self.mode != Mode::Behaviors {
+            self.behavior_error = Some(BehaviorError::admission("behavior_view_required"));
+            return Err("behavior_view_required");
+        }
+        match self
+            .runtime
+            .preview_behavior(self.selected, self.row, id, base)
+        {
+            Ok(values) => {
+                self.draft = values;
+                self.behavior_id = Text::new(id)?;
+                self.behavior_base = base;
+                self.mode = Mode::BehaviorPreview;
+                self.message = Text::EMPTY;
+                Ok(())
+            }
+            Err(error) => {
+                self.behavior_error = Some(error);
+                Err(error.code)
+            }
+        }
+    }
+    fn run_behavior(&mut self, id: &str, base: u32) -> Result<(), &'static str> {
+        self.behavior_error = None;
+        if self.mode != Mode::BehaviorPreview
+            || self.behavior_id.text() != id
+            || self.behavior_base != base
+        {
+            self.behavior_error = Some(BehaviorError::admission("behavior_preview_required"));
+            return Err("behavior_preview_required");
+        }
+        match self.runtime.run_behavior(self.selected, self.row, id, base) {
+            Ok(()) => {
+                self.mode = Mode::Behaviors;
+                self.message = Text::new("All changes applied locally.")?;
+                Ok(())
+            }
+            Err(error) => {
+                self.behavior_error = Some(error);
+                Err(error.code)
+            }
+        }
     }
     fn check_request(&self, id: &str) -> Result<(), &'static str> {
         if id.parse::<u32>().ok() != Some(self.request) || self.mode != Mode::Thinking {
@@ -750,6 +919,35 @@ impl Controller {
                     return Err("app_restore_denied");
                 }
                 self.restoring = false;
+            }
+            "app.button" => {
+                let [request, id, label, event] = parts(arg)?;
+                self.check_request(request)?;
+                self.pending
+                    .behaviors
+                    .add(Button::new(id, decode::<22>(label)?.text(), event)?)?;
+            }
+            "app.step" => {
+                let [request, button, op, field, value, compare, skip] = parts(arg)?;
+                self.check_request(request)?;
+                self.pending.behaviors.add_step(
+                    button,
+                    Step::new(
+                        op,
+                        field,
+                        decode::<64>(value)?.text(),
+                        compare,
+                        skip.parse().map_err(|_| "bad_args")?,
+                    )?,
+                )?;
+            }
+            "app.behavior.preview" => {
+                let [base, id] = parts(arg)?;
+                self.preview_behavior(id, base.parse().map_err(|_| "bad_args")?)?;
+            }
+            "app.behavior.run" => {
+                let [base, id] = parts(arg)?;
+                self.run_behavior(id, base.parse().map_err(|_| "bad_args")?)?;
             }
             "app.workflow.run" => {
                 let [base, id] = parts(arg)?;
@@ -922,6 +1120,20 @@ impl core::fmt::Display for DisplayState<'_> {
             "available={}; brightness={}; mode=software_rgb",
             self.0.display_available,
             self.0.brightness.percent()
+        )
+    }
+}
+
+/// Read-only diagnostic for a failed composed operation; no app data or authority.
+pub struct BehaviorStatus<'a>(pub &'a Controller);
+impl core::fmt::Display for BehaviorStatus<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        let error = self.0.behavior_error;
+        write!(
+            f,
+            "step={}; error={}",
+            error.map_or(0, |e| e.step),
+            error.map_or("", |e| e.code)
         )
     }
 }

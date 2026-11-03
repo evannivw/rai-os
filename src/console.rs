@@ -246,6 +246,14 @@ impl Console<'_> {
         {
             self.apps.display_available = self.display.is_some();
         }
+        if name == "app.behavior.status" {
+            if arg.is_some() {
+                response(id, "err", "bad_args");
+            } else {
+                response(id, "ok", crate::app_ui::BehaviorStatus(&self.apps));
+            }
+            return;
+        }
         if name == "app.display" {
             if arg.is_some() {
                 response(id, "err", "bad_args");
@@ -357,7 +365,9 @@ impl Console<'_> {
 }
 
 // Keep large initialization temporaries off the permanently retained command-loop
-// frame. The fixed 64 KiB kernel stack must also accommodate command handlers.
+// frame. Const blocks below evaluate large fixed defaults at compile time instead
+// of constructing additional temporary aggregates on the runtime stack.
+// The fixed 64 KiB kernel stack must also accommodate command handlers.
 #[inline(never)]
 fn create_console<'a>(
     clock: &'a Clock,
@@ -386,9 +396,9 @@ fn create_console<'a>(
     Console {
         clock,
         task: Task::new(),
-        files: crate::ramfs::Store::new(),
-        workspace: crate::workspace::Workspace::new(),
-        apps: crate::app_ui::Controller::new(),
+        files: const { crate::ramfs::Store::new() },
+        workspace: const { crate::workspace::Workspace::new() },
+        apps: const { crate::app_ui::Controller::new() },
         memory,
         mmu,
         timer,

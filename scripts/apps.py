@@ -27,6 +27,16 @@ def schema(g,app_id):
             key,label,frm,to,guard,op,value=item.split('~')
             actions.append(dict(id=key,label=bytes.fromhex(label).decode('ascii'),**{'from':frm},to=to,guard_field=guard,guard_op=op,guard_value=int(value)))
         result['workflow']=dict(initial=row['initial'],actions=actions)
+    if row.get('behaviors'):
+        buttons=[]
+        for item in row['behaviors'].split(','):
+            key,label,event,encoded=item.split('~')
+            steps=[]
+            for entry in encoded.split('/'):
+                op,field,value,compare,skip=entry.split('^')
+                steps.append(dict(op=op,field=field,value=bytes.fromhex(value).decode('ascii'),compare=compare,skip=int(skip)))
+            buttons.append(dict(id=key,label=bytes.fromhex(label).decode('ascii'),event=event,steps=steps))
+        result['behaviors']=buttons
     return result
 
 def states(g,app_id):
@@ -49,6 +59,10 @@ def deliver(g,p):
     if s.get('workflow'):
         flow=s['workflow'];g.request('app.flow',f"{rid}:{flow['initial']}")
         for a in flow['actions']:g.request('app.action',f"{rid}:{a['id']}:{a['label'].encode().hex()}:{a['from']}:{a['to']}:{a['guard_field']}:{a['guard_op']}:{a['guard_value']}")
+    for button in s.get('behaviors',[]):
+        g.request('app.button',f"{rid}:{button['id']}:{button['label'].encode().hex()}:{button['event']}")
+        for step in button['steps']:
+            g.request('app.step',f"{rid}:{button['id']}:{step['op']}:{step['field']}:{step['value'].encode().hex()}:{step['compare']}:{step['skip']}")
     g.request('app.filter',f"{rid}:{s['filter_key']}:{s['filter_label'].encode().hex()}")
     g.request('app.ready',f"{rid}:{p['reason']}")
 

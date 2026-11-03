@@ -1,9 +1,12 @@
 //! Bounded declarative records runtime. No I/O, bytecode, pointers or ambient capabilities.
 use core::fmt::{self, Write};
+#[path = "microapp_behavior.rs"]
+mod behavior;
 #[path = "microapp_formula.rs"]
 mod formula;
 #[path = "microapp_workflow.rs"]
 mod workflow;
+pub use behavior::{BehaviorError, Behaviors, Button, Step};
 pub use workflow::{Action, Workflow};
 pub const APPS: usize = 3;
 pub const FIELDS: usize = 6;
@@ -185,6 +188,7 @@ pub struct Spec {
     pub filter_key: Text<12>,
     pub filter_label: Text<18>,
     pub workflow: Workflow,
+    pub behaviors: Behaviors,
 }
 impl Spec {
     pub const EMPTY: Self = Self {
@@ -196,6 +200,7 @@ impl Spec {
         filter_key: Text::EMPTY,
         filter_label: Text::EMPTY,
         workflow: Workflow::EMPTY,
+        behaviors: Behaviors::EMPTY,
     };
     pub fn new(id: &str, title: &str, capability: &str) -> Result<Self, &'static str> {
         let capability = Capability::parse(capability)?;
@@ -305,6 +310,7 @@ impl Spec {
             Brightness::parse(self.fields[0].default.text())?;
         }
         self.workflow.check(self)?;
+        self.behaviors.check(self)?;
         if !self.filter_key.text().is_empty() && self.check_field().is_none() {
             return Err("app_bad_filter");
         }
@@ -378,6 +384,23 @@ impl fmt::Display for Spec {
                 a.guard_op.text(),
                 a.guard_value
             )?;
+        }
+        f.write_str("; behaviors=")?;
+        for (i, button) in self.behaviors.buttons().iter().enumerate() {
+            if i > 0 {
+                f.write_str(",")?;
+            }
+            write!(f, "{}~", button.id.text())?;
+            button.label.hex(f)?;
+            write!(f, "~{}~", button.event.text())?;
+            for (j, step) in button.steps().iter().enumerate() {
+                if j > 0 {
+                    f.write_str("/")?;
+                }
+                write!(f, "{}^{}^", step.op.text(), step.field.text())?;
+                step.value.hex(f)?;
+                write!(f, "^{}^{}", step.compare.text(), step.skip)?;
+            }
         }
         Ok(())
     }
@@ -682,6 +705,52 @@ impl Runtime {
             .ok_or("workflow_unknown_action")?;
         action.allowed(&app.spec, values, app.states[row])?;
         self.apps[index].states[row] = action.to;
+        self.revision += 1;
+        Ok(())
+    }
+    /// Evaluate a button against an exact saved record without publishing any
+    /// writes. The returned candidate may be shown to the user; commit evaluates
+    /// it again against the same revision rather than trusting host-supplied data.
+    pub fn preview_behavior(
+        &self,
+        index: usize,
+        row: usize,
+        id: &str,
+        base: u32,
+    ) -> Result<Values, BehaviorError> {
+        let admission = BehaviorError::admission;
+        if base != self.revision {
+            return Err(admission("app_stale_revision"));
+        }
+        self.revision
+            .checked_add(1)
+            .ok_or(admission("app_revision_exhausted"))?;
+        let app = self.app(index).ok_or(admission("app_not_found"))?;
+        if app.spec.capability() != Capability::Records {
+            return Err(admission("behavior_capability_denied"));
+        }
+        let values = app.row(row).ok_or(admission("app_row_not_found"))?;
+        if app.spec.workflow.terminal(app.states[row]) {
+            return Err(admission("workflow_closed"));
+        }
+        let button = app
+            .spec
+            .behaviors
+            .buttons()
+            .iter()
+            .find(|b| b.id.text() == id)
+            .ok_or(admission("behavior_unknown_button"))?;
+        button.preview(&app.spec, values)
+    }
+    pub fn run_behavior(
+        &mut self,
+        index: usize,
+        row: usize,
+        id: &str,
+        base: u32,
+    ) -> Result<(), BehaviorError> {
+        let candidate = self.preview_behavior(index, row, id, base)?;
+        self.apps[index].rows[row] = candidate;
         self.revision += 1;
         Ok(())
     }
