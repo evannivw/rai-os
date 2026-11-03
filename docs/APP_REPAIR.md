@@ -157,3 +157,15 @@ execution and reboot checks, plus all thirteen adversarial cases listed above.
 Both runs made zero Meta calls. Partial synthetic timeout output was retained.
 This establishes the bounded offline path; successful live generation or repair
 requires separate provider evidence and is not implied by these results.
+
+
+## Observed live result, November 3
+
+Clean source 5984a20 made one live Meta call for the disclosed conditional stock
+transfer goal. The first proposal passed; no correction was needed. HTTP 200,
+4232 ms provider latency, 3495 tokens. Real QEMU confirmed both approvals, preview
+without mutation, correct results on two rows, unchanged rejected empty stock and
+exact recovery after restart, with no additional inference. This establishes live
+generation/execution for that example; the automatic correction path is supported
+by the separate offline checks, not exercised by this successful first attempt.
+See [retained live evidence](evidence/2026-11-03-app-repair/live/README.md).

@@ -1,0 +1,213 @@
+{
+  "verified": true,
+  "source": "meta",
+  "source_commit": "5984a204aa20fe5a3c412099b93e1aa3b6ed5350",
+  "source_worktree_dirty": false,
+  "maximum_live_calls": 3,
+  "kernel_sha256": "14d09a49a07a1dadd886b0d78d962adc1f545e64586dda1c848ff4b86158f864",
+  "checks": [
+    "Only the accepted proposal reaches guest review; both approvals required; exact arithmetic on different rows, denied empty stock and reboot verified without further inference"
+  ],
+  "cases": [],
+  "success_trace": {
+    "source": "meta",
+    "max_attempts": 3,
+    "session_limit": 8,
+    "attempts": [
+      {
+        "attempt": 1,
+        "kind": "initial",
+        "state": "accepted",
+        "exit_code": 0
+      }
+    ],
+    "state": "review",
+    "accepted_attempt": 1,
+    "session_attempts_used": 1
+  },
+  "events": [
+    {
+      "diagnostic": {
+        "choice_count": 1,
+        "finish_reason": "stop",
+        "http_status": 200,
+        "latency_ms": 4232,
+        "model_matches": true,
+        "refusal_present": false,
+        "role": "assistant",
+        "stage": "proposal",
+        "tool_calls_present": false,
+        "transport_exit_code": 0,
+        "usage": {
+          "completion_tokens": 561,
+          "prompt_tokens": 2934,
+          "total_tokens": 3495
+        }
+      },
+      "error": null,
+      "event": "provider_diagnostic",
+      "outcome": "decoded",
+      "source": "meta",
+      "state_version": 2,
+      "attempt": 1
+    },
+    {
+      "attempt": 1,
+      "event": "app_plan",
+      "execution": false,
+      "plan": {
+        "base_revision": 1,
+        "decision": "install",
+        "reason": "Complete records.local app with name/stock/moved and Move button implementing requested checks.",
+        "request_id": 2,
+        "spec": {
+          "behaviors": [
+            {
+              "event": "press",
+              "id": "move",
+              "label": "Move",
+              "steps": [
+                {
+                  "compare": "ge",
+                  "field": "stock",
+                  "op": "require",
+                  "skip": 0,
+                  "value": "1"
+                },
+                {
+                  "compare": "",
+                  "field": "stock",
+                  "op": "calculate",
+                  "skip": 0,
+                  "value": "$stock-1"
+                },
+                {
+                  "compare": "",
+                  "field": "moved",
+                  "op": "calculate",
+                  "skip": 0,
+                  "value": "$moved+1"
+                }
+              ]
+            }
+          ],
+          "capability": "records.local",
+          "fields": [
+            {
+              "default": "",
+              "key": "name",
+              "kind": "text",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "default": "0",
+              "key": "stock",
+              "kind": "number",
+              "label": "Stock",
+              "required": true
+            },
+            {
+              "default": "0",
+              "key": "moved",
+              "kind": "number",
+              "label": "Moved",
+              "required": true
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "id": "stockmove",
+          "title": "Stock Mover"
+        }
+      },
+      "source": "meta"
+    }
+  ],
+  "actual_attempts": 1,
+  "generation_calls": 1,
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "stockmove",
+          "title": "Stock Mover",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "stock",
+              "kind": "number",
+              "required": true,
+              "label": "Stock",
+              "default": "0"
+            },
+            {
+              "key": "moved",
+              "kind": "number",
+              "required": true,
+              "label": "Moved",
+              "default": "0"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "behaviors": [
+            {
+              "id": "move",
+              "label": "Move",
+              "event": "press",
+              "steps": [
+                {
+                  "op": "require",
+                  "field": "stock",
+                  "value": "1",
+                  "compare": "ge",
+                  "skip": 0
+                },
+                {
+                  "op": "calculate",
+                  "field": "stock",
+                  "value": "$stock-1",
+                  "compare": "",
+                  "skip": 0
+                },
+                {
+                  "op": "calculate",
+                  "field": "moved",
+                  "value": "$moved+1",
+                  "compare": "",
+                  "skip": 0
+                }
+              ]
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Widget",
+            "2",
+            "1"
+          ],
+          [
+            "Empty",
+            "0",
+            "0"
+          ],
+          [
+            "Other",
+            "6",
+            "5"
+          ]
+        ]
+      }
+    ]
+  }
+}

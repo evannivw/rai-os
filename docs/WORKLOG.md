@@ -2832,3 +2832,27 @@ new verifier and saved demo with network disabled. No Meta calls in these checks
 Evidence: evidence/2026-11-03-app-repair. The tested tree was modified relative to
 a20bf47; exact hashes are retained. Next: freeze source, then one bounded live goal
 with every attempt retained. Syntax validity still does not establish user intent.
+
+
+## 2026-11-03 — Live composed app succeeds from frozen source
+
+Clean committed source 5984a204aa20fe5a3c412099b93e1aa3b6ed5350 made exactly one
+Meta call under the new maximum-three-attempt policy. HTTP 200, matching model,
+4232 ms provider latency, 3495 tokens (2934 input / 561 output). The initial
+Stock Mover proposal passed host and guest validation; no correction, retry or
+fallback occurred. This live run therefore establishes generation and execution,
+not an observed need for the live repair path.
+
+The independent QEMU verifier confirmed no installation before field and program
+approval, preview without mutation, Widget 3/0 -> 2/1 and Other 7/4 -> 6/5, empty
+stock rejected unchanged, and exact schema/row recovery after restart. No model
+calls were needed for execution or recovery. The three-row arithmetic oracle is
+independent of the generated expressions; this is one disclosed example, not a
+general proof that models understand every goal. Actual program definitions came
+from Meta; no production app-specific implementation or replacement was used.
+
+Evidence: evidence/2026-11-03-app-repair/live, including actual response, per-attempt
+logs, request, checkpoint, UART, screenshots, report and hashes. Offline correction
+and its thirteen adverse cases remain separate evidence. The earlier failed
+single-call run is retained unchanged. This follow-up changes documentation and
+evidence only; it makes no further provider calls or executable changes.

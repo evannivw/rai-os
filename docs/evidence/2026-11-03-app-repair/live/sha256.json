@@ -1,0 +1,19 @@
+{
+  "01-accepted-review.png": "018cf3ad92f9afc4105ed2d67663d71aa63417a7c7ef079badcb9507a1afecd3",
+  "02-program-review.png": "65667b189810fd70e631fe16811c802ad2ed1e641b1e283cfeca2d39981d2d56",
+  "03-corrected-preview.png": "5a30e005a226aae595c31c8a486484577010b875d4f3506e7014247c61f009fb",
+  "04-denied-empty.png": "a8e29256dfef2b2f5bbada5791176b965e75b20083b569cb988e306027dfa247",
+  "05-restored.png": "8f93b8c9e074b316addb7e28a8f67b6658d167eca5fa2b54a1454e4fd7fb0211",
+  "README.md": "8ed4aa2b669df2e47637ff1978877bccc87e008a4534b7426bde1349abcbe4a9",
+  "report.json": "e5b115f11ee5687696f53fbc95c8659de300531973367a0bdcd584f2526367fd",
+  "restored/uart.log": "5c736a58ede1221be9fad685a3c80c4131e0be28c4f5bda52cbf14e036124c75",
+  "success/2/attempt-01/provider.stderr.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "success/2/attempt-01/provider.stdout.jsonl": "604a4b5d0fe797886d1b36057a07eca42f81250f0da4aea0e2e1696c21167ce4",
+  "success/2/loop.json": "139d5def520e9418c0a5e671864ac79374623df938aacb473e06c2a451715112",
+  "success/2/proposal.png": "018cf3ad92f9afc4105ed2d67663d71aa63417a7c7ef079badcb9507a1afecd3",
+  "success/2/provider.stderr.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "success/2/provider.stdout.jsonl": "4705f16e8fc6bfb6d28b927914b49cfcd5201d82039e32f186f3333398f82717",
+  "success/2/request.json": "61a5012124806eae40698cbd6d75f0d852a4f42ed31866770cf74b6f8ed00a1c",
+  "success/uart.log": "5ce20c8d89fdeb1d3382cfc46dd4d2da27b10e34be413c25741e396aa1e08e99",
+  "success-device.json": "2a0bf6fae79f864fb0df055d4f42d1363f97d7e753282cbc21c8438f36183ef2"
+}

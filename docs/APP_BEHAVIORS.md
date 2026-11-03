@@ -169,7 +169,7 @@ capability. These primitives extend app behavior; they do not create drivers or
 make arbitrary untrusted code safe to run with kernel privileges.
 
 
-## Observed verification and live limitation, November 3
+## Initial verification and failed live request, November 3
 
 The typed executor passed 83 shared/host tests and real QEMU debug/release
 verification with disclosed generic schemas. Linux ARM64 Docker offline checks
@@ -185,10 +185,16 @@ revision, so no specific syntax repair is inferred. See the
 The subsequent diagnostic fix retains the full decoded rejected proposal under
 app_validation_failed and still emits no accepted app_plan. A synthetic invalid
 formula replay verified this and the host/shared suite now passes 84 tests. This
-was not another model call. The runtime is verified; a successful live model
-generation with composed behaviors remains unverified. A bounded correction
-cycle is the next integration step, not a capability claimed by this increment.
+was not another model call. At that point, successful live generation with
+composed behaviors remained unverified, and a bounded correction cycle was the
+next integration step.
 
 The follow-up in [APP_REPAIR.md](APP_REPAIR.md) implements the previously planned
 bounded correction cycle. The failed single-call result above remains historical
 evidence; new verification results are recorded separately.
+
+A later clean-source run from 5984a20 succeeded on its first Meta call. It verified
+review, guarded composed execution, unchanged rejected data and exact restart
+recovery. That live run did not need correction. See the separate
+[successful live evidence](evidence/2026-11-03-app-repair/live/README.md); the original
+failed run above remains preserved.

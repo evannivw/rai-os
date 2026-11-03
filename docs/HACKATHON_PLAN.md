@@ -462,3 +462,11 @@ including failures, and report whether live correction was actually needed.
 Do not run until success or substitute a replay fixture. After this increment,
 return to the runnable demo, narration and submission; the internal November 4
 18:00 Guatemala target and final 20:00 deadline remain unchanged.
+
+
+The bounded check from clean 5984a20 passed on its first live call: actual composed
+app, approval, independent arithmetic, condition denial and recovered data. No
+live correction was needed. Preserve the earlier failed run and the distinction
+between offline correction and live generation. The next delivery priority is to
+rehearse the existing app-creation/approval/local-execution story and finish the
+three-minute video; this result is not a reason to add another subsystem first.
