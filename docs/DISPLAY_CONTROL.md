@@ -111,3 +111,21 @@ Next system capabilities should follow this same sequence: implement the actual
 backend, define bounded authority and effect, show consent in app review, verify
 execution/failure/recovery, then advertise it to Meta. Merely adding an operation
 name to a prompt does not implement the corresponding OS function.
+
+## Observed live development result
+
+On November 3, clean frozen source b2e5c9a generated Brightness Control with one
+Meta request, no retry: HTTP 200, 2768 ms provider latency, 1382 reported tokens.
+The returned capability, single required numeric field and default 50 were checked
+before installation. The same real-QEMU pixel, range, permission and recovery
+checks then passed. Restore kept the saved schema and returned brightness to 100%
+until the next user Apply. Exact requests, diagnostics, UART and captures are in
+[evidence/2026-11-03-display-control/live/report.json](evidence/2026-11-03-display-control/live/report.json).
+This is one disclosed development integration test, not a reliability benchmark
+or a physical-display/energy claim. Input was scripted through the guest controller;
+RFB keyboard/pointer behavior was separately covered by regression tests.
+
+The complete offline check also passed in Linux ARM64 and Linux AMD64 containers
+(AMD64 emulated on this ARM64 Mac), with networking disabled. See
+[portable evidence](evidence/2026-11-03-display-control/portable/manifest.json).
+Physical Windows and phone hardware remain untested.

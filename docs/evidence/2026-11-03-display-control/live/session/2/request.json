@@ -1,0 +1,8 @@
+{
+  "request_id": 2,
+  "base_revision": 1,
+  "goal": "Create an app to adjust the RAI-OS display brightness from 20 to 100 percent, with a default of 50.",
+  "target": null,
+  "app_ids": [],
+  "record_count": 0
+}

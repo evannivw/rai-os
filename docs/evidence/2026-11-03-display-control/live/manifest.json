@@ -1,0 +1,50 @@
+{
+  "recorded_utc": "2026-11-03T14:06:06.326862+00:00",
+  "source_commit": "b2e5c9a0cf968ea577767d2e5b73bebe59535084",
+  "live_calls": 1,
+  "retries": 0,
+  "input": "Scripted guest key/pointer protocol; actual framebuffer pixels measured. RFB regression tested separately.",
+  "diagnostics": [
+    {
+      "diagnostic": {
+        "choice_count": 1,
+        "finish_reason": "stop",
+        "http_status": 200,
+        "latency_ms": 2768,
+        "model_matches": true,
+        "refusal_present": false,
+        "role": "assistant",
+        "stage": "proposal",
+        "tool_calls_present": false,
+        "transport_exit_code": 0,
+        "usage": {
+          "completion_tokens": 278,
+          "prompt_tokens": 1104,
+          "total_tokens": 1382
+        }
+      },
+      "error": null,
+      "event": "provider_diagnostic",
+      "outcome": "decoded",
+      "source": "meta",
+      "state_version": 2
+    }
+  ],
+  "sha256": {
+    "control-20.png": "74544af4954d8da0c31c8ef2d4fa2f12fe2761c3f968c432aab43c38e7e6a4ca",
+    "control-50.png": "b504f87e95871ae0fcecd644f90a7ee83598186b53a1631287b888709a0df50e",
+    "home-100.png": "3fd450d9c76a08e49eb2ef2c82a82b8c153ead0488aa1139503b934205d62272",
+    "home-50-repeat.png": "314486db5230f489069712d96cf1a746435e5cb336e0fef9670ce9e398d13e42",
+    "home-50.png": "314486db5230f489069712d96cf1a746435e5cb336e0fef9670ce9e398d13e42",
+    "home-reset.png": "3fd450d9c76a08e49eb2ef2c82a82b8c153ead0488aa1139503b934205d62272",
+    "permission-review.png": "5620fe4ce576a9891fc6c0694c83b22a5a635f58868f102a885f78d588705182",
+    "report.json": "861d7d2fbc2cc85f1834df12132700c7cec7cc47fbcc90da5efe92ca34df4f95",
+    "restored/uart.log": "82371e31e42ce93b23e71a0c474eedbc5b90eb5f066af354dc6d3f68ce52c665",
+    "restored-100.png": "488dee80de4cc4a99bdc63538ef0404dabbbc86196d1ccfa465d359d944db5f4",
+    "session/2/proposal.png": "5620fe4ce576a9891fc6c0694c83b22a5a635f58868f102a885f78d588705182",
+    "session/2/provider.stderr.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "session/2/provider.stdout.jsonl": "c686cc8b1fed6025606ee6b8aa7714b4e53d794d975076566358c2726447e8e9",
+    "session/2/request.json": "7f183584785546340eea37dacbe8434805acd98f307a94984af113bb2f20bb15",
+    "session/uart.log": "246290fd3946bd15b39eac52b3ddf4546506b5c2f0847bd247bd9c7c2eb2c5d5"
+  }
+}

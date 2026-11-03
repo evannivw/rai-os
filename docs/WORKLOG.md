@@ -2490,3 +2490,26 @@ exact measurements and reports are archived under
  evidence/2026-11-03-display-control/offline. Pre-commit reports explicitly mark
 the working tree as dirty. The next step freezes these sources before one live
 Meta control-app request; no live result is inferred from replay.
+
+## 2026-11-03 — Live Meta brightness app verified against actual pixels
+
+Clean frozen source b2e5c9a0cf968ea577767d2e5b73bebe59535084 made exactly one
+live Meta request. HTTP 200; matching configured model; 2768 ms provider latency;
+1382 reported tokens. It returned Brightness Control with display.brightness,
+one required numeric input and default 50. No retry, fallback or post-response
+prompt tuning. The independent check approved the shape before installation,
+then verified 50%/20% framebuffer output, unchanged repeated redraws, exact reset,
+permission and range rejection, and fresh-guest restore at 100% without inference.
+
+The screenshot/report evidence is under evidence/2026-11-03-display-control/live.
+Keys/pointer events were injected through the guest protocol; RFB behavior was
+separately regression-tested. The records fixture for denied-authority checks is
+explicitly scripted, not claimed as another generated app. The live success is a
+known development example, not a general reliability or physical hardware claim.
+The Linux ARM64 container also passed the complete offline brightness check with
+network access disabled. The AMD64 result follows once that run completes.
+The Linux AMD64 emulated container also passed the complete offline check with
+network access disabled. Both platform logs and image/source/binary hashes are in
+evidence/2026-11-03-display-control/portable. These results do not establish a
+physical Windows or phone test. Executable sources match frozen b2e5c9a; final
+changes only archive evidence and documentation.

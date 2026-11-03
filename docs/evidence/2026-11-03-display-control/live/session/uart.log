@@ -1,0 +1,381 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Display ready: 480x800 guest framebuffer
+Console ready: type help for commands
+@rai1	1	ok	state=home
+@rai1	2	ok	state=home
+@rai1	3	ok	revision=1; apps=-
+@rai1	4	ok	state=home
+@rai1	5	ok	state=compose
+@rai1	6	ok	revision=1; apps=-
+@rai1	7	ok	state=compose
+@rai1	8	ok	revision=1; apps=-
+@rai1	9	ok	state=compose
+@rai1	10	ok	revision=1; apps=-
+@rai1	11	ok	state=compose
+@rai1	12	ok	revision=1; apps=-
+@rai1	13	ok	state=compose
+@rai1	14	ok	revision=1; apps=-
+@rai1	15	ok	state=compose
+@rai1	16	ok	revision=1; apps=-
+@rai1	17	ok	state=compose
+@rai1	18	ok	revision=1; apps=-
+@rai1	19	ok	state=compose
+@rai1	20	ok	revision=1; apps=-
+@rai1	21	ok	state=compose
+@rai1	22	ok	revision=1; apps=-
+@rai1	23	ok	state=compose
+@rai1	24	ok	revision=1; apps=-
+@rai1	25	ok	state=compose
+@rai1	26	ok	revision=1; apps=-
+@rai1	27	ok	state=compose
+@rai1	28	ok	revision=1; apps=-
+@rai1	29	ok	state=compose
+@rai1	30	ok	revision=1; apps=-
+@rai1	31	ok	state=compose
+@rai1	32	ok	revision=1; apps=-
+@rai1	33	ok	state=compose
+@rai1	34	ok	revision=1; apps=-
+@rai1	35	ok	state=compose
+@rai1	36	ok	revision=1; apps=-
+@rai1	37	ok	state=compose
+@rai1	38	ok	revision=1; apps=-
+@rai1	39	ok	state=compose
+@rai1	40	ok	revision=1; apps=-
+@rai1	41	ok	state=compose
+@rai1	42	ok	revision=1; apps=-
+@rai1	43	ok	state=compose
+@rai1	44	ok	revision=1; apps=-
+@rai1	45	ok	state=compose
+@rai1	46	ok	revision=1; apps=-
+@rai1	47	ok	state=compose
+@rai1	48	ok	revision=1; apps=-
+@rai1	49	ok	state=compose
+@rai1	50	ok	revision=1; apps=-
+@rai1	51	ok	state=compose
+@rai1	52	ok	revision=1; apps=-
+@rai1	53	ok	state=compose
+@rai1	54	ok	revision=1; apps=-
+@rai1	55	ok	state=compose
+@rai1	56	ok	revision=1; apps=-
+@rai1	57	ok	state=compose
+@rai1	58	ok	revision=1; apps=-
+@rai1	59	ok	state=compose
+@rai1	60	ok	revision=1; apps=-
+@rai1	61	ok	state=compose
+@rai1	62	ok	revision=1; apps=-
+@rai1	63	ok	state=compose
+@rai1	64	ok	revision=1; apps=-
+@rai1	65	ok	state=compose
+@rai1	66	ok	revision=1; apps=-
+@rai1	67	ok	state=compose
+@rai1	68	ok	revision=1; apps=-
+@rai1	69	ok	state=compose
+@rai1	70	ok	revision=1; apps=-
+@rai1	71	ok	state=compose
+@rai1	72	ok	revision=1; apps=-
+@rai1	73	ok	state=compose
+@rai1	74	ok	revision=1; apps=-
+@rai1	75	ok	state=compose
+@rai1	76	ok	revision=1; apps=-
+@rai1	77	ok	state=compose
+@rai1	78	ok	revision=1; apps=-
+@rai1	79	ok	state=compose
+@rai1	80	ok	revision=1; apps=-
+@rai1	81	ok	state=compose
+@rai1	82	ok	revision=1; apps=-
+@rai1	83	ok	state=compose
+@rai1	84	ok	revision=1; apps=-
+@rai1	85	ok	state=compose
+@rai1	86	ok	revision=1; apps=-
+@rai1	87	ok	state=compose
+@rai1	88	ok	revision=1; apps=-
+@rai1	89	ok	state=compose
+@rai1	90	ok	revision=1; apps=-
+@rai1	91	ok	state=compose
+@rai1	92	ok	revision=1; apps=-
+@rai1	93	ok	state=compose
+@rai1	94	ok	revision=1; apps=-
+@rai1	95	ok	state=compose
+@rai1	96	ok	revision=1; apps=-
+@rai1	97	ok	state=compose
+@rai1	98	ok	revision=1; apps=-
+@rai1	99	ok	state=compose
+@rai1	100	ok	revision=1; apps=-
+@rai1	101	ok	state=compose
+@rai1	102	ok	revision=1; apps=-
+@rai1	103	ok	state=compose
+@rai1	104	ok	revision=1; apps=-
+@rai1	105	ok	state=compose
+@rai1	106	ok	revision=1; apps=-
+@rai1	107	ok	state=compose
+@rai1	108	ok	revision=1; apps=-
+@rai1	109	ok	state=compose
+@rai1	110	ok	revision=1; apps=-
+@rai1	111	ok	state=compose
+@rai1	112	ok	revision=1; apps=-
+@rai1	113	ok	state=compose
+@rai1	114	ok	revision=1; apps=-
+@rai1	115	ok	state=compose
+@rai1	116	ok	revision=1; apps=-
+@rai1	117	ok	state=compose
+@rai1	118	ok	revision=1; apps=-
+@rai1	119	ok	state=compose
+@rai1	120	ok	revision=1; apps=-
+@rai1	121	ok	state=compose
+@rai1	122	ok	revision=1; apps=-
+@rai1	123	ok	state=compose
+@rai1	124	ok	revision=1; apps=-
+@rai1	125	ok	state=compose
+@rai1	126	ok	revision=1; apps=-
+@rai1	127	ok	state=compose
+@rai1	128	ok	revision=1; apps=-
+@rai1	129	ok	state=compose
+@rai1	130	ok	revision=1; apps=-
+@rai1	131	ok	state=compose
+@rai1	132	ok	revision=1; apps=-
+@rai1	133	ok	state=compose
+@rai1	134	ok	revision=1; apps=-
+@rai1	135	ok	state=compose
+@rai1	136	ok	revision=1; apps=-
+@rai1	137	ok	state=compose
+@rai1	138	ok	revision=1; apps=-
+@rai1	139	ok	state=compose
+@rai1	140	ok	revision=1; apps=-
+@rai1	141	ok	state=compose
+@rai1	142	ok	revision=1; apps=-
+@rai1	143	ok	state=compose
+@rai1	144	ok	revision=1; apps=-
+@rai1	145	ok	state=compose
+@rai1	146	ok	revision=1; apps=-
+@rai1	147	ok	state=compose
+@rai1	148	ok	revision=1; apps=-
+@rai1	149	ok	state=compose
+@rai1	150	ok	revision=1; apps=-
+@rai1	151	ok	state=compose
+@rai1	152	ok	revision=1; apps=-
+@rai1	153	ok	state=compose
+@rai1	154	ok	revision=1; apps=-
+@rai1	155	ok	state=compose
+@rai1	156	ok	revision=1; apps=-
+@rai1	157	ok	state=compose
+@rai1	158	ok	revision=1; apps=-
+@rai1	159	ok	state=compose
+@rai1	160	ok	revision=1; apps=-
+@rai1	161	ok	state=compose
+@rai1	162	ok	revision=1; apps=-
+@rai1	163	ok	state=compose
+@rai1	164	ok	revision=1; apps=-
+@rai1	165	ok	state=compose
+@rai1	166	ok	revision=1; apps=-
+@rai1	167	ok	state=compose
+@rai1	168	ok	revision=1; apps=-
+@rai1	169	ok	state=compose
+@rai1	170	ok	revision=1; apps=-
+@rai1	171	ok	state=compose
+@rai1	172	ok	revision=1; apps=-
+@rai1	173	ok	state=compose
+@rai1	174	ok	revision=1; apps=-
+@rai1	175	ok	state=compose
+@rai1	176	ok	revision=1; apps=-
+@rai1	177	ok	state=compose
+@rai1	178	ok	revision=1; apps=-
+@rai1	179	ok	state=compose
+@rai1	180	ok	revision=1; apps=-
+@rai1	181	ok	state=compose
+@rai1	182	ok	revision=1; apps=-
+@rai1	183	ok	state=compose
+@rai1	184	ok	revision=1; apps=-
+@rai1	185	ok	state=compose
+@rai1	186	ok	revision=1; apps=-
+@rai1	187	ok	state=compose
+@rai1	188	ok	revision=1; apps=-
+@rai1	189	ok	state=compose
+@rai1	190	ok	revision=1; apps=-
+@rai1	191	ok	state=compose
+@rai1	192	ok	revision=1; apps=-
+@rai1	193	ok	state=compose
+@rai1	194	ok	revision=1; apps=-
+@rai1	195	ok	state=compose
+@rai1	196	ok	revision=1; apps=-
+@rai1	197	ok	state=compose
+@rai1	198	ok	revision=1; apps=-
+@rai1	199	ok	state=compose
+@rai1	200	ok	revision=1; apps=-
+@rai1	201	ok	state=compose
+@rai1	202	ok	revision=1; apps=-
+@rai1	203	ok	submit=2; revision=1; target=-; prompt=43726561746520616e2061707020746f2061646a75737420746865205241492d4f5320646973706c6179206272696768746e6573732066726f6d20323020746f203130302070657263656e742c207769746820612064656661756c74206f662035302e
+@rai1	204	ok	revision=1; apps=-
+@rai1	205	ok	revision=1; apps=-
+@rai1	206	ok	state=thinking
+@rai1	207	ok	state=thinking
+@rai1	208	ok	state=thinking
+@rai1	209	ok	state=review
+@rai1	210	ok	state=review
+@rai1	211	ok	available=true; brightness=100; mode=software_rgb
+@rai1	212	ok	state=form
+@rai1	213	ok	revision=2; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c
+@rai1	214	ok	state=form
+@rai1	215	ok	revision=2; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c
+@rai1	216	ok	id=brightness; title=4272696768746e65737320436f6e74726f6c; capability=display.brightness; filter=; filter_label=; fields=level~number~1~4272696768746e6573732025~3530
+@rai1	217	ok	id=brightness; version=1; count=0; rows=
+@rai1	218	ok	state=form
+@rai1	219	ok	id=brightness; title=4272696768746e65737320436f6e74726f6c; capability=display.brightness; filter=; filter_label=; fields=level~number~1~4272696768746e6573732025~3530
+@rai1	220	ok	id=brightness; version=1; count=0; rows=
+@rai1	221	ok	available=true; brightness=100; mode=software_rgb
+@rai1	222	ok	state=home
+@rai1	223	ok	revision=2; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c
+@rai1	224	ok	state=form
+@rai1	225	ok	state=applied
+@rai1	226	ok	revision=2; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c
+@rai1	227	ok	available=true; brightness=50; mode=software_rgb
+@rai1	228	ok	state=home
+@rai1	229	ok	revision=2; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c
+@rai1	230	ok	state=home
+@rai1	231	ok	state=home
+@rai1	232	ok	state=home
+@rai1	233	ok	state=form
+@rai1	234	ok	state=form
+@rai1	235	ok	available=true; brightness=50; mode=software_rgb
+@rai1	236	ok	state=applied
+@rai1	237	ok	revision=2; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c
+@rai1	238	ok	state=form
+@rai1	239	err	display_brightness_range
+@rai1	240	ok	available=true; brightness=20; mode=software_rgb
+@rai1	241	ok	state=form
+@rai1	242	err	display_brightness_range
+@rai1	243	ok	available=true; brightness=20; mode=software_rgb
+@rai1	244	ok	state=form
+@rai1	245	err	display_brightness_range
+@rai1	246	ok	available=true; brightness=20; mode=software_rgb
+@rai1	247	ok	state=form
+@rai1	248	err	display_brightness_range
+@rai1	249	ok	available=true; brightness=20; mode=software_rgb
+@rai1	250	ok	state=form
+@rai1	251	err	display_brightness_range
+@rai1	252	ok	available=true; brightness=20; mode=software_rgb
+@rai1	253	ok	state=form
+@rai1	254	err	display_brightness_range
+@rai1	255	ok	available=true; brightness=20; mode=software_rgb
+@rai1	256	ok	state=form
+@rai1	257	err	display_brightness_range
+@rai1	258	ok	available=true; brightness=20; mode=software_rgb
+@rai1	259	ok	state=display_reset
+@rai1	260	ok	revision=2; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c
+@rai1	261	ok	available=true; brightness=100; mode=software_rgb
+@rai1	262	ok	state=home
+@rai1	263	ok	revision=2; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c
+@rai1	264	ok	id=brightness; version=1; count=0; rows=
+@rai1	265	ok	state=home
+@rai1	266	ok	state=compose
+@rai1	267	ok	state=compose
+@rai1	268	ok	state=compose
+@rai1	269	ok	state=compose
+@rai1	270	ok	state=compose
+@rai1	271	ok	state=compose
+@rai1	272	ok	state=compose
+@rai1	273	ok	state=compose
+@rai1	274	ok	state=compose
+@rai1	275	ok	state=compose
+@rai1	276	ok	state=compose
+@rai1	277	ok	state=compose
+@rai1	278	ok	state=compose
+@rai1	279	ok	state=compose
+@rai1	280	ok	state=compose
+@rai1	281	ok	state=compose
+@rai1	282	ok	state=compose
+@rai1	283	ok	state=compose
+@rai1	284	ok	state=compose
+@rai1	285	ok	state=compose
+@rai1	286	ok	state=compose
+@rai1	287	ok	state=compose
+@rai1	288	ok	state=compose
+@rai1	289	ok	state=compose
+@rai1	290	ok	submit=9; revision=2; target=-; prompt=5665726966696572207265636f72642066697874757265
+@rai1	291	ok	state=thinking
+@rai1	292	ok	state=thinking
+@rai1	293	ok	state=thinking
+@rai1	294	ok	state=thinking
+@rai1	295	ok	state=thinking
+@rai1	296	ok	state=review
+@rai1	297	ok	state=form
+@rai1	298	ok	revision=3; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c,inspection:1:0:4669656c6420696e7370656374696f6e73
+@rai1	299	ok	state=form
+@rai1	300	ok	revision=3; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c,inspection:1:0:4669656c6420696e7370656374696f6e73
+@rai1	301	ok	id=brightness; title=4272696768746e65737320436f6e74726f6c; capability=display.brightness; filter=; filter_label=; fields=level~number~1~4272696768746e6573732025~3530
+@rai1	302	ok	id=brightness; version=1; count=0; rows=
+@rai1	303	ok	id=inspection; title=4669656c6420696e7370656374696f6e73; capability=records.local; filter=done; filter_label=50656e64696e67; fields=equipment~text~1~45717569706d656e74~,notes~text~0~4e6f746573~,done~check~1~446f6e65~66616c7365
+@rai1	304	ok	id=inspection; version=1; count=0; rows=
+@rai1	305	ok	state=form
+@rai1	306	err	app_capability_denied
+@rai1	307	ok	available=true; brightness=100; mode=software_rgb
+@rai1	308	ok	revision=3; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c,inspection:1:0:4669656c6420696e7370656374696f6e73
+@rai1	309	ok	state=form
+@rai1	310	ok	state=compose
+@rai1	311	ok	state=compose
+@rai1	312	ok	state=compose
+@rai1	313	ok	state=compose
+@rai1	314	ok	state=compose
+@rai1	315	ok	state=compose
+@rai1	316	ok	state=compose
+@rai1	317	ok	state=compose
+@rai1	318	ok	state=compose
+@rai1	319	ok	state=compose
+@rai1	320	ok	state=compose
+@rai1	321	ok	state=compose
+@rai1	322	ok	state=compose
+@rai1	323	ok	state=compose
+@rai1	324	ok	state=compose
+@rai1	325	ok	state=compose
+@rai1	326	ok	state=compose
+@rai1	327	ok	state=compose
+@rai1	328	ok	state=compose
+@rai1	329	ok	state=compose
+@rai1	330	ok	state=compose
+@rai1	331	ok	state=compose
+@rai1	332	ok	state=compose
+@rai1	333	ok	state=compose
+@rai1	334	ok	state=compose
+@rai1	335	ok	state=compose
+@rai1	336	ok	state=compose
+@rai1	337	ok	state=compose
+@rai1	338	ok	state=compose
+@rai1	339	ok	state=compose
+@rai1	340	ok	state=compose
+@rai1	341	ok	submit=11; revision=3; target=inspection; prompt=556e617574686f72697a6564206361706162696c69747920757064617465
+@rai1	342	ok	state=thinking
+@rai1	343	ok	state=thinking
+@rai1	344	ok	state=thinking
+@rai1	345	err	app_capability_change
+@rai1	346	ok	state=form
+@rai1	347	ok	state=compose
+@rai1	348	ok	state=compose
+@rai1	349	ok	state=compose
+@rai1	350	ok	state=compose
+@rai1	351	ok	state=compose
+@rai1	352	ok	state=compose
+@rai1	353	ok	state=compose
+@rai1	354	ok	state=compose
+@rai1	355	ok	state=compose
+@rai1	356	ok	state=compose
+@rai1	357	ok	state=compose
+@rai1	358	ok	state=compose
+@rai1	359	ok	state=compose
+@rai1	360	ok	state=compose
+@rai1	361	ok	state=compose
+@rai1	362	ok	state=compose
+@rai1	363	ok	submit=13; revision=3; target=brightness; prompt=496e76616c69642064656661756c74
+@rai1	364	ok	state=thinking
+@rai1	365	ok	state=thinking
+@rai1	366	ok	state=thinking
+@rai1	367	err	display_brightness_range
+@rai1	368	err	app_capability_denied
+@rai1	369	ok	state=home
+@rai1	370	err	app_stale_request
+@rai1	371	ok	revision=3; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c,inspection:1:0:4669656c6420696e7370656374696f6e73
+@rai1	372	ok	id=brightness; title=4272696768746e65737320436f6e74726f6c; capability=display.brightness; filter=; filter_label=; fields=level~number~1~4272696768746e6573732025~3530
+@rai1	373	ok	state=form
+@rai1	374	ok	state=form
+@rai1	375	ok	state=applied
+@rai1	376	ok	revision=3; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c,inspection:1:0:4669656c6420696e7370656374696f6e73
+@rai1	377	ok	available=true; brightness=50; mode=software_rgb
+@rai1	378	ok	revision=3; apps=brightness:1:0:4272696768746e65737320436f6e74726f6c,inspection:1:0:4669656c6420696e7370656374696f6e73
