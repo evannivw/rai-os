@@ -2995,3 +2995,14 @@ icons and less horizontal padding. Recorded the selected layout and four cooler
 color proposals. Updated conversational concepts retain separate creation and
 illustrative three-app navigation. Script syntax and documentation whitespace
 checked; no native UI changes, rendered-browser verification or API calls.
+
+
+## 2026-11-03 — Refine Apps, prompt entry and keyboard concept
+
+Responded to user feedback with compact library rows/search, balanced 16 px mockup
+side margins, clearer composer/action spacing and an optional local keyboard.
+Preserved the 128-character ASCII boundary. Read the actual guest pointer handling
+and VNC/UART forwarding before documenting the path to a guest-drawn keyboard.
+The interactive concept sends no API calls; it is not a native implementation.
+Checked preview script syntax and documentation whitespace. No QEMU execution or
+rendered-browser validation was performed for this design-only increment.

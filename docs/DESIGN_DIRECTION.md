@@ -96,3 +96,32 @@ Four color options share a near-black #090b0f background, #e7ebf1 primary text,
 Keep accents on launcher glyphs, focus and selected navigation. Do not fill every
 row with color. No palette is selected yet. Preview examples still contain three
 apps; denser layout does not increase runtime app capacity.
+
+## Apps and Create refinement
+
+The user requested a compact application library, improved prompt entry and more
+breathing room between adjacent controls. The next interactive concept uses the
+glacier-blue working accent and Column home. Apps has a 44 px search field, 34 px
+glyphs and 54 px rows with six-pixel separation. Side inset is 16 px, between the
+previous spacious and overly tight proposals. Section gaps are 20 px. These are
+browser design values, not framebuffer coordinates.
+
+Create groups an explicit label, multiline prompt and character counter inside one
+composer. The primary Create action is separated from both the text field and the
+bottom navigation. The concept retains the current 128 printable-ASCII-character
+constraint. It provides a local optional keyboard with letters, shift, basic
+numbers/symbols, space and backspace; input is retained when the keyboard closes.
+The composer contracts while the keyboard is open. Preview submission sends no
+request and explicitly reports that it is a design preview.
+
+This is not an implemented guest keyboard. Current scripts/apps.py forwards VNC
+key/pointer events to guest app.key/app.tap commands; src/app_ui.rs owns pointer
+geometry and application interaction. A future guest-drawn soft keyboard can
+reuse that coordinate route and translate key hit areas into existing text input.
+It needs drawing, hit testing, focus/cursor management, layout changes, input limits
+and real QEMU checks. It does not itself require introducing a physical phone
+touchscreen driver. Removing the host input adapter or supporting actual phones
+requires separate platform-specific input/display work.
+
+Preview JavaScript syntax was checked; rendered-browser and native-QEMU verification
+are not claimed for these design-only changes.
