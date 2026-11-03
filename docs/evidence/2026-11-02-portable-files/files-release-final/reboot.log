@@ -1,0 +1,4 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Display ready: 480x800 guest framebuffer
+Console ready: type help for commands
+@rai1	1	ok	generation=1; capacity=8; max_bytes=512; persistence=ram; staged=false; files=-

@@ -1,0 +1,13 @@
+{
+  "execution": "guest_EL1",
+  "storage": "volatile_ram",
+  "ai_planning": false,
+  "checks": [
+    "512-byte binary roundtrip; source preserved; copy and move in guest"
+  ],
+  "source_sha256": "b91c8734cdebcdd43c4a81189cdfa25211473124d2340d414c3a17c48a987038",
+  "binary_sha256": "110009dcee21620b166f3abfecb5eff7a873be729d1c2d53822e7acc5f34eb9b",
+  "capacity": 8,
+  "max_file_bytes": 512,
+  "commands": 27
+}

@@ -19,6 +19,7 @@ fn response(id: &str, status: &str, payload: impl Display) {
 struct Console<'a> {
     clock: &'a Clock,
     task: Task,
+    files: crate::ramfs::Store,
     memory: &'a mut Memory,
     mmu: &'a Mmu,
     timer: &'a mut Timer,
@@ -31,6 +32,18 @@ impl Console<'_> {
         &mut self,
         operation: command::Operation<'a>,
     ) -> Result<command::Reply<'a>, &'static str> {
+        if let command::Operation::Files(operation) = operation {
+            let result = self.files.execute(operation);
+            #[cfg(feature = "guest-display")]
+            if let Some(display) = &mut self.display {
+                crate::display::view::render_files(
+                    display,
+                    &self.files,
+                    result.as_ref().err().copied(),
+                );
+            }
+            return result.map(command::Reply::Files);
+        }
         #[cfg(feature = "guest-display")]
         let is_index = matches!(operation, command::Operation::RecordIndex(_));
         #[cfg(feature = "guest-display")]
@@ -246,6 +259,7 @@ pub fn run(clock: &Clock, memory: &mut Memory, mmu: &Mmu, timer: &mut Timer) -> 
     let mut console = Console {
         clock,
         task: Task::new(),
+        files: crate::ramfs::Store::new(),
         memory,
         mmu,
         timer,

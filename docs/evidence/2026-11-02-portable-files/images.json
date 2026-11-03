@@ -1,0 +1,20 @@
+[
+  {
+    "id": "sha256:1bf0f72fffe369b10a155bbb8c2f6e7c8312c03d84ae6497f6ab996d8d1d46d2",
+    "architecture": "arm64",
+    "os": "linux",
+    "created": "2026-11-03T05:34:22.168391634Z",
+    "tags": [
+      "rai-os-demo:latest"
+    ]
+  },
+  {
+    "id": "sha256:60857b091dd89fa82e726bb8994a26fcb57bb8fc194dcfef5817611649b27642",
+    "architecture": "amd64",
+    "os": "linux",
+    "created": "2026-11-03T05:36:19.601598882Z",
+    "tags": [
+      "rai-os-demo-amd64:latest"
+    ]
+  }
+]

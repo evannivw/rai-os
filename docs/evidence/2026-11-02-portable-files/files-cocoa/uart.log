@@ -1,0 +1,30 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Display ready: 480x800 guest framebuffer
+Console ready: type help for commands
+@rai1	1	ok	generation=1; capacity=8; max_bytes=512; persistence=ram; staged=false; files=-
+@rai1	2	ok	generation=1; capacity=8; max_bytes=512; persistence=ram; staged=false; files=-
+@rai1	3	ok	generation=1; ticket=1; written=0
+@rai1	4	ok	generation=1; ticket=1; written=64
+@rai1	5	ok	generation=1; ticket=1; written=100
+@rai1	6	ok	generation=2; ticket=0; written=0
+@rai1	7	ok	generation=2; path=/inbox/brief.txt; bytes=100; data=4175726f726120776f726b73706163650a417070726f7665642068616e646f66663a20636f6c6c65637420736f75726365206e6f7465732c207072657365727665206f726967696e616c732c20616e642073686f772070656e64696e6720776f726b2e0a
+@rai1	8	ok	generation=2; capacity=8; max_bytes=512; persistence=ram; staged=false; files=/inbox/brief.txt:100
+@rai1	9	ok	generation=2; ticket=2; written=0
+@rai1	10	ok	generation=2; ticket=2; written=64
+@rai1	11	ok	generation=2; ticket=2; written=128
+@rai1	12	ok	generation=2; ticket=2; written=192
+@rai1	13	ok	generation=2; ticket=2; written=256
+@rai1	14	ok	generation=2; ticket=2; written=320
+@rai1	15	ok	generation=2; ticket=2; written=384
+@rai1	16	ok	generation=2; ticket=2; written=448
+@rai1	17	ok	generation=2; ticket=2; written=512
+@rai1	18	ok	generation=3; ticket=0; written=0
+@rai1	19	ok	generation=3; path=/inbox/sample.bin; bytes=512; data=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+@rai1	20	ok	generation=3; capacity=8; max_bytes=512; persistence=ram; staged=false; files=/inbox/brief.txt:100,/inbox/sample.bin:512
+@rai1	21	ok	generation=4; ticket=0; written=0
+@rai1	22	ok	generation=4; capacity=8; max_bytes=512; persistence=ram; staged=false; files=/inbox/brief.txt:100,/inbox/sample.bin:512,/work/brief.txt:100
+@rai1	23	ok	generation=5; ticket=0; written=0
+@rai1	24	ok	generation=5; path=/inbox/brief.txt; bytes=100; data=4175726f726120776f726b73706163650a417070726f7665642068616e646f66663a20636f6c6c65637420736f75726365206e6f7465732c207072657365727665206f726967696e616c732c20616e642073686f772070656e64696e6720776f726b2e0a
+@rai1	25	ok	generation=5; path=/archive/brief.txt; bytes=100; data=4175726f726120776f726b73706163650a417070726f7665642068616e646f66663a20636f6c6c65637420736f75726365206e6f7465732c207072657365727665206f726967696e616c732c20616e642073686f772070656e64696e6720776f726b2e0a
+@rai1	26	err	fs_not_found
+@rai1	27	ok	generation=5; capacity=8; max_bytes=512; persistence=ram; staged=false; files=/inbox/brief.txt:100,/inbox/sample.bin:512,/archive/brief.txt:100

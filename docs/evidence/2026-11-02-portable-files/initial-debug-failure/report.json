@@ -1,0 +1,11 @@
+{
+  "source": "replay",
+  "event_source": "controlled_context_updates",
+  "events_delivered": 0,
+  "exit_code": 1,
+  "correct_decisions": 0,
+  "all_decisions_correct": false,
+  "end_to_end_ms": 2459,
+  "graphics": false,
+  "presentation_pause_ms": 0
+}

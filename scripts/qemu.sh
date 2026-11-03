@@ -3,7 +3,17 @@ set -eu
 kernel=${1:?Usage: qemu.sh kernel [--graphics|--capture]}
 shift
 case "${1:-}" in
-  --graphics) shift; set -- -display cocoa -device ramfb "$@" ;;
+  --graphics)
+    shift
+    backend=${RAI_DISPLAY:-}
+    if [ -z "$backend" ]; then
+      case "$(uname -s)" in Darwin) backend=cocoa ;; *) backend=gtk ;; esac
+    fi
+    case "$backend" in
+      cocoa|gtk|sdl) set -- -display "$backend" -device ramfb "$@" ;;
+      vnc) set -- -display none -vnc 0.0.0.0:0 -device ramfb "$@" ;;
+      *) echo 'RAI_DISPLAY must be cocoa, gtk, sdl or vnc' >&2; exit 1 ;;
+    esac ;;
   --capture) shift; set -- -display none -device ramfb "$@" ;;
   *) set -- -display none "$@" ;;
 esac

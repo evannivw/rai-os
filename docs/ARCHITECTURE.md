@@ -374,3 +374,28 @@ Freeze three development observations and expected outputs before a three-call
 Meta probe. This input-boundary increment does not establish an advantage on
 complex unseen tasks. No kernel/corpus expansion; deadlines and provenance limits
 are unchanged. Finish evidence and protect rehearsal/video/submission time.
+
+
+## November 2: portability and writable guest files
+
+[PORTABLE_RUN.md](PORTABLE_RUN.md) packages a common Linux host environment for
+Docker users, with a platform-independent VNC display route. The QEMU board/CPU
+contract remains unchanged. Actual platform test results must be reported; Linux
+containers on macOS do not establish physical Windows validation.
+
+[GUEST_FILES.md](GUEST_FILES.md) adds a separate bounded volatile guest store:
+runtime byte import, list/read/copy/move, complete-upload publication and generation
+checks. The native Files view renders real state. It currently runs at EL1, has
+no persistent disk, and is NOT an isolated filesystem service or AI file manager.
+Next design bounded whole-plan file actions with preview and atomic publication;
+preserve originals and reject stale/colliding plans. Existing comparisons remain
+unchanged; stop framing tiny per-operation inference as a speed optimization.
+
+Adding the 5,216-byte owned RAM store exposed a debug-only stack regression on
+coord.start. The dispatcher now routes coordinator and other system operations
+through separate helpers, so unrelated match-arm temporaries are not retained on
+the same call path. Observed debug frames: old combined command executor 20,832
+bytes; new router 144 plus coordinator helper 9,808 (system helper 12,720 on its
+separate path). The console run frame is 23,376 bytes. The 64 KiB stack is unchanged.
+Actual headless/native context cycles and scheduling fault diagnostics pass;
+these frame measurements are not a complete worst-case stack bound or guard.

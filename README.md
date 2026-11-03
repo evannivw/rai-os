@@ -60,6 +60,12 @@ The [constant-goal context cycle](docs/CONTEXT_SESSION.md) keeps the same object
 while simulated assignment reports change. Conflicting reports cause no guest
 work; a resolving report can update the result in the same running RAI-OS session.
 
+A [portable Linux container](docs/PORTABLE_RUN.md) packages compilation, QEMU and
+the bridge for use from Windows/Linux/macOS Docker environments. A new
+[guest RAM file store](docs/GUEST_FILES.md) accepts runtime bytes and supports
+checked read/copy/move with a native file-list view. It is limited to eight
+512-byte files, lost on reboot; AI file planning and persistent storage are pending.
+
 ## Run
 
 Install Rustup and QEMU (9.2 or newer with virt-9.2), then:
@@ -86,7 +92,8 @@ Each person supplies their own API key in the checkout-root `.env.local`; see
 [public template](config/meta.env.example) contains no key. Offline tests need none.
 
 The repository pins Rust 1.90.0 and aarch64-unknown-none-softfloat.
-Only macOS ARM64 has been tested. The host console is not a kernel GUI.
+See [portable verification status](docs/PORTABLE_RUN.md) for tested host environments.
+Native Windows execution is not claimed. The host console is not a kernel GUI.
 
 ## Verify
 

@@ -4,11 +4,12 @@ use crate::mmu::Snapshot as MmuSnapshot;
 use crate::task::{Snapshot, Task};
 use core::fmt;
 
-pub const HELP: &str = "help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | record.index <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start [index] | coord.result | coord.goal <keys> | coord.bundle.status | coord.bundle | coord.publish.status | coord.publish.read | coord.publish.prepare | coord.publish.commit <ticket> | coord.publish.reject <ticket> | coord.observe <key> | coord.select <goal_version>:<key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
+pub const HELP: &str = "help | info | fs.list | fs.read <path> | fs.begin <generation>:<size>:<path> | fs.append <ticket>:<offset>:<hex> | fs.commit <ticket> | fs.abort <ticket> | fs.copy <generation>:<src>:<dst> | fs.move <generation>:<src>:<dst> | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | record.index <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start [index] | coord.result | coord.goal <keys> | coord.bundle.status | coord.bundle | coord.publish.status | coord.publish.read | coord.publish.prepare | coord.publish.commit <ticket> | coord.publish.reject <ticket> | coord.observe <key> | coord.select <goal_version>:<key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <text> | task.start <text> | task.status | task.cancel <id>";
 pub const INFO: &str =
     "RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected";
 
 pub enum Operation<'a> {
+    Files(crate::ramfs::Operation<'a>),
     Help,
     Info,
     Uptime,
@@ -54,6 +55,12 @@ pub enum Operation<'a> {
 }
 
 pub fn parse_shell(line: &str) -> Result<Operation<'_>, &'static str> {
+    if line.starts_with("fs.") {
+        let (name, arg) = line
+            .split_once(' ')
+            .map_or((line, None), |(name, arg)| (name, Some(arg)));
+        return crate::ramfs::Operation::parse(name, arg).map(Operation::Files);
+    }
     match line {
         "help" => Ok(Operation::Help),
         "info" => Ok(Operation::Info),
@@ -160,6 +167,7 @@ pub struct Uptime {
 // is unavailable; the fixed bundle owns its bytes instead of borrowing session RAM.
 #[allow(clippy::large_enum_variant)]
 pub enum Reply<'a> {
+    Files(crate::ramfs::Reply),
     Bundle(crate::bundle::Artifact),
     BundleStatus(crate::bundle::Status),
     PublicationStatus(crate::publication::Status),
@@ -185,6 +193,7 @@ pub enum Reply<'a> {
 impl fmt::Display for Reply<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::Files(reply) => write!(f, "{reply}"),
             Self::Bundle(report) => write!(f, "{report}"),
             Self::BundleStatus(report) => write!(f, "{report}"),
             Self::PublicationStatus(report) => write!(f, "{report}"),
@@ -222,6 +231,35 @@ pub fn execute<'a>(
     timer: &mut crate::timer::Timer,
     sessions: &mut crate::schedule::Sessions,
 ) -> Result<Reply<'a>, &'static str> {
+    // Keep unrelated system-command temporaries out of retained coordinator calls.
+    // Debug builds reserve stack for every match arm, even the arms not taken.
+    match operation {
+        Operation::CoordGoal(_)
+        | Operation::CoordBundleStatus
+        | Operation::CoordBundle
+        | Operation::PublicationRead
+        | Operation::PublicationPrepare
+        | Operation::PublicationStatus
+        | Operation::PublicationCommit(_)
+        | Operation::PublicationReject(_)
+        | Operation::CoordResult
+        | Operation::CoordIndexStart
+        | Operation::CoordStart
+        | Operation::CoordObserve(_)
+        | Operation::CoordSelect(_)
+        | Operation::CoordPropose(_)
+        | Operation::CoordStatus
+        | Operation::CoordStop => execute_coordinator(operation, sessions, timer, mmu),
+        _ => execute_system(operation, uptime, task, memory, mmu, timer, sessions),
+    }
+}
+
+fn execute_coordinator<'a>(
+    operation: Operation<'a>,
+    sessions: &mut crate::schedule::Sessions,
+    timer: &mut crate::timer::Timer,
+    mmu: &crate::mmu::Mmu,
+) -> Result<Reply<'a>, &'static str> {
     Ok(match operation {
         Operation::CoordGoal(required) => {
             Reply::BundleStatus(sessions.coordinator.set_goal(required, timer, mmu)?)
@@ -248,6 +286,21 @@ pub fn execute<'a>(
             timer,
             mmu,
         )?),
+        _ => return Err("command_route_mismatch"),
+    })
+}
+
+fn execute_system<'a>(
+    operation: Operation<'a>,
+    uptime: Uptime,
+    task: &mut Task,
+    memory: &mut Memory,
+    mmu: &crate::mmu::Mmu,
+    timer: &mut crate::timer::Timer,
+    sessions: &mut crate::schedule::Sessions,
+) -> Result<Reply<'a>, &'static str> {
+    Ok(match operation {
+        Operation::Files(_) => return Err("fs_console_owner_required"),
         Operation::WorkerStart => Reply::Worker(sessions.worker.start(timer, mmu)?),
         Operation::WorkerCount(id) => Reply::WorkerCount(sessions.worker.count(id, timer, mmu)?),
         Operation::WorkerStatus => Reply::Worker(sessions.worker.status()),
@@ -290,6 +343,7 @@ pub fn execute<'a>(
         Operation::TaskStart(text) => Reply::Task(task.start(text, uptime.milliseconds)?),
         Operation::TaskStatus => Reply::Task(task.snapshot()),
         Operation::TaskCancel(id) => Reply::Task(task.cancel(id)?),
+        _ => return Err("command_route_mismatch"),
     })
 }
 

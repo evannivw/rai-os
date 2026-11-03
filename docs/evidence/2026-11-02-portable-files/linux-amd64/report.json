@@ -1,0 +1,52 @@
+{
+  "system": "Linux",
+  "machine": "x86_64",
+  "rust": "rustc 1.90.0 (1159e78c4 2025-09-14)",
+  "qemu": "QEMU emulator version 10.0.13 (Debian 1:10.0.13+ds-0+deb13u1)",
+  "files": {
+    "execution": "guest_EL1",
+    "storage": "volatile_ram",
+    "ai_planning": false,
+    "checks": [
+      "512-byte binary roundtrip; source preserved; copy and move in guest",
+      "rejected stale/collision/traversal/oversize/partial/malformed/offset/ticket/overflow/capacity operations; failed uploads remain invisible",
+      "fresh boot has no files: RAM-only lifetime confirmed"
+    ],
+    "source_sha256": "b91c8734cdebcdd43c4a81189cdfa25211473124d2340d414c3a17c48a987038",
+    "binary_sha256": "110009dcee21620b166f3abfecb5eff7a873be729d1c2d53822e7acc5f34eb9b",
+    "capacity": 8,
+    "max_file_bytes": 512,
+    "commands": 76
+  },
+  "context": {
+    "correct_decisions": 3,
+    "events": 3,
+    "all_decisions_correct": true,
+    "lifecycle": {
+      "goals": [
+        1,
+        6
+      ],
+      "publications": [
+        1,
+        6
+      ],
+      "total_jobs": 4,
+      "reused_on_update": 2,
+      "new_jobs_on_update": 1,
+      "previous_bytes_unchanged": true
+    },
+    "rejected": []
+  },
+  "context_report": {
+    "source": "rules",
+    "event_source": "controlled_context_updates",
+    "events_delivered": 3,
+    "exit_code": 0,
+    "correct_decisions": 3,
+    "all_decisions_correct": true,
+    "end_to_end_ms": 2499,
+    "graphics": false,
+    "presentation_pause_ms": 0
+  }
+}

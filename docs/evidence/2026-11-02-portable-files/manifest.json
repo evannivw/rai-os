@@ -1,0 +1,11 @@
+{
+  "observed_utc": "2026-11-03T05:32:55.745051+00:00",
+  "work_date_timezone": "America/Guatemala",
+  "base_commit": "8fe00dddfebf555d47b4bcbf4c15a21597b02242",
+  "source_state": "Uncommitted implementation snapshot; exact source hashes in each Linux build-info.json",
+  "macos": "ProductName:\t\tmacOS\nProductVersion:\t\t26.3.1\nBuildVersion:\t\t25D2128\n",
+  "native_qemu": "QEMU emulator version 11.1.2",
+  "windows_host_tested": false,
+  "live_meta_calls": 0,
+  "ai_file_planning": false
+}

@@ -16,6 +16,7 @@ mod memory;
 mod mmu;
 mod protocol;
 mod publication;
+mod ramfs;
 mod record_index;
 mod records;
 mod schedule;

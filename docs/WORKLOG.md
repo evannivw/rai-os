@@ -2197,3 +2197,56 @@ fixture hashes, fixed objective, current context, guest artifacts and same-call
 usage. This live probe was headless; native display had separate offline checks.
 Final video/rehearsal/submission remain pending; preserve original deadline and
 contribution-eligibility limitations.
+
+
+## 2026-11-02 — Portable QEMU runtime and writable guest files (Guatemala date)
+
+The user requested independence from the Mac host and a deeper useful operation
+such as file management. Added a Linux container recipe that builds the same
+AArch64 guest and a native Linux Rust bridge. QEMU uses TCG and a versioned virt
+board; native graphics select the host backend, while containers expose guest
+framebuffer pixels over VNC. Windows uses Docker Desktop Linux containers; a
+physical Windows host has not been tested. Git attributes retain LF build inputs.
+Source and binary hashes accompany image verification. The allowlisted build
+context excludes .env files, key suffixes, targets and Git metadata. No live model
+calls, credential changes, external publication of an image, or phone flashing.
+
+Added an allocator-free, pure Rust guest RAM store owned by the console. Eight
+512-byte file slots accept runtime uploads through bounded hex chunks. Complete
+uploads publish only after ticket, size, generation and destination checks.
+Read/list/copy/move operate on guest bytes and render the native Files view. No
+new unsafe, dependencies, overwrite/delete, directory objects, persistent disk,
+file permissions, isolated service or AI file planning. Individual operations are
+sequentially atomic; multi-action transaction semantics remain future work.
+
+The first Linux image exposed missing ramfb ROM firmware and the verifier's ASCII
+error decoder. Added Debian seabios and UTF-8 diagnostic decoding; boot assertions
+remain strict. A subsequent build correctly failed when source metadata requested
+a non-copied .dockerignore; the context now explicitly includes both ignore and
+attribute files. Debug coordinator regression exposed insufficient stack headroom
+with the new owned store. Separating coordinator/system dispatch temporaries fixed
+the reproduced fault without increasing the 64 KiB stack. Frame sizes and the
+failed test trace are retained; whole-program bounds and guard pages are pending.
+
+Verified pure file-store tests, formatting, warnings-denied Clippy, real-QEMU UART
+and file checks in debug/release, context replay/rules and rejection suites in both
+profiles, native debug context continuity, native file rendering, and debug
+scheduler register-corruption/user-fault diagnostics. File verification sends 76
+commands, checks exact 512-byte binary reads, unchanged originals, invalid/stale
+operations, capacity and empty state after reboot. Linux offline verification also
+runs the prior rules context lifecycle. VNC's local protocol greeting was checked;
+this does not prove a Windows viewer installation. Platform manifests, exact
+results and limitations are in evidence/2026-11-02-portable-files.
+
+Next implement bounded file-action plans: preview the entire proposal, validate
+versions/destinations/capacity, preserve originals, then publish all-or-nothing.
+Only then connect Meta to this new operation surface and evaluate requested
+outcome quality, ambiguity and unintended changes against a competent baseline.
+This increment establishes execution capability, not an AI speed/quality win.
+Preserve previous negative comparisons, actual contribution dates, the unresolved
+Oct 26/27 eligibility discrepancy and Nov 4 20:00 Guatemala deadline.
+
+Linux ARM64 and emulated Linux AMD64 both passed the offline retained-context and
+file/reboot checks. A core.autocrlf=true staged checkout initially changed bundled
+font notice/license line endings; scoped attributes now preserve all 254 included
+input files byte-for-byte. This checkout simulation is not a Windows host test.

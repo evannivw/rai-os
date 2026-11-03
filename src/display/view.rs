@@ -401,3 +401,61 @@ fn publication(
         if error.is_some() { 0x98644c } else { MUTED },
     );
 }
+
+/// Lists actual guest-owned file metadata. Input still uses UART, not touch.
+pub fn render_files(s: &mut Display, store: &crate::ramfs::Store, error: Option<&str>) {
+    s.fill(PAPER);
+    text(s, "rai / FILES", 40, 32, Size::Body, INK);
+    text(s, "Your files.", 40, 94, Size::Title, INK);
+    text(
+        s,
+        "Stored inside RAI-OS guest memory.",
+        40,
+        160,
+        Size::Small,
+        MUTED,
+    );
+    let mut label = Label::new();
+    let _ = write!(
+        label,
+        "Revision {} / 8 slots / 512 bytes per file",
+        store.generation()
+    );
+    text(s, label.text(), 40, 188, Size::Small, MUTED);
+    line(s, 220);
+    let mut count = 0;
+    for (path, bytes) in store.entries() {
+        text(s, path, 40, 246 + count * 50, Size::Small, INK);
+        let mut size = Label::new();
+        let _ = write!(size, "{bytes} bytes");
+        text(s, size.text(), 40, 266 + count * 50, Size::Small, MUTED);
+        count += 1;
+    }
+    if count == 0 {
+        text(
+            s,
+            "No files yet. Import through the console.",
+            40,
+            256,
+            Size::Small,
+            MUTED,
+        );
+    }
+    line(s, 690);
+    text(
+        s,
+        error.unwrap_or("Ready. Every completed change is versioned."),
+        40,
+        710,
+        Size::Small,
+        GREEN,
+    );
+    text(
+        s,
+        "RAM only / files disappear when powered off.",
+        40,
+        748,
+        Size::Small,
+        MUTED,
+    );
+}

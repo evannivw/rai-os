@@ -1,0 +1,3 @@
+{"event":"selection_stream_started","graphics":false,"intent_gate":"trusted_external_checker","max_events":4,"pause_ms":0,"source":"streamed_host_approvals"}
+{"event":"guest_boot_confirmed"}
+{"error":"Unexpected response format","event":"guest_cleanup_failed"}

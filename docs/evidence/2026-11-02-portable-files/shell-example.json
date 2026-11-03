@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "commands": "fs.list\nfs.begin 1:5:/inbox/hello.txt\nfs.append 1:0:68656c6c6f\nfs.commit 1\nfs.read /inbox/hello.txt\nfs.copy 2:/inbox/hello.txt:/work/hello.txt\nfs.move 3:/work/hello.txt:/archive/hello.txt\nfs.list\n",
+  "uart": "RAI-OS: boot OK | AArch64 EL1 | UART PL011\r\nConsole ready: type help for commands\r\nfs.list\r\ngeneration=1; capacity=8; max_bytes=512; persistence=ram; staged=false; files=-\r\nfs.begin 1:5:/inbox/hello.txt\r\ngeneration=1; ticket=1; written=0\r\nfs.append 1:0:68656c6c6f\r\ngeneration=1; ticket=1; written=5\r\nfs.commit 1\r\ngeneration=2; ticket=0; written=0\r\nfs.read /inbox/hello.txt\r\ngeneration=2; path=/inbox/hello.txt; bytes=5; data=68656c6c6f\r\nfs.copy 2:/inbox/hello.txt:/work/hello.txt\r\ngeneration=3; ticket=0; written=0\r\nfs.move 3:/work/hello.txt:/archive/hello.txt\r\ngeneration=4; ticket=0; written=0\r\nfs.list\r\ngeneration=4; capacity=8; max_bytes=512; persistence=ram; staged=false; files=/inbox/hello.txt:5,/archive/hello.txt:5\r\nqemu-system-aarch64: terminating on signal 15 from pid 7755 (<unknown process>)\n"
+}
