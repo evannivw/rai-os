@@ -25,3 +25,10 @@ Unicode, driver completeness or unrestricted natural-language correctness claims
 
 No earlier negative timing result is replaced. The native interface and one-plan
 model path are product/integration progress; AI superiority is still unproven.
+
+
+The live/ directory contains one fresh Meta response on frozen source a330bd3.
+It passed the independent expected-source/scope checks before confirmation and
+exact guest byte checks afterward. HTTP 200, 3093 ms provider latency, 817 tokens,
+no retry. Live input used the UI's UART adapter; viewer interaction was separately
+verified offline. Screenshots show the actual Meta reason and guest results.

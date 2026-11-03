@@ -1,0 +1,27 @@
+{
+  "source": "meta",
+  "maximum_calls": 1,
+  "retries": 0,
+  "development_fixture": true,
+  "ai_advantage_measured": false,
+  "applied": true,
+  "source_commit": "a330bd305f4707a2b1eef69775b380db2d6d70a6",
+  "plan": {
+    "actions": [
+      {
+        "destination": "/work/aurora.txt",
+        "kind": "copy",
+        "source": "/inbox/aurora.txt"
+      },
+      {
+        "destination": "/work/field.txt",
+        "kind": "copy",
+        "source": "/inbox/field.txt"
+      }
+    ],
+    "decision": "plan",
+    "generation": 5,
+    "reason": "Copy two approved Aurora notes to /work, skip draft and unrelated.",
+    "request_id": 2
+  }
+}

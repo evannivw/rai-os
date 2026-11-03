@@ -127,3 +127,14 @@ This makes at most one new live call on the same disclosed development data,
 independently checks the selected sources/destination scope before confirming,
 then checks exact guest results. No retry, tuning to the response, benchmark or
 unseen evaluation is implied. Prior negative timing evidence remains unchanged.
+
+
+## Recorded result
+
+The November 3 live smoke test on clean source a330bd3 passed: Meta proposed the
+two approved-document copies, the independent check accepted their scope, and the
+guest preserved all originals and returned both exact copied byte sequences after
+one confirmed generation increment. One call, no retries; provider latency 3093 ms,
+817 reported tokens. This known development example demonstrates the integration,
+not superiority over another policy. See [raw evidence](evidence/2026-11-03-prompt-workspace/live/manifest.json).
+Offline Linux ARM64 and emulated AMD64 runs also passed the actual RFB/guest flow.

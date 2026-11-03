@@ -1,0 +1,26 @@
+{
+  "recorded_utc": "2026-11-03T06:09:27.603570+00:00",
+  "source_commit": "a330bd305f4707a2b1eef69775b380db2d6d70a6",
+  "live_calls": 1,
+  "retries": 0,
+  "provider": {
+    "choice_count": 1,
+    "finish_reason": "stop",
+    "http_status": 200,
+    "latency_ms": 3093,
+    "model_matches": true,
+    "refusal_present": false,
+    "role": "assistant",
+    "stage": "proposal",
+    "tool_calls_present": false,
+    "transport_exit_code": 0,
+    "usage": {
+      "completion_tokens": 291,
+      "prompt_tokens": 526,
+      "total_tokens": 817
+    }
+  },
+  "kernel_sha256": "bb96237f95610e7cfc1aa417503b86a5a7d250e2dc75d5dd465415846631b068",
+  "bridge_sha256": "f689eb1d82c36328cb2c1a8200d0e9a68679ed55f49d135bb2700296a3cf7684",
+  "evaluation": "One disclosed development case; no baseline comparison or superiority claim"
+}

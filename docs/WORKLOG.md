@@ -2295,3 +2295,26 @@ confirming, then exact guest bytes afterward. Preserve failed results with no
 retry or prompt tuning. This proves an integration path, not an unseen semantic
 advantage over a competent baseline. Protect video/rehearsal/submission time and
 the existing November 4 20:00 Guatemala deadline and contribution-date caveats.
+
+
+## 2026-11-03 — One live Meta file plan and confirmed guest result
+
+Frozen source a330bd305f4707a2b1eef69775b380db2d6d70a6 produced one new Meta
+file-plan response for the disclosed “Collect approved Aurora notes in /work.
+Keep originals.” case. HTTP 200; provider latency 3093 ms; reported usage 817
+tokens (526 prompt, 291 completion). No retry, fallback or post-response tuning.
+Meta proposed copying /inbox/aurora.txt and /inbox/field.txt into /work, excluding
+the draft and personal list. The reason and exact actions appeared on the guest
+review screen. The independent check verified that preview left generation 5 and
+all original bytes unchanged, validated both selected sources/destination scope,
+then explicitly confirmed. The guest committed one generation transition to 6;
+returned copy bytes and all four originals matched exactly.
+
+The live smoke test used the same guest UI/bridge but injected keys through its
+UART adapter, not a human viewer. RFB and native macOS viewer interaction were
+separately tested offline. Live request, provider diagnostic/proposal, UART,
+compose/thinking/review/result captures and binary hashes are archived in
+evidence/2026-11-03-prompt-workspace/live. This is an end-to-end integration result
+on a known development example, not an unseen benchmark or an AI speed/quality
+advantage. The model still takes seconds; one request proposes the complete plan.
+No persistent storage, new isolation or physical Windows/phone claim is added.
