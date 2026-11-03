@@ -1,0 +1,554 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Display ready: 480x800 guest framebuffer
+Console ready: type help for commands
+@rai1	1	ok	state=home
+@rai1	2	ok	state=home
+@rai1	3	ok	revision=1; apps=-
+@rai1	4	ok	state=home
+@rai1	5	ok	state=home
+@rai1	6	ok	state=compose
+@rai1	7	ok	state=compose
+@rai1	8	ok	state=compose
+@rai1	9	ok	state=compose
+@rai1	10	ok	state=compose
+@rai1	11	ok	state=compose
+@rai1	12	ok	state=compose
+@rai1	13	ok	state=compose
+@rai1	14	ok	state=compose
+@rai1	15	ok	state=compose
+@rai1	16	ok	state=compose
+@rai1	17	ok	state=compose
+@rai1	18	ok	state=compose
+@rai1	19	ok	state=compose
+@rai1	20	ok	state=compose
+@rai1	21	ok	state=compose
+@rai1	22	ok	state=compose
+@rai1	23	ok	state=compose
+@rai1	24	ok	state=compose
+@rai1	25	ok	state=compose
+@rai1	26	ok	state=compose
+@rai1	27	ok	state=compose
+@rai1	28	ok	state=compose
+@rai1	29	ok	state=compose
+@rai1	30	ok	state=compose
+@rai1	31	ok	state=compose
+@rai1	32	ok	state=compose
+@rai1	33	ok	state=compose
+@rai1	34	ok	state=compose
+@rai1	35	ok	state=compose
+@rai1	36	ok	state=compose
+@rai1	37	ok	state=compose
+@rai1	38	ok	state=compose
+@rai1	39	ok	state=compose
+@rai1	40	ok	state=compose
+@rai1	41	ok	state=compose
+@rai1	42	ok	state=compose
+@rai1	43	ok	state=compose
+@rai1	44	ok	submit=3; revision=1; target=-; prompt=446973636c6f73656420736368656d6120666f722047697420766572696669636174696f6e
+@rai1	45	ok	state=thinking
+@rai1	46	ok	state=thinking
+@rai1	47	ok	state=thinking
+@rai1	48	ok	state=thinking
+@rai1	49	ok	state=thinking
+@rai1	50	ok	state=thinking
+@rai1	51	ok	state=thinking
+@rai1	52	ok	state=review
+@rai1	53	ok	revision=1; apps=-
+@rai1	54	ok	state=review
+@rai1	55	ok	state=behavior_review
+@rai1	56	ok	revision=1; apps=-
+@rai1	57	ok	state=behavior_review
+@rai1	58	ok	revision=1; apps=-
+@rai1	59	ok	state=form
+@rai1	60	ok	revision=2; apps=versiontool:1:0:56657273696f6e656420746f6f6c
+@rai1	61	ok	state=form
+@rai1	62	ok	revision=2; apps=versiontool:1:0:56657273696f6e656420746f6f6c
+@rai1	63	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b31^^0~all
+@rai1	64	ok	id=versiontool; version=1; count=0; rows=; states=
+@rai1	65	ok	state=form
+@rai1	66	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b31^^0~all
+@rai1	67	ok	state=form
+@rai1	68	ok	state=form
+@rai1	69	ok	state=records
+@rai1	70	ok	revision=3; apps=versiontool:1:1:56657273696f6e656420746f6f6c
+@rai1	71	ok	state=records
+@rai1	72	ok	revision=3; apps=versiontool:1:1:56657273696f6e656420746f6f6c
+@rai1	73	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b31^^0~all
+@rai1	74	ok	id=versiontool; version=1; count=1; rows=4c4f43414c5f4f4e4c595f41,35; states=
+@rai1	75	ok	state=records
+@rai1	76	ok	state=form
+@rai1	77	ok	revision=3; apps=versiontool:1:1:56657273696f6e656420746f6f6c
+@rai1	78	ok	state=form
+@rai1	79	ok	state=form
+@rai1	80	ok	state=records
+@rai1	81	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	82	ok	state=records
+@rai1	83	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	84	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b31^^0~all
+@rai1	85	ok	id=versiontool; version=1; count=2; rows=4c4f43414c5f4f4e4c595f41,35|4c4f43414c5f4f4e4c595f42,39; states=,
+@rai1	86	ok	state=records
+@rai1	87	ok	id=versiontool; version=1; count=2; rows=4c4f43414c5f4f4e4c595f41,35|4c4f43414c5f4f4e4c595f42,39; states=,
+@rai1	88	ok	state=form
+@rai1	89	ok	state=compose
+@rai1	90	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	91	ok	state=compose
+@rai1	92	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	93	ok	state=compose
+@rai1	94	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	95	ok	state=compose
+@rai1	96	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	97	ok	state=compose
+@rai1	98	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	99	ok	state=compose
+@rai1	100	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	101	ok	state=compose
+@rai1	102	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	103	ok	state=compose
+@rai1	104	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	105	ok	state=compose
+@rai1	106	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	107	ok	state=compose
+@rai1	108	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	109	ok	state=compose
+@rai1	110	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	111	ok	state=compose
+@rai1	112	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	113	ok	state=compose
+@rai1	114	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	115	ok	state=compose
+@rai1	116	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	117	ok	state=compose
+@rai1	118	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	119	ok	state=compose
+@rai1	120	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	121	ok	state=compose
+@rai1	122	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	123	ok	state=compose
+@rai1	124	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	125	ok	state=compose
+@rai1	126	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	127	ok	state=compose
+@rai1	128	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	129	ok	state=compose
+@rai1	130	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	131	ok	state=compose
+@rai1	132	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	133	ok	state=compose
+@rai1	134	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	135	ok	state=compose
+@rai1	136	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	137	ok	state=compose
+@rai1	138	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	139	ok	state=compose
+@rai1	140	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	141	ok	state=compose
+@rai1	142	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	143	ok	state=compose
+@rai1	144	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	145	ok	state=compose
+@rai1	146	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	147	ok	state=compose
+@rai1	148	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	149	ok	state=compose
+@rai1	150	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	151	ok	state=compose
+@rai1	152	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	153	ok	state=compose
+@rai1	154	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	155	ok	state=compose
+@rai1	156	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	157	ok	state=compose
+@rai1	158	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	159	ok	state=compose
+@rai1	160	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	161	ok	state=compose
+@rai1	162	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	163	ok	state=compose
+@rai1	164	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	165	ok	state=compose
+@rai1	166	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	167	ok	state=compose
+@rai1	168	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	169	ok	state=compose
+@rai1	170	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	171	ok	submit=5; revision=4; target=versiontool; prompt=6769743a2073617665207468697320646566696e6974696f6e2061732076657273696f6e206f6e65
+@rai1	172	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	173	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b31^^0~all
+@rai1	174	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	175	ok	request=5; base=4; revision=4; state=thinking
+@rai1	176	ok	state=thinking
+@rai1	177	ok	request=5; base=4; revision=4; state=thinking
+@rai1	178	ok	state=notice
+@rai1	179	ok	state=form
+@rai1	180	ok	state=compose
+@rai1	181	ok	state=compose
+@rai1	182	ok	state=compose
+@rai1	183	ok	state=compose
+@rai1	184	ok	state=compose
+@rai1	185	ok	state=compose
+@rai1	186	ok	state=compose
+@rai1	187	ok	state=compose
+@rai1	188	ok	state=compose
+@rai1	189	ok	state=compose
+@rai1	190	ok	state=compose
+@rai1	191	ok	state=compose
+@rai1	192	ok	state=compose
+@rai1	193	ok	state=compose
+@rai1	194	ok	state=compose
+@rai1	195	ok	state=compose
+@rai1	196	ok	state=compose
+@rai1	197	ok	state=compose
+@rai1	198	ok	state=compose
+@rai1	199	ok	state=compose
+@rai1	200	ok	state=compose
+@rai1	201	ok	state=compose
+@rai1	202	ok	state=compose
+@rai1	203	ok	state=compose
+@rai1	204	ok	state=compose
+@rai1	205	ok	state=compose
+@rai1	206	ok	state=compose
+@rai1	207	ok	state=compose
+@rai1	208	ok	state=compose
+@rai1	209	ok	state=compose
+@rai1	210	ok	state=compose
+@rai1	211	ok	state=compose
+@rai1	212	ok	state=compose
+@rai1	213	ok	state=compose
+@rai1	214	ok	state=compose
+@rai1	215	ok	state=compose
+@rai1	216	ok	state=compose
+@rai1	217	ok	state=compose
+@rai1	218	ok	submit=7; revision=4; target=versiontool; prompt=446973636c6f73656420736368656d6120666f722047697420766572696669636174696f6e
+@rai1	219	ok	state=thinking
+@rai1	220	ok	state=thinking
+@rai1	221	ok	state=thinking
+@rai1	222	ok	state=thinking
+@rai1	223	ok	state=thinking
+@rai1	224	ok	state=thinking
+@rai1	225	ok	state=thinking
+@rai1	226	ok	state=review
+@rai1	227	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	228	ok	state=review
+@rai1	229	ok	state=behavior_review
+@rai1	230	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	231	ok	state=behavior_review
+@rai1	232	ok	revision=4; apps=versiontool:1:2:56657273696f6e656420746f6f6c
+@rai1	233	ok	state=form
+@rai1	234	ok	revision=5; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	235	ok	state=form
+@rai1	236	ok	revision=5; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	237	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b3130^^0~all
+@rai1	238	ok	id=versiontool; version=2; count=2; rows=4c4f43414c5f4f4e4c595f41,35|4c4f43414c5f4f4e4c595f42,39; states=,
+@rai1	239	ok	state=form
+@rai1	240	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b3130^^0~all
+@rai1	241	ok	id=versiontool; version=2; count=2; rows=4c4f43414c5f4f4e4c595f41,35|4c4f43414c5f4f4e4c595f42,39; states=,
+@rai1	242	ok	state=form
+@rai1	243	ok	state=records
+@rai1	244	ok	revision=5; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	245	ok	state=form
+@rai1	246	ok	revision=5; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	247	ok	state=behaviors
+@rai1	248	ok	revision=5; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	249	ok	state=behavior_preview
+@rai1	250	ok	revision=5; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	251	ok	state=behaviors
+@rai1	252	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	253	ok	state=behaviors
+@rai1	254	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	255	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b3130^^0~all
+@rai1	256	ok	id=versiontool; version=2; count=2; rows=4c4f43414c5f4f4e4c595f41,3135|4c4f43414c5f4f4e4c595f42,3139; states=,
+@rai1	257	ok	state=behaviors
+@rai1	258	ok	id=versiontool; version=2; count=2; rows=4c4f43414c5f4f4e4c595f41,3135|4c4f43414c5f4f4e4c595f42,3139; states=,
+@rai1	259	ok	state=form
+@rai1	260	ok	state=compose
+@rai1	261	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	262	ok	state=compose
+@rai1	263	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	264	ok	state=compose
+@rai1	265	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	266	ok	state=compose
+@rai1	267	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	268	ok	state=compose
+@rai1	269	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	270	ok	state=compose
+@rai1	271	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	272	ok	state=compose
+@rai1	273	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	274	ok	state=compose
+@rai1	275	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	276	ok	state=compose
+@rai1	277	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	278	ok	state=compose
+@rai1	279	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	280	ok	state=compose
+@rai1	281	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	282	ok	state=compose
+@rai1	283	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	284	ok	state=compose
+@rai1	285	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	286	ok	state=compose
+@rai1	287	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	288	ok	state=compose
+@rai1	289	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	290	ok	state=compose
+@rai1	291	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	292	ok	state=compose
+@rai1	293	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	294	ok	state=compose
+@rai1	295	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	296	ok	state=compose
+@rai1	297	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	298	ok	state=compose
+@rai1	299	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	300	ok	state=compose
+@rai1	301	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	302	ok	state=compose
+@rai1	303	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	304	ok	state=compose
+@rai1	305	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	306	ok	state=compose
+@rai1	307	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	308	ok	state=compose
+@rai1	309	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	310	ok	state=compose
+@rai1	311	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	312	ok	state=compose
+@rai1	313	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	314	ok	state=compose
+@rai1	315	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	316	ok	state=compose
+@rai1	317	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	318	ok	state=compose
+@rai1	319	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	320	ok	state=compose
+@rai1	321	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	322	ok	state=compose
+@rai1	323	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	324	ok	state=compose
+@rai1	325	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	326	ok	state=compose
+@rai1	327	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	328	ok	state=compose
+@rai1	329	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	330	ok	state=compose
+@rai1	331	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	332	ok	state=compose
+@rai1	333	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	334	ok	state=compose
+@rai1	335	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	336	ok	state=compose
+@rai1	337	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	338	ok	state=compose
+@rai1	339	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	340	ok	state=compose
+@rai1	341	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	342	ok	state=compose
+@rai1	343	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	344	ok	state=compose
+@rai1	345	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	346	ok	state=compose
+@rai1	347	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	348	ok	state=compose
+@rai1	349	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	350	ok	state=compose
+@rai1	351	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	352	ok	state=compose
+@rai1	353	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	354	ok	state=compose
+@rai1	355	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	356	ok	state=compose
+@rai1	357	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	358	ok	submit=10; revision=6; target=versiontool; prompt=6769743a20736176652074686973206368616e67656420646566696e6974696f6e2061732076657273696f6e2074776f
+@rai1	359	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	360	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b3130^^0~all
+@rai1	361	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	362	ok	request=10; base=6; revision=6; state=thinking
+@rai1	363	ok	state=thinking
+@rai1	364	ok	request=10; base=6; revision=6; state=thinking
+@rai1	365	ok	state=notice
+@rai1	366	ok	state=form
+@rai1	367	ok	state=compose
+@rai1	368	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	369	ok	state=compose
+@rai1	370	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	371	ok	state=compose
+@rai1	372	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	373	ok	state=compose
+@rai1	374	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	375	ok	state=compose
+@rai1	376	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	377	ok	state=compose
+@rai1	378	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	379	ok	state=compose
+@rai1	380	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	381	ok	state=compose
+@rai1	382	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	383	ok	state=compose
+@rai1	384	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	385	ok	state=compose
+@rai1	386	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	387	ok	state=compose
+@rai1	388	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	389	ok	state=compose
+@rai1	390	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	391	ok	state=compose
+@rai1	392	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	393	ok	state=compose
+@rai1	394	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	395	ok	state=compose
+@rai1	396	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	397	ok	state=compose
+@rai1	398	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	399	ok	state=compose
+@rai1	400	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	401	ok	state=compose
+@rai1	402	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	403	ok	state=compose
+@rai1	404	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	405	ok	state=compose
+@rai1	406	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	407	ok	state=compose
+@rai1	408	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	409	ok	state=compose
+@rai1	410	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	411	ok	state=compose
+@rai1	412	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	413	ok	state=compose
+@rai1	414	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	415	ok	state=compose
+@rai1	416	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	417	ok	state=compose
+@rai1	418	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	419	ok	state=compose
+@rai1	420	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	421	ok	state=compose
+@rai1	422	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	423	ok	state=compose
+@rai1	424	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	425	ok	state=compose
+@rai1	426	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	427	ok	state=compose
+@rai1	428	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	429	ok	state=compose
+@rai1	430	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	431	ok	state=compose
+@rai1	432	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	433	ok	state=compose
+@rai1	434	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	435	ok	state=compose
+@rai1	436	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	437	ok	state=compose
+@rai1	438	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	439	ok	state=compose
+@rai1	440	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	441	ok	state=compose
+@rai1	442	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	443	ok	state=compose
+@rai1	444	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	445	ok	state=compose
+@rai1	446	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	447	ok	state=compose
+@rai1	448	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	449	ok	state=compose
+@rai1	450	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	451	ok	state=compose
+@rai1	452	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	453	ok	state=compose
+@rai1	454	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	455	ok	state=compose
+@rai1	456	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	457	ok	state=compose
+@rai1	458	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	459	ok	state=compose
+@rai1	460	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	461	ok	state=compose
+@rai1	462	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	463	ok	state=compose
+@rai1	464	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	465	ok	state=compose
+@rai1	466	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	467	ok	state=compose
+@rai1	468	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	469	ok	state=compose
+@rai1	470	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	471	ok	state=compose
+@rai1	472	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	473	ok	state=compose
+@rai1	474	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	475	ok	state=compose
+@rai1	476	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	477	ok	state=compose
+@rai1	478	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	479	ok	state=compose
+@rai1	480	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	481	ok	state=compose
+@rai1	482	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	483	ok	state=compose
+@rai1	484	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	485	ok	state=compose
+@rai1	486	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	487	ok	state=compose
+@rai1	488	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	489	ok	state=compose
+@rai1	490	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	491	ok	state=compose
+@rai1	492	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	493	ok	state=compose
+@rai1	494	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	495	ok	state=compose
+@rai1	496	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	497	ok	submit=12; revision=6; target=versiontool; prompt=6769743a20726573746f7265207468652070726576696f75732073617665642076657273696f6e2c206b656570696e672063757272656e74207265636f726473
+@rai1	498	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	499	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b3130^^0~all
+@rai1	500	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	501	ok	request=12; base=6; revision=6; state=thinking
+@rai1	502	ok	state=thinking
+@rai1	503	ok	request=12; base=6; revision=6; state=thinking
+@rai1	504	ok	state=thinking
+@rai1	505	ok	state=thinking
+@rai1	506	ok	state=thinking
+@rai1	507	ok	state=thinking
+@rai1	508	ok	state=thinking
+@rai1	509	ok	state=thinking
+@rai1	510	ok	state=thinking
+@rai1	511	ok	state=review
+@rai1	512	ok	id=versiontool; version=2; count=2; rows=4c4f43414c5f4f4e4c595f41,3135|4c4f43414c5f4f4e4c595f42,3139; states=,
+@rai1	513	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b3130^^0~all
+@rai1	514	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	515	ok	state=review
+@rai1	516	ok	state=behavior_review
+@rai1	517	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	518	ok	state=behavior_review
+@rai1	519	ok	revision=6; apps=versiontool:2:2:56657273696f6e656420746f6f6c
+@rai1	520	ok	state=form
+@rai1	521	ok	revision=7; apps=versiontool:3:2:56657273696f6e656420746f6f6c
+@rai1	522	ok	state=form
+@rai1	523	ok	revision=7; apps=versiontool:3:2:56657273696f6e656420746f6f6c
+@rai1	524	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b31^^0~all
+@rai1	525	ok	id=versiontool; version=3; count=2; rows=4c4f43414c5f4f4e4c595f41,3135|4c4f43414c5f4f4e4c595f42,3139; states=,
+@rai1	526	ok	state=form
+@rai1	527	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b31^^0~all
+@rai1	528	ok	id=versiontool; version=3; count=2; rows=4c4f43414c5f4f4e4c595f41,3135|4c4f43414c5f4f4e4c595f42,3139; states=,
+@rai1	529	ok	state=form
+@rai1	530	ok	state=records
+@rai1	531	ok	revision=7; apps=versiontool:3:2:56657273696f6e656420746f6f6c
+@rai1	532	ok	state=form
+@rai1	533	ok	revision=7; apps=versiontool:3:2:56657273696f6e656420746f6f6c
+@rai1	534	ok	state=behaviors
+@rai1	535	ok	revision=7; apps=versiontool:3:2:56657273696f6e656420746f6f6c
+@rai1	536	ok	state=behavior_preview
+@rai1	537	ok	revision=7; apps=versiontool:3:2:56657273696f6e656420746f6f6c
+@rai1	538	ok	state=behaviors
+@rai1	539	ok	revision=8; apps=versiontool:3:2:56657273696f6e656420746f6f6c
+@rai1	540	ok	state=behaviors
+@rai1	541	ok	revision=8; apps=versiontool:3:2:56657273696f6e656420746f6f6c
+@rai1	542	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b31^^0~all
+@rai1	543	ok	id=versiontool; version=3; count=2; rows=4c4f43414c5f4f4e4c595f41,3136|4c4f43414c5f4f4e4c595f42,3230; states=,
+@rai1	544	ok	state=behaviors
+@rai1	545	ok	id=versiontool; version=3; count=2; rows=4c4f43414c5f4f4e4c595f41,3136|4c4f43414c5f4f4e4c595f42,3230; states=,
+@rai1	546	ok	state=table
+@rai1	547	ok	revision=8; apps=versiontool:3:2:56657273696f6e656420746f6f6c
+@rai1	548	ok	revision=8; apps=versiontool:3:2:56657273696f6e656420746f6f6c
+@rai1	549	ok	id=versiontool; title=56657273696f6e656420746f6f6c; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,count~number~1~436f756e74~30~; initial=; actions=; behaviors=advance~416476616e636520616c6c~press~calculate^count^24636f756e742b31^^0~all
+@rai1	550	ok	id=versiontool; version=3; count=2; rows=4c4f43414c5f4f4e4c595f41,3136|4c4f43414c5f4f4e4c595f42,3230; states=,
+@rai1	551	ok	revision=8; apps=versiontool:3:2:56657273696f6e656420746f6f6c

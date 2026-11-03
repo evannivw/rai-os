@@ -1,0 +1,7 @@
+{
+  "source": "meta",
+  "state": "completed",
+  "maximum_provider_calls": 1,
+  "operation": "save",
+  "session_provider_attempts": 2
+}

@@ -1,0 +1,12 @@
+{
+  "app_id": "versiontool",
+  "base_revision": 6,
+  "choice": {
+    "message": "Save version two",
+    "operation": "save",
+    "reason": "Guest requested save of changed definition as version two with two records present.",
+    "revision": ""
+  },
+  "head": "bd60703df35d6cbffdddc65ec9f43edef3446ffd",
+  "request_id": 10
+}

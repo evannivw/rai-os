@@ -1,0 +1,7 @@
+{
+  "source": "meta",
+  "state": "review",
+  "maximum_provider_calls": 1,
+  "operation": "restore",
+  "session_provider_attempts": 3
+}

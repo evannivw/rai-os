@@ -127,7 +127,7 @@ guest state. Rust tests cover real Git CAS/no-op semantics, the 64-version limit
 ordinary repository rejection, altered config, alternate stores, symlinks and a
 reference-transaction hook that must not run. Previous generated-app/repair/demo
 regressions remain separate. Actual observed results belong in WORKLOG/evidence;
-the commands above are not themselves a claim that live validation passed.
+the commands above are not themselves evidence. The recorded [live run](evidence/2026-11-03-app-git/live/README.md) passed two actual Meta-selected saves and a reviewed restore in exactly three calls.
 
 ## Toward updating RAI-OS itself
 

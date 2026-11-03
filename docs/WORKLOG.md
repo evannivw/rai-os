@@ -2942,3 +2942,24 @@ offline checks are explicit fixtures. Exact source hashes are retained for this
 modified tree. No Meta calls in this increment yet. Next: freeze source and perform
 one live sequence of two saves and one restore, at most three calls total, retaining
 all outcomes. This checks live tool selection, not generation of the fixture apps.
+
+
+## 2026-11-03 — Live Meta selects real Git saves and reviewed restore
+
+Clean source 5a086a7d9bb9dd3f0226646ea1b6b9c9514dd391 completed exactly three
+Meta calls: save version one, save version two, restore the previous saved version.
+All returned HTTP 200, matching model and stop completion, without retry/fallback.
+Provider latencies: 2988/3158/2364 ms; token totals: 695/740/719. These are tool
+selection measurements, not an OS performance comparison.
+
+The input app definitions were explicit verifier fixtures; Meta selected actual
+operations, commit messages and the observed earlier Git OID. The native verifier
+confirmed no restoration before approval, preserved current 15/19 records, ran the
+restored +1 behavior to produce 16/20, and recovered identical program/data after
+reboot without inference. Real Git HEAD retained version two; neither record data
+nor credentials were committed by the app adapter. Offline adverse cases remain
+separate. Evidence: evidence/2026-11-03-app-git/live.
+
+This follow-up only records evidence/documentation. No executable changes or
+further API calls. Non-kernel executable self-update remains future work requiring
+service isolation, tested packages, compatible state and independent recovery.

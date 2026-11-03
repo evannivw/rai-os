@@ -1,0 +1,12 @@
+{
+  "app_id": "versiontool",
+  "base_revision": 4,
+  "choice": {
+    "message": "Save version one",
+    "operation": "save",
+    "reason": "Guest requested first save of current definition as version one.",
+    "revision": ""
+  },
+  "head": "",
+  "request_id": 5
+}

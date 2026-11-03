@@ -1,0 +1,11 @@
+{
+  "source_commit": "5a086a7d9bb9dd3f0226646ea1b6b9c9514dd391",
+  "sha256": {
+    "host/meta/src/app_git.rs": "536e4a8cdadcd0a1e16735ec9907f6bd6075cebb6371654e9d4eac177f317948",
+    "host/meta/src/git_store.rs": "7bd753aed44559376d0a1cebbd491bd6e0ce2359b701270f1f54a187abde62d6",
+    "host/meta/src/provider.rs": "4e2c538d4ad72ca743d101e6602de0d5e7f8684cf60dee219aa42d0269eb3040",
+    "scripts/app_git.py": "188c53f82e7aeb3b57106739e4d9f269b0ef9df2ff2232c95752ada6446da937",
+    "scripts/apps.py": "cfc46394648766b18e19302b536376b3d830fb3dd341832465b0e416f270c6f0",
+    "scripts/verify_app_git.py": "676881abd2a74f424528bf45b216f100927b4623e93f417e069de97e53ccb5b8"
+  }
+}

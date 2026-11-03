@@ -1,0 +1,105 @@
+{
+  "verified": true,
+  "source": "meta",
+  "source_commit": "5a086a7d9bb9dd3f0226646ea1b6b9c9514dd391",
+  "source_worktree_dirty": false,
+  "maximum_live_calls": 3,
+  "generation_calls": 3,
+  "checks": [
+    "Real commits contain definitions only; restore requires native approval, preserves records and Git history, and executes the old program over current data",
+    "Current records and restored definition recover after a fresh QEMU boot without inference"
+  ],
+  "operations": [
+    {
+      "goal": "git: save this definition as version one",
+      "trace": {
+        "source": "meta",
+        "state": "completed",
+        "maximum_provider_calls": 1,
+        "operation": "save",
+        "session_provider_attempts": 1
+      }
+    },
+    {
+      "goal": "git: save this changed definition as version two",
+      "trace": {
+        "source": "meta",
+        "state": "completed",
+        "maximum_provider_calls": 1,
+        "operation": "save",
+        "session_provider_attempts": 2
+      }
+    },
+    {
+      "goal": "git: restore the previous saved version, keeping current records",
+      "trace": {
+        "source": "meta",
+        "state": "review",
+        "maximum_provider_calls": 1,
+        "operation": "restore",
+        "session_provider_attempts": 3
+      }
+    }
+  ],
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "versiontool",
+          "title": "Versioned tool",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "count",
+              "kind": "number",
+              "required": true,
+              "label": "Count",
+              "default": "0"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "behaviors": [
+            {
+              "id": "advance",
+              "label": "Advance all",
+              "event": "press",
+              "steps": [
+                {
+                  "op": "calculate",
+                  "field": "count",
+                  "value": "$count+1",
+                  "compare": "",
+                  "skip": 0
+                }
+              ],
+              "scope": "all"
+            }
+          ]
+        },
+        "rows": [
+          [
+            "LOCAL_ONLY_A",
+            "16"
+          ],
+          [
+            "LOCAL_ONLY_B",
+            "20"
+          ]
+        ]
+      }
+    ]
+  },
+  "git_history": [
+    "3b50f4bbdc3b358b12570be7cd06d30483da7d03 Save version two",
+    "bd60703df35d6cbffdddc65ec9f43edef3446ffd Save version one"
+  ]
+}
