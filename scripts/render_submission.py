@@ -84,7 +84,7 @@ def render(capture,output):
     metadata=probe(output/'rai-os-demo.mp4');assert abs(float(metadata['format']['duration'])-180)<.15
     assert {s['codec_type'] for s in metadata['streams']}=={'audio','video'}
     video=next(s for s in metadata['streams'] if s['codec_type']=='video');assert (video['width'],video['height'])==(1920,1080)
-    (output/'captions-en.srt').write_text('\n'.join(subtitles)+'\n');(output/'narration-en.txt').write_text('\n'.join(narration))
+    (output/'captions-en.srt').write_text('\n'.join(subtitles).rstrip()+'\n');(output/'narration-en.txt').write_text('\n'.join(narration))
     manifest['video_sha256']=hashlib.sha256((output/'rai-os-demo.mp4').read_bytes()).hexdigest()
     (output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');(output/'media-info.json').write_text(json.dumps(metadata,indent=2)+'\n')
     for i,s in enumerate(manifest['scenes']):
