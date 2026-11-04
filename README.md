@@ -4,12 +4,13 @@ An educational AArch64 operating-system prototype in Rust. Describe a small
 application, review Meta's proposal, and use its forms, calculations and processes
 locally in our QEMU guest.
 
-**Start here:** [Runnable demo and three-minute presentation](docs/DEMO_READY.md) ·
+**Start here:** [Try without a key / connect your own Meta account](docs/TRY_RAI_OS.md) ·
+[Runnable demo and three-minute presentation](docs/DEMO_READY.md) ·
 [App capabilities and remaining limits](docs/APP_LIMITS.md) ·
 [Atomic app transfers](docs/APP_TRANSFERS.md) · [Final recording runbook](docs/DEMO_FINAL_RUNBOOK.md).
 
 ```sh
-# Two actual previously Meta-generated apps; no API key needed:
+# Three actual previously Meta-generated apps; no API key needed:
 python3 -B scripts/demo.py saved --output target/demo-visit-1
 ```
 

@@ -24,6 +24,7 @@ def verify(output):
         env = dict(os.environ)
         env.pop('RAI_VNC_PASSWORD', None)
         env.pop('MODEL_API_KEY', None)
+        if action=='live':env['MODEL_API_KEY']='LLM_synthetic_format_only_0000'
         with (output / f'{action}.log').open('w') as log:
             process = subprocess.Popen([sys.executable, '-B', 'scripts/demo.py', action,
                                         '--output', str(folder), '--port', str(port)],
@@ -56,7 +57,7 @@ def verify(output):
         saved = output / 'saved'
         launch('saved', saved)
         original = (saved / 'device.json').read_bytes()
-        assert len(json.loads(original)['state']['apps']) == 2
+        assert len(json.loads(original)['state']['apps']) == 3
         launch('resume', saved)
         assert (saved / 'device.json').read_bytes() == original
         assert len(list(saved.glob('session-*'))) == 2

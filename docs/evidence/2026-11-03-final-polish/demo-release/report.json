@@ -1,0 +1,320 @@
+{
+  "verified": true,
+  "source": "saved_actual_meta_results",
+  "live_meta_calls": 0,
+  "kernel_sha256": "c2193ae82924411caf250151c09dd6399e32a0cddcf2ee10891c418291b25d73",
+  "checks": [
+    "Saved Meta workflow: native unpaid delivery rejected unchanged; payment and delivery succeed locally",
+    "Three apps restored; transfer preserves total 17; exact local profit 285 -> 260; workshop unchanged; CSV and reboot match; no model requests",
+    "Existing demo directory refuses reset; tracked fixture remains byte-identical"
+  ],
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "repairshop",
+          "title": "Repair Shop",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "device",
+              "kind": "text",
+              "required": true,
+              "label": "Device",
+              "default": ""
+            },
+            {
+              "key": "job",
+              "kind": "text",
+              "required": false,
+              "label": "Job",
+              "default": ""
+            },
+            {
+              "key": "quote",
+              "kind": "number",
+              "required": true,
+              "label": "Quote cents",
+              "default": ""
+            },
+            {
+              "key": "paid",
+              "kind": "number",
+              "required": false,
+              "label": "Paid cents",
+              "default": ""
+            },
+            {
+              "key": "balance",
+              "kind": "calculated",
+              "required": true,
+              "label": "Balance cents",
+              "default": "",
+              "formula": "$quote-$paid"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "workflow": {
+            "initial": "received",
+            "actions": [
+              {
+                "id": "start",
+                "label": "Start",
+                "from": "received",
+                "to": "inprog",
+                "guard_field": "",
+                "guard_op": "none",
+                "guard_value": 0
+              },
+              {
+                "id": "finish",
+                "label": "Finish",
+                "from": "inprog",
+                "to": "done",
+                "guard_field": "",
+                "guard_op": "none",
+                "guard_value": 0
+              },
+              {
+                "id": "deliver",
+                "label": "Deliver",
+                "from": "done",
+                "to": "delivered",
+                "guard_field": "balance",
+                "guard_op": "le",
+                "guard_value": 0
+              }
+            ]
+          }
+        },
+        "rows": [
+          [
+            "Phone A",
+            "Screen",
+            "12000",
+            "12000",
+            "0"
+          ],
+          [
+            "Tablet B",
+            "Battery",
+            "8000",
+            "8000",
+            "0"
+          ],
+          [
+            "Phone C",
+            "Port",
+            "5000",
+            "5000",
+            "0"
+          ],
+          [
+            "Laptop D",
+            "Keyboard",
+            "15000",
+            "0",
+            "15000"
+          ],
+          [
+            "Watch E",
+            "Battery",
+            "3000",
+            "0",
+            "3000"
+          ],
+          [
+            "Tablet F",
+            "Screen",
+            "18000",
+            "4000",
+            "14000"
+          ],
+          [
+            "Phone G",
+            "Speaker",
+            "6000",
+            "0",
+            "6000"
+          ],
+          [
+            "Laptop H",
+            "Hinge",
+            "9000",
+            "3000",
+            "6000"
+          ]
+        ],
+        "states": [
+          "delivered",
+          "delivered",
+          "delivered",
+          "inprog",
+          "received",
+          "received",
+          "received",
+          "received"
+        ]
+      },
+      {
+        "spec": {
+          "id": "quote",
+          "title": "Quote App",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "item",
+              "kind": "text",
+              "required": true,
+              "label": "Item",
+              "default": ""
+            },
+            {
+              "key": "qty",
+              "kind": "number",
+              "required": true,
+              "label": "Quantity",
+              "default": ""
+            },
+            {
+              "key": "unitc",
+              "kind": "number",
+              "required": true,
+              "label": "Unit cents",
+              "default": ""
+            },
+            {
+              "key": "totalc",
+              "kind": "calculated",
+              "required": true,
+              "label": "Total cents",
+              "default": "",
+              "formula": "$qty * $unitc"
+            },
+            {
+              "key": "cost_cents",
+              "kind": "number",
+              "required": true,
+              "label": "Cost cents",
+              "default": "100"
+            },
+            {
+              "key": "profit",
+              "kind": "calculated",
+              "required": true,
+              "label": "Profit",
+              "default": "",
+              "formula": "$totalc - $cost_cents"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": ""
+        },
+        "rows": [
+          [
+            "Cable",
+            "3",
+            "125",
+            "375",
+            "175",
+            "200"
+          ],
+          [
+            "Adapter",
+            "2",
+            "80",
+            "160",
+            "100",
+            "60"
+          ]
+        ]
+      },
+      {
+        "spec": {
+          "id": "transferapp",
+          "title": "Transfer Balances",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "balance",
+              "kind": "number",
+              "required": true,
+              "label": "Balance",
+              "default": ""
+            },
+            {
+              "key": "amount",
+              "kind": "number",
+              "required": false,
+              "label": "Amount",
+              "default": ""
+            },
+            {
+              "key": "to",
+              "kind": "text",
+              "required": false,
+              "label": "To",
+              "default": ""
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "transfer": {
+            "id": "move",
+            "label": "Transfer",
+            "balance_field": "balance",
+            "amount_field": "amount",
+            "target_field": "to",
+            "key_field": "name"
+          },
+          "pages": [
+            {
+              "title": "Balances",
+              "blocks": [
+                {
+                  "kind": "metric",
+                  "title": "Total Balance",
+                  "value": "balance",
+                  "label_field": "",
+                  "aggregate": "sum",
+                  "scope": "all"
+                },
+                {
+                  "kind": "bars",
+                  "title": "By Name",
+                  "value": "balance",
+                  "label_field": "name",
+                  "aggregate": "",
+                  "scope": "all"
+                }
+              ]
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Warehouse",
+            "8",
+            "4",
+            "Dispatch"
+          ],
+          [
+            "Dispatch",
+            "9",
+            "1",
+            "Warehouse"
+          ]
+        ]
+      }
+    ]
+  }
+}

@@ -250,11 +250,22 @@ impl Controller {
             if x < 160 {
                 return self.key(27);
             }
-            if x < 320 {
-                return self.key(1002);
-            }
             self.key(27)?;
-            return self.key(47);
+            return self.key(if x < 320 { 47 } else { 1002 });
+        }
+        if matches!(
+            self.mode,
+            Mode::Form
+                | Mode::Records
+                | Mode::Table
+                | Mode::Workflow
+                | Mode::Behaviors
+                | Mode::Pages
+                | Mode::MovePreview
+        ) && (112..142).contains(&y)
+            && x < 180
+        {
+            return self.key(1002);
         }
         if self.mode == Mode::Pages && (696..745).contains(&y) {
             return self.key(if x < 240 { 1009 } else { 1008 });
@@ -375,27 +386,17 @@ impl Controller {
                     self.mode = Mode::Search;
                     return Ok(Reply::State("search"));
                 }
-                for cell in 0..4 {
-                    let left = 44 + (cell % 2) * 216;
-                    let top = 242 + (cell / 2) * 178;
-                    if (left..left + 176).contains(&x) && (top..top + 150).contains(&y) {
-                        if let Some(slot) = (0..crate::microapp::APPS)
+                if (16..464).contains(&x) && (218..458).contains(&y) {
+                    let cell = (y - 218) / 80;
+                    if (y - 218) % 80 < 72
+                        && let Some(slot) = (0..crate::microapp::APPS)
                             .filter(|i| self.app_matches(*i))
                             .nth(cell)
-                        {
-                            self.selected = slot;
-                            self.form(None)?;
-                        } else if cell
-                            == self
-                                .runtime
-                                .entries()
-                                .filter(|(i, _)| self.app_matches(*i))
-                                .count()
-                        {
-                            self.begin_prompt(None);
-                        }
-                        return Ok(Reply::State(self.state()));
+                    {
+                        self.selected = slot;
+                        self.form(None)?;
                     }
+                    return Ok(Reply::State(self.state()));
                 }
             }
             Mode::Form => {

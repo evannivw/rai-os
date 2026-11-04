@@ -5,6 +5,7 @@ import csv
 import hashlib
 import io
 import json
+import subprocess
 from pathlib import Path
 import sys
 import uuid
@@ -49,7 +50,8 @@ def prepare(output, binary, kernel, source='saved', showcase=None):
         'Saved: open Repair Shop > records > Phone C > actions. Delivery is blocked while balance is 4000.\n'
         'Return to records, open Phone C, replace Paid cents with 5000, then Save and Deliver.\n'
         'Home > Quote App > table > right column page: totals and profit run locally.\n'
-        'No API is called in saved mode. The screen says replay; its Create button uses only disclosed offline examples.\n'
+        'Transfer Balances > records > Warehouse > move: 12/5 becomes 8/9; pages total stays 17.\n'
+        'No API is called in saved mode. The screen says saved; its Create button uses only disclosed offline examples.\n'
         'For arbitrary supported generation, start a separate live demo with your own key.\n'
         'Resume with scripts/demo.py resume --output THIS_DIRECTORY; it never resets your data.\n'
         'Live Git: open an app, choose Create, and type git: save this definition or git: restore the previous saved version.\n'
@@ -70,6 +72,10 @@ def prepare(output, binary, kernel, source='saved', showcase=None):
 
 
 def open_demo(kernel, binary, output, source='saved', resume=False, port=5900, bind='127.0.0.1', showcase=None):
+    if source == 'meta' and not resume:
+        from meta_setup import check
+        check(binary,cwd=ROOT)
+        print('Key format checked locally; use check-meta to verify access with Meta.')
     if not resume:
         prepare(output, binary, kernel, source, showcase)
     manifest = json.loads((output / 'demo.json').read_text())
@@ -78,8 +84,11 @@ def open_demo(kernel, binary, output, source='saved', resume=False, port=5900, b
     if not (output / 'device.json').is_file():
         raise ValueError('Saved device is missing; refusing to silently start empty')
     source = manifest['source']
+    if resume and source == 'meta':
+        from meta_setup import check
+        check(binary,cwd=ROOT)
     session = output / ('session-' + uuid.uuid4().hex[:12])
-    print((output / 'START.txt').read_text(), flush=True)
+    print((output / 'START.txt').read_text().replace('localhost:5900', f'localhost:{port}'), flush=True)
     run(kernel, binary, session, 'replay' if source == 'saved' else 'meta',
         port=port, bind=bind, state=output / 'device.json', exchange=output / 'exchange', git_store=output / 'app-git')
 
@@ -126,7 +135,7 @@ def verify(kernel, binary, output):
         g.capture(output / '04-delivered.ppm')
         workshop = collect(g, schema, records)['apps'][0]
         report['checks'].append('Saved Meta workflow: native unpaid delivery rejected unchanged; payment and delivery succeed locally')
-        app.press(27); app.tap(350, 270); app.press(1007); app.tap(400, 650)
+        app.press(27); app.tap(150, 340); app.press(1007); app.tap(400, 650)
         assert g.fields('app.totals', 'quote:all')['totals'].endswith('profit:285')
         g.capture(output / '05-profit.ppm')
         app.tap(150, 255); app.tap(150, 500)
@@ -140,6 +149,12 @@ def verify(kernel, binary, output):
         exported = next((output / 'exchange/outbox').glob('quote-*.csv'))
         assert list(csv.reader(io.StringIO(exported.read_text(), newline=''))) == [
             [f['key'] for f in schema(g, 'quote')['fields']]] + records(g, 'quote')
+        # Third actual Meta result, launched through the compact Column list.
+        app.press(27);app.tap(150,410);app.press(1003);app.tap(90,225)
+        app.tap(290,125);g.capture(output/'07-transfer-preview.ppm');app.tap(240,720)
+        assert [r[1] for r in records(g,'transferapp')]==['8','9']
+        app.press(1015);assert g.fields('app.page.values','transferapp:0')['metrics']=='17,-'
+        g.capture(output/'08-transfer-page.ppm')
         final = collect(g, schema, records)
         assert not app.threads
         app.close(); app = None
@@ -147,9 +162,9 @@ def verify(kernel, binary, output):
                      state=output / 'device.json', exchange=output / 'exchange')
         assert collect(app.guest, schema, records) == final and not app.threads
         app.tap(132, 270); app.press(1003)
-        app.guest.capture(output / '07-restarted.ppm')
+        app.guest.capture(output / '09-restarted.ppm')
         assert FIXTURE.read_bytes() == seed_bytes
-        report['checks'].append('Two apps restored; exact local profit 285 -> 260; workshop unchanged; CSV and reboot match; no model requests')
+        report['checks'].append('Three apps restored; transfer preserves total 17; exact local profit 285 -> 260; workshop unchanged; CSV and reboot match; no model requests')
         report['checks'].append('Existing demo directory refuses reset; tracked fixture remains byte-identical')
         report['final_state'] = final
         report['verified'] = True
@@ -167,14 +182,29 @@ def verify(kernel, binary, output):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['saved', 'live', 'resume', 'verify'])
-    parser.add_argument('--output', required=True, type=Path)
+    parser.add_argument('action', choices=['saved', 'live', 'resume', 'verify', 'configure', 'check-meta'])
+    parser.add_argument('--output', type=Path)
     parser.add_argument('--debug', action='store_true')
     parser.add_argument('--checkpoint', type=Path, help='Seed saved mode from a validated checkpoint; never modify its source')
     parser.add_argument('--port', default=5900, type=int)
     args = parser.parse_args()
     if args.checkpoint is not None and args.action != 'saved':
         parser.error('--checkpoint requires saved mode')
+    if args.action in ('configure', 'check-meta'):
+        from meta_setup import configure, check
+        binary = host_build(args.debug)
+        try:
+            if args.action == 'configure': configure(binary,ROOT/'.env.local')
+            else:
+                print('Checking Meta with one small request. This may use API credits; no app data is sent.', flush=True)
+                event = check(binary, live=True, cwd=ROOT)
+                print('Connected to Meta. Authentication and model response verified.')
+                print(json.dumps(event, indent=2))
+        except (ValueError, OSError, subprocess.TimeoutExpired) as e:
+            print(str(e) if isinstance(e, ValueError) else 'Local setup or connection check failed.', file=sys.stderr)
+            raise SystemExit(1)
+        return
+    if args.output is None: parser.error('--output is required for this action')
     kernel, binary = build(args.debug), host_build(args.debug)
     output = args.output.resolve()
     try:
@@ -185,6 +215,9 @@ def main():
                       resume=args.action == 'resume', port=args.port, showcase=args.checkpoint)
     except KeyboardInterrupt:
         pass
+    except ValueError as e:
+        print(str(e), file=sys.stderr)
+        raise SystemExit(1)
 
 
 if __name__ == '__main__':

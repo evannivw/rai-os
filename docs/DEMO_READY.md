@@ -2,12 +2,13 @@
 
 **Describe the tool you need. Review it. Use it locally. Keep your work.**
 
-This is the current presentation entry point. The workshop is the main story;
-the quoting tool demonstrates schema evolution and formulas. Both are actual
-previously Meta-generated apps, with fictional records. Their schemas and data
-are assembled unchanged in fixtures/microapps/v1/demo-device.json; the adjacent
-provenance file identifies the two original evidence files and their hashes.
-Assembly/restoration does not count as another model generation.
+For the shortest evaluator setup, including private key entry and connection
+checking, start with [TRY_RAI_OS.md](TRY_RAI_OS.md). The saved kit contains Repair
+Shop, Quote App and Transfer Balances: three actual previously Meta-generated apps
+with fictional records. Their schemas/data are assembled unchanged in
+fixtures/microapps/v1/demo-device.json; the adjacent provenance file identifies
+the original sources/hashes. Assembly/restoration is not a new model generation.
+The current recording sequence is [DEMO_FINAL_RUNBOOK.md](DEMO_FINAL_RUNBOOK.md).
 
 ## Try the result without a key
 
@@ -30,7 +31,7 @@ The first command refuses an existing folder instead of resetting it. Resume
 preserves edits and uses a new session log each time. To start over, choose a new
 folder. The tracked fictional fixture is never modified. The copied device.json
 and exchange folder contain the visitor's records; do not publish private data.
-The screen says replay: app use is real guest execution, but no model runs.
+The screen says saved: app use is real guest execution, but no model runs.
 Create in this mode accepts only the existing disclosed offline examples.
 
 For Docker users on Windows/Linux/macOS, build the image then run:
@@ -71,8 +72,10 @@ engineering sequence are in [APP_LIMITS.md](APP_LIMITS.md).
 
 ## Generate something new with Meta
 
-Put your own key in the checkout-root .env.local following
-[META_BRIDGE.md](META_BRIDGE.md). Never show the file in a recording. Then:
+Use `python3 -B scripts/demo.py configure` for hidden key entry and
+`python3 -B scripts/demo.py check-meta` for one explicit connection request.
+See [TRY_RAI_OS.md](TRY_RAI_OS.md) for Docker and error meanings. Never show
+the private file in a recording. Then:
 
 ```sh
 python3 -B scripts/demo.py live --output target/demo-live-1
@@ -88,7 +91,7 @@ Review both fields and process before installing. Enter 0 for no payment if the
 model leaves the numeric field blank; formulas need numeric operands. Enter a new
 fictional order using the actual returned field labels. Creation is not guaranteed:
 show an error or clarification honestly, retain the attempt, and only switch to
-saved mode with an explicit explanation. There is no silent fallback or retry.
+saved mode with an explicit explanation. There is no silent fallback. Eligible expression errors have bounded, logged correction attempts.
 The source meta label means generation mode, not inference on every action.
 
 For a new creation/evolution story, use the two prompts and checks in
@@ -127,7 +130,7 @@ python3 -B scripts/demo.py verify --output target/demo-check-1
 python3 -B scripts/render_demo_preview.py --check target/demo-check-1 --output target/demo-preview-1
 ```
 
-The verifier restores both exact public apps, performs actual guest pointer/key
+The verifier restores all three exact public apps, performs actual guest pointer/key
 input, checks denied unpaid delivery, exact payment, profit, CSV, app separation
 and reboot. It rejects reuse of the same output directory and retains failure
 reports. It makes no model call. The preview uses these native captures plus the
@@ -181,7 +184,7 @@ python3 -B scripts/apps.py --source replay --state target/batch-showcase.json --
 ```
 
 Connect the VNC viewer as described above. This restores the actual prior model
-result and labels the session replay; it is not a new generation. For a fresh live
+result and labels the session saved; it is not a new generation. For a fresh live
 creation, use the existing live entry point with your own key and the two prompts
 in the linked evidence. Keep generation, human review, local execution and saved
 recovery visibly distinct in the three-minute narration.

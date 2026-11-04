@@ -1,0 +1,691 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Display ready: 480x800 guest framebuffer
+Console ready: type help for commands
+@rai1	1	ok	state=home
+@rai1	2	ok	state=home
+@rai1	3	ok	revision=1; apps=-
+@rai1	4	ok	state=home
+@rai1	5	ok	state=home
+@rai1	6	ok	state=compose
+@rai1	7	ok	state=compose
+@rai1	8	ok	state=compose
+@rai1	9	ok	state=compose
+@rai1	10	ok	state=compose
+@rai1	11	ok	state=compose
+@rai1	12	ok	state=compose
+@rai1	13	ok	state=compose
+@rai1	14	ok	state=compose
+@rai1	15	ok	state=compose
+@rai1	16	ok	state=compose
+@rai1	17	ok	state=compose
+@rai1	18	ok	state=compose
+@rai1	19	ok	state=compose
+@rai1	20	ok	state=compose
+@rai1	21	ok	state=compose
+@rai1	22	ok	state=compose
+@rai1	23	ok	state=compose
+@rai1	24	ok	submit=3; revision=1; target=-; prompt=526573746f726520736176656420617070
+@rai1	25	ok	state=thinking
+@rai1	26	ok	state=thinking
+@rai1	27	ok	state=thinking
+@rai1	28	ok	state=thinking
+@rai1	29	ok	state=thinking
+@rai1	30	ok	state=thinking
+@rai1	31	ok	state=thinking
+@rai1	32	ok	state=thinking
+@rai1	33	ok	state=thinking
+@rai1	34	ok	state=thinking
+@rai1	35	ok	state=thinking
+@rai1	36	ok	state=thinking
+@rai1	37	ok	state=review
+@rai1	38	ok	state=workflow_review
+@rai1	39	ok	state=form
+@rai1	40	ok	state=form
+@rai1	41	ok	state=form
+@rai1	42	ok	state=form
+@rai1	43	ok	state=form
+@rai1	44	ok	state=records
+@rai1	45	ok	state=records
+@rai1	46	ok	state=form
+@rai1	47	ok	state=form
+@rai1	48	ok	state=form
+@rai1	49	ok	state=form
+@rai1	50	ok	state=form
+@rai1	51	ok	state=records
+@rai1	52	ok	state=records
+@rai1	53	ok	state=form
+@rai1	54	ok	state=form
+@rai1	55	ok	state=form
+@rai1	56	ok	state=form
+@rai1	57	ok	state=form
+@rai1	58	ok	state=records
+@rai1	59	ok	state=records
+@rai1	60	ok	state=form
+@rai1	61	ok	state=form
+@rai1	62	ok	state=form
+@rai1	63	ok	state=form
+@rai1	64	ok	state=form
+@rai1	65	ok	state=records
+@rai1	66	ok	state=records
+@rai1	67	ok	state=form
+@rai1	68	ok	state=form
+@rai1	69	ok	state=form
+@rai1	70	ok	state=form
+@rai1	71	ok	state=form
+@rai1	72	ok	state=records
+@rai1	73	ok	state=records
+@rai1	74	ok	state=form
+@rai1	75	ok	state=form
+@rai1	76	ok	state=form
+@rai1	77	ok	state=form
+@rai1	78	ok	state=form
+@rai1	79	ok	state=records
+@rai1	80	ok	state=records
+@rai1	81	ok	state=form
+@rai1	82	ok	state=form
+@rai1	83	ok	state=form
+@rai1	84	ok	state=form
+@rai1	85	ok	state=form
+@rai1	86	ok	state=records
+@rai1	87	ok	state=records
+@rai1	88	ok	state=form
+@rai1	89	ok	state=form
+@rai1	90	ok	state=form
+@rai1	91	ok	state=form
+@rai1	92	ok	state=form
+@rai1	93	ok	state=records
+@rai1	94	ok	state=records
+@rai1	95	ok	id=repairshop; version=1; count=8; rows=50686f6e652041,53637265656e,3132303030,3132303030,30|5461626c65742042,42617474657279,38303030,38303030,30|50686f6e652043,506f7274,35303030,31303030,34303030|4c6170746f702044,4b6579626f617264,3135303030,30,3135303030|57617463682045,42617474657279,33303030,30,33303030|5461626c65742046,53637265656e,3138303030,34303030,3134303030|50686f6e652047,537065616b6572,36303030,30,36303030|4c6170746f702048,48696e6765,39303030,33303030,36303030; states=delivered,delivered,done,inprog,received,received,received,received
+@rai1	96	ok	id=repairshop; title=5265706169722053686f70; capability=records.local; filter=; filter_label=; fields=device~text~1~446576696365~~,job~text~0~4a6f62~~,quote~number~1~51756f74652063656e7473~~,paid~number~0~506169642063656e7473~~,balance~calculated~1~42616c616e63652063656e7473~~2471756f74652d2470616964; initial=received; actions=start~5374617274~received~inprog~~none~0,finish~46696e697368~inprog~done~~none~0,deliver~44656c69766572~done~delivered~balance~le~0; behaviors=
+@rai1	97	ok	id=repairshop; version=1; count=8; rows=50686f6e652041,53637265656e,3132303030,3132303030,30|5461626c65742042,42617474657279,38303030,38303030,30|50686f6e652043,506f7274,35303030,31303030,34303030|4c6170746f702044,4b6579626f617264,3135303030,30,3135303030|57617463682045,42617474657279,33303030,30,33303030|5461626c65742046,53637265656e,3138303030,34303030,3134303030|50686f6e652047,537065616b6572,36303030,30,36303030|4c6170746f702048,48696e6765,39303030,33303030,36303030; states=delivered,delivered,done,inprog,received,received,received,received
+@rai1	98	ok	state=home
+@rai1	99	ok	state=compose
+@rai1	100	ok	state=compose
+@rai1	101	ok	state=compose
+@rai1	102	ok	state=compose
+@rai1	103	ok	state=compose
+@rai1	104	ok	state=compose
+@rai1	105	ok	state=compose
+@rai1	106	ok	state=compose
+@rai1	107	ok	state=compose
+@rai1	108	ok	state=compose
+@rai1	109	ok	state=compose
+@rai1	110	ok	state=compose
+@rai1	111	ok	state=compose
+@rai1	112	ok	state=compose
+@rai1	113	ok	state=compose
+@rai1	114	ok	state=compose
+@rai1	115	ok	state=compose
+@rai1	116	ok	state=compose
+@rai1	117	ok	submit=5; revision=18; target=-; prompt=526573746f726520736176656420617070
+@rai1	118	ok	state=thinking
+@rai1	119	ok	state=thinking
+@rai1	120	ok	state=thinking
+@rai1	121	ok	state=thinking
+@rai1	122	ok	state=thinking
+@rai1	123	ok	state=thinking
+@rai1	124	ok	state=thinking
+@rai1	125	ok	state=thinking
+@rai1	126	ok	state=thinking
+@rai1	127	ok	state=thinking
+@rai1	128	ok	state=review
+@rai1	129	ok	state=form
+@rai1	130	ok	state=form
+@rai1	131	ok	state=form
+@rai1	132	ok	state=form
+@rai1	133	ok	state=form
+@rai1	134	ok	state=records
+@rai1	135	ok	state=form
+@rai1	136	ok	state=form
+@rai1	137	ok	state=form
+@rai1	138	ok	state=form
+@rai1	139	ok	state=form
+@rai1	140	ok	state=records
+@rai1	141	ok	id=quote; title=51756f746520417070; capability=records.local; filter=; filter_label=; fields=item~text~1~4974656d~~,qty~number~1~5175616e74697479~~,unitc~number~1~556e69742063656e7473~~,totalc~calculated~1~546f74616c2063656e7473~~24717479202a2024756e697463,cost_cents~number~1~436f73742063656e7473~313030~,profit~calculated~1~50726f666974~~24746f74616c63202d2024636f73745f63656e7473; initial=; actions=; behaviors=
+@rai1	142	ok	id=quote; version=1; count=2; rows=4361626c65,33,313235,333735,313530,323235|41646170746572,32,3830,313630,313030,3630; states=,
+@rai1	143	ok	state=home
+@rai1	144	ok	state=compose
+@rai1	145	ok	state=compose
+@rai1	146	ok	state=compose
+@rai1	147	ok	state=compose
+@rai1	148	ok	state=compose
+@rai1	149	ok	state=compose
+@rai1	150	ok	state=compose
+@rai1	151	ok	state=compose
+@rai1	152	ok	state=compose
+@rai1	153	ok	state=compose
+@rai1	154	ok	state=compose
+@rai1	155	ok	state=compose
+@rai1	156	ok	state=compose
+@rai1	157	ok	state=compose
+@rai1	158	ok	state=compose
+@rai1	159	ok	state=compose
+@rai1	160	ok	state=compose
+@rai1	161	ok	state=compose
+@rai1	162	ok	submit=7; revision=21; target=-; prompt=526573746f726520736176656420617070
+@rai1	163	ok	state=thinking
+@rai1	164	ok	state=thinking
+@rai1	165	ok	state=thinking
+@rai1	166	ok	state=thinking
+@rai1	167	ok	state=thinking
+@rai1	168	ok	state=thinking
+@rai1	169	ok	state=thinking
+@rai1	170	ok	state=thinking
+@rai1	171	ok	state=thinking
+@rai1	172	ok	state=thinking
+@rai1	173	ok	state=review
+@rai1	174	ok	state=move_review
+@rai1	175	ok	state=page_review
+@rai1	176	ok	state=form
+@rai1	177	ok	state=form
+@rai1	178	ok	state=form
+@rai1	179	ok	state=form
+@rai1	180	ok	state=form
+@rai1	181	ok	state=records
+@rai1	182	ok	state=form
+@rai1	183	ok	state=form
+@rai1	184	ok	state=form
+@rai1	185	ok	state=form
+@rai1	186	ok	state=form
+@rai1	187	ok	state=records
+@rai1	188	ok	id=transferapp; title=5472616e736665722042616c616e636573; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,balance~number~1~42616c616e6365~~,amount~number~0~416d6f756e74~~,to~text~0~546f~~; initial=; actions=; behaviors=; move=move~5472616e73666572~balance~amount~to~name; pages=42616c616e636573~metric^546f74616c2042616c616e6365^62616c616e6365^^sum^all~bars^4279204e616d65^62616c616e6365^name^^all
+@rai1	189	ok	id=transferapp; version=1; count=2; rows=57617265686f757365,3132,34,4469737061746368|4469737061746368,35,31,57617265686f757365; states=,
+@rai1	190	ok	state=records
+@rai1	191	ok	state=home
+@rai1	192	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	193	ok	state=home
+@rai1	194	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	195	ok	id=repairshop; title=5265706169722053686f70; capability=records.local; filter=; filter_label=; fields=device~text~1~446576696365~~,job~text~0~4a6f62~~,quote~number~1~51756f74652063656e7473~~,paid~number~0~506169642063656e7473~~,balance~calculated~1~42616c616e63652063656e7473~~2471756f74652d2470616964; initial=received; actions=start~5374617274~received~inprog~~none~0,finish~46696e697368~inprog~done~~none~0,deliver~44656c69766572~done~delivered~balance~le~0; behaviors=
+@rai1	196	ok	id=repairshop; version=1; count=8; rows=50686f6e652041,53637265656e,3132303030,3132303030,30|5461626c65742042,42617474657279,38303030,38303030,30|50686f6e652043,506f7274,35303030,31303030,34303030|4c6170746f702044,4b6579626f617264,3135303030,30,3135303030|57617463682045,42617474657279,33303030,30,33303030|5461626c65742046,53637265656e,3138303030,34303030,3134303030|50686f6e652047,537065616b6572,36303030,30,36303030|4c6170746f702048,48696e6765,39303030,33303030,36303030; states=delivered,delivered,done,inprog,received,received,received,received
+@rai1	197	ok	id=repairshop; version=1; count=8; rows=50686f6e652041,53637265656e,3132303030,3132303030,30|5461626c65742042,42617474657279,38303030,38303030,30|50686f6e652043,506f7274,35303030,31303030,34303030|4c6170746f702044,4b6579626f617264,3135303030,30,3135303030|57617463682045,42617474657279,33303030,30,33303030|5461626c65742046,53637265656e,3138303030,34303030,3134303030|50686f6e652047,537065616b6572,36303030,30,36303030|4c6170746f702048,48696e6765,39303030,33303030,36303030; states=delivered,delivered,done,inprog,received,received,received,received
+@rai1	198	ok	id=quote; title=51756f746520417070; capability=records.local; filter=; filter_label=; fields=item~text~1~4974656d~~,qty~number~1~5175616e74697479~~,unitc~number~1~556e69742063656e7473~~,totalc~calculated~1~546f74616c2063656e7473~~24717479202a2024756e697463,cost_cents~number~1~436f73742063656e7473~313030~,profit~calculated~1~50726f666974~~24746f74616c63202d2024636f73745f63656e7473; initial=; actions=; behaviors=
+@rai1	199	ok	id=quote; version=1; count=2; rows=4361626c65,33,313235,333735,313530,323235|41646170746572,32,3830,313630,313030,3630; states=,
+@rai1	200	ok	id=transferapp; title=5472616e736665722042616c616e636573; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,balance~number~1~42616c616e6365~~,amount~number~0~416d6f756e74~~,to~text~0~546f~~; initial=; actions=; behaviors=; move=move~5472616e73666572~balance~amount~to~name; pages=42616c616e636573~metric^546f74616c2042616c616e6365^62616c616e6365^^sum^all~bars^4279204e616d65^62616c616e6365^name^^all
+@rai1	201	ok	id=transferapp; version=1; count=2; rows=57617265686f757365,3132,34,4469737061746368|4469737061746368,35,31,57617265686f757365; states=,
+@rai1	202	ok	state=home
+@rai1	203	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	204	ok	state=home
+@rai1	205	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	206	ok	state=form
+@rai1	207	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	208	ok	state=form
+@rai1	209	ok	state=compose
+@rai1	210	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	211	ok	state=compose
+@rai1	212	ok	state=compose
+@rai1	213	ok	state=compose
+@rai1	214	ok	state=compose
+@rai1	215	ok	state=compose
+@rai1	216	ok	state=compose
+@rai1	217	ok	state=compose
+@rai1	218	ok	state=compose
+@rai1	219	ok	state=compose
+@rai1	220	ok	state=compose
+@rai1	221	ok	submit=11; revision=24; target=repairshop; prompt=436865636b20617070
+@rai1	222	ok	state=home
+@rai1	223	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	224	ok	state=home
+@rai1	225	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	226	ok	state=form
+@rai1	227	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	228	ok	state=form
+@rai1	229	ok	state=compose
+@rai1	230	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	231	ok	state=compose
+@rai1	232	ok	state=compose
+@rai1	233	ok	state=compose
+@rai1	234	ok	state=compose
+@rai1	235	ok	state=compose
+@rai1	236	ok	state=compose
+@rai1	237	ok	state=compose
+@rai1	238	ok	state=compose
+@rai1	239	ok	state=compose
+@rai1	240	ok	state=compose
+@rai1	241	ok	submit=14; revision=24; target=quote; prompt=436865636b20617070
+@rai1	242	ok	state=home
+@rai1	243	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	244	ok	state=home
+@rai1	245	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	246	ok	state=form
+@rai1	247	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	248	ok	state=form
+@rai1	249	ok	state=compose
+@rai1	250	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	251	ok	state=compose
+@rai1	252	ok	state=compose
+@rai1	253	ok	state=compose
+@rai1	254	ok	state=compose
+@rai1	255	ok	state=compose
+@rai1	256	ok	state=compose
+@rai1	257	ok	state=compose
+@rai1	258	ok	state=compose
+@rai1	259	ok	state=compose
+@rai1	260	ok	state=compose
+@rai1	261	ok	submit=17; revision=24; target=transferapp; prompt=436865636b20617070
+@rai1	262	ok	state=home
+@rai1	263	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	264	ok	state=search
+@rai1	265	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	266	ok	state=search
+@rai1	267	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	268	ok	state=search
+@rai1	269	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	270	ok	state=search
+@rai1	271	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	272	ok	state=search
+@rai1	273	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	274	ok	state=search
+@rai1	275	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	276	ok	state=search
+@rai1	277	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	278	ok	state=search
+@rai1	279	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	280	ok	state=search
+@rai1	281	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	282	ok	state=search
+@rai1	283	ok	state=search
+@rai1	284	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	285	ok	state=search
+@rai1	286	ok	state=form
+@rai1	287	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	288	ok	state=form
+@rai1	289	ok	state=compose
+@rai1	290	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	291	ok	state=compose
+@rai1	292	ok	state=compose
+@rai1	293	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	294	ok	state=compose
+@rai1	295	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	296	ok	state=compose
+@rai1	297	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	298	ok	state=compose
+@rai1	299	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	300	ok	state=compose
+@rai1	301	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	302	ok	state=compose
+@rai1	303	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	304	ok	state=compose
+@rai1	305	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	306	ok	state=compose
+@rai1	307	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	308	ok	state=compose
+@rai1	309	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	310	ok	state=compose
+@rai1	311	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	312	ok	state=compose
+@rai1	313	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	314	ok	state=compose
+@rai1	315	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	316	ok	state=compose
+@rai1	317	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	318	ok	state=compose
+@rai1	319	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	320	ok	state=compose
+@rai1	321	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	322	ok	state=compose
+@rai1	323	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	324	ok	state=compose
+@rai1	325	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	326	ok	state=compose
+@rai1	327	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	328	ok	state=compose
+@rai1	329	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	330	ok	state=compose
+@rai1	331	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	332	ok	state=compose
+@rai1	333	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	334	ok	state=compose
+@rai1	335	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	336	ok	state=compose
+@rai1	337	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	338	ok	state=compose
+@rai1	339	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	340	ok	state=compose
+@rai1	341	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	342	ok	state=compose
+@rai1	343	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	344	ok	state=compose
+@rai1	345	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	346	ok	state=compose
+@rai1	347	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	348	ok	state=compose
+@rai1	349	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	350	ok	state=compose
+@rai1	351	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	352	ok	state=compose
+@rai1	353	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	354	ok	state=compose
+@rai1	355	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	356	ok	state=compose
+@rai1	357	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	358	ok	state=compose
+@rai1	359	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	360	ok	state=compose
+@rai1	361	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	362	ok	state=compose
+@rai1	363	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	364	ok	state=compose
+@rai1	365	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	366	ok	state=compose
+@rai1	367	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	368	ok	state=compose
+@rai1	369	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	370	ok	state=compose
+@rai1	371	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	372	ok	state=compose
+@rai1	373	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	374	ok	state=compose
+@rai1	375	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	376	ok	state=compose
+@rai1	377	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	378	ok	state=compose
+@rai1	379	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	380	ok	state=compose
+@rai1	381	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	382	ok	state=compose
+@rai1	383	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	384	ok	state=compose
+@rai1	385	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	386	ok	state=compose
+@rai1	387	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	388	ok	state=compose
+@rai1	389	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	390	ok	state=compose
+@rai1	391	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	392	ok	state=compose
+@rai1	393	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	394	ok	state=compose
+@rai1	395	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	396	ok	state=compose
+@rai1	397	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	398	ok	state=compose
+@rai1	399	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	400	ok	state=compose
+@rai1	401	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	402	ok	state=compose
+@rai1	403	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	404	ok	state=compose
+@rai1	405	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	406	ok	submit=21; revision=24; target=-; prompt=4120746f6f6c20666f7220747261636b696e672070617274732077697468206120746f74616c20616e642061207265706f727420706167652e
+@rai1	407	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	408	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	409	ok	request=21; base=24; revision=24; state=thinking
+@rai1	410	ok	state=thinking
+@rai1	411	ok	request=21; base=24; revision=24; state=thinking
+@rai1	412	ok	request=21; base=24; revision=24; state=thinking
+@rai1	413	ok	state=notice
+@rai1	414	ok	state=notice
+@rai1	415	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	416	ok	id=repairshop; title=5265706169722053686f70; capability=records.local; filter=; filter_label=; fields=device~text~1~446576696365~~,job~text~0~4a6f62~~,quote~number~1~51756f74652063656e7473~~,paid~number~0~506169642063656e7473~~,balance~calculated~1~42616c616e63652063656e7473~~2471756f74652d2470616964; initial=received; actions=start~5374617274~received~inprog~~none~0,finish~46696e697368~inprog~done~~none~0,deliver~44656c69766572~done~delivered~balance~le~0; behaviors=
+@rai1	417	ok	id=repairshop; version=1; count=8; rows=50686f6e652041,53637265656e,3132303030,3132303030,30|5461626c65742042,42617474657279,38303030,38303030,30|50686f6e652043,506f7274,35303030,31303030,34303030|4c6170746f702044,4b6579626f617264,3135303030,30,3135303030|57617463682045,42617474657279,33303030,30,33303030|5461626c65742046,53637265656e,3138303030,34303030,3134303030|50686f6e652047,537065616b6572,36303030,30,36303030|4c6170746f702048,48696e6765,39303030,33303030,36303030; states=delivered,delivered,done,inprog,received,received,received,received
+@rai1	418	ok	id=repairshop; version=1; count=8; rows=50686f6e652041,53637265656e,3132303030,3132303030,30|5461626c65742042,42617474657279,38303030,38303030,30|50686f6e652043,506f7274,35303030,31303030,34303030|4c6170746f702044,4b6579626f617264,3135303030,30,3135303030|57617463682045,42617474657279,33303030,30,33303030|5461626c65742046,53637265656e,3138303030,34303030,3134303030|50686f6e652047,537065616b6572,36303030,30,36303030|4c6170746f702048,48696e6765,39303030,33303030,36303030; states=delivered,delivered,done,inprog,received,received,received,received
+@rai1	419	ok	id=quote; title=51756f746520417070; capability=records.local; filter=; filter_label=; fields=item~text~1~4974656d~~,qty~number~1~5175616e74697479~~,unitc~number~1~556e69742063656e7473~~,totalc~calculated~1~546f74616c2063656e7473~~24717479202a2024756e697463,cost_cents~number~1~436f73742063656e7473~313030~,profit~calculated~1~50726f666974~~24746f74616c63202d2024636f73745f63656e7473; initial=; actions=; behaviors=
+@rai1	420	ok	id=quote; version=1; count=2; rows=4361626c65,33,313235,333735,313530,323235|41646170746572,32,3830,313630,313030,3630; states=,
+@rai1	421	ok	id=transferapp; title=5472616e736665722042616c616e636573; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,balance~number~1~42616c616e6365~~,amount~number~0~416d6f756e74~~,to~text~0~546f~~; initial=; actions=; behaviors=; move=move~5472616e73666572~balance~amount~to~name; pages=42616c616e636573~metric^546f74616c2042616c616e6365^62616c616e6365^^sum^all~bars^4279204e616d65^62616c616e6365^name^^all
+@rai1	422	ok	id=transferapp; version=1; count=2; rows=57617265686f757365,3132,34,4469737061746368|4469737061746368,35,31,57617265686f757365; states=,
+@rai1	423	ok	state=home
+@rai1	424	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	425	ok	state=compose
+@rai1	426	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	427	ok	state=compose
+@rai1	428	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	429	ok	state=compose
+@rai1	430	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	431	ok	state=compose
+@rai1	432	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	433	ok	state=compose
+@rai1	434	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	435	ok	state=compose
+@rai1	436	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	437	ok	state=compose
+@rai1	438	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	439	ok	state=compose
+@rai1	440	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	441	ok	state=compose
+@rai1	442	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	443	ok	state=compose
+@rai1	444	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	445	ok	state=compose
+@rai1	446	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	447	ok	state=compose
+@rai1	448	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	449	ok	state=compose
+@rai1	450	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	451	ok	state=compose
+@rai1	452	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	453	ok	state=compose
+@rai1	454	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	455	ok	state=compose
+@rai1	456	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	457	ok	state=compose
+@rai1	458	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	459	ok	state=compose
+@rai1	460	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	461	ok	state=compose
+@rai1	462	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	463	ok	state=compose
+@rai1	464	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	465	ok	state=compose
+@rai1	466	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	467	ok	state=compose
+@rai1	468	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	469	ok	state=compose
+@rai1	470	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	471	ok	state=compose
+@rai1	472	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	473	ok	state=compose
+@rai1	474	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	475	ok	state=compose
+@rai1	476	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	477	ok	state=compose
+@rai1	478	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	479	ok	state=compose
+@rai1	480	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	481	ok	state=compose
+@rai1	482	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	483	ok	state=compose
+@rai1	484	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	485	ok	state=compose
+@rai1	486	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	487	ok	state=compose
+@rai1	488	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	489	ok	state=compose
+@rai1	490	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	491	ok	state=compose
+@rai1	492	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	493	ok	state=compose
+@rai1	494	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	495	ok	state=compose
+@rai1	496	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	497	ok	state=compose
+@rai1	498	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	499	ok	state=compose
+@rai1	500	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	501	ok	state=compose
+@rai1	502	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	503	ok	state=compose
+@rai1	504	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	505	ok	state=compose
+@rai1	506	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	507	ok	state=compose
+@rai1	508	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	509	ok	state=compose
+@rai1	510	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	511	ok	state=compose
+@rai1	512	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	513	ok	state=compose
+@rai1	514	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	515	ok	state=compose
+@rai1	516	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	517	ok	state=compose
+@rai1	518	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	519	ok	state=compose
+@rai1	520	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	521	ok	state=compose
+@rai1	522	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	523	ok	state=compose
+@rai1	524	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	525	ok	state=compose
+@rai1	526	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	527	ok	state=compose
+@rai1	528	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	529	ok	state=compose
+@rai1	530	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	531	ok	state=compose
+@rai1	532	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	533	ok	state=compose
+@rai1	534	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	535	ok	state=compose
+@rai1	536	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	537	ok	state=compose
+@rai1	538	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	539	ok	state=compose
+@rai1	540	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	541	ok	state=compose
+@rai1	542	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	543	ok	state=compose
+@rai1	544	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	545	ok	state=compose
+@rai1	546	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	547	ok	state=compose
+@rai1	548	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	549	ok	state=compose
+@rai1	550	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	551	ok	state=compose
+@rai1	552	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	553	ok	state=compose
+@rai1	554	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	555	ok	state=compose
+@rai1	556	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	557	ok	state=compose
+@rai1	558	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	559	ok	state=compose
+@rai1	560	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	561	ok	state=compose
+@rai1	562	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	563	ok	state=compose
+@rai1	564	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	565	ok	state=compose
+@rai1	566	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	567	ok	state=compose
+@rai1	568	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	569	ok	state=compose
+@rai1	570	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	571	ok	state=compose
+@rai1	572	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	573	ok	state=compose
+@rai1	574	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	575	ok	state=compose
+@rai1	576	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	577	ok	state=compose
+@rai1	578	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	579	ok	state=compose
+@rai1	580	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	581	ok	state=compose
+@rai1	582	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	583	ok	state=compose
+@rai1	584	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	585	ok	state=compose
+@rai1	586	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	587	ok	state=compose
+@rai1	588	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	589	ok	state=compose
+@rai1	590	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	591	ok	state=compose
+@rai1	592	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	593	ok	state=compose
+@rai1	594	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	595	ok	state=compose
+@rai1	596	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	597	ok	state=compose
+@rai1	598	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	599	ok	state=compose
+@rai1	600	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	601	ok	state=compose
+@rai1	602	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	603	ok	state=compose
+@rai1	604	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	605	ok	state=compose
+@rai1	606	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	607	ok	state=compose
+@rai1	608	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	609	ok	state=compose
+@rai1	610	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	611	ok	state=compose
+@rai1	612	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	613	ok	state=compose
+@rai1	614	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	615	ok	state=compose
+@rai1	616	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	617	ok	state=compose
+@rai1	618	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	619	ok	state=compose
+@rai1	620	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	621	ok	state=compose
+@rai1	622	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	623	ok	state=compose
+@rai1	624	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	625	ok	state=compose
+@rai1	626	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	627	ok	state=compose
+@rai1	628	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	629	ok	state=compose
+@rai1	630	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	631	ok	state=compose
+@rai1	632	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	633	ok	state=compose
+@rai1	634	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	635	ok	state=compose
+@rai1	636	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	637	ok	state=compose
+@rai1	638	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	639	ok	state=compose
+@rai1	640	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	641	ok	state=compose
+@rai1	642	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	643	ok	state=compose
+@rai1	644	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	645	ok	state=compose
+@rai1	646	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	647	ok	state=compose
+@rai1	648	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	649	ok	state=compose
+@rai1	650	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	651	ok	state=compose
+@rai1	652	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	653	ok	state=compose
+@rai1	654	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	655	ok	state=compose
+@rai1	656	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	657	ok	state=compose
+@rai1	658	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	659	ok	state=compose
+@rai1	660	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	661	ok	state=compose
+@rai1	662	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	663	ok	state=compose
+@rai1	664	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	665	ok	state=compose
+@rai1	666	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	667	ok	state=compose
+@rai1	668	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	669	ok	state=compose
+@rai1	670	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	671	ok	state=compose
+@rai1	672	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	673	ok	state=compose
+@rai1	674	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	675	ok	state=compose
+@rai1	676	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	677	ok	state=compose
+@rai1	678	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	679	ok	state=compose
+@rai1	680	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	681	ok	state=compose
+@rai1	682	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	683	ok	state=compose
+@rai1	684	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	685	ok	submit=24; revision=24; target=-; prompt=5858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858
+@rai1	686	ok	state=home
+@rai1	687	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573
+@rai1	688	ok	revision=24; apps=repairshop:1:8:5265706169722053686f70,quote:1:2:51756f746520417070,transferapp:1:2:5472616e736665722042616c616e636573

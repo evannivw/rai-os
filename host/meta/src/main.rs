@@ -6,6 +6,7 @@ mod batch;
 mod batch_bridge;
 mod batch_publication;
 mod config;
+mod connection;
 mod context;
 mod context_runner;
 mod coordinator;
@@ -42,6 +43,9 @@ use serde_json::json;
 use std::{path::Path, time::Instant};
 fn run() -> Result<(), String> {
     let mut args: Vec<_> = std::env::args().skip(1).collect();
+    if args.len() == 1 && matches!(args[0].as_str(), "--meta-check" | "--meta-config-check") {
+        return connection::run(args[0] == "--meta-check");
+    }
     if args.is_empty() {
         return Err(
             "usage: rai-meta <kernel> --context <rules|meta|replay> <observation.json> [selection.json] | <kernel> [--graphics] --selection-stream | <kernel> --mission-plan <request.json> | --mission-plan-replay <request.json> <plan.json> | --mission-build <request.json> <plan.json> <new-output> | <kernel> [--graphics] --sequence-replay <approved.json> | --resolve <request.json> | --interpret <request.json> | --interpret-replay <request.json> <selection.json> | [--graphics] --execute-selection <request.json> <selection.json> | <kernel> [--graphics] --guest-batch <events.json> | [--graphics] --guest-batch-replay <events.json> <plans.json> | <kernel> --pilot <edf|value|meta|replay> <scenario.json> [replay.json] | <kernel> [--graphics] --guest-set <events.json> | [--graphics] --guest-set-replay <events.json> <proposals.json> | <kernel> <goal> | --replay <proposal.json> | --coordinate <events.json> | --coordinate-replay <events.json> <proposals.json> | [--graphics] --guest-index <events.json> | [--graphics] --guest-index-replay <events.json> <proposals.json> | --guest <events.json> | --guest-replay <events.json> <proposals.json>".into(),

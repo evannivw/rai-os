@@ -1,7 +1,7 @@
 {
   "kind": "assembled_saved_session",
   "generated_at": "2026-11-03",
-  "description": "Unmodified apps and fictional records from two recorded live Meta runs. Assembly is not a new model request.",
+  "description": "Unmodified app declarations and fictional records from three recorded actual Meta runs. Assembly is not a new model request.",
   "sources": [
     {
       "path": "docs/evidence/2026-11-03-app-workflows/live/device.json",
@@ -10,6 +10,11 @@
     {
       "path": "docs/evidence/2026-11-03-app-exchange/live/device.json",
       "sha256": "b1c87b69e691708a662e014433c15e38603b27d1fd17dfe74c04e3d4904a0404"
+    },
+    {
+      "path": "docs/evidence/2026-11-03-app-transfer/live/showcase.json",
+      "sha256": "fb93bbd51bc98ff253359e5e632060eabe92bf529c2fa52f0845e8c9711728f9"
     }
-  ]
+  ],
+  "updated_utc": "2026-11-04T04:53:32.035708+00:00"
 }

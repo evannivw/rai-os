@@ -1,0 +1,49 @@
+    Finished `release` profile [optimized] target(s) in 0.00s
+    Finished `release` profile [optimized] target(s) in 0.01s
+RAI-OS DEMO
+Source: saved. Saved mode restores actual earlier Meta proposals; it does not generate them again.
+Connect a VNC viewer to localhost:53389. Ctrl-C closes and saves the session.
+Saved: open Repair Shop > records > Phone C > actions. Delivery is blocked while balance is 4000.
+Return to records, open Phone C, replace Paid cents with 5000, then Save and Deliver.
+Home > Quote App > table > right column page: totals and profit run locally.
+Transfer Balances > records > Warehouse > move: 12/5 becomes 8/9; pages total stays 17.
+No API is called in saved mode. The screen says saved; its Create button uses only disclosed offline examples.
+For arbitrary supported generation, start a separate live demo with your own key.
+Resume with scripts/demo.py resume --output THIS_DIRECTORY; it never resets your data.
+Live Git: open an app, choose Create, and type git: save this definition or git: restore the previous saved version.
+Git keeps definitions in app-git; records stay in the device checkpoint. Restores require review.
+Limits: 3 apps, 6 fields, 8 records each; host checkpoint and HTTPS; shared EL1 runtime.
+
+CSV exchange folder: /Users/jv/Development/Rust/rai-os/target/polish-entry/saved/exchange
+RAI-OS workspace ready: VNC localhost:53389. Type an instruction; Enter previews, Enter confirms, Esc cancels.
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py", line 607, in wait
+    signaled = self._cond.wait(timeout)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py", line 329, in wait
+    self._acquire_restore(saved_state)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py", line 276, in _acquire_restore
+    def _acquire_restore(self, x):
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/jv/Development/Rust/rai-os/scripts/demo.py", line 224, in <module>
+    main()
+  File "/Users/jv/Development/Rust/rai-os/scripts/demo.py", line 214, in main
+    open_demo(kernel, binary, output, 'meta' if args.action == 'live' else 'saved',
+  File "/Users/jv/Development/Rust/rai-os/scripts/demo.py", line 92, in open_demo
+    run(kernel, binary, session, 'replay' if source == 'saved' else 'meta',
+  File "/Users/jv/Development/Rust/rai-os/scripts/apps.py", line 358, in run
+    try:serve(app.guest.vnc_socket,press,port,bind,tap=lambda x,y:keys.put_nowait((x,y)))
+  File "/Users/jv/Development/Rust/rai-os/scripts/workspace_vnc.py", line 94, in serve
+    try:session(client,path,press,tap)
+  File "/Users/jv/Development/Rust/rai-os/scripts/workspace_vnc.py", line 49, in session
+    worker=threading.Thread(target=pixels,daemon=True);worker.start();buttons=0
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py", line 940, in start
+    self._started.wait()
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py", line 604, in wait
+    with self._cond:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py", line 268, in __exit__
+    return self._lock.__exit__(*args)
+RuntimeError: release unlocked lock

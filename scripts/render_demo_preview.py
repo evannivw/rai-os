@@ -45,7 +45,7 @@ def render(check, output):
          check / '06-local-edit.png', 'SAVED APP / NEW QEMU REHEARSAL'),
         (15, 'Restart.\nKeep your work.',
          'Both apps, their records and process states recover after a fresh QEMU boot. Persistence uses an explicit host checkpoint.',
-         check / '07-restarted.png', 'REAL QEMU RESTART / NO INFERENCE'),
+         check / '09-restarted.png', 'REAL QEMU RESTART / NO INFERENCE'),
         (15, 'Small kernel.\nExplicit boundaries.',
          'Rust guest: validation, execution, graphics. Host: HTTPS, input, saved sessions. Apps currently share EL1 privilege.',
          check / '02-orders.png', 'PROTOTYPE / 3 APPS, 6 FIELDS, 8 ROWS'),

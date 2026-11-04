@@ -1,0 +1,9 @@
+{
+  "verified": true,
+  "actual_provider_calls": 0,
+  "checks": [
+    "Three compact rows open distinct real apps; edit app keeps the correct target",
+    "Apps search is case-insensitive; gap does not select; global Create starts a new app; synthetic 401 shows safe native feedback and leaves records unchanged",
+    "128-character prompt remains bounded; overflow character is not submitted; cancellation leaves state untouched"
+  ]
+}

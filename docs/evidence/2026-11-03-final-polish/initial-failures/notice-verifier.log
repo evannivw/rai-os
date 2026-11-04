@@ -1,0 +1,17 @@
+   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 4.63s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s
+{
+  "verified": false,
+  "actual_provider_calls": 0,
+  "checks": [
+    "Three compact rows open distinct real apps; edit app keeps the correct target"
+  ],
+  "error": "AssertionError"
+}
+Traceback (most recent call last):
+  File "/Users/jv/Development/Rust/rai-os/scripts/verify_navigation.py", line 61, in <module>
+    verify(build(a.debug),host_build(a.debug),a.output.resolve())
+  File "/Users/jv/Development/Rust/rai-os/scripts/verify_navigation.py", line 45, in verify
+    assert any('Meta rejected authentication' in line for line in g.log)
+AssertionError

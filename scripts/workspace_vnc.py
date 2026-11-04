@@ -4,6 +4,7 @@ Standard protocol: https://www.rfc-editor.org/rfc/rfc6143.html
 No web frontend, authentication, physical keyboard driver or remote exposure.
 """
 import socket
+import signal
 import queue
 import struct
 import threading
@@ -85,11 +86,30 @@ def session(client,path,press,tap=None):
             worker.join(timeout=2)
 
 def serve(path,press,port=5900,bind='127.0.0.1',tap=None):
-    with socket.socket() as listener:
-        listener.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1);listener.bind((bind,port));listener.listen(1)
-        print(f'RAI-OS workspace ready: VNC localhost:{port}. Type an instruction; Enter previews, Enter confirms, Esc cancels.',flush=True)
-        while True:
-            client,_=listener.accept()
-            with client:
-                try:session(client,path,press,tap)
-                except (OSError,EOFError,ValueError,AssertionError,queue.Full) as error:print(f'VNC viewer disconnected ({type(error).__name__}: {error}); guest workspace retained.',flush=True)
+    # Do not raise KeyboardInterrupt in Thread.start: Python can leave its startup
+    # condition half-acquired. Signal intent, unblock the viewer, then unwind normally.
+    stopped=threading.Event();active=[None]
+    def stop(_signal,_frame):
+        stopped.set()
+        if active[0] is not None:
+            try:active[0].shutdown(socket.SHUT_RDWR)
+            except OSError:pass
+    previous=None
+    if threading.current_thread() is threading.main_thread():
+        previous=signal.signal(signal.SIGINT,stop)
+    try:
+        with socket.socket() as listener:
+            listener.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1);listener.bind((bind,port));listener.listen(1);listener.settimeout(.25)
+            print(f'RAI-OS workspace ready: VNC localhost:{port}. Type an instruction; Enter previews, Enter confirms, Esc cancels.',flush=True)
+            while not stopped.is_set():
+                try:client,_=listener.accept()
+                except socket.timeout:continue
+                with client:
+                    active[0]=client
+                    if stopped.is_set():break
+                    try:session(client,path,press,tap)
+                    except (OSError,EOFError,ValueError,AssertionError,queue.Full) as error:
+                        if not stopped.is_set():print(f'VNC viewer disconnected ({type(error).__name__}); guest workspace retained.',flush=True)
+                    finally:active[0]=None
+    finally:
+        if previous is not None:signal.signal(signal.SIGINT,previous)

@@ -19,6 +19,34 @@ pub struct Answer<T = Proposal> {
     pub usage: Option<Usage>,
     pub diagnostic: Option<Box<Diagnostic>>,
 }
+fn connection_body() -> Value {
+    json!({"model":MODEL,"stream":false,"max_tokens":32,"reasoning_effort":"minimal",
+        "messages":[{"role":"user","content":"Connection check only. Return ready true. No app or user data is supplied."}],
+        "response_format":{"type":"json_schema","json_schema":{"name":"rai_connection","strict":true,
+            "schema":{"type":"object","additionalProperties":false,"properties":{"ready":{"type":"boolean","enum":[true]}},"required":["ready"]}}}})
+}
+fn connection_reply(text: &str) -> Result<(), &'static str> {
+    #[derive(serde::Deserialize)]
+    #[serde(deny_unknown_fields)]
+    struct Reply {
+        ready: bool,
+    }
+    let r: Reply = serde_json::from_str(text).map_err(|_| "meta_check_response_invalid")?;
+    if !r.ready {
+        return Err("meta_check_response_invalid");
+    }
+    Ok(())
+}
+/// One fixed, bounded inference request. A successful format check alone never
+/// claims authentication; this checks the same model/TLS/envelope path as apps.
+pub fn check_connection(key: &Secret) -> Result<Answer<()>, Failure> {
+    request(
+        key,
+        "Check Meta connection",
+        connection_body,
+        connection_reply,
+    )
+}
 pub fn app_git(
     key: &Secret,
     r: &crate::apps::Request,
@@ -402,6 +430,21 @@ pub fn files(
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn connection_check_has_no_app_data_and_requires_exact_ready_reply() {
+        let body = connection_body();
+        assert_eq!(body["max_tokens"], 32);
+        assert_eq!(body["model"], MODEL);
+        assert!(connection_reply(r#"{"ready":true}"#).is_ok());
+        for value in [
+            r#"{"ready":false}"#,
+            r#"{"ready":true,"extra":"ignored"}"#,
+            r#"{"ready":true,"ready":true}"#,
+            "ok",
+        ] {
+            assert!(connection_reply(value).is_err());
+        }
+    }
     #[test]
     fn git_request_exposes_a_closed_tool_contract_without_record_data() {
         let r=crate::apps::request(r#"{"request_id":1,"base_revision":2,"goal":"git: show history","target":null,"app_ids":[],"record_count":0}"#).unwrap();

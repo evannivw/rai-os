@@ -19,7 +19,7 @@ def binaries():
     return ROOT/f'target/host-meta/{host}/release/rai-meta',ROOT/'target/display/aarch64-unknown-none-softfloat/release/rai-os'
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path);p.add_argument('action',choices=['build','verify','console','desktop','context-rules','context-meta','workspace','workspace-replay','workspace-verify','apps','apps-replay','apps-verify','apps-storage-verify','apps-table-verify','apps-brightness-verify','apps-formulas-verify','apps-exchange-verify','apps-workflow-verify','demo','demo-verify','apps-behaviors-verify','apps-repair-verify','apps-batches-verify','apps-git-verify','apps-pages-verify','apps-transfer-verify'],default='verify',nargs='?');a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path);p.add_argument('action',choices=['build','verify','console','desktop','context-rules','context-meta','workspace','workspace-replay','workspace-verify','apps','apps-replay','apps-verify','apps-storage-verify','apps-table-verify','apps-brightness-verify','apps-formulas-verify','apps-exchange-verify','apps-workflow-verify','demo','demo-verify','apps-behaviors-verify','apps-repair-verify','apps-batches-verify','apps-git-verify','apps-pages-verify','apps-transfer-verify','demo-live','check-meta'],default='verify',nargs='?');a=p.parse_args()
     binary,kernel=binaries()
     if a.action=='build':
         subprocess.run(['cargo','build','--locked','--bin','rai-os','--features','guest-display','--target-dir','target/display','--release'],check=True)
@@ -42,10 +42,18 @@ def main():
     with (nullcontext(str(a.output.resolve())) if a.output else tempfile.TemporaryDirectory(prefix='rai-portable-')) as directory:
         output=Path(directory)
         (output/'build-info.json').write_bytes((ROOT/'target/portable-build-info.json').read_bytes())
-        if a.action == 'demo':
+        if a.action == 'check-meta':
+            from meta_setup import check
+            print('One small Meta request; may use API credits. No app data is sent.',flush=True)
+            try: print(json.dumps(check(binary,live=True),indent=2))
+            except ValueError as e: print(str(e),file=sys.stderr);raise SystemExit(1)
+            return
+        if a.action in ('demo','demo-live'):
             from demo import open_demo
-            device = Path('/state/demo')
-            open_demo(kernel,binary,device,resume=device.exists(),bind='0.0.0.0');return
+            device = Path('/state/demo-live' if a.action=='demo-live' else '/state/demo')
+            try: open_demo(kernel,binary,device,source='meta' if a.action=='demo-live' else 'saved',resume=device.exists(),bind='0.0.0.0')
+            except ValueError as e: print(str(e),file=sys.stderr);raise SystemExit(1)
+            return
         if a.action == 'demo-verify':
             from demo import verify
             verify(kernel,binary,output/'demo');return

@@ -291,6 +291,10 @@ class Studio:
                     return
                 entry['state'] = 'rejected'
                 if len(failures) != 1 or plans:
+                    from meta_setup import message as connection_message
+                    codes=[e.get('code',e.get('error')) for e in events if e.get('event') in ('error','provider_diagnostic')]
+                    codes += [e.get('error') for e in [json.loads(line) for line in result.stderr.splitlines()] if isinstance(e,dict) and e.get('event')=='error']
+                    message=connection_message(next((c for c in codes if isinstance(c,str)),None))
                     trace['state'] = 'provider_failed'; break
                 failure = failures[0]
                 code = failure['code']

@@ -83,9 +83,9 @@ def verify(kernel,binary,output):
         text(g,'Cable');g.request('app.key','13');assert records(g,'stock')==[['Cable','','false']] and records(g,'inspection')==saved
         g.request('app.open');g.capture(output/'library.ppm');checks.append('Second app has independent records; rejected numeric edit has no side effects')
         # Guest-owned touch targets and case-insensitive search select real apps.
-        app.tap(400,775);text(g,'INVENT');assert g.request('app.key','0')=='state=search';g.capture(output/'search.ppm')
+        app.tap(240,775);text(g,'INVENT');assert g.request('app.key','0')=='state=search';g.capture(output/'search.ppm')
         app.tap(132,270);assert g.request('app.key','0')=='state=form'
-        app.tap(50,775);app.tap(350,270);assert g.request('app.key','0')=='state=form'
+        app.tap(50,775);app.tap(150,340);assert g.request('app.key','0')=='state=form'
         # Touch the checkbox field, then save to the selected Inventory app.
         text(g,'Sensor');app.tap(150,350);app.tap(240,720)
         assert records(g,'stock')[-1]==['Sensor','','true'] and records(g,'inspection')==saved

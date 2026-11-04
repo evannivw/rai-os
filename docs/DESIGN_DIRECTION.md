@@ -1,7 +1,8 @@
 # Native interface directions for the final demo
 
-Status: Column selected; compact spacing and color proposals under review.
-Not yet implemented as guest screens. November 3, 2026.
+Status: compact Column, Tactile Terminal linework and Glacier Blue selected.
+Native guest implementation completed in the late November 3 polish increment.
+The sections below preserve the earlier design discussion; current details follow.
 The user requested a black, terminal-inspired phone interface with sparse text,
 keyboard-like linework and recognizable applications. Keep native QEMU rendering
 as the product target; conversational interactive mockups only explore layouts.
@@ -125,3 +126,20 @@ requires separate platform-specific input/display work.
 
 Preview JavaScript syntax was checked; rendered-browser and native-QEMU verification
 are not claimed for these design-only changes.
+
+
+## Implemented native polish
+
+The user selected Column, Tactile Terminal and Glacier Blue. The actual 480x800
+framebuffer now uses near-black #090b0f, readable muted text, glacier #87bfff,
+40-pixel monograms and 80-pixel launcher rows with a 16-pixel outer inset. All
+three installed apps fit in a connected column. Metadata shows record counts;
+app identities remain dynamic. Apps has a separate search field and compact rows.
+Create has a multiline bounded composer, 128-character count and separated action.
+No on-screen keyboard or new capacity was added.
+
+Bottom navigation is Home / Apps / Create. Global Create always requests a new
+app; edit app inside an installed app (or F2) retains that app as the update target.
+Changing destinations cancels uncommitted work. Existing app toolbar coordinates
+remain stable. The saved/live badge indicates source mode, not authentication or
+inference on each action. Host connection checking is separate and explicit.

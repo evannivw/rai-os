@@ -3100,3 +3100,34 @@ and only offline tests assert those columns. Raw report is retained with this
 qualification. Added raw-log Git attributes, preserving actual UART bytes. No
 runtime change or additional Meta call in this follow-up. Recording/submission
 remain pending; prioritize the coherent generate/use/reject/recover story.
+
+
+## 2026-11-03 late polish — native Column and own-key evaluator setup
+
+Applied selected terminal linework, compact Column and Glacier Blue to actual guest
+screens. Home/Apps/Create are distinct; global Create starts a new app, edit app/F2
+retains the existing update target. Search, counter and prompt layout remain bounded.
+The default saved kit now includes three unmodified recorded Meta app definitions,
+with fictional records and source hashes. Nothing in app execution recognizes those
+example identities specially.
+
+Added private hidden-entry setup and separate local-format versus actual Meta
+connection checks. The latter is one fixed small inference request with no app data.
+401/403/quota/transport errors have distinct safe messages; native creation failures
+use these notices. Existing key files are preserved and never read into tool output.
+TRY_RAI_OS provides local/Docker paths, recovery and troubleshooting; SUBMISSION_DRAFT
+and the final runbook leave video upload/actual submission explicit.
+
+Offline checks: 112 Rust tests, host/guest Clippy, formatting and Python syntax.
+Real QEMU debug/release navigation and saved-demo actions/reboot passed; generic app
+regression passed. Setup tests use a synthetic key and simulated service errors.
+An initial navigation assertion looked for outbound notice text in inbound UART logs;
+corrected the verifier instrumentation. A real Ctrl-C race during VNC thread startup
+was reproduced and fixed with graceful stop intent; saved/resume/live CLI checks
+then passed without provider calls. Console/protocol passed both profiles. Debug
+mapping still has 4096 bytes remaining; no memory-layout expansion.
+
+Anonymous GitHub API check reported private=false for evannivw/rai-os. Linux offline
+saved-demo checks passed; final-image CLI startup/shutdown/resume verification also passed offline in Linux.
+Next: freeze sources, one actual connection probe, then reopen the polished saved
+kit. No claim that the final narrated video or platform submission is complete.

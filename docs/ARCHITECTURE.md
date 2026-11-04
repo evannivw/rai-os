@@ -617,3 +617,19 @@ validation, UART, native renderer, checkpoints and Git preserve the definition.
 This is bounded two-row RAM atomicity, not a general database or durable transaction.
 No new unsafe, driver, process isolation or kernel hardware interface is introduced.
 See APP_TRANSFERS.md for contracts and DEMO_FINAL_RUNBOOK.md for truthful footage.
+
+
+## Final navigation and evaluator setup
+
+The native launcher uses the selected compact Column/Glacier Blue design. Bottom
+navigation separates Home, Apps search and new-app Create; edit app/F2 retains the
+selected update target. The composer displays its existing 128-byte limit. No new
+privileged operation, driver or app isolation is implied by presentation changes.
+
+The host-only configure path validates a hidden key through Rust before exclusive
+0600 file creation. --meta-config-check validates local syntax; --meta-check makes
+one fixed, bounded request through the existing TLS/model/envelope adapter. Neither
+boots the guest nor reads application records. Only the latter may report ready.
+The default saved demo assembles three recorded Meta outputs without inference.
+The VNC server handles SIGINT as stop intent, unblocks a viewer and unwinds normally
+so an interrupt cannot break Python's thread-start condition during connection.

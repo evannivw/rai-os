@@ -8,9 +8,9 @@ use crate::{
     app_ui::{Controller, Mode},
     microapp::{Capability, Kind},
 };
-const QUIET: u32 = 0x62716d;
-const WHITE: u32 = 0xe6ece7;
-const LIME: u32 = 0xc1f27d;
+const QUIET: u32 = 0x9fa9b8;
+const WHITE: u32 = 0xe7ebf1;
+const ACCENT: u32 = 0x87bfff;
 fn text(s: &mut Display, v: &str, x: i32, y: i32, c: u32) {
     t::text(s, v, x, y, c);
 }
@@ -37,34 +37,43 @@ fn frame(s: &mut Display, x: usize, y: usize, w: usize, h: usize, c: u32) {
         s.pixel(x + w - 9 + d, y + h - 1 - d, c);
     }
 }
-fn icon(s: &mut Display, x: usize, y: usize, shape: usize, c: u32) {
-    frame(s, x, y, 70, 70, c);
-    let art = match shape % 4 {
-        0 => ["+---+", "| = |", "+---+"],
-        1 => ["[x] /", "[ ] /", "[ ] /"],
-        2 => ["+---+", "|# #|", "+---+"],
-        _ => ["  |  ", "--+--", "  |  "],
-    };
-    for (i, line) in art.iter().enumerate() {
-        text(s, line, x as i32 + 18, y as i32 + 10 + i as i32 * 17, c);
-    }
+fn icon(s: &mut Display, x: usize, y: usize, title: &str, c: u32) {
+    frame(s, x, y, 40, 40, c);
+    text(
+        s,
+        &title[..title.len().min(2)],
+        x as i32 + 12,
+        y as i32 + 12,
+        c,
+    );
 }
 fn header(s: &mut Display, u: &Controller, title: &str) {
-    s.fill(0x060908);
+    s.fill(0x090b0f);
     text(s, "rai", 26, 28, WHITE);
-    text(s, if u.live { "meta" } else { "replay" }, 406, 28, QUIET);
+    text(s, if u.live { "live" } else { "saved" }, 406, 28, QUIET);
     center(s, ". . .", 28, Size::Small, QUIET);
     center(s, title, 83, Size::Title, WHITE);
 }
-fn nav(s: &mut Display) {
-    t::rect(s, 24, 750, 432, 1, 0x21302a);
-    text(s, "[ home ]", 49, 769, QUIET);
-    text(s, "[ + create ]", 198, 769, LIME);
-    text(s, "[ / find ]", 365, 769, QUIET);
+fn nav(s: &mut Display, mode: Mode) {
+    t::rect(s, 16, 750, 448, 1, 0x303743);
+    for (i, (label, selected)) in [
+        ("Home", mode == Mode::Home),
+        ("Apps", mode == Mode::Search),
+        ("Create", matches!(mode, Mode::Compose | Mode::Thinking)),
+    ]
+    .iter()
+    .enumerate()
+    {
+        let x = 80 + i as i32 * 160 - font::width(label, Size::Small) / 2;
+        text(s, label, x, 771, if *selected { ACCENT } else { QUIET });
+        if *selected {
+            t::rect(s, 56 + i * 160, 750, 48, 2, ACCENT);
+        }
+    }
 }
 fn action(s: &mut Display, label: &str) {
-    frame(s, 24, 696, 432, 48, LIME);
-    center(s, label, 708, Size::Body, LIME);
+    frame(s, 24, 696, 432, 48, ACCENT);
+    center(s, label, 708, Size::Body, ACCENT);
 }
 fn wrap(s: &mut Display, value: &str, y: i32, lines: usize) {
     let mut rest = value;
@@ -103,7 +112,7 @@ fn number(s: &mut Display, value: i64, x: i32, y: i32) {
         core::str::from_utf8(&bytes[end..]).unwrap_or("?"),
         x,
         y,
-        LIME,
+        ACCENT,
     );
 }
 pub fn render(s: &mut Display, u: &Controller) {
@@ -113,13 +122,13 @@ pub fn render(s: &mut Display, u: &Controller) {
         Mode::MovePreview => "Move together.",
         Mode::Pages => "Your pages.",
         Mode::PageReview => "Review the pages.",
-        Mode::Home => "Your space.",
-        Mode::Search => "Find an app.",
+        Mode::Home => "Home",
+        Mode::Search => "Apps",
         Mode::Compose => {
             if u.target().is_some() {
-                "Evolve your app."
+                "Evolve app"
             } else {
-                "Make an app."
+                "Create app"
             }
         }
         Mode::Thinking => "Creating...",
@@ -212,130 +221,141 @@ pub fn render(s: &mut Display, u: &Controller) {
             }
         }
         Mode::Home | Mode::Search => {
-            frame(s, 24, 146, 432, 48, QUIET);
-            text(
-                s,
-                if u.mode == Mode::Search && !u.search.text().is_empty() {
-                    u.search.text()
-                } else {
-                    "/ search your apps"
-                },
-                44,
-                161,
-                if u.mode == Mode::Search { LIME } else { QUIET },
-            );
-            let mut count = 0;
-            for (slot, app) in u.runtime.entries().filter(|(i, _)| u.app_matches(*i)) {
-                let x = 44 + count % 2 * 216;
-                let y = 242 + count / 2 * 178;
-                count += 1;
-                let c = if slot == u.selected { LIME } else { WHITE };
-                let shape = app
-                    .spec
-                    .id
-                    .text()
-                    .bytes()
-                    .fold(0usize, |n, b| n + usize::from(b))
-                    % 3;
-                icon(s, x + 53, y, shape, c);
-                let title = app.spec.title.text();
-                let split = title.len().min(23);
+            if u.mode == Mode::Search {
+                frame(s, 16, 146, 448, 48, ACCENT);
                 text(
                     s,
-                    &title[..split],
-                    x as i32 + (176 - split as i32 * 7) / 2,
-                    y as i32 + 88,
-                    c,
+                    if u.search.text().is_empty() {
+                        "/ search apps"
+                    } else {
+                        u.search.text()
+                    },
+                    32,
+                    162,
+                    WHITE,
                 );
-                if split < title.len() {
-                    text(s, &title[split..], x as i32 + 24, y as i32 + 106, QUIET);
-                }
+            } else {
+                text(s, "APPLICATIONS", 24, 167, QUIET);
+                text(s, "Open locally", 357, 167, QUIET);
+            }
+            let mut count = 0;
+            for (slot, app) in u.runtime.entries().filter(|(i, _)| u.app_matches(*i)) {
+                let y = 218 + count * 80;
+                count += 1;
+                let c = if slot == u.selected { ACCENT } else { WHITE };
                 if slot == u.selected {
-                    text(s, "_", x as i32 + 84, y as i32 + 125, LIME);
+                    t::rect(s, 16, y, 448, 72, 0x121923);
+                }
+                icon(s, 28, y + 16, app.spec.title.text(), c);
+                t::body(s, app.spec.title.text(), 88, y as i32 + 17, c);
+                number(s, app.count() as i64, 88, y as i32 + 44);
+                text(s, "records", 108, y as i32 + 44, QUIET);
+                text(s, ">", 439, y as i32 + 28, c);
+                if count
+                    < u.runtime
+                        .entries()
+                        .filter(|(i, _)| u.app_matches(*i))
+                        .count()
+                {
+                    t::rect(s, 48, y + 57, 1, 38, 0x303743);
                 }
             }
-            if count < 4 {
-                let x = 44 + count % 2 * 216;
-                let y = 242 + count / 2 * 178;
-                icon(s, x + 53, y, 3, QUIET);
-                text(s, "Create", x as i32 + 67, y as i32 + 88, QUIET);
-            }
-            if u.mode == Mode::Search && count == 0 {
-                center(s, "No matching apps", 622, Size::Small, QUIET);
+            if count == 0 {
+                text(
+                    s,
+                    if u.mode == Mode::Search {
+                        "No matching apps"
+                    } else {
+                        "No apps yet"
+                    },
+                    32,
+                    240,
+                    WHITE,
+                );
+                text(s, "Open Create to describe a tool.", 32, 279, QUIET);
             }
             action(
                 s,
                 if count == 0 {
-                    "+ Create your first app"
+                    "Create an app"
                 } else {
-                    "Enter / Open app"
+                    "Open selected app"
                 },
             );
         }
         Mode::Compose | Mode::Thinking => {
-            // An original line-art spark: decorative, never fabricated telemetry.
-            for (i, line) in [
-                "      .      ",
-                "  .   |   .  ",
-                "   \\  |  /   ",
-                "----  +  ----",
-                "   /  |  \\   ",
-                "  '   |   '  ",
-            ]
-            .iter()
-            .enumerate()
-            {
-                center(
-                    s,
-                    line,
-                    162 + i as i32 * 18,
-                    Size::Small,
-                    if i == 3 { LIME } else { QUIET },
-                );
-            }
+            text(
+                s,
+                if u.target().is_some() {
+                    "CHANGE THIS APP"
+                } else {
+                    "DESCRIBE YOUR APP"
+                },
+                24,
+                166,
+                QUIET,
+            );
             frame(
                 s,
-                24,
-                328,
-                432,
-                220,
+                16,
+                208,
+                448,
+                244,
                 if u.mode == Mode::Thinking {
                     QUIET
                 } else {
-                    LIME
+                    ACCENT
                 },
             );
-            text(s, ">", 40, 350, LIME);
+            text(s, ">", 30, 236, ACCENT);
             wrap(
                 s,
                 if u.prompt.text().is_empty() {
-                    "What do you want to create?_"
+                    "A tool for..."
                 } else {
                     u.prompt.text()
                 },
-                389,
-                6,
+                274,
+                4,
             );
-            center(
+            number(s, u.prompt.text().len() as i64, 350, 424);
+            text(s, "/ 128", 383, 424, QUIET);
+            text(
                 s,
-                if u.target().is_some() {
-                    "Your input records stay."
+                if u.live {
+                    "Meta proposes. You review and install."
                 } else {
-                    "Your idea. Your app."
+                    "Saved mode: offline examples only."
                 },
-                588,
-                Size::Small,
+                24,
+                490,
                 QUIET,
             );
+            text(
+                s,
+                if u.target().is_some() {
+                    "Existing records stay."
+                } else {
+                    "Forms, rules, calculations and pages."
+                },
+                24,
+                523,
+                WHITE,
+            );
+            text(s, "Use your keyboard. Esc cancels.", 24, 565, QUIET);
             if u.mode == Mode::Thinking && !u.message.text().is_empty() {
-                wrap(s, u.message.text(), 628, 2);
+                wrap(s, u.message.text(), 608, 2);
             }
             action(
                 s,
                 if u.mode == Mode::Thinking {
-                    "Waiting for Meta..."
+                    if u.live {
+                        "Waiting for Meta..."
+                    } else {
+                        "Loading example..."
+                    }
                 } else {
-                    "Enter / Create"
+                    "Review proposal >"
                 },
             );
         }
@@ -348,8 +368,8 @@ pub fn render(s: &mut Display, u: &Controller) {
                 // Formula text is bounded printable ASCII; both slices are valid.
                 let expression = f.formula.text();
                 let split = expression.len().min(48);
-                text(s, &expression[..split], 42, y + 18, LIME);
-                text(s, &expression[split..], 42, y + 34, LIME);
+                text(s, &expression[..split], 42, y + 18, ACCENT);
+                text(s, &expression[split..], 42, y + 34, ACCENT);
             }
             text(
                 s,
@@ -360,7 +380,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                 },
                 42,
                 577,
-                LIME,
+                ACCENT,
             );
             wrap(s, u.message.text(), 606, 3);
             action(
@@ -398,11 +418,11 @@ pub fn render(s: &mut Display, u: &Controller) {
                         y,
                         432,
                         64,
-                        if i == u.focus { LIME } else { 0x26392e },
+                        if i == u.focus { ACCENT } else { 0x26392e },
                     );
                     text(s, f.label.text(), 42, y as i32 + 6, QUIET);
                     let value = if f.kind == Kind::Calculated {
-                        text(s, "= auto", 362, y as i32 + 6, LIME);
+                        text(s, "= auto", 362, y as i32 + 6, ACCENT);
                         calculated.as_ref().map_or("--", |v| v[i].text())
                     } else if f.kind == Kind::Check {
                         if u.draft[i].text() == "true" {
@@ -467,7 +487,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                     },
                     26,
                     154,
-                    LIME,
+                    ACCENT,
                 );
                 let mut visible = 0;
                 for row in 0..a.count() {
@@ -485,7 +505,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                     } else {
                         ">"
                     };
-                    text(s, mark, 39, y as i32 + 13, LIME);
+                    text(s, mark, 39, y as i32 + 13, ACCENT);
                     let headline = v[0].text();
                     t::body(
                         s,
@@ -499,7 +519,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                         WHITE,
                     );
                     if a.spec.workflow.enabled() {
-                        text(s, a.state(row).unwrap().text(), 345, y as i32 + 13, LIME);
+                        text(s, a.state(row).unwrap().text(), 345, y as i32 + 13, ACCENT);
                     }
                 }
                 if visible == 0 {
@@ -518,7 +538,7 @@ pub fn render(s: &mut Display, u: &Controller) {
         Mode::Table => {
             if let Some(a) = a {
                 text(s, "records", 42, 154, QUIET);
-                text(s, "[ table ]", 184, 154, LIME);
+                text(s, "[ table ]", 184, 154, ACCENT);
                 frame(s, 24, 192, 432, 446, QUIET);
                 for (column, f) in a
                     .spec
@@ -530,7 +550,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                 {
                     let x = 67 + column as i32 * 128;
                     let title = f.label.text();
-                    text(s, &title[..title.len().min(16)], x, 207, LIME);
+                    text(s, &title[..title.len().min(16)], x, 207, ACCENT);
                 }
                 let mut visible = 0;
                 for row in 0..a.count() {
@@ -594,7 +614,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                     },
                     371,
                     651,
-                    LIME,
+                    ACCENT,
                 );
                 action(s, "Edit row");
             }
@@ -627,7 +647,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                     213,
                     QUIET,
                 );
-                text(s, state.text(), 180, 213, LIME);
+                text(s, state.text(), 180, 213, ACCENT);
                 for (i, step) in spec.workflow.actions().iter().enumerate() {
                     let y = 238 + i * 84;
                     let allowed = review
@@ -639,7 +659,11 @@ pub fn render(s: &mut Display, u: &Controller) {
                         y,
                         432,
                         74,
-                        if !review && i == u.focus { LIME } else { QUIET },
+                        if !review && i == u.focus {
+                            ACCENT
+                        } else {
+                            QUIET
+                        },
                     );
                     text(
                         s,
@@ -652,7 +676,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                     text(s, "->", 140, y as i32 + 29, QUIET);
                     text(s, step.to.text(), 165, y as i32 + 29, QUIET);
                     if step.guard_op.text() != "none" {
-                        text(s, step.guard_field.text(), 42, y as i32 + 49, LIME);
+                        text(s, step.guard_field.text(), 42, y as i32 + 49, ACCENT);
                         text(
                             s,
                             match step.guard_op.text() {
@@ -662,7 +686,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                             },
                             140,
                             y as i32 + 49,
-                            LIME,
+                            ACCENT,
                         );
                         number(s, i64::from(step.guard_value), 180, y as i32 + 49);
                         if !review
@@ -717,7 +741,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                     frame(s, 24, y, 432, 60, QUIET);
                     number(s, (i + 1) as i64, 38, y as i32 + 5);
                     text(s, step.op.text(), 65, y as i32 + 5, WHITE);
-                    text(s, step.field.text(), 163, y as i32 + 5, LIME);
+                    text(s, step.field.text(), 163, y as i32 + 5, ACCENT);
                     text(s, step.compare.text(), 275, y as i32 + 5, WHITE);
                     if step.skip != 0 {
                         text(s, "skip", 335, y as i32 + 5, QUIET);
@@ -725,8 +749,8 @@ pub fn render(s: &mut Display, u: &Controller) {
                     }
                     let value = step.value.text();
                     let split = value.len().min(48);
-                    text(s, &value[..split], 42, y as i32 + 23, LIME);
-                    text(s, &value[split..], 42, y as i32 + 40, LIME);
+                    text(s, &value[..split], 42, y as i32 + 23, ACCENT);
+                    text(s, &value[split..], 42, y as i32 + 40, ACCENT);
                 }
                 wrap(
                     s,
@@ -755,7 +779,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                 }
                 for (i, button) in a.spec.behaviors.buttons().iter().enumerate() {
                     let y = 238 + i * 94;
-                    frame(s, 24, y, 432, 84, if i == u.focus { LIME } else { QUIET });
+                    frame(s, 24, y, 432, 84, if i == u.focus { ACCENT } else { QUIET });
                     text(s, button.label.text(), 42, y as i32 + 13, WHITE);
                     number(s, button.steps().len() as i64, 42, y as i32 + 44);
                     text(
@@ -796,31 +820,35 @@ pub fn render(s: &mut Display, u: &Controller) {
             if let Some(a) = a
                 && let Some(before) = a.row(u.row)
             {
-                text(s, u.behavior_label(), 42, 194, LIME);
+                text(s, u.behavior_label(), 42, 194, ACCENT);
                 if u.behavior_is_all() {
-                    text(s, "ALL rows", 360, 194, LIME);
+                    text(s, "ALL rows", 360, 194, ACCENT);
                 }
                 for (i, field) in a.spec.fields().iter().enumerate() {
                     let y = 224 + i as i32 * 64;
                     text(s, field.label.text(), 42, y, WHITE);
                     text(s, "was", 42, y + 19, QUIET);
                     text(s, before[i].text(), 84, y + 19, QUIET);
-                    text(s, "now", 42, y + 36, LIME);
+                    text(s, "now", 42, y + 36, ACCENT);
                     text(
                         s,
                         u.draft[i].text(),
                         84,
                         y + 36,
-                        if before[i] == u.draft[i] { QUIET } else { LIME },
+                        if before[i] == u.draft[i] {
+                            QUIET
+                        } else {
+                            ACCENT
+                        },
                     );
                 }
                 if u.behavior_is_all() {
-                    text(s, "< Previous", 42, 625, LIME);
+                    text(s, "< Previous", 42, 625, ACCENT);
                     text(s, "Row", 190, 625, QUIET);
                     number(s, (u.row + 1) as i64, 220, 625);
                     text(s, "/", 239, 625, QUIET);
                     number(s, a.count() as i64, 252, 625);
-                    text(s, "Next >", 372, 625, LIME);
+                    text(s, "Next >", 372, 625, ACCENT);
                     if u.message.text().is_empty() {
                         number(s, u.behavior_changed as i64, 42, 656);
                         text(s, "rows change. Nothing saved yet.", 62, 656, QUIET);
@@ -891,16 +919,16 @@ pub fn render(s: &mut Display, u: &Controller) {
             | Mode::MovePreview
     ) && a.is_some_and(|a| a.spec.capability() == Capability::Records)
     {
-        t::rect(s, 24, 146, 432, 36, 0x060908);
+        t::rect(s, 24, 146, 432, 36, 0x090b0f);
         if a.is_some_and(|a| !a.spec.behaviors.is_empty()) {
             text(s, "records", 30, 154, QUIET);
             text(s, "table", 110, 154, QUIET);
             if a.is_some_and(|a| a.spec.workflow.enabled()) {
-                text(s, "flow", 180, 154, LIME);
+                text(s, "flow", 180, 154, ACCENT);
             }
-            text(s, "do", 252, 154, LIME);
-            text(s, "import", 309, 154, LIME);
-            text(s, "export", 390, 154, LIME);
+            text(s, "do", 252, 154, ACCENT);
+            text(s, "import", 309, 154, ACCENT);
+            text(s, "export", 390, 154, ACCENT);
         } else {
             text(
                 s,
@@ -925,10 +953,10 @@ pub fn render(s: &mut Display, u: &Controller) {
                 QUIET,
             );
             if a.is_some_and(|a| a.spec.workflow.enabled()) {
-                text(s, "actions", 210, 154, LIME);
+                text(s, "actions", 210, 154, ACCENT);
             }
-            text(s, "import", 300, 154, LIME);
-            text(s, "export", 390, 154, LIME);
+            text(s, "import", 300, 154, ACCENT);
+            text(s, "export", 390, 154, ACCENT);
         }
     }
     if matches!(
@@ -938,10 +966,22 @@ pub fn render(s: &mut Display, u: &Controller) {
     {
         text(s, "pages >", 372, 120, 0x87bfff);
     }
+    if matches!(
+        u.mode,
+        Mode::Form
+            | Mode::Records
+            | Mode::Table
+            | Mode::Workflow
+            | Mode::Behaviors
+            | Mode::Pages
+            | Mode::MovePreview
+    ) {
+        text(s, "edit app >", 24, 120, ACCENT);
+    }
     if !u.storage.text().is_empty() {
         center(s, u.storage.text(), 672, Size::Small, QUIET);
     }
-    nav(s);
+    nav(s, u.mode);
     if matches!(
         u.mode,
         Mode::Form | Mode::Records | Mode::Table | Mode::Pages | Mode::MovePreview

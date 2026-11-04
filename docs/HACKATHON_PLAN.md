@@ -540,3 +540,13 @@ outcome and distinguish actual model output from scripted tests. Prepare a suppl
 checkpoint entry for repeatable rehearsal and a three-minute recording sequence.
 After verification, freeze scope for final polish, video and submission; advanced
 relations, broad document editors and physical hardware remain future work.
+
+
+## Final polish and evaluator path
+
+Implement the approved Column / Tactile Terminal / Glacier Blue interface, verify
+real pointer targets and preserve existing app behavior. Provide a single evaluator
+guide with saved mode requiring no key, private own-key setup, a one-request Meta
+connection check and separate live sessions. Include a truthful submission draft.
+Verify public repository visibility without authentication. Recording, video upload,
+team/track fields and actual submission confirmation remain separate pending work.
