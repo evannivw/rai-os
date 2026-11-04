@@ -1,0 +1,102 @@
+{
+  "verified": true,
+  "source": "meta",
+  "source_commit": "ce219caf694953d3a13cd4394e39469b8a989a0e",
+  "source_worktree_dirty": false,
+  "provider_calls": 1,
+  "checks": [
+    "Reviewed dynamic rule; preview/cancel write nothing; pointer Apply changes both balances with one revision; sum conserved at 17; derived values recomputed",
+    "Insufficient transfer rejected without writes/revision; cancelled and outdated UI approval cannot execute",
+    "Exact rule, pages and edited records restored on fresh QEMU boot without inference",
+    "Saved-demo entry validates and copies the supplied showcase without modifying it"
+  ],
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "transferapp",
+          "title": "Transfer Balances",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "balance",
+              "kind": "number",
+              "required": true,
+              "label": "Balance",
+              "default": ""
+            },
+            {
+              "key": "amount",
+              "kind": "number",
+              "required": false,
+              "label": "Amount",
+              "default": ""
+            },
+            {
+              "key": "to",
+              "kind": "text",
+              "required": false,
+              "label": "To",
+              "default": ""
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "transfer": {
+            "id": "move",
+            "label": "Transfer",
+            "balance_field": "balance",
+            "amount_field": "amount",
+            "target_field": "to",
+            "key_field": "name"
+          },
+          "pages": [
+            {
+              "title": "Balances",
+              "blocks": [
+                {
+                  "kind": "metric",
+                  "title": "Total Balance",
+                  "value": "balance",
+                  "label_field": "",
+                  "aggregate": "sum",
+                  "scope": "all"
+                },
+                {
+                  "kind": "bars",
+                  "title": "By Name",
+                  "value": "balance",
+                  "label_field": "name",
+                  "aggregate": "",
+                  "scope": "all"
+                }
+              ]
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Warehouse",
+            "8",
+            "2",
+            "Dispatch"
+          ],
+          [
+            "Dispatch",
+            "9",
+            "1",
+            "Warehouse"
+          ]
+        ]
+      }
+    ]
+  }
+}

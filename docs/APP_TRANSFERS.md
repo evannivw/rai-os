@@ -117,3 +117,28 @@ python3 -B scripts/demo.py saved --checkpoint target/transfer-live-new/showcase.
 Saved mode performs no generation and never modifies the source checkpoint. A new
 output directory is required. Resume via `scripts/demo.py resume --output PATH`.
 See [DEMO_FINAL_RUNBOOK.md](DEMO_FINAL_RUNBOOK.md) for the recording sequence.
+
+
+## Actual generated example
+
+The [frozen-source live run](evidence/2026-11-03-app-transfer/live/README.md) passed
+with one actual Meta call, no retries: Transfer Balances has four fields, the
+transfer rule and a sum/bar page. Provider latency was 8119 ms, not an OS speed
+comparison. The fictional data and arithmetic oracle were supplied independently.
+
+From the repository root, reopen its pre-operation checkpoint with no key:
+
+```sh
+python3 -B scripts/demo.py saved --checkpoint docs/evidence/2026-11-03-app-transfer/live/showcase.json --output target/transfer-showcase-1
+```
+
+Connect a VNC viewer to localhost:5900. Open Transfer Balances > records > Warehouse
+> move. The preview is 12→8 and 5→9; Apply, then F11 shows total 17. Select Warehouse,
+replace Amount with 99, save and try move to see rejection. Use a new output directory
+for each rehearsal; resume an existing one explicitly.
+
+For Docker on Windows/Linux/macOS, build the image using [PORTABLE_RUN.md](PORTABLE_RUN.md). Copy
+showcase.json into a fresh host state directory as device.json, mount that directory
+at /state and run apps-replay; the same guest restores the saved app. The fixture
+is data, not a source-code app implementation. Linux offline verification passed;
+this specific saved actual result was verified on the local Mac QEMU run.

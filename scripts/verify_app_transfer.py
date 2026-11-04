@@ -67,7 +67,8 @@ def verify(kernel,binary,output,source='offline'):
         after=records(g,aid);assert [r[bi] for r in after]==['8','9'] and revision()==base+1
         if source=='offline':assert [r[4] for r in after]==['16','18']
         app.press(1015);assert g.fields('app.page.values',f'{aid}:0')['metrics']=='17,-';g.capture(output/'03-distribution.ppm')
-        report['checks'].append('Reviewed dynamic rule; preview/cancel write nothing; pointer Apply changes both balances with one revision; sum conserved at 17; derived values recomputed')
+        report['checks'].append('Reviewed dynamic rule; preview/cancel write nothing; pointer Apply changes both balances with one revision; page sum conserved at 17')
+        if source=='offline':report['checks'].append('Both calculated record columns recomputed from their changed balances')
         select_source();g.request('app.value',f'{ai}:3939');app.press(13);select_source()
         before=collect(g,schema,records);base=revision();g.request('app.tap','290:125',error='move_insufficient');g.capture(output/'04-blocked.ppm')
         g.request('app.move.run',str(base),error='move_preview_required');assert collect(g,schema,records)==before and revision()==base

@@ -3081,3 +3081,22 @@ reorganize memory before further substantial growth. No enlarged mapping/stack.
 Evidence: evidence/2026-11-03-app-transfer (actual UTC timestamps are November 4;
 local work remains November 3). Next: freeze source and attempt one actual Meta
 app generation, retaining the result without retry or fixture replacement.
+
+
+## 2026-11-03 — Meta generates and QEMU runs Transfer Balances
+
+Clean source ce219caf694953d3a13cd4394e39469b8a989a0e made one actual Meta call:
+HTTP 200, matching model, stop, 8119 ms, 4832 tokens (4066 input / 766 output).
+No repair, retry or fixture replacement. Meta's four-field app includes the new
+transfer rule and a sum/bar page. The actual declaration was reviewed unchanged.
+Independent fictional balances 12/5 became 8/9, sum remained 17; quantity 99 was
+rejected, cancelled approval could not execute, and reboot restored exact state.
+Saved-demo preparation copied/validated the actual pre-operation checkpoint.
+
+Archived raw request/proposal/diagnostics/UART/captures/checkpoints and documented
+how to rehearse from the supplied checkpoint. Corrected a verifier annotation that
+mentioned calculated record columns unconditionally: live Meta generated none,
+and only offline tests assert those columns. Raw report is retained with this
+qualification. Added raw-log Git attributes, preserving actual UART bytes. No
+runtime change or additional Meta call in this follow-up. Recording/submission
+remain pending; prioritize the coherent generate/use/reject/recover story.

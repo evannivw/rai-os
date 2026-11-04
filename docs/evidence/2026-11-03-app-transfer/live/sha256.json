@@ -1,0 +1,23 @@
+{
+  "recorded_utc": "2026-11-04T04:44:11.177640+00:00",
+  "source_commit": "ce219caf694953d3a13cd4394e39469b8a989a0e",
+  "files": {
+    "04-blocked.png": "77d09c711191b4abe737214216e88f0bc73e996f1c8d7f9fffa7c10d0486e759",
+    "report.json": "9350832309cefe0e350aec89021c4d26fae12e6db195b795dfb826974381ef51",
+    "device.json": "6274f3a42928645e93c0fb1baa82f9c278856b2efeeb17930aaf4be04927135c",
+    "05-reboot.png": "ef9d573b2ee19ea71e5b7d2ecde28ded87669e9fe0ba73fe720ea28cee0bc105",
+    "01-rule.png": "430a6acc0140897c2d1b17c6421bfb57b91b4c508a08d425bb888c5379533fa4",
+    "README.md": "66a5ecbc26a6592ca1ef3f8e5514405f369b170f638bf6627487cc9b26af9721",
+    "03-distribution.png": "0ae6b3232b7050625b508ce777435503da57bc872b59a42766d9190225b152ff",
+    "02-preview.png": "1b7a7ebc2fdd8c7df43ef61c78fb854c15f4fa85b75a4aaf5dbff03a912a92ac",
+    "showcase.json": "fb93bbd51bc98ff253359e5e632060eabe92bf529c2fa52f0845e8c9711728f9",
+    "restored/uart.log": "fb10b1bf8128627637bcb39db24655d61c034dcb01d1558881146982d91d3f59",
+    "session/uart.log": "52355e51567c771aa7f24ac5112fffaf1c8c27c7de92d3155f31f8b86f2e3273",
+    "session/2/loop.json": "082e43a1acc3f34dd93fca6bc9bd8525f9e434d0a89394ab4fdb18dec2a96064",
+    "session/2/request.json": "669e525b456e645a37b30b24722b9e5a1b12b8dc8ae2aa0206889c8dd38ecb89",
+    "session/2/provider.stderr.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "session/2/provider.stdout.jsonl": "0c40298ef911bb59c9c70ab8d478b1685e710ca54afe0620da06f3ad00c31912",
+    "session/2/attempt-01/provider.stderr.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "session/2/attempt-01/provider.stdout.jsonl": "a502e36be49852e70375b5d843b47b13a61a3bf2e90c08264fee7386a0a31580"
+  }
+}

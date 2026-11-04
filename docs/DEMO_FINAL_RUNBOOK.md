@@ -5,6 +5,14 @@ locally inside our own Rust/QEMU OS. Meta creates the declaration; deterministic
 Rust code validates and executes it. This is not a claim that model latency beats
 a scheduler, that all apps are expressible, or that the prototype replaces Android.
 
+## Ready-to-rehearse actual example
+
+One actual Meta generation of Transfer Balances passed creation, approval, movement,
+rejection and reboot. Use the saved checkpoint command in [APP_TRANSFERS.md](APP_TRANSFERS.md)
+to rehearse the exact data path without another API call. Its raw proposal and
+provider diagnostics are retained; generation took 8119 ms. The video itself and
+submission have not been completed by these verification runs.
+
 ## Recording sequence
 
 | Time | Picture | Explain |
