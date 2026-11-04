@@ -3205,3 +3205,15 @@ checks without network after resolving local Docker startup/configuration issues
 See docs/evidence/2026-11-04-final-review for reports and exact limits. No real Meta
 request or access to the author's private key file. No new feature needed for the submitted demonstration;
 physical phones, app isolation and arbitrary native apps remain future work.
+
+
+## 2026-11-04 — finalized submission description
+
+Reviewed submission copy against the implemented app catalog, actual two-request
+recording and final 114-test review. Removed stale draft/review-required labels
+and unfilled-link instructions; provided finished English project fields. Kept
+existing filename/links stable. Distinguished October 13 minimal scaffold and
+October 26 foundations from the November 3–4 declarative app demo work using real
+Git history. Preserved the unresolved October 26 eligibility distinction and left
+actual submission status in the separate checklist. Documentation-only update;
+checked factual consistency, relative links and diff formatting, no new API calls.

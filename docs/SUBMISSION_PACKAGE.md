@@ -10,7 +10,7 @@ Based on the supplied Participant Guide:
 1. Public repository: https://github.com/evannivw/rai-os
 2. **[Three-minute demo video](https://drive.google.com/file/d/18e2NPFsIktJhBC-T7ZY4ANAfQhD9PvaO/view?usp=sharing)**, uploaded by the participant.
 3. One Cerebral Valley project entry, identifying the participant, original work,
-   project purpose and Meta integration. Use [submission copy](SUBMISSION_DRAFT.md).
+   project purpose and Meta integration. Use the [reviewed submission description](SUBMISSION_DRAFT.md).
 
 The public event page is https://cerebralvalley.ai/e/meta-ai-developer-hackathon.
 It is not the authenticated project submission form. Exact required form fields
