@@ -4,6 +4,9 @@ An educational AArch64 operating-system prototype in Rust. Describe a small
 application, review Meta's proposal, and use its forms, calculations and processes
 locally in our QEMU guest.
 
+**[Watch the three-minute demo](https://drive.google.com/file/d/18e2NPFsIktJhBC-T7ZY4ANAfQhD9PvaO/view?usp=sharing)** — real QEMU interaction,
+actual Meta-generated apps, English captions and synthetic reference narration.
+
 **Start here:** [Try without a key / connect your own Meta account](docs/TRY_RAI_OS.md) ·
 [Runnable demo and three-minute presentation](docs/DEMO_READY.md) ·
 [App capabilities and remaining limits](docs/APP_LIMITS.md) ·

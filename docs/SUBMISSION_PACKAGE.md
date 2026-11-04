@@ -8,7 +8,7 @@ Recommended track: **Indie Developer**. Problem statement: **Push the Frontier**
 Based on the supplied Participant Guide:
 
 1. Public repository: https://github.com/evannivw/rai-os
-2. An accessible **three-minute demo video URL** showing work built during the event.
+2. **[Three-minute demo video](https://drive.google.com/file/d/18e2NPFsIktJhBC-T7ZY4ANAfQhD9PvaO/view?usp=sharing)**, uploaded by the participant.
 3. One Cerebral Valley project entry, identifying the participant, original work,
    project purpose and Meta integration. Use [submission copy](SUBMISSION_DRAFT.md).
 
@@ -68,9 +68,12 @@ video, plus requests, responses and verification evidence. No API key is include
 ## Before pressing Submit
 
 - Watch the complete video with audio; replace reference narration if desired.
-- Upload the final MP4 and verify its link works without requesting access.
+- Open the uploaded video in a private/incognito window and verify playback with audio.
 - Check public repository access and paste the video URL into the project form.
 - Use the individual participant details above; review the description and limits.
 - Submit before the deadline and save the actual confirmation.
 
-Preparing local artifacts does not upload the video or submit the project.
+The participant supplied the uploaded Drive video link on November 4. An anonymous
+page request returned the video title without an access-request page. Full anonymous
+video playback and byte-for-byte identity with the local MP4 were not verified.
+The project submission itself remains pending; a video upload does not submit it.

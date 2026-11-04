@@ -3174,3 +3174,15 @@ inputs and edited timing, not a latency benchmark. All scene proof frames inspec
 full media decode passed; mean/peak audio -20.0/-4.5 dB. Container duration about
 180.023 seconds includes audio padding. Participant listening review, video upload
 and platform submission remain pending. Local media stays in ignored target/.
+
+
+## 2026-11-04 — participant-provided video link
+
+Jarrol supplied the uploaded Google Drive video link. Added it to the README,
+submission copy, submission checklist and recording runbook. Drive metadata
+identified rai-os-demo.mp4; an anonymous page fetch returned its title without an
+access-request page. Full anonymous playback and identity with the locally rendered
+MP4 were not verified. The web reader could not access the Drive page; Python's
+certificate check failed locally, and curl with normal certificate validation
+succeeded. No sharing permissions were changed. Platform submission remains pending.
+Documentation-only change; checked links and diff formatting, no runtime retest.

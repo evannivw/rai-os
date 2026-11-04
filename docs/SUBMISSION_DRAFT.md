@@ -35,7 +35,7 @@ changing permissions/guards. Evidence retains actual responses and outcomes.
 
 - Repository: https://github.com/evannivw/rai-os
 - Reproduction: docs/TRY_RAI_OS.md in that repository.
-- Video URL: pending upload; use the final narrated three-minute recording.
+- Video: [Watch the three-minute demo](https://drive.google.com/file/d/18e2NPFsIktJhBC-T7ZY4ANAfQhD9PvaO/view?usp=sharing).
 - Participant and representative: Jarrol Villatoro (individual entry).
 - Recommended track: Indie Developer. Recommended problem statement: Push the Frontier. Confirm these selections in the official form.
 - Contribution period: preserve actual commits/worklog; distinguish any earlier work.
@@ -43,5 +43,6 @@ changing permissions/guards. Evidence retains actual responses and outcomes.
   clarification of Oct 26 eligibility remains unresolved; do not claim it is settled.
 
 Deadline in the supplied guide: Nov 4, 2026, 20:00 Guatemala. Internal target: 18:00.
-This file is draft submission copy, not evidence of an uploaded video or completed
-entry. Save the actual platform confirmation after submission.
+The participant supplied the uploaded video link on November 4. This file is draft
+submission copy, not evidence of a completed entry. Save the actual platform
+confirmation after submission.

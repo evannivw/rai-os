@@ -1,5 +1,7 @@
 # Final three-minute recording runbook
 
+Uploaded video: [Watch the three-minute demo](https://drive.google.com/file/d/18e2NPFsIktJhBC-T7ZY4ANAfQhD9PvaO/view?usp=sharing).
+
 The claim: describe a bounded tool, review the generated application, then use it
 locally inside our own Rust/QEMU OS. Meta creates the declaration; deterministic
 Rust code validates and executes it. This is not a claim that model latency beats
