@@ -1,0 +1,77 @@
+{
+  "request_id": 4,
+  "base_revision": 6,
+  "goal": "Keep all fields and rules. Add page: table name/balance; text \"Ready for dispatch\".",
+  "target": {
+    "id": "ledger",
+    "title": "Ledger",
+    "capability": "records.local",
+    "fields": [
+      {
+        "key": "name",
+        "kind": "text",
+        "required": true,
+        "label": "Name",
+        "default": ""
+      },
+      {
+        "key": "balance",
+        "kind": "number",
+        "required": true,
+        "label": "Balance",
+        "default": ""
+      },
+      {
+        "key": "amount",
+        "kind": "number",
+        "required": false,
+        "label": "Amount",
+        "default": ""
+      },
+      {
+        "key": "to",
+        "kind": "text",
+        "required": false,
+        "label": "To",
+        "default": ""
+      }
+    ],
+    "filter_key": "",
+    "filter_label": "",
+    "transfer": {
+      "id": "move",
+      "label": "Transfer",
+      "balance_field": "balance",
+      "amount_field": "amount",
+      "target_field": "to",
+      "key_field": "name"
+    },
+    "pages": [
+      {
+        "title": "Balances",
+        "blocks": [
+          {
+            "kind": "metric",
+            "title": "Total Balance",
+            "value": "balance",
+            "label_field": "",
+            "aggregate": "sum",
+            "scope": "all"
+          },
+          {
+            "kind": "bars",
+            "title": "By Name",
+            "value": "balance",
+            "label_field": "name",
+            "aggregate": "",
+            "scope": "all"
+          }
+        ]
+      }
+    ]
+  },
+  "app_ids": [
+    "ledger"
+  ],
+  "record_count": 2
+}

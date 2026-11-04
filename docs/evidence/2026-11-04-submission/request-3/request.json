@@ -1,0 +1,8 @@
+{
+  "request_id": 3,
+  "base_revision": 1,
+  "goal": "App: name, balance, amount, to. Transfer amount from this balance to name=to atomically. Page: sum balance and bars by name.",
+  "target": null,
+  "app_ids": [],
+  "record_count": 0
+}

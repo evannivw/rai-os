@@ -1,0 +1,124 @@
+1
+00:00:00,250 --> 00:00:05,351
+A small team should be able to shape its own tools. RAI OS explores that idea: describe
+
+2
+00:00:05,351 --> 00:00:10,452
+a tool, review its behavior, and use it inside a Rust operating system.
+
+3
+00:00:12,250 --> 00:00:16,457
+We start a new session and describe a tool for moving quantities between locations, with
+
+4
+00:00:16,457 --> 00:00:20,665
+a total and a chart. These names and rules come from the application request. They are
+
+5
+00:00:20,665 --> 00:00:24,872
+not special application types built into the kernel.
+
+6
+00:00:30,250 --> 00:00:34,290
+This is an actual Meta request. The model receives the implemented capability catalog
+
+7
+00:00:34,290 --> 00:00:38,330
+and proposes a declarative application. Rust validates its fields and operations. We
+
+8
+00:00:38,330 --> 00:00:42,370
+review the transfer rule and the page before installation. A proposal alone cannot
+
+9
+00:00:42,370 --> 00:00:46,409
+execute an operation.
+
+10
+00:00:52,250 --> 00:00:57,126
+The generated form accepts our test records: twelve units in Warehouse, and five in
+
+11
+00:00:57,126 --> 00:01:02,003
+Dispatch. We enter a quantity of four and choose Dispatch as the destination. These are
+
+12
+00:01:02,003 --> 00:01:06,879
+fictional demonstration records, entered through the same guest form controls.
+
+13
+00:01:10,250 --> 00:01:14,131
+The preview shows both changes before we apply them. Warehouse falls from twelve to
+
+14
+00:01:14,131 --> 00:01:18,011
+eight, while Dispatch rises from five to nine. The total remains seventeen. Rust
+
+15
+00:01:18,011 --> 00:01:21,892
+validates and commits both records together, and the chart updates locally without
+
+16
+00:01:21,892 --> 00:01:25,773
+another model request.
+
+17
+00:01:30,250 --> 00:01:35,481
+Now we request ninety nine units. The source does not have enough. The operation is
+
+18
+00:01:35,481 --> 00:01:40,711
+rejected, and both balances stay unchanged. The same checks apply to every generated app
+
+19
+00:01:40,711 --> 00:01:45,942
+using this capability. The model describes behavior; the runtime enforces its rules.
+
+20
+00:01:48,250 --> 00:01:52,985
+Next, we ask Meta to add a report page while keeping the fields and rules. The model
+
+21
+00:01:52,985 --> 00:01:57,721
+sees the application definition, not the stored record values. We review the updated
+
+22
+00:01:57,721 --> 00:02:02,456
+declaration before installation. Existing data stays in place.
+
+23
+00:02:10,250 --> 00:02:14,662
+The new page presents the existing balances and a dispatch note. The tool has changed
+
+24
+00:02:14,662 --> 00:02:19,074
+through a second prompt, while our records and transfer rule remain intact.
+
+25
+00:02:22,250 --> 00:02:26,674
+We close the guest and start a fresh instance. The host checkpoint restores the evolved
+
+26
+00:02:26,674 --> 00:02:31,098
+application and its exact records. This is saved recovery, not new generation. The
+
+27
+00:02:31,098 --> 00:02:35,523
+application remains usable without another call to Meta.
+
+28
+00:02:38,250 --> 00:02:42,583
+Our Rust kernel runs on emulated ARM hardware. The guest draws and executes
+
+29
+00:02:42,583 --> 00:02:46,917
+applications. The host provides HTTPS and persistence. Apps share kernel privilege
+
+30
+00:02:46,917 --> 00:02:51,250
+today; isolated app services are future work.
+
+31
+00:02:52,250 --> 00:02:56,987
+Try the public saved demo without a key. Bring your own Meta key to create new tools.
+

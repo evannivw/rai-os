@@ -7,7 +7,8 @@ locally in our QEMU guest.
 **Start here:** [Try without a key / connect your own Meta account](docs/TRY_RAI_OS.md) ·
 [Runnable demo and three-minute presentation](docs/DEMO_READY.md) ·
 [App capabilities and remaining limits](docs/APP_LIMITS.md) ·
-[Atomic app transfers](docs/APP_TRANSFERS.md) · [Final recording runbook](docs/DEMO_FINAL_RUNBOOK.md).
+[Atomic app transfers](docs/APP_TRANSFERS.md) · [Final recording runbook](docs/DEMO_FINAL_RUNBOOK.md) ·
+[Submission package and verified recording](docs/SUBMISSION_PACKAGE.md).
 
 ```sh
 # Three actual previously Meta-generated apps; no API key needed:

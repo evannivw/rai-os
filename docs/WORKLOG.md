@@ -3157,3 +3157,20 @@ order; selecting the highest request id fixed it. Both raw takes remain in targe
 Fresh Meta recording and final rendered media are pending at this commit.
 Submission checklist distinguishes required guide artifacts from uninspected form
 fields; video upload and actual platform submission remain separate pending actions.
+
+
+## 2026-11-04 — actual recorded demo and narrated delivery assets
+
+Clean pushed source 94e9efbac8960190740a3ab292c17ab6872d81c0 completed the live
+recording in one take: two actual Meta requests, each accepted on attempt one,
+repairs disabled. HTTP 200/matching model; 8892 ms/4784 tokens and 9284 ms/4958
+tokens. Transfer/rejection, evolving page with retained records and fresh-guest
+recovery all passed. Preserved requests, responses, recording manifest and final
+checkpoint under docs/evidence/2026-11-04-submission. No inference beyond two calls.
+
+Rendered an eleven-scene three-minute 1080p MP4 with English captions and explicitly
+labelled synthetic reference narration. Real sampled QEMU footage uses scripted
+inputs and edited timing, not a latency benchmark. All scene proof frames inspected;
+full media decode passed; mean/peak audio -20.0/-4.5 dB. Container duration about
+180.023 seconds includes audio padding. Participant listening review, video upload
+and platform submission remain pending. Local media stays in ignored target/.

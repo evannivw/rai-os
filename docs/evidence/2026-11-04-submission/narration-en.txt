@@ -1,0 +1,32 @@
+00:00:00,000 — 00:00:12,000 | Your tools. Your OS.
+A small team should be able to shape its own tools. RAI OS explores that idea: describe a tool, review its behavior, and use it inside a Rust operating system.
+
+00:00:12,000 — 00:00:30,000 | Start with a request.
+We start a new session and describe a tool for moving quantities between locations, with a total and a chart. These names and rules come from the application request. They are not special application types built into the kernel.
+
+00:00:30,000 — 00:00:52,000 | Meta proposes. You decide.
+This is an actual Meta request. The model receives the implemented capability catalog and proposes a declarative application. Rust validates its fields and operations. We review the transfer rule and the page before installation. A proposal alone cannot execute an operation.
+
+00:00:52,000 — 00:01:10,000 | Make it your workspace.
+The generated form accepts our test records: twelve units in Warehouse, and five in Dispatch. We enter a quantity of four and choose Dispatch as the destination. These are fictional demonstration records, entered through the same guest form controls.
+
+00:01:10,000 — 00:01:30,000 | Two records. One checked change.
+The preview shows both changes before we apply them. Warehouse falls from twelve to eight, while Dispatch rises from five to nine. The total remains seventeen. Rust validates and commits both records together, and the chart updates locally without another model request.
+
+00:01:30,000 — 00:01:48,000 | The boundary is visible.
+Now we request ninety nine units. The source does not have enough. The operation is rejected, and both balances stay unchanged. The same checks apply to every generated app using this capability. The model describes behavior; the runtime enforces its rules.
+
+00:01:48,000 — 00:02:10,000 | Evolve the tool by prompt.
+Next, we ask Meta to add a report page while keeping the fields and rules. The model sees the application definition, not the stored record values. We review the updated declaration before installation. Existing data stays in place.
+
+00:02:10,000 — 00:02:22,000 | New view. Same work.
+The new page presents the existing balances and a dispatch note. The tool has changed through a second prompt, while our records and transfer rule remain intact.
+
+00:02:22,000 — 00:02:38,000 | Restart. Keep your work.
+We close the guest and start a fresh instance. The host checkpoint restores the evolved application and its exact records. This is saved recovery, not new generation. The application remains usable without another call to Meta.
+
+00:02:38,000 — 00:02:52,000 | Own kernel. Clear boundaries.
+Our Rust kernel runs on emulated ARM hardware. The guest draws and executes applications. The host provides HTTPS and persistence. Apps share kernel privilege today; isolated app services are future work.
+
+00:02:52,000 — 00:03:00,000 | Try it. Make it yours.
+Try the public saved demo without a key. Bring your own Meta key to create new tools.

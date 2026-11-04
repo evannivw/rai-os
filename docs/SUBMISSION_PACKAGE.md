@@ -51,6 +51,20 @@ Recording outputs include frame hashes, input events and state assertions. Video
 outputs include narration, captions, rendering manifest and media metadata. These
 large local artifacts remain outside Git. Failed takes must remain identifiable.
 
+## Prepared local artifacts
+
+The verified fresh recording and rendering are complete. See
+[evidence and measured outcomes](evidence/2026-11-04-submission/README.md).
+Local deliverables (ignored by Git):
+
+- `target/submission-video-20261104/rai-os-demo.mp4`: three-minute 1080p edit.
+- `target/rai-os-submission-20261104.zip`: video, captions, narration, copy and provenance.
+- `target/submission-video-20261104/captions-en.srt`: optional external captions;
+  the video already includes burned-in captions.
+
+The public repo contains a saved checkpoint for the exact generated app from the
+video, plus requests, responses and verification evidence. No API key is included.
+
 ## Before pressing Submit
 
 - Watch the complete video with audio; replace reference narration if desired.
