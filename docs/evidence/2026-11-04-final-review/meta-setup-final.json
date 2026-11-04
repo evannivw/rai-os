@@ -1,0 +1,9 @@
+{
+  "verified": true,
+  "provider_calls": 0,
+  "checks": [
+    "Missing key and invalid environment override rejected; valid format is configured, not authenticated",
+    "Hidden-entry adapter validates before exclusive 0600 write; existing files/symlinks and malformed keys preserved/rejected without disclosure",
+    "Synthetic 401/403/429/timeout/transport responses produce distinct safe messages; configured cannot masquerade as connected"
+  ]
+}

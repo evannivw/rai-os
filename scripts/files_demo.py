@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 """Import real bytes into RAI-OS RAM, then copy/move/read them through guest commands."""
+# Protocol replies and exact restore checks currently rely on assertions. Refuse
+# optimized mode before any guest, provider request or saved-state operation.
+if not __debug__:
+    raise SystemExit(
+        'RAI-OS host tools require Python assertions. Run without -O, -OO or PYTHONOPTIMIZE.'
+    )
+
 import argparse
 import hashlib
 import json

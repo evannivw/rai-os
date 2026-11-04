@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Bounded RFB 3.3/3.8 input relay. Pixels originate only from QEMU's framebuffer.
 Standard protocol: https://www.rfc-editor.org/rfc/rfc6143.html
-No web frontend, authentication, physical keyboard driver or remote exposure.
+Forwards optional QEMU VNC authentication; it does not implement a web frontend
+or a physical keyboard driver. Local runs bind to loopback; container callers
+choose the bind address and must publish the host port on loopback.
 """
 import socket
 import signal

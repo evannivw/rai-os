@@ -46,7 +46,11 @@ impl<const N: usize> Text<N> {
         }
     }
     pub fn pop(&mut self) {
-        self.len = self.len.saturating_sub(1);
+        if self.len > 0 {
+            self.len -= 1;
+            // Keep the unused suffix zeroed so derived equality matches visible text.
+            self.bytes[self.len] = 0;
+        }
     }
     pub fn hex(&self, f: &mut impl Write) -> fmt::Result {
         for b in &self.bytes[..self.len] {
@@ -997,6 +1001,23 @@ impl fmt::Display for Export<'_> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn edited_text_matches_fresh_text_and_empty_backspace_is_safe() {
+        let mut edited = Text::<8>::new("Dispatch").unwrap();
+        for _ in 0..9 {
+            edited.pop();
+        }
+        assert!(edited == Text::EMPTY);
+        edited.push(b'B');
+        assert!(edited == Text::new("B").unwrap());
+        let mut shortened = Text::<8>::new("Dispatch").unwrap();
+        shortened.pop();
+        assert!(shortened == Text::new("Dispatc").unwrap());
+        let mut zero_capacity = Text::<0>::EMPTY;
+        zero_capacity.pop();
+        assert!(zero_capacity == Text::EMPTY);
+    }
     fn spec(id: &str) -> Spec {
         let mut s = Spec::new(id, "Inspections", "records.local").unwrap();
         s.add(Field::new("equipment", "Equipment", "text", true, "").unwrap())

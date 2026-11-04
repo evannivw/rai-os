@@ -3186,3 +3186,22 @@ MP4 were not verified. The web reader could not access the Drive page; Python's
 certificate check failed locally, and curl with normal certificate validation
 succeeded. No sharing permissions were changed. Platform submission remains pending.
 Documentation-only change; checked links and diff formatting, no runtime retest.
+
+
+## 2026-11-04 — final code and evaluator review
+
+Reviewed Rust domain logic, host/Meta/credential boundaries, persistence and Git,
+portable onboarding and readability. Reproduced and fixed hidden deleted bytes
+in Text::pop causing a visibly renamed transfer destination not to match. Added
+unit tests and actual-QEMU keyboard regression in debug/release. Preserved layout,
+capacities, safety boundary and 4096-byte mapping headroom.
+
+Made assertion-dependent host tools fail early under optimized Python, corrected
+Git/VNC guidance, expanded private-key setup readability and retained build.rs in
+Docker inputs/provenance. Updated platform evidence and final-vs-legacy demo docs.
+114 Rust tests, formatting, host/kernel Clippy, all Python syntax, real saved-demo
+recovery and transfer checks passed. Rebuilt Linux image passed saved/transfer
+checks without network after resolving local Docker startup/configuration issues.
+See docs/evidence/2026-11-04-final-review for reports and exact limits. No real Meta
+request or access to the author's private key file. No new feature needed for the submitted demonstration;
+physical phones, app isolation and arbitrary native apps remain future work.

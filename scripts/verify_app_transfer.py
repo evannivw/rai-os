@@ -88,6 +88,34 @@ def verify(kernel,binary,output,source='offline'):
             from verify_app_behaviors import expect_error
             expect_error(lambda:deliver(g,p),'move_bad_binding');app.press(27);assert schema(g,aid)==spec
             report['checks'].append('Missing/self destination and aliased field binding rejected by actual guest')
+
+            # Real backspace input must not leave hidden bytes in the destination key.
+            key_index = keys.index(rule['key_field'])
+            g.request('app.open', aid)
+            app.press(1003)
+            app.tap(90, 275)  # The second saved record.
+            app.tap(150, 220 + key_index * 72)
+            for _ in 'Dispatch':
+                app.press(8)
+            app.press(ord('B'))
+            app.press(13)
+            assert records(g, aid)[1][key_index] == 'B'
+            select_source()
+            g.request('app.value', f'{ti}:42')  # Fresh visible target B.
+            app.press(13)
+            select_source()
+            before = collect(g, schema, records)
+            base = revision()
+            app.tap(290, 125)
+            assert collect(g, schema, records) == before and revision() == base
+            app.tap(240, 720)
+            assert [row[bi] for row in records(g, aid)] == ['6', '11']
+            assert [row[4] for row in records(g, aid)] == ['12', '22']
+            assert revision() == base + 1
+            report['checks'].append(
+                'Backspace-renamed destination Dispatch -> B resolves exactly; '
+                'transfer commits 8/9 -> 6/11 and recomputes both derived values'
+            )
         app.persist();final=collect(g,schema,records);report['final_state']=final;app.close();app=None
         app=Studio(kernel,binary,output/'restored','replay',state=state);assert collect(app.guest,schema,records)==final and not app.threads
         app.guest.request('app.open',aid);app.press(1015);app.guest.capture(output/'05-reboot.ppm')

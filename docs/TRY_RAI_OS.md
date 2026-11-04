@@ -5,6 +5,10 @@ ones. The author's credential is never included.** All commands below start at t
 repository root. The screen is the actual Rust guest in QEMU; VNC carries pixels
 and input. This is not a browser application or a physical-phone installer.
 
+Host tools require Python assertion checks. Do not use `-O`, `-OO` or
+`PYTHONOPTIMIZE`; startup refuses optimized mode before launching the guest. The
+`-B` flag shown below only disables bytecode files and is safe to use.
+
 ## 1. Start without a key
 
 The portable route uses Docker with Linux containers on Windows, Linux or macOS:
@@ -163,3 +167,9 @@ Recorded checks: [final-polish evidence](evidence/2026-11-03-final-polish/README
 contains actual QEMU/Linux navigation and recovery, offline setup rejection tests,
 and one successful real connection check. That check does not supply credentials
 to other evaluators or guarantee their account access.
+
+
+[Final repository review](evidence/2026-11-04-final-review/README.md) records the
+November 4 text-edit fix, 114 Rust tests, QEMU debug/release transfer regression,
+and rebuilt Linux saved-demo/transfer checks without network. The published video
+retains its original recording provenance; the reviewed source includes these fixes.

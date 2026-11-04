@@ -1,0 +1,48 @@
+{
+  "base_commit": "e9ca970d3d01c01676d184ce7583824c9607f0ae",
+  "reviewed_worktree_changes": true,
+  "source_hashes": {
+    ".dockerignore": "ecb42acfac514e3b97ecb899bd69930949c5d21659ffa343117c8dedb1e6011a",
+    "docs/DEMO_READY.md": "10fdf3fe93851c2e6f2e82fd6f6d6fed44b3b906163334a1f8600ed8dfdeaebe",
+    "docs/GETTING_STARTED.md": "cddf10bd0fc3bb2a23f1d33fa7d477074ff836d1faea5265b07692bfed83e0e1",
+    "docs/TRY_RAI_OS.md": "8db8783b7c90de32cc16541d4aeca8559f53ad91d12433c335aa2a783f03bb74",
+    "scripts/app_git.py": "327e9b9cce563eb76b1466fda09e48c89f902fcce856e5308080cd47dfc63402",
+    "scripts/files_demo.py": "28d7356e55b8e16cc7ce3939a41ce8337bb07012229ea2a719bfd27616b7c10a",
+    "scripts/meta_setup.py": "517b73723af5388b06811f41f8d57676649658e7fa149f2d21f5106d7c13ff3a",
+    "scripts/portable.py": "6c163e59345f253ddce8f691c5be3ac2cc4b03600d672f79d0c2fbfbde250c17",
+    "scripts/verify_app_transfer.py": "70f459673654d447bc96ef40f28dcfb16abadb30d3c0768df7f75ff5e80b26bc",
+    "scripts/workspace_vnc.py": "47821a9476789b759956d8b7fd7fb8ee192884035e513a44a4574af525606624",
+    "src/microapp.rs": "1d230d3934ea3c1c13e2080680747ba84a4126970f677c7ea0f9b532a81761e7",
+    "src/microapp_transfer.rs": "0162b17f28ff1c7bafb49e8fbe43c0a2ba6a3c38e2b8d36fa1e7b0ec4ce92808",
+    ".gitattributes": "429deade16e0a7a66e9ecb8b16373fd21ea62bcde4114cae28bea93d4c7e4374"
+  },
+  "rust_tests": 114,
+  "python_files_parsed": 88,
+  "optimized_python_rejections": [
+    "-O",
+    "-OO",
+    "PYTHONOPTIMIZE=1"
+  ],
+  "actual_meta_calls": 0,
+  "debug_page_pool_end": "0x401ff000",
+  "release_page_pool_end": "0x401ff000",
+  "mapping_limit": "0x40200000",
+  "remaining_mapping_bytes": 4096,
+  "portable_image": "sha256:c00f0e0a0a81e8bd652b4bc32ed223ec57233146334a6b9c98e449437d5d90f2 linux/arm64",
+  "checks": [
+    "Rust formatting and host/kernel Clippy with warnings denied",
+    "Shared-domain unit tests, including deleted-text equality and shortened transfer destination",
+    "Real QEMU debug/release transfer edit, atomicity, invalid input and exact restart recovery",
+    "Saved three-app use, export and recovery",
+    "Offline private-key setup rejection tests; synthetic provider errors only",
+    "Native navigation and console/protocol checks",
+    "Rebuilt Linux container: saved demo and transfer verification with network disabled"
+  ],
+  "limits": [
+    "Bounded declarative apps, not arbitrary native programs",
+    "App runtime and UI still share EL1",
+    "Host HTTPS, Git and checkpoint storage remain required",
+    "No physical Windows or phone hardware test in this review",
+    "Review is not a formal security audit or proof that no bugs remain"
+  ]
+}

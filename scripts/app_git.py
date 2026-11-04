@@ -15,7 +15,7 @@ def plan(app, request):
         with app.lock:
             if not app._planning_active(request):trace['state']='cancelled_or_stale';return
             if app.git_store is None:raise ValueError('Start with --git-store PATH to enable app definition history.')
-            if request['target'] is None:raise ValueError('Open an installed app, then use Create to request Git tools.')
+            if request['target'] is None:raise ValueError('Open an installed app, then use edit app or F2 to request Git tools.')
             if app.provider_calls>=MAX_SESSION_ATTEMPTS:raise ValueError('Session provider limit reached.')
             app.guest.request('app.progress',f"{request['request_id']}:{request['base_revision']}:1")
             app.provider_calls+=1

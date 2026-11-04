@@ -6,6 +6,7 @@
 !Cargo.lock
 !rust-toolchain.toml
 !linker.ld
+!build.rs
 !.cargo
 !.cargo/config.toml
 !src

@@ -28,7 +28,7 @@ def main():
         paths=[]
         for name in ['src','host','scripts','fixtures','assets','.cargo','portable']:
             paths.extend(p for p in (ROOT/name).rglob('*') if p.is_file() and 'target' not in p.parts and '__pycache__' not in p.parts)
-        paths.extend(ROOT/name for name in ['Cargo.toml','Cargo.lock','rust-toolchain.toml','linker.ld','.dockerignore','.gitattributes'])
+        paths.extend(ROOT/name for name in ['Cargo.toml','Cargo.lock','rust-toolchain.toml','linker.ld','build.rs','.dockerignore','.gitattributes'])
         hashes={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(paths)}
         metadata=dict(source_files=hashes,source_digest=hashlib.sha256(json.dumps(hashes,sort_keys=True).encode()).hexdigest(),kernel_sha256=hashlib.sha256(kernel.read_bytes()).hexdigest(),bridge_sha256=hashlib.sha256(binary.read_bytes()).hexdigest())
         (ROOT/'target/portable-build-info.json').write_text(json.dumps(metadata,indent=2)+'\n');return

@@ -1,0 +1,116 @@
+fatal: not a git repository (or any of the parent directories): .git
+{
+  "verified": true,
+  "source": "offline",
+  "source_commit": null,
+  "source_worktree_dirty": null,
+  "provider_calls": 0,
+  "checks": [
+    "Reviewed dynamic rule; preview/cancel write nothing; pointer Apply changes both balances with one revision; page sum conserved at 17",
+    "Both calculated record columns recomputed from their changed balances",
+    "Insufficient transfer rejected without writes/revision; cancelled and outdated UI approval cannot execute",
+    "Missing/self destination and aliased field binding rejected by actual guest",
+    "Backspace-renamed destination Dispatch -> B resolves exactly; transfer commits 8/9 -> 6/11 and recomputes both derived values",
+    "Exact rule, pages and edited records restored on fresh QEMU boot without inference",
+    "Saved-demo entry validates and copies the supplied showcase without modifying it"
+  ],
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "locations",
+          "title": "Locations",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "balance",
+              "kind": "number",
+              "required": true,
+              "label": "Balance",
+              "default": "0"
+            },
+            {
+              "key": "amount",
+              "kind": "number",
+              "required": true,
+              "label": "Amount",
+              "default": "0"
+            },
+            {
+              "key": "to",
+              "kind": "text",
+              "required": false,
+              "label": "To",
+              "default": ""
+            },
+            {
+              "key": "double",
+              "kind": "calculated",
+              "required": true,
+              "label": "Double",
+              "default": "",
+              "formula": "$balance*2"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "transfer": {
+            "id": "send",
+            "label": "Move stock",
+            "balance_field": "balance",
+            "amount_field": "amount",
+            "target_field": "to",
+            "key_field": "name"
+          },
+          "pages": [
+            {
+              "title": "Distribution",
+              "blocks": [
+                {
+                  "kind": "metric",
+                  "title": "Total",
+                  "value": "balance",
+                  "label_field": "",
+                  "aggregate": "sum",
+                  "scope": "all"
+                },
+                {
+                  "kind": "bars",
+                  "title": "Locations",
+                  "value": "balance",
+                  "label_field": "name",
+                  "aggregate": "",
+                  "scope": "all"
+                }
+              ]
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Warehouse",
+            "6",
+            "2",
+            "B",
+            "12"
+          ],
+          [
+            "B",
+            "11",
+            "1",
+            "Warehouse",
+            "22"
+          ]
+        ]
+      }
+    ]
+  }
+}

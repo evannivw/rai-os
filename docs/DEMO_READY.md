@@ -8,7 +8,12 @@ Shop, Quote App and Transfer Balances: three actual previously Meta-generated ap
 with fictional records. Their schemas/data are assembled unchanged in
 fixtures/microapps/v1/demo-device.json; the adjacent provenance file identifies
 the original sources/hashes. Assembly/restoration is not a new model generation.
-The current recording sequence is [DEMO_FINAL_RUNBOOK.md](DEMO_FINAL_RUNBOOK.md).
+The final [three-minute video](https://drive.google.com/file/d/18e2NPFsIktJhBC-T7ZY4ANAfQhD9PvaO/view?usp=sharing)
+is recorded and uploaded. It follows a fresh Ledger app through creation, checked
+transfer, rejection, evolution and recovery, with English captions and synthetic
+reference narration. See [final recording evidence](evidence/2026-11-04-submission/README.md)
+and the [submission checklist](SUBMISSION_PACKAGE.md). The workshop script below
+is retained as an earlier rehearsal option, not the final video's shot list.
 
 ## Try the result without a key
 
@@ -99,10 +104,10 @@ For a new creation/evolution story, use the two prompts and checks in
 on update. The quotation evolution is a separate demonstrated app, not evidence
 that a workshop workflow can be rewritten.
 
-## Three-minute video sequence and English narration
+## Earlier workshop rehearsal sequence and English narration
 
-The final video should show actual interaction and a readable pointer. This
-script fits a three-minute cut with pauses for actions; rehearse the timing.
+This earlier workshop script is retained for reproducible alternative rehearsals.
+It describes separate workshop and quote examples, not the uploaded Ledger video.
 
 | Time | Show | Narration |
 | --- | --- | --- |
@@ -120,7 +125,8 @@ cuts between runs, replay/saved state, prepared data and any shortened API wait.
 The observed workshop provider latency was 5518 ms, not a promised response time.
 Do not splice them into a claim of one continuous live session. The rough preview
 renderer uses still QEMU captures and labeled cuts; it is not an interactive video
-recording and has no voice track. Replace it with narrated interaction for the final.
+recording and has no voice track. The final linked video instead uses sampled
+real QEMU interaction and synthetic reference narration.
 
 ## Rehearsal checks and recording assets
 
@@ -139,7 +145,7 @@ scene manifest with English narration. Its source labels remain visible.
 
 ## Submission completion remains separate
 
-- Record narration and real interaction; watch the final three-minute video.
+- Watch the uploaded three-minute video with audio; replace reference narration if desired.
 - Check public repository and video access from a logged-out session.
 - Fill the platform entry, contributor list and model/provider identification
   using actual registration and the retained provider metadata.

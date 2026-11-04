@@ -231,6 +231,24 @@ mod tests {
         assert_eq!(r.revision(), revision);
     }
     #[test]
+    fn transfer_resolves_a_destination_renamed_to_a_shorter_key() {
+        let mut r = runtime(&spec());
+        let mut destination = *r.app(0).unwrap().row(1).unwrap();
+        destination[0] = Text::new("Dispatch").unwrap();
+        r.save(0, Some(1), &destination).unwrap();
+        for _ in 0..8 {
+            destination[0].pop();
+        }
+        destination[0].push(b'B');
+        r.save(0, Some(1), &destination).unwrap();
+        let revision = r.revision();
+        r.run_transfer(0, 0, "send", revision).unwrap();
+        assert_eq!(r.app(0).unwrap().row(0).unwrap()[1].text(), "5");
+        assert_eq!(r.app(0).unwrap().row(1).unwrap()[1].text(), "5");
+        assert_eq!(r.revision(), revision + 1);
+    }
+
+    #[test]
     fn transfer_preview_and_commit_conserve_total_and_recompute_both_rows() {
         let mut s = spec();
         s.add(

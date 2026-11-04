@@ -46,9 +46,12 @@ RAI-OS: boot OK | AArch64 EL1 | UART PL011
 Type help, info, uptime, or echo hello Rust, then Enter. The direct shell echoes input
 and supports Backspace/Delete. Input is ASCII, without accented text or emoji.
 Ctrl-C terminates QEMU. UART uses stdio without a multiplexed monitor; we do not
-use -nographic. TCG emulates the same CPU on ARM64 or x86_64 hosts, but only macOS
-ARM64 has been tested. Do not switch to HVF or change secure/virtualization/CPU
-options without revisiting the boot contract. No disks or network are attached.
+use -nographic. TCG emulates the same CPU on ARM64 or x86_64 hosts. Native macOS
+ARM64 and Linux ARM64/AMD64 containers have been tested; the AMD64 container was
+emulated on the ARM Mac. Physical Windows-host testing remains pending. See
+[recorded portability checks](PORTABLE_RUN.md#reproduction-and-scope). Do not switch
+to HVF or change secure/virtualization/CPU options without revisiting the boot
+contract. No disks or network are attached.
 
 ## Host interface
 
