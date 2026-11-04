@@ -6,14 +6,17 @@ use super::{
 };
 use crate::{
     app_ui::{Controller, Mode},
-    microapp::{Capability, Kind},
+    microapp::{App, Capability, Field, Kind},
 };
 const QUIET: u32 = 0x9fa9b8;
 const WHITE: u32 = 0xe7ebf1;
 const ACCENT: u32 = 0x87bfff;
+// Keep repeated glyph-call setup shared in the fixed guest image.
+#[inline(never)]
 fn text(s: &mut Display, v: &str, x: i32, y: i32, c: u32) {
     t::text(s, v, x, y, c);
 }
+#[inline(never)]
 fn center(s: &mut Display, v: &str, y: i32, size: Size, c: u32) {
     font::draw(s, v, (480 - font::width(v, size)) / 2, y, size, c);
 }
@@ -91,6 +94,7 @@ fn wrap(s: &mut Display, value: &str, y: i32, lines: usize) {
         rest = rest[end..].trim_start();
     }
 }
+#[inline(never)]
 fn number(s: &mut Display, value: i64, x: i32, y: i32) {
     let mut bytes = [0u8; 24];
     let mut end = 24;
@@ -115,6 +119,137 @@ fn number(s: &mut Display, value: i64, x: i32, y: i32) {
         ACCENT,
     );
 }
+// Follow the controller's approval order; only the final step changes the app.
+#[inline(never)]
+fn review_action(u: &Controller) -> &'static str {
+    match u.mode {
+        Mode::Review if u.pending.workflow.enabled() => "Review process >",
+        Mode::Review | Mode::WorkflowReview if !u.pending.behaviors.is_empty() => {
+            "Review behavior >"
+        }
+        Mode::BehaviorReview if u.focus + 1 < u.pending.behaviors.buttons().len() => {
+            "Review next button >"
+        }
+        Mode::Review | Mode::WorkflowReview | Mode::BehaviorReview
+            if u.pending.transfer.is_some() =>
+        {
+            "Review transfer >"
+        }
+        Mode::Review | Mode::WorkflowReview | Mode::BehaviorReview | Mode::MoveReview
+            if !u.pending.pages.is_empty() =>
+        {
+            "Review pages >"
+        }
+        Mode::PageReview if u.page + 1 < u.pending.pages.entries().len() => "Review next page >",
+        _ if u.target().is_some() => "Approve update",
+        _ => "+ Install app",
+    }
+}
+#[inline(never)]
+fn expression(s: &mut Display, value: &str, y: i32) {
+    // Validated formulas contain at most 64 printable ASCII bytes. Two lines
+    // show the complete expression, including changes beyond the first line.
+    let split = value.len().min(48);
+    text(s, &value[..split], 42, y, ACCENT);
+    text(s, &value[split..], 42, y + 18, ACCENT);
+}
+#[inline(never)]
+fn review_field(s: &mut Display, label: &str, field: Option<&Field>, y: i32) {
+    text(s, label, 42, y, QUIET);
+    if let Some(field) = field {
+        text(s, field.label.text(), 126, y, WHITE);
+        text(s, field.kind.name(), 42, y + 21, QUIET);
+        text(
+            s,
+            if field.required {
+                "required"
+            } else {
+                "optional"
+            },
+            154,
+            y + 21,
+            QUIET,
+        );
+        if field.kind == Kind::Calculated {
+            expression(s, field.formula.text(), y + 42);
+        } else {
+            text(s, "Default:", 42, y + 42, QUIET);
+            text(
+                s,
+                if field.default.text().is_empty() {
+                    "(empty)"
+                } else {
+                    field.default.text()
+                },
+                112,
+                y + 42,
+                ACCENT,
+            );
+        }
+    } else {
+        text(s, "Not present", 126, y, QUIET);
+    }
+}
+#[inline(never)]
+fn review_update(s: &mut Display, u: &Controller, old: &App) {
+    center(s, u.pending.title.text(), 145, Size::Body, WHITE);
+    text(s, "Version", 42, 176, QUIET);
+    number(s, i64::from(old.version), 112, 176);
+    text(s, "->", 208, 176, QUIET);
+    number(s, i64::from(old.version) + 1, 242, 176);
+    let previous = old.spec.fields();
+    let proposed = u.pending.fields();
+    let changed = proposed
+        .iter()
+        .zip(previous)
+        .filter(|(a, b)| a.differs_from(Some(b)))
+        .count();
+    let formulas = proposed
+        .iter()
+        .zip(previous)
+        .filter(|(a, b)| a.formula != b.formula)
+        .count();
+    text(s, "Fields added", 42, 201, QUIET);
+    number(
+        s,
+        proposed.len().saturating_sub(previous.len()) as i64,
+        140,
+        201,
+    );
+    text(s, "changed", 188, 201, QUIET);
+    number(s, changed as i64, 250, 201);
+    text(s, "formulas", 300, 201, QUIET);
+    number(s, formulas as i64, 372, 201);
+    number(s, old.count() as i64, 42, 225);
+    text(s, "records / Saved inputs kept", 62, 225, WHITE);
+    text(s, "Calculated values recompute on approval", 42, 247, QUIET);
+    frame(s, 24, 273, 432, 263, QUIET);
+    if let Some(field) = proposed.get(u.focus) {
+        let before = previous.get(u.focus);
+        text(s, field.key.text(), 42, 287, ACCENT);
+        text(
+            s,
+            match before {
+                None => "Added",
+                Some(old) if field.differs_from(Some(old)) => "Changed",
+                _ => "Unchanged",
+            },
+            350,
+            287,
+            QUIET,
+        );
+        review_field(s, "BEFORE", before, 316);
+        review_field(s, "AFTER", Some(field), 414);
+    }
+    frame(s, 24, 548, 432, 42, ACCENT);
+    text(s, "< Previous", 42, 561, ACCENT);
+    number(s, (u.focus + 1) as i64, 218, 561);
+    text(s, "/", 238, 561, QUIET);
+    number(s, proposed.len() as i64, 258, 561);
+    text(s, "Next >", 390, 561, ACCENT);
+    // The provider's explanation remains visible, separate from computed counts.
+    wrap(s, u.message.text(), 606, 3);
+}
 pub fn render(s: &mut Display, u: &Controller) {
     let a = u.runtime.app(u.selected);
     let title = match u.mode {
@@ -132,6 +267,7 @@ pub fn render(s: &mut Display, u: &Controller) {
             }
         }
         Mode::Thinking => "Creating...",
+        Mode::Review if u.target().is_some() => "Review update.",
         Mode::Review => "Ready to install.",
         Mode::WorkflowReview => "Review the process.",
         Mode::BehaviorReview => "Review behavior.",
@@ -161,7 +297,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                     490,
                     5,
                 );
-                action(s, "Approve transfer >");
+                action(s, review_action(u));
             }
         }
         Mode::MovePreview => {
@@ -210,14 +346,7 @@ pub fn render(s: &mut Display, u: &Controller) {
         Mode::Pages | Mode::PageReview => {
             super::app_pages::render(s, u);
             if u.mode == Mode::PageReview {
-                action(
-                    s,
-                    if u.page + 1 < u.pending.pages.entries().len() {
-                        "Review next page >"
-                    } else {
-                        "Approve pages / Install"
-                    },
-                );
+                action(s, review_action(u));
             }
         }
         Mode::Home | Mode::Search => {
@@ -360,39 +489,30 @@ pub fn render(s: &mut Display, u: &Controller) {
             );
         }
         Mode::Review => {
-            center(s, u.pending.title.text(), 175, Size::Body, WHITE);
-            for (i, f) in u.pending.fields().iter().enumerate() {
-                let y = 222 + i as i32 * 56;
-                text(s, f.label.text(), 42, y, WHITE);
-                text(s, f.kind.name(), 371, y, QUIET);
-                // Formula text is bounded printable ASCII; both slices are valid.
-                let expression = f.formula.text();
-                let split = expression.len().min(48);
-                text(s, &expression[..split], 42, y + 18, ACCENT);
-                text(s, &expression[split..], 42, y + 34, ACCENT);
+            if let Some(old) = u.target().and_then(|i| u.runtime.app(i)) {
+                review_update(s, u, old);
+            } else {
+                center(s, u.pending.title.text(), 175, Size::Body, WHITE);
+                for (i, f) in u.pending.fields().iter().enumerate() {
+                    let y = 222 + i as i32 * 56;
+                    text(s, f.label.text(), 42, y, WHITE);
+                    text(s, f.kind.name(), 371, y, QUIET);
+                    expression(s, f.formula.text(), y + 18);
+                }
+                text(
+                    s,
+                    if u.pending.capability() == Capability::Brightness {
+                        "Allow: change display brightness"
+                    } else {
+                        "Local records only"
+                    },
+                    42,
+                    577,
+                    ACCENT,
+                );
+                wrap(s, u.message.text(), 606, 3);
             }
-            text(
-                s,
-                if u.pending.capability() == Capability::Brightness {
-                    "Allow: change display brightness"
-                } else {
-                    "Local records only"
-                },
-                42,
-                577,
-                ACCENT,
-            );
-            wrap(s, u.message.text(), 606, 3);
-            action(
-                s,
-                if u.pending.workflow.enabled() {
-                    "Review process >"
-                } else if !u.pending.behaviors.is_empty() {
-                    "Review behavior >"
-                } else {
-                    "+ Install app"
-                },
-            );
+            action(s, review_action(u));
         }
         Mode::Form => {
             if let Some(a) = a {
@@ -707,14 +827,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                         590,
                         3,
                     );
-                    action(
-                        s,
-                        if spec.behaviors.is_empty() {
-                            "+ Install app"
-                        } else {
-                            "Review behavior >"
-                        },
-                    );
+                    action(s, review_action(u));
                 } else {
                     let message = match u.message.text() {
                         "workflow_guard_failed" => "Condition not met. Update the record first.",
@@ -762,14 +875,7 @@ pub fn render(s: &mut Display, u: &Controller) {
                     613,
                     3,
                 );
-                action(
-                    s,
-                    if u.focus + 1 < u.pending.behaviors.buttons().len() {
-                        "Review next button >"
-                    } else {
-                        "+ Install app"
-                    },
-                );
+                action(s, review_action(u));
             }
         }
         Mode::Behaviors => {

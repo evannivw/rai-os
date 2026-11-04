@@ -1,0 +1,35 @@
+{
+  "base_commit": "73bce02d2f2ddb80c561623718331ccb81bc25db",
+  "date": "2026-11-04",
+  "verified": true,
+  "live_meta_calls": 0,
+  "private_key_read": false,
+  "controller_domain_tests": 33,
+  "new_controller_cases": 4,
+  "host_bridge_tests": 114,
+  "suites_overlap": true,
+  "controller_stress_actions": 1000000,
+  "identical_debug_release_captures": 17,
+  "linked_mapped_headroom_bytes": 0,
+  "mmu_or_linker_or_pool_or_build_profile_changed": false,
+  "source": "explicit_offline_verifier_fixtures",
+  "docker_image": "sha256:03e84d142de12f3c40e9b7eca446037f37080384bb211f63786caaf951491bb2",
+  "changes_sha256": {
+    ".gitattributes": "c3395034569b348f41168ed8c565526d9780443c56345bbe1fe36b526b6643c4",
+    "README.md": "266d65348023207286bd387f29080d8dcdce05090a683f7f62806309f9dfab5e",
+    "docs/MICROAPPS.md": "fa51eafeede36d1012f622f8c67166843d20f6ca4881dbfaeb27f0bc09bb90d2",
+    "docs/README.md": "05e17ab5f140e6603e8cb2ba07c5bde7bbff8a0521965f551ad7bb200d7d0beb",
+    "docs/WORKLOG.md": "e91807a981a2083bc9177c05b81713e8fcb686ddaf8cc49595b3193a23ca0fb8",
+    "scripts/check_update_review.rs": "a5ffc5b3aafde3b0c8bcebab7ecee30dc94eabb2e496b3ba0911b0d20e85f50e",
+    "scripts/verify_app_update_review.py": "0061aee38f66f558133193fd050aded0fc57cd9d77fabf5c6c989e8fea039280",
+    "src/app_ui.rs": "41cb9dbb36eeb6faf7fe56e48d3d718fcdb5296e846bc42ec7909570e6b624f7",
+    "src/display/apps.rs": "083498f5daebc562e6ac42010b2d35cc0559b1d7584235b4c0cf06d19ea4641e",
+    "src/microapp.rs": "f8297082ab608e3a08eac1c24295986cd41b9a3f5a6911bd8e1d3b395335ada8"
+  },
+  "limits": [
+    "Field-level declaration comparison, not complete semantic diff or intent proof",
+    "Optional paging; existing approval sequence remains mandatory",
+    "Apps share EL1; host HTTPS/storage/Git remain",
+    "Initial release linking failures preserved; final debug/release/Linux pass"
+  ]
+}

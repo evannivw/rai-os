@@ -114,6 +114,8 @@ Preserved measurements and evolving plans. Dated pending items describe their or
 
 ## Verification evidence and compatibility links
 
+- [Visible update review: actual QEMU captures and debug/release/Linux checks](evidence/2026-11-04-update-review/README.md)
+
 - [Repository-wide audit: documentation, controller stress and portable startup](evidence/2026-11-04-repository-audit/README.md)
 
 - [Recorded two-request Meta demo](evidence/2026-11-04-submission/README.md)

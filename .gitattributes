@@ -34,3 +34,4 @@ docs/evidence/2026-11-03-app-transfer/**/*.log -text whitespace=cr-at-eol,-blank
 docs/evidence/2026-11-03-final-polish/**/*.log -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
 docs/evidence/2026-11-04-final-review/**/*.log -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
 docs/evidence/2026-11-04-repository-audit/**/*.log -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+docs/evidence/2026-11-04-update-review/**/*.log -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol

@@ -3263,3 +3263,28 @@ Documentation-only change. Checked relative paths/headings and diff formatting;
 no runtime modification, new model request or private-key access. Classroom
 adoption and educational benefit remain unvalidated. Repository text does not
 update the already-submitted platform entry or uploaded video automatically.
+
+
+## 2026-11-04 — visible update review and approval polish
+
+The participant requested a visibly polished existing demo. Added generic
+BEFORE/AFTER update-field cards, exact formulas/defaults/required flags, version
+and field counts, first-changed focus, and keyboard/pointer paging. Reused the
+existing review state and approval sequence; accurately named subsequent review
+steps and final update/install actions. No app identity is built into the feature.
+Field comparison is shared across selection and rendering. Input preservation,
+derived recomputation and final stale-state validation remain domain-owned.
+
+Initial release attempts exceeded the existing mapped window. Retained failures
+and measured layout; shared comparisons/drawing functions reduced duplicated code.
+No MMU, pool, linker boundary or build-profile changes. Debug/release now fit exactly
+at 0x40200000 with zero mapped headroom; further growth needs an explicit decision.
+
+33 controller/domain tests (four new controller cases), 114 host tests, a million
+deterministic actions, formatting and host/kernel Clippy passed. Real QEMU
+update/cancel/rejection/migration/recovery passed in debug/release with 17 identical
+captures. Existing saved-demo and Git regressions passed. Rebuilt Linux image passed
+update and saved-demo checks offline. No Meta calls or private-key reads; new images
+are explicitly offline verifier fixtures. Added current README capture and controls;
+the already uploaded video and its original provenance remain unchanged. See
+evidence/2026-11-04-update-review for reports, failed attempts, hashes and limits.

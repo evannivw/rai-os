@@ -65,7 +65,8 @@ cannot implement unavailable operations; inspect the proposed fields carefully.
 | --- | --- |
 | Home | Type or F2: create. Tab/Down: select. Enter: open. Apps or `/`: search. |
 | Prompt | ASCII input (128 chars), Backspace, Enter: propose. |
-| Review | Enter or bottom button: advance through fields, workflow, buttons, transfer and pages as present; the final approval installs. Esc: discard. |
+| Review | Enter or bottom button: continue through the review stages for fields, workflow, buttons, transfer and pages as present; the final approval installs. Esc: discard. |
+| Update field review | Previous/Next buttons or Left/Up and Right/Down/Tab: inspect the previous or next field. Enter continues the usual approval sequence. |
 | Form | Tab/Down/Up: field. Type/Backspace: edit. Space: checkbox. Enter: save. F3: records. |
 | Records | Up/Down/Tab: select. Enter: edit. N: new. Space: toggle configured status. F4: pending/all. |
 | Form or records | F2: evolve this app, preserving records. |
@@ -80,6 +81,28 @@ Global Create starts a new app; **edit app >** or F2 inside an app updates it.
 Tab also selects editable fields. F7 imports and F8 exports; F9 opens workflow
 actions, F10 composed buttons, F11 pages and F12 transfer preview when supported.
 See [APP_EXCHANGE.md](APP_EXCHANGE.md) for host-mediated CSV exchange.
+
+## Reviewing a compatible update
+
+An update opens its field review at the first changed or added field, or the first
+field if none changed. Previous/Next and the keyboard controls above cycle through
+all proposed fields. Each BEFORE/AFTER pair shows the label, type, required status
+and default value, or the complete formula for a calculated field. Added fields
+show that no previous definition exists.
+
+The summary counts added fields, changed existing fields and changed formulas on
+existing fields. These are field-level counts, not a summary of every app change:
+a proposal that changes only buttons or pages can show zero in all three counts.
+The provider's explanation remains separate from these computed differences.
+
+Review and paging do not change saved data. On final approval, compatible updates
+retain existing input values and recompute calculated values; new input fields
+receive their validated defaults. Installation rechecks the current revision and
+all existing rows before changing the app. Paging is optional: Enter continues
+the same workflow, behavior, transfer and page review sequence as before.
+
+This layout is a later repository improvement; the submitted video's original
+source revision remains identified in the [recording evidence](evidence/2026-11-04-submission/README.md).
 
 ## Contract and boundaries
 

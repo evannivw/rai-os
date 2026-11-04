@@ -290,6 +290,13 @@ impl Controller {
         if self.mode == Mode::Table && x >= 350 && (635..670).contains(&y) {
             return self.key(1008);
         }
+        if self.mode == Mode::Review
+            && self.target.is_some()
+            && (24..456).contains(&x)
+            && (548..590).contains(&y)
+        {
+            return self.key(if x < 240 { 1009 } else { 1008 });
+        }
         if self.mode == Mode::ImportReview && (195..235).contains(&y) {
             return self.key(1006);
         }
@@ -726,6 +733,18 @@ impl Controller {
                 }
                 _ => {}
             },
+            Mode::Review
+                if self.target.is_some() && matches!(key, 9 | 1005 | 1006 | 1008 | 1009) =>
+            {
+                let len = self.pending.fields().len();
+                // app.ready has validated a nonempty field list. Paging reads the
+                // declaration only; Enter retains the normal approval sequence.
+                self.focus = if matches!(key, 1005 | 1009) {
+                    (self.focus + len - 1) % len
+                } else {
+                    (self.focus + 1) % len
+                };
+            }
             Mode::Review if key == 13 && self.pending.workflow.enabled() => {
                 self.mode = Mode::WorkflowReview;
             }
@@ -990,7 +1009,11 @@ impl Controller {
         self.filtered = false;
         self.row = 0;
         self.form(None)?;
-        self.message = Text::new("App installed.")?;
+        self.message = Text::new(if self.target.is_some() {
+            "App updated."
+        } else {
+            "App installed."
+        })?;
         Ok(())
     }
     fn preview_behavior(&mut self, id: &str, base: u32) -> Result<(), &'static str> {
@@ -1369,6 +1392,19 @@ impl Controller {
                 self.runtime
                     .validate(&self.pending, self.base, self.target)?;
                 self.message = Text::new(reason)?;
+                self.focus = self
+                    .target
+                    .and_then(|index| self.runtime.app(index))
+                    .and_then(|old| {
+                        self.pending
+                            .fields()
+                            .iter()
+                            .enumerate()
+                            .position(|(index, field)| {
+                                field.differs_from(old.spec.fields().get(index))
+                            })
+                    })
+                    .unwrap_or(0);
                 self.mode = Mode::Review;
             }
             "app.progress" => {

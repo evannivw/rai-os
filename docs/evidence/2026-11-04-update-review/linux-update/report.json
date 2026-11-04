@@ -1,0 +1,1030 @@
+{
+  "verified": true,
+  "source": "explicit_offline_verifier_fixtures",
+  "live_meta_calls": 0,
+  "ai_advantage_measured": false,
+  "graphics": "real_QEMU_guest_framebuffer",
+  "source_commit": null,
+  "source_worktree_dirty": null,
+  "kernel_sha256": "a0e49166e5a2cbbaa435c39e93f648e966d29b85c0072ed4287470a5e6dc093f",
+  "host_sha256": "40eab28e6835dc27a4c63a7c497f3a5c2db53452998da83f95b4c6987715ca40",
+  "checks": [
+    "First changed calculation is captured; pointer and keyboard paging cycle all fields without mutating installed state",
+    "Cancel, late reply, stale revision and division by zero in the second existing row preserve exact definitions, records, states, revision and checkpoint bytes",
+    "Approval recomputes 1000 to 0 and 1000 to 500, preserves every user input and process state, and retains the unpaid-delivery guard",
+    "An appended field is reviewed separately after the calculation; existing rows receive its default; identical-definition approval preserves all data",
+    "A second unrelated application uses the same update path; a 64-byte formula renders its final character and recomputes records independently",
+    "Page-only changes still require a separate page approval; cancellation is exact and the installed metric is computed from saved data",
+    "Brightness default changes use the same review without actuating the display or inventing records",
+    "Zero-due delivery succeeds; exact definitions, calculated records and workflow states survive a fresh QEMU boot with zero provider calls"
+  ],
+  "captures": [
+    "01-create-review.png",
+    "02-formula-before-after.png",
+    "03-previous-field.png",
+    "04-pointer-return.png",
+    "05-keyboard-cycle.png",
+    "06-keyboard-previous.png",
+    "07-keyboard-return.png",
+    "08-unchanged-delivery-guard.png",
+    "09-recomputed-records.png",
+    "10-added-field-before-after.png",
+    "11-no-field-changes.png",
+    "12-maximum-formula.png",
+    "13-maximum-formula-last-byte.png",
+    "14-page-only-no-field-changes.png",
+    "15-page-review-still-required.png",
+    "16-brightness-default-review.png",
+    "17-restored-records.png"
+  ],
+  "proposals": [
+    {
+      "request_id": 3,
+      "base_revision": 1,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "repairdesk",
+        "title": "Repair desk",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "customer",
+            "label": "Customer",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "parts",
+            "label": "Parts",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "labor",
+            "label": "Labor",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "paid",
+            "label": "Paid",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "due",
+            "label": "Due",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "$parts+$labor-$paid"
+          }
+        ],
+        "workflow": {
+          "initial": "ready",
+          "actions": [
+            {
+              "id": "deliver",
+              "label": "Deliver device",
+              "from": "ready",
+              "to": "delivered",
+              "guard_field": "due",
+              "guard_op": "eq",
+              "guard_value": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request_id": 6,
+      "base_revision": 4,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "repairdesk",
+        "title": "Repair desk",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "customer",
+            "label": "Customer",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "parts",
+            "label": "Parts",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "labor",
+            "label": "Labor",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "paid",
+            "label": "Paid",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "due",
+            "label": "Due",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "$parts+$labor/2-$paid"
+          }
+        ],
+        "workflow": {
+          "initial": "ready",
+          "actions": [
+            {
+              "id": "deliver",
+              "label": "Deliver device",
+              "from": "ready",
+              "to": "delivered",
+              "guard_field": "due",
+              "guard_op": "eq",
+              "guard_value": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request_id": 9,
+      "base_revision": 4,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "repairdesk",
+        "title": "Repair desk",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "customer",
+            "label": "Customer",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "parts",
+            "label": "Parts",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "labor",
+            "label": "Labor",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "paid",
+            "label": "Paid",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "due",
+            "label": "Due",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "$parts+$labor/2-$paid"
+          }
+        ],
+        "workflow": {
+          "initial": "ready",
+          "actions": [
+            {
+              "id": "deliver",
+              "label": "Deliver device",
+              "from": "ready",
+              "to": "delivered",
+              "guard_field": "due",
+              "guard_op": "eq",
+              "guard_value": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request_id": 12,
+      "base_revision": 4,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "repairdesk",
+        "title": "Repair desk",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "customer",
+            "label": "Customer",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "parts",
+            "label": "Parts",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "labor",
+            "label": "Labor",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "paid",
+            "label": "Paid",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "due",
+            "label": "Due",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "$parts/($labor-1000)"
+          }
+        ],
+        "workflow": {
+          "initial": "ready",
+          "actions": [
+            {
+              "id": "deliver",
+              "label": "Deliver device",
+              "from": "ready",
+              "to": "delivered",
+              "guard_field": "due",
+              "guard_op": "eq",
+              "guard_value": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request_id": 15,
+      "base_revision": 4,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "repairdesk",
+        "title": "Repair desk",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "customer",
+            "label": "Customer",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "parts",
+            "label": "Parts",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "labor",
+            "label": "Labor",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "paid",
+            "label": "Paid",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "due",
+            "label": "Due",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "$parts+$labor/2-$paid"
+          }
+        ],
+        "workflow": {
+          "initial": "ready",
+          "actions": [
+            {
+              "id": "deliver",
+              "label": "Deliver device",
+              "from": "ready",
+              "to": "delivered",
+              "guard_field": "due",
+              "guard_op": "eq",
+              "guard_value": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request_id": 18,
+      "base_revision": 5,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "repairdesk",
+        "title": "Repair desk",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "customer",
+            "label": "Customer",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "parts",
+            "label": "Parts",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "labor",
+            "label": "Labor",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "paid",
+            "label": "Paid",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "due",
+            "label": "Due",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "$parts+$labor/2-$paid"
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "kind": "text",
+            "required": true,
+            "default": "checked"
+          }
+        ],
+        "workflow": {
+          "initial": "ready",
+          "actions": [
+            {
+              "id": "deliver",
+              "label": "Deliver device",
+              "from": "ready",
+              "to": "delivered",
+              "guard_field": "due",
+              "guard_op": "eq",
+              "guard_value": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request_id": 20,
+      "base_revision": 6,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "repairdesk",
+        "title": "Repair desk",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "customer",
+            "label": "Customer",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "parts",
+            "label": "Parts",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "labor",
+            "label": "Labor",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "paid",
+            "label": "Paid",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "due",
+            "label": "Due",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "$parts+$labor/2-$paid"
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "kind": "text",
+            "required": true,
+            "default": "checked"
+          }
+        ],
+        "workflow": {
+          "initial": "ready",
+          "actions": [
+            {
+              "id": "deliver",
+              "label": "Deliver device",
+              "from": "ready",
+              "to": "delivered",
+              "guard_field": "due",
+              "guard_op": "eq",
+              "guard_value": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request_id": 22,
+      "base_revision": 7,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "quotecheck",
+        "title": "Quote check",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "item",
+            "label": "Item",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "base_amount",
+            "label": "Base_Amount",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "total",
+            "label": "Total",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "$base_amount*2"
+          }
+        ]
+      }
+    },
+    {
+      "request_id": 24,
+      "base_revision": 10,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "quotecheck",
+        "title": "Quote check",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "item",
+            "label": "Item",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "base_amount",
+            "label": "Base_Amount",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "total",
+            "label": "Total",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "($base_amount + $base_amount + $base_amount + $base_amount)  / 4"
+          }
+        ]
+      }
+    },
+    {
+      "request_id": 27,
+      "base_revision": 10,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "quotecheck",
+        "title": "Quote check",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "item",
+            "label": "Item",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "base_amount",
+            "label": "Base_Amount",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "total",
+            "label": "Total",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "($base_amount + $base_amount + $base_amount + $base_amount)  / 2"
+          }
+        ]
+      }
+    },
+    {
+      "request_id": 30,
+      "base_revision": 10,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "quotecheck",
+        "title": "Quote check",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "item",
+            "label": "Item",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "base_amount",
+            "label": "Base_Amount",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "total",
+            "label": "Total",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "($base_amount + $base_amount + $base_amount + $base_amount)  / 4"
+          }
+        ]
+      }
+    },
+    {
+      "request_id": 32,
+      "base_revision": 11,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "quotecheck",
+        "title": "Quote check",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "item",
+            "label": "Item",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "base_amount",
+            "label": "Base_Amount",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "total",
+            "label": "Total",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "($base_amount + $base_amount + $base_amount + $base_amount)  / 4"
+          }
+        ],
+        "pages": [
+          {
+            "title": "Summary",
+            "blocks": [
+              {
+                "kind": "metric",
+                "title": "Total",
+                "value": "total",
+                "label_field": "",
+                "aggregate": "sum",
+                "scope": "all"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": 35,
+      "base_revision": 11,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "quotecheck",
+        "title": "Quote check",
+        "capability": "records.local",
+        "filter_key": "",
+        "filter_label": "",
+        "fields": [
+          {
+            "key": "item",
+            "label": "Item",
+            "kind": "text",
+            "required": true,
+            "default": ""
+          },
+          {
+            "key": "base_amount",
+            "label": "Base_Amount",
+            "kind": "number",
+            "required": true,
+            "default": "0"
+          },
+          {
+            "key": "total",
+            "label": "Total",
+            "kind": "calculated",
+            "required": true,
+            "default": "",
+            "formula": "($base_amount + $base_amount + $base_amount + $base_amount)  / 4"
+          }
+        ],
+        "pages": [
+          {
+            "title": "Summary",
+            "blocks": [
+              {
+                "kind": "metric",
+                "title": "Total",
+                "value": "total",
+                "label_field": "",
+                "aggregate": "sum",
+                "scope": "all"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": 37,
+      "base_revision": 12,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "lightlevel",
+        "title": "Light level",
+        "capability": "display.brightness",
+        "fields": [
+          {
+            "key": "level",
+            "label": "Level",
+            "kind": "number",
+            "required": true,
+            "default": "50"
+          }
+        ],
+        "filter_key": "",
+        "filter_label": ""
+      }
+    },
+    {
+      "request_id": 39,
+      "base_revision": 13,
+      "decision": "install",
+      "reason": "Offline verifier fixture. Review before applying.",
+      "spec": {
+        "id": "lightlevel",
+        "title": "Light level",
+        "capability": "display.brightness",
+        "fields": [
+          {
+            "key": "level",
+            "label": "Level",
+            "kind": "number",
+            "required": true,
+            "default": "75"
+          }
+        ],
+        "filter_key": "",
+        "filter_label": ""
+      }
+    }
+  ],
+  "formula_transition": {
+    "before": [
+      [
+        "A",
+        "1000",
+        "2000",
+        "2000",
+        "1000"
+      ],
+      [
+        "B",
+        "1000",
+        "1000",
+        "1000",
+        "1000"
+      ]
+    ],
+    "after": [
+      [
+        "A",
+        "1000",
+        "2000",
+        "2000",
+        "0"
+      ],
+      [
+        "B",
+        "1000",
+        "1000",
+        "1000",
+        "500"
+      ]
+    ],
+    "unchanged_guard": {
+      "initial": "ready",
+      "actions": [
+        {
+          "id": "deliver",
+          "label": "Deliver device",
+          "from": "ready",
+          "to": "delivered",
+          "guard_field": "due",
+          "guard_op": "eq",
+          "guard_value": 0
+        }
+      ]
+    }
+  },
+  "maximum_formula_bytes": 64,
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "repairdesk",
+          "title": "Repair desk",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "customer",
+              "kind": "text",
+              "required": true,
+              "label": "Customer",
+              "default": ""
+            },
+            {
+              "key": "parts",
+              "kind": "number",
+              "required": true,
+              "label": "Parts",
+              "default": "0"
+            },
+            {
+              "key": "labor",
+              "kind": "number",
+              "required": true,
+              "label": "Labor",
+              "default": "0"
+            },
+            {
+              "key": "paid",
+              "kind": "number",
+              "required": true,
+              "label": "Paid",
+              "default": "0"
+            },
+            {
+              "key": "due",
+              "kind": "calculated",
+              "required": true,
+              "label": "Due",
+              "default": "",
+              "formula": "$parts+$labor/2-$paid"
+            },
+            {
+              "key": "note",
+              "kind": "text",
+              "required": true,
+              "label": "Note",
+              "default": "checked"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "workflow": {
+            "initial": "ready",
+            "actions": [
+              {
+                "id": "deliver",
+                "label": "Deliver device",
+                "from": "ready",
+                "to": "delivered",
+                "guard_field": "due",
+                "guard_op": "eq",
+                "guard_value": 0
+              }
+            ]
+          }
+        },
+        "rows": [
+          [
+            "A",
+            "1000",
+            "2000",
+            "2000",
+            "0",
+            "checked"
+          ],
+          [
+            "B",
+            "1000",
+            "1000",
+            "1000",
+            "500",
+            "checked"
+          ]
+        ],
+        "states": [
+          "delivered",
+          "ready"
+        ]
+      },
+      {
+        "spec": {
+          "id": "quotecheck",
+          "title": "Quote check",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "item",
+              "kind": "text",
+              "required": true,
+              "label": "Item",
+              "default": ""
+            },
+            {
+              "key": "base_amount",
+              "kind": "number",
+              "required": true,
+              "label": "Base_Amount",
+              "default": "0"
+            },
+            {
+              "key": "total",
+              "kind": "calculated",
+              "required": true,
+              "label": "Total",
+              "default": "",
+              "formula": "($base_amount + $base_amount + $base_amount + $base_amount)  / 4"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "pages": [
+            {
+              "title": "Summary",
+              "blocks": [
+                {
+                  "kind": "metric",
+                  "title": "Total",
+                  "value": "total",
+                  "label_field": "",
+                  "aggregate": "sum",
+                  "scope": "all"
+                }
+              ]
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Bolt",
+            "80",
+            "80"
+          ],
+          [
+            "Cable",
+            "125",
+            "125"
+          ]
+        ]
+      },
+      {
+        "spec": {
+          "id": "lightlevel",
+          "title": "Light level",
+          "capability": "display.brightness",
+          "fields": [
+            {
+              "key": "level",
+              "kind": "number",
+              "required": true,
+              "label": "Level",
+              "default": "75"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": ""
+        },
+        "rows": []
+      }
+    ]
+  }
+}

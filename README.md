@@ -72,6 +72,19 @@ app, **edit app > / F2** requests a compatible update. Meta receives the impleme
 capability catalog and returns a bounded declarative definition. User review precedes
 installation; ordinary execution makes no model calls. See the [capability catalog](docs/APP_CAPABILITIES.md).
 
+## Review what will change
+
+When evolving a tool, inspect its existing and proposed fields and formulas before
+approval. The guest opens the first changed field, keeps input records on compatible
+updates and recomputes derived values. Previous/Next lets you inspect every field;
+process, button, transfer and page reviews follow as applicable.
+
+<img src="docs/evidence/2026-11-04-update-review/release/02-formula-before-after.png" alt="Actual RAI-OS update review showing the old and proposed balance formula, two retained input records and the next approval step" width="280">
+
+Actual QEMU capture from a disclosed offline test. The video above shows real Meta
+generation; this later UI improvement has its own [tests and captures](docs/evidence/2026-11-04-update-review/README.md).
+[Update-review controls](docs/MICROAPPS.md#reviewing-a-compatible-update).
+
 ## What is implemented, and where
 
 | Component | Current role |

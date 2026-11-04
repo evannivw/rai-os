@@ -1,0 +1,80 @@
+#1 [internal] load build definition from Dockerfile
+#1 sha256:d3f616d6cc77b87cf4ed7849789929a1c9196a192c748cd9ac2793f10a1779cf
+#1 transferring dockerfile: 74B done
+#1 DONE 0.0s
+
+#2 [internal] load .dockerignore
+#2 sha256:dfba0581dfb9d86bc462d85b15c04b9e8d85ffe06067e069b29e8f8614739bd1
+#2 transferring context: 72B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/rust:1.90.0-trixie@sha256:e227f20ec42af3ea9a3c9c1dd1b2012aa15f12279b5e9d5fb890ca1c2bb5726c
+#3 sha256:5e696888c3838507c02edd15c7cb3228f20507826c3dab216c37ae6becb16ad2
+#3 DONE 0.0s
+
+#4 [toolchain 1/4] FROM docker.io/library/rust:1.90.0-trixie@sha256:e227f20ec42af3ea9a3c9c1dd1b2012aa15f12279b5e9d5fb890ca1c2bb5726c
+#4 sha256:c15769c388f45d3e5796d1575e987f1ba5204426e1a1b37844015d8bf8ed47ed
+#4 DONE 0.0s
+
+#8 [internal] load build context
+#8 sha256:ecf7959711d69e96de6cb0030aadae407992afbe344cc9563b52602ad1daddc0
+#8 transferring context: 198.62kB 0.0s done
+#8 DONE 0.0s
+
+#6 [toolchain 3/4] RUN rustup target add aarch64-unknown-none-softfloat && rustup component add rustfmt clippy
+#6 sha256:76dda059746e1eff870dc79a048a9fc85b0eeb28d6585b772054a749508eee1e
+#6 CACHED
+
+#5 [toolchain 2/4] RUN apt-get update && apt-get install -y --no-install-recommends qemu-system-arm seabios python3 ca-certificates git && rm -rf /var/lib/apt/lists/*
+#5 sha256:d0d76bb57d3a75e925d0d1585003127fc192d15bf1e05bce4830fc3f01813b65
+#5 CACHED
+
+#7 [toolchain 4/4] WORKDIR /rai
+#7 sha256:d6f2b536f370e916114c0239cc5825eade44fba654a00e19fbdb03dfacfb4c12
+#7 CACHED
+
+#9 [demo 1/2] COPY . .
+#9 sha256:c9ebcec0860993268d29e05f296ee7b0e3a7e5399d926a075a6d7f6e9232372a
+#9 DONE 0.0s
+
+#10 [demo 2/2] RUN python3 -B scripts/portable.py build
+#10 sha256:e1f83afadba45d5e00e4305a4a380c5f1e7d66880adc31ab84525124fa579750
+#10 0.390    Compiling rai-os v0.1.0 (/rai)
+#10 2.131     Finished `release` profile [optimized] target(s) in 1.85s
+#10 2.283     Updating crates.io index
+#10 3.513  Downloading crates ...
+#10 3.992   Downloaded itoa v1.0.18
+#10 4.180   Downloaded zmij v1.0.23
+#10 4.188   Downloaded unicode-ident v1.0.27
+#10 4.202   Downloaded quote v1.0.47
+#10 4.276   Downloaded proc-macro2 v1.0.107
+#10 4.283   Downloaded serde_derive v1.0.229
+#10 4.290   Downloaded serde_core v1.0.229
+#10 4.296   Downloaded serde v1.0.229
+#10 4.336   Downloaded memchr v2.8.3
+#10 4.347   Downloaded serde_json v1.0.154
+#10 4.415   Downloaded syn v3.0.9
+#10 4.466    Compiling proc-macro2 v1.0.107
+#10 4.466    Compiling unicode-ident v1.0.27
+#10 4.466    Compiling quote v1.0.47
+#10 4.466    Compiling serde_core v1.0.229
+#10 4.466    Compiling zmij v1.0.23
+#10 4.552    Compiling serde_json v1.0.154
+#10 4.653    Compiling serde v1.0.229
+#10 4.687    Compiling itoa v1.0.18
+#10 4.826    Compiling memchr v2.8.3
+#10 5.114    Compiling syn v3.0.9
+#10 5.999    Compiling serde_derive v1.0.229
+#10 7.318    Compiling rai-meta v0.1.0 (/rai/host/meta)
+#10 12.19     Finished `release` profile [optimized] target(s) in 9.96s
+#10 DONE 12.3s
+
+#11 exporting to image
+#11 sha256:e8c613e07b0b7ff33893b694f7759a10d42e180f2b4dc349fb57dc6b71dcab00
+#11 exporting layers
+#11 exporting layers 0.1s done
+#11 writing image sha256:03e84d142de12f3c40e9b7eca446037f37080384bb211f63786caaf951491bb2 done
+#11 naming to docker.io/library/rai-os-update-review done
+#11 DONE 0.1s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them

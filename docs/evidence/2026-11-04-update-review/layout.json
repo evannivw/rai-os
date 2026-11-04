@@ -1,0 +1,18 @@
+{
+  "debug": {
+    "__text_end": "0x400c5000",
+    "__rodata_end": "0x400e4000",
+    "__page_pool_start": "0x40100000",
+    "__page_pool_end": "0x40200000",
+    "headroom_bytes": 0,
+    "kernel_sha256": "ff498b09690de1256b0cee88af96ffb8908dd5e4467c049cbbf308cc23844543"
+  },
+  "release": {
+    "__text_end": "0x400c8000",
+    "__rodata_end": "0x400e4000",
+    "__page_pool_start": "0x40100000",
+    "__page_pool_end": "0x40200000",
+    "headroom_bytes": 0,
+    "kernel_sha256": "198622e68a9d08fd85e320acd671d5afea85c536a31e943790b5c35a9b9ee82f"
+  }
+}

@@ -1,0 +1,179 @@
+    Finished `release` profile [optimized] target(s) in 0.00s
+    Finished `release` profile [optimized] target(s) in 0.01s
+{
+  "verified": true,
+  "source": "offline",
+  "source_commit": "73bce02d2f2ddb80c561623718331ccb81bc25db",
+  "source_worktree_dirty": true,
+  "maximum_live_calls": 0,
+  "generation_calls": 0,
+  "checks": [
+    "Real commits contain definitions only; restore requires native approval, preserves records and Git history, and executes the old program over current data",
+    "History/diff use real Git; canceled saves do not commit; saved rollback appends history; changed Git HEAD rejects pending action; ninth provider call denied",
+    "Current records and restored definition recover after a fresh QEMU boot without inference",
+    "A restore that would remove a field is rejected with all current data unchanged; changed guest state prevents a pending save"
+  ],
+  "operations": [
+    {
+      "goal": "git: save this definition as version one",
+      "trace": {
+        "source": "replay",
+        "state": "completed",
+        "maximum_provider_calls": 1,
+        "operation": "save",
+        "session_provider_attempts": 1
+      }
+    },
+    {
+      "goal": "git: save this changed definition as version two",
+      "trace": {
+        "source": "replay",
+        "state": "completed",
+        "maximum_provider_calls": 1,
+        "operation": "save",
+        "session_provider_attempts": 2
+      }
+    },
+    {
+      "goal": "git: list saved versions",
+      "trace": {
+        "source": "replay",
+        "state": "completed",
+        "maximum_provider_calls": 1,
+        "operation": "history",
+        "session_provider_attempts": 3
+      }
+    },
+    {
+      "goal": "git: compare the first version with the current definition",
+      "trace": {
+        "source": "replay",
+        "state": "completed",
+        "maximum_provider_calls": 1,
+        "operation": "diff",
+        "session_provider_attempts": 4
+      }
+    },
+    {
+      "goal": "git: restore the previous saved version, keeping current records",
+      "trace": {
+        "source": "replay",
+        "state": "review",
+        "maximum_provider_calls": 1,
+        "operation": "restore",
+        "session_provider_attempts": 5
+      }
+    },
+    {
+      "goal": "git: save current definition",
+      "trace": {
+        "source": "replay",
+        "state": "cancelled_or_stale",
+        "maximum_provider_calls": 1,
+        "session_provider_attempts": 6
+      }
+    },
+    {
+      "goal": "git: save the restored definition as a new version",
+      "trace": {
+        "source": "replay",
+        "state": "completed",
+        "maximum_provider_calls": 1,
+        "operation": "save",
+        "session_provider_attempts": 7
+      }
+    },
+    {
+      "goal": "git: list history",
+      "trace": {
+        "source": "replay",
+        "state": "failed",
+        "maximum_provider_calls": 1,
+        "error": "ValueError",
+        "session_provider_attempts": 8
+      }
+    },
+    {
+      "goal": "git: restore version one",
+      "trace": {
+        "source": "replay",
+        "state": "failed",
+        "maximum_provider_calls": 1,
+        "error": "ValueError",
+        "session_provider_attempts": 1
+      }
+    },
+    {
+      "goal": "git: save current definition",
+      "trace": {
+        "source": "replay",
+        "state": "cancelled_or_stale",
+        "maximum_provider_calls": 1,
+        "session_provider_attempts": 2
+      }
+    }
+  ],
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "versiontool",
+          "title": "Versioned tool",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "count",
+              "kind": "number",
+              "required": true,
+              "label": "Count",
+              "default": "0"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "behaviors": [
+            {
+              "id": "advance",
+              "label": "Advance all",
+              "event": "press",
+              "steps": [
+                {
+                  "op": "calculate",
+                  "field": "count",
+                  "value": "$count+1",
+                  "compare": "",
+                  "skip": 0
+                }
+              ],
+              "scope": "all"
+            }
+          ]
+        },
+        "rows": [
+          [
+            "LOCAL_ONLY_A",
+            "16"
+          ],
+          [
+            "LOCAL_ONLY_B",
+            "20"
+          ]
+        ]
+      }
+    ]
+  },
+  "git_history": [
+    "7596c04b416fbda5909a653ba82f1122ddceeed7 Concurrent writer",
+    "5478dd03873f2e85cf3022bef5888bbc4a37b73f Restored program",
+    "cc56e2cab1a90415d37468aeaca8a56457be83a7 Version two",
+    "22bf99c42ab758f30a8f4a6377d0e6ef351349ec Version one"
+  ]
+}

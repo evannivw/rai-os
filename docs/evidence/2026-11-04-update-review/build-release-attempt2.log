@@ -1,0 +1,10 @@
+   Compiling rai-os v0.1.0 (/Users/jv/Development/Rust/rai-os)
+error: linking with `rust-lld` failed: exit status: 1
+  |
+  = note:  "rust-lld" "-flavor" "gnu" "/var/folders/d3/1z_z03ns5b574gqpf3557fg00000gn/T/rustcjZNQEK/symbols.o" "<16 object files omitted>" "--as-needed" "-Bstatic" "<sysroot>/lib/rustlib/aarch64-unknown-none-softfloat/lib/{libcore-*,libcompiler_builtins-*}.rlib" "-L" "/var/folders/d3/1z_z03ns5b574gqpf3557fg00000gn/T/rustcjZNQEK/raw-dylibs" "-Bdynamic" "--eh-frame-hdr" "-z" "noexecstack" "-o" "/Users/jv/Development/Rust/rai-os/target/display/aarch64-unknown-none-softfloat/release/deps/rai_os-6724af82436c090d" "--gc-sections" "-O1" "--strip-debug" "-Tlinker.ld"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: rust-lld: error: Kernel/pool exceeds initial MMU RAM window
+          rust-lld: error: Kernel/pool exceeds initial MMU RAM window
+          
+
+error: could not compile `rai-os` (bin "rai-os") due to 1 previous error

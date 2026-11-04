@@ -1,0 +1,38 @@
+
+running 33 tests
+test microapp::behavior::tests::late_condition_and_arithmetic_failures_publish_nothing ... ok
+test first_install_keeps_original_review_behavior ... ok
+test microapp::behavior::tests::all_branches_types_references_and_forward_bounds_are_validated ... ok
+test microapp::behavior::tests::composed_steps_preview_atomically_and_observe_updated_derived_values ... ok
+test cancellation_and_later_revision_never_install_the_reviewed_proposal ... ok
+test microapp::behavior::tests::conditions_compare_typed_values_and_missing_numbers_are_errors ... ok
+test added_field_and_metadata_change_are_selected_without_claiming_formula_change ... ok
+test microapp::behavior::tests::program_counts_and_wire_format_are_bounded ... ok
+test microapp::behavior::tests::all_rows_preview_branches_and_one_revision_commit_at_capacity ... ok
+test microapp::behavior::tests::public_step_fields_cannot_bypass_schema_admission ... ok
+test microapp::behavior::tests::reviewed_behavior_updates_preserve_records_and_other_apps ... ok
+test microapp::formula::tests::grammar_precedence_limits_and_checked_arithmetic ... ok
+test microapp::pages::tests::aggregates_cover_blank_signed_empty_and_filtered_data_without_mutation ... ok
+test microapp::behavior::tests::terminal_records_stale_revisions_and_wrong_targets_cannot_mutate ... ok
+test microapp::behavior::tests::late_row_errors_rollback_the_entire_batch_and_terminal_locks_apply ... ok
+test microapp::pages::tests::full_capacity_aggregate_is_wider_than_cell_arithmetic ... ok
+test microapp::pages::tests::invalid_bindings_scopes_and_device_capabilities_are_rejected ... ok
+test microapp::pages::tests::page_limits_and_wire_escaping_preserve_arbitrary_printable_text ... ok
+test microapp::pages::tests::presentation_updates_keep_records_and_recompute_from_current_values ... ok
+test microapp::tests::bounded_and_denied_capabilities ... ok
+test microapp::tests::display_controls_require_installed_authority_and_bounded_values ... ok
+test microapp::tests::edited_text_matches_fresh_text_and_empty_backspace_is_safe ... ok
+test microapp::tests::calculated_rows_and_migrations_are_atomic ... ok
+test microapp::tests::imports_validate_complete_batches_and_preserve_existing_rows ... ok
+test microapp::tests::scope_migration_and_failed_updates ... ok
+test microapp::tests::totals_use_wide_integer_arithmetic_and_the_selected_filter ... ok
+test microapp::tests::workflows_guard_transitions_and_lock_terminal_records ... ok
+test microapp::transfer::tests::transfer_bindings_and_capability_are_checked_at_admission ... ok
+test microapp::transfer::tests::transfer_preview_and_commit_conserve_total_and_recompute_both_rows ... ok
+test microapp::transfer::tests::transfer_late_derived_error_and_terminal_rows_abort_both_writes ... ok
+test microapp::transfer::tests::transfer_resolves_a_destination_renamed_to_a_shorter_key ... ok
+test update_review_pages_without_mutation_then_uses_existing_approval ... ok
+test microapp::transfer::tests::transfer_rejects_missing_ambiguous_self_and_invalid_balances_without_any_write ... ok
+
+test result: ok. 33 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

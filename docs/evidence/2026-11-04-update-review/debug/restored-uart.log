@@ -1,0 +1,142 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Display ready: 480x800 guest framebuffer
+Console ready: type help for commands
+@rai1	1	ok	state=home
+@rai1	2	ok	state=home
+@rai1	3	ok	revision=1; apps=-
+@rai1	4	ok	state=home
+@rai1	5	ok	state=home
+@rai1	6	ok	state=compose
+@rai1	7	ok	state=compose
+@rai1	8	ok	state=compose
+@rai1	9	ok	state=compose
+@rai1	10	ok	state=compose
+@rai1	11	ok	state=compose
+@rai1	12	ok	state=compose
+@rai1	13	ok	state=compose
+@rai1	14	ok	state=compose
+@rai1	15	ok	state=compose
+@rai1	16	ok	state=compose
+@rai1	17	ok	state=compose
+@rai1	18	ok	state=compose
+@rai1	19	ok	state=compose
+@rai1	20	ok	state=compose
+@rai1	21	ok	state=compose
+@rai1	22	ok	state=compose
+@rai1	23	ok	state=compose
+@rai1	24	ok	submit=3; revision=1; target=-; prompt=526573746f726520736176656420617070
+@rai1	25	ok	state=thinking
+@rai1	26	ok	state=thinking
+@rai1	27	ok	state=thinking
+@rai1	28	ok	state=thinking
+@rai1	29	ok	state=thinking
+@rai1	30	ok	state=thinking
+@rai1	31	ok	state=thinking
+@rai1	32	ok	state=thinking
+@rai1	33	ok	state=thinking
+@rai1	34	ok	state=thinking
+@rai1	35	ok	state=thinking
+@rai1	36	ok	state=review
+@rai1	37	ok	state=workflow_review
+@rai1	38	ok	state=form
+@rai1	39	ok	state=form
+@rai1	40	ok	state=form
+@rai1	41	ok	state=form
+@rai1	42	ok	state=form
+@rai1	43	ok	state=form
+@rai1	44	ok	state=records
+@rai1	45	ok	state=records
+@rai1	46	ok	state=form
+@rai1	47	ok	state=form
+@rai1	48	ok	state=form
+@rai1	49	ok	state=form
+@rai1	50	ok	state=form
+@rai1	51	ok	state=form
+@rai1	52	ok	state=records
+@rai1	53	ok	state=records
+@rai1	54	ok	id=repairdesk; version=1; count=2; rows=41,31303030,32303030,32303030,30,636865636b6564|42,31303030,31303030,31303030,353030,636865636b6564; states=delivered,ready
+@rai1	55	ok	id=repairdesk; title=526570616972206465736b; capability=records.local; filter=; filter_label=; fields=customer~text~1~437573746f6d6572~~,parts~number~1~5061727473~30~,labor~number~1~4c61626f72~30~,paid~number~1~50616964~30~,due~calculated~1~447565~~2470617274732b246c61626f722f322d2470616964,note~text~1~4e6f7465~636865636b6564~; initial=ready; actions=deliver~44656c6976657220646576696365~ready~delivered~due~eq~0; behaviors=
+@rai1	56	ok	id=repairdesk; version=1; count=2; rows=41,31303030,32303030,32303030,30,636865636b6564|42,31303030,31303030,31303030,353030,636865636b6564; states=delivered,ready
+@rai1	57	ok	state=home
+@rai1	58	ok	state=compose
+@rai1	59	ok	state=compose
+@rai1	60	ok	state=compose
+@rai1	61	ok	state=compose
+@rai1	62	ok	state=compose
+@rai1	63	ok	state=compose
+@rai1	64	ok	state=compose
+@rai1	65	ok	state=compose
+@rai1	66	ok	state=compose
+@rai1	67	ok	state=compose
+@rai1	68	ok	state=compose
+@rai1	69	ok	state=compose
+@rai1	70	ok	state=compose
+@rai1	71	ok	state=compose
+@rai1	72	ok	state=compose
+@rai1	73	ok	state=compose
+@rai1	74	ok	state=compose
+@rai1	75	ok	state=compose
+@rai1	76	ok	submit=5; revision=6; target=-; prompt=526573746f726520736176656420617070
+@rai1	77	ok	state=thinking
+@rai1	78	ok	state=thinking
+@rai1	79	ok	state=thinking
+@rai1	80	ok	state=thinking
+@rai1	81	ok	state=thinking
+@rai1	82	ok	state=thinking
+@rai1	83	ok	state=thinking
+@rai1	84	ok	state=thinking
+@rai1	85	ok	state=review
+@rai1	86	ok	state=page_review
+@rai1	87	ok	state=form
+@rai1	88	ok	state=form
+@rai1	89	ok	state=form
+@rai1	90	ok	state=records
+@rai1	91	ok	state=form
+@rai1	92	ok	state=form
+@rai1	93	ok	state=form
+@rai1	94	ok	state=records
+@rai1	95	ok	id=quotecheck; title=51756f746520636865636b; capability=records.local; filter=; filter_label=; fields=item~text~1~4974656d~~,base_amount~number~1~426173655f416d6f756e74~30~,total~calculated~1~546f74616c~~2824626173655f616d6f756e74202b2024626173655f616d6f756e74202b2024626173655f616d6f756e74202b2024626173655f616d6f756e742920202f2034; initial=; actions=; behaviors=; pages=53756d6d617279~metric^546f74616c^746f74616c^^sum^all
+@rai1	96	ok	id=quotecheck; version=1; count=2; rows=426f6c74,3830,3830|4361626c65,313235,313235; states=,
+@rai1	97	ok	state=home
+@rai1	98	ok	state=compose
+@rai1	99	ok	state=compose
+@rai1	100	ok	state=compose
+@rai1	101	ok	state=compose
+@rai1	102	ok	state=compose
+@rai1	103	ok	state=compose
+@rai1	104	ok	state=compose
+@rai1	105	ok	state=compose
+@rai1	106	ok	state=compose
+@rai1	107	ok	state=compose
+@rai1	108	ok	state=compose
+@rai1	109	ok	state=compose
+@rai1	110	ok	state=compose
+@rai1	111	ok	state=compose
+@rai1	112	ok	state=compose
+@rai1	113	ok	state=compose
+@rai1	114	ok	state=compose
+@rai1	115	ok	state=compose
+@rai1	116	ok	submit=7; revision=9; target=-; prompt=526573746f726520736176656420617070
+@rai1	117	ok	state=thinking
+@rai1	118	ok	state=thinking
+@rai1	119	ok	state=thinking
+@rai1	120	ok	state=review
+@rai1	121	ok	state=form
+@rai1	122	ok	id=lightlevel; title=4c69676874206c6576656c; capability=display.brightness; filter=; filter_label=; fields=level~number~1~4c6576656c~3735~; initial=; actions=; behaviors=
+@rai1	123	ok	id=lightlevel; version=1; count=0; rows=; states=
+@rai1	124	ok	state=form
+@rai1	125	ok	state=home
+@rai1	126	ok	revision=10; apps=repairdesk:1:2:526570616972206465736b,quotecheck:1:2:51756f746520636865636b,lightlevel:1:0:4c69676874206c6576656c
+@rai1	127	ok	state=home
+@rai1	128	ok	revision=10; apps=repairdesk:1:2:526570616972206465736b,quotecheck:1:2:51756f746520636865636b,lightlevel:1:0:4c69676874206c6576656c
+@rai1	129	ok	id=repairdesk; title=526570616972206465736b; capability=records.local; filter=; filter_label=; fields=customer~text~1~437573746f6d6572~~,parts~number~1~5061727473~30~,labor~number~1~4c61626f72~30~,paid~number~1~50616964~30~,due~calculated~1~447565~~2470617274732b246c61626f722f322d2470616964,note~text~1~4e6f7465~636865636b6564~; initial=ready; actions=deliver~44656c6976657220646576696365~ready~delivered~due~eq~0; behaviors=
+@rai1	130	ok	id=repairdesk; version=1; count=2; rows=41,31303030,32303030,32303030,30,636865636b6564|42,31303030,31303030,31303030,353030,636865636b6564; states=delivered,ready
+@rai1	131	ok	id=repairdesk; version=1; count=2; rows=41,31303030,32303030,32303030,30,636865636b6564|42,31303030,31303030,31303030,353030,636865636b6564; states=delivered,ready
+@rai1	132	ok	id=quotecheck; title=51756f746520636865636b; capability=records.local; filter=; filter_label=; fields=item~text~1~4974656d~~,base_amount~number~1~426173655f416d6f756e74~30~,total~calculated~1~546f74616c~~2824626173655f616d6f756e74202b2024626173655f616d6f756e74202b2024626173655f616d6f756e74202b2024626173655f616d6f756e742920202f2034; initial=; actions=; behaviors=; pages=53756d6d617279~metric^546f74616c^746f74616c^^sum^all
+@rai1	133	ok	id=quotecheck; version=1; count=2; rows=426f6c74,3830,3830|4361626c65,313235,313235; states=,
+@rai1	134	ok	id=lightlevel; title=4c69676874206c6576656c; capability=display.brightness; filter=; filter_label=; fields=level~number~1~4c6576656c~3735~; initial=; actions=; behaviors=
+@rai1	135	ok	id=lightlevel; version=1; count=0; rows=; states=
+@rai1	136	ok	state=form
+@rai1	137	ok	state=records
+@rai1	138	ok	revision=10; apps=repairdesk:1:2:526570616972206465736b,quotecheck:1:2:51756f746520636865636b,lightlevel:1:0:4c69676874206c6576656c
+@rai1	139	ok	revision=10; apps=repairdesk:1:2:526570616972206465736b,quotecheck:1:2:51756f746520636865636b,lightlevel:1:0:4c69676874206c6576656c

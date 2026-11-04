@@ -98,7 +98,7 @@ impl Kind {
         }
     }
 }
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub struct Field {
     pub key: Text<12>,
     pub label: Text<22>,
@@ -108,6 +108,12 @@ pub struct Field {
     pub formula: Text<64>,
 }
 impl Field {
+    /// Compare complete declarations, including an absent field for additions.
+    /// Share this bounded comparison across review navigation and rendering.
+    #[inline(never)]
+    pub fn differs_from(&self, previous: Option<&Self>) -> bool {
+        previous != Some(self)
+    }
     const EMPTY: Self = Self {
         key: Text::EMPTY,
         label: Text::EMPTY,
