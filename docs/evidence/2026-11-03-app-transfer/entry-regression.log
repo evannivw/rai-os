@@ -1,0 +1,4 @@
+[
+  "Saved CLI serves actual VNC framebuffer; resume preserves checkpoint bytes and creates a separate session log",
+  "Live CLI starts with an empty device; no model request without explicit user submission; all sessions stop cleanly"
+]

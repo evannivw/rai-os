@@ -47,6 +47,9 @@ def schema(g,app_id):
             if len(parts)==5:button['scope']='all'
             buttons.append(button)
         result['behaviors']=buttons
+    if row.get('move'):
+        key,label,balance,amount,target,match_key=row['move'].split('~')
+        result['transfer']=dict(id=key,label=bytes.fromhex(label).decode('ascii'),balance_field=balance,amount_field=amount,target_field=target,key_field=match_key)
     if row.get('pages'):
         pages=[]
         for encoded in row['pages'].split('|'):
@@ -83,6 +86,8 @@ def deliver(g,p):
         if button.get('scope','row') != 'row':g.request('app.button.scope',f"{rid}:{button['id']}:{button['scope']}")
         for step in button['steps']:
             g.request('app.step',f"{rid}:{button['id']}:{step['op']}:{step['field']}:{step['value'].encode().hex()}:{step['compare']}:{step['skip']}")
+    if s.get('transfer'):
+        t=s['transfer'];g.request('app.move.rule',f"{rid}:{t['id']}:{t['label'].encode().hex()}:{t['balance_field']}:{t['amount_field']}:{t['target_field']}:{t['key_field']}")
     for index,page in enumerate(s.get('pages',[])):
         g.request('app.page',f"{rid}:{page['title'].encode().hex()}")
         for b in page['blocks']:

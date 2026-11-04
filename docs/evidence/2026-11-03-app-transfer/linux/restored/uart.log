@@ -1,0 +1,67 @@
+RAI-OS: boot OK | AArch64 EL1 | UART PL011
+Display ready: 480x800 guest framebuffer
+Console ready: type help for commands
+@rai1	1	ok	state=home
+@rai1	2	ok	state=home
+@rai1	3	ok	revision=1; apps=-
+@rai1	4	ok	state=home
+@rai1	5	ok	state=home
+@rai1	6	ok	state=compose
+@rai1	7	ok	state=compose
+@rai1	8	ok	state=compose
+@rai1	9	ok	state=compose
+@rai1	10	ok	state=compose
+@rai1	11	ok	state=compose
+@rai1	12	ok	state=compose
+@rai1	13	ok	state=compose
+@rai1	14	ok	state=compose
+@rai1	15	ok	state=compose
+@rai1	16	ok	state=compose
+@rai1	17	ok	state=compose
+@rai1	18	ok	state=compose
+@rai1	19	ok	state=compose
+@rai1	20	ok	state=compose
+@rai1	21	ok	state=compose
+@rai1	22	ok	state=compose
+@rai1	23	ok	state=compose
+@rai1	24	ok	submit=3; revision=1; target=-; prompt=526573746f726520736176656420617070
+@rai1	25	ok	state=thinking
+@rai1	26	ok	state=thinking
+@rai1	27	ok	state=thinking
+@rai1	28	ok	state=thinking
+@rai1	29	ok	state=thinking
+@rai1	30	ok	state=thinking
+@rai1	31	ok	state=thinking
+@rai1	32	ok	state=thinking
+@rai1	33	ok	state=thinking
+@rai1	34	ok	state=thinking
+@rai1	35	ok	state=thinking
+@rai1	36	ok	state=thinking
+@rai1	37	ok	state=review
+@rai1	38	ok	state=move_review
+@rai1	39	ok	state=page_review
+@rai1	40	ok	state=form
+@rai1	41	ok	state=form
+@rai1	42	ok	state=form
+@rai1	43	ok	state=form
+@rai1	44	ok	state=form
+@rai1	45	ok	state=records
+@rai1	46	ok	state=form
+@rai1	47	ok	state=form
+@rai1	48	ok	state=form
+@rai1	49	ok	state=form
+@rai1	50	ok	state=form
+@rai1	51	ok	state=records
+@rai1	52	ok	id=locations; title=4c6f636174696f6e73; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,balance~number~1~42616c616e6365~30~,amount~number~1~416d6f756e74~30~,to~text~0~546f~~,double~calculated~1~446f75626c65~~2462616c616e63652a32; initial=; actions=; behaviors=; move=send~4d6f76652073746f636b~balance~amount~to~name; pages=446973747269627574696f6e~metric^546f74616c^62616c616e6365^^sum^all~bars^4c6f636174696f6e73^62616c616e6365^name^^all
+@rai1	53	ok	id=locations; version=1; count=2; rows=57617265686f757365,38,32,4469737061746368,3136|4469737061746368,39,31,57617265686f757365,3138; states=,
+@rai1	54	ok	state=records
+@rai1	55	ok	state=home
+@rai1	56	ok	revision=4; apps=locations:1:2:4c6f636174696f6e73
+@rai1	57	ok	state=home
+@rai1	58	ok	revision=4; apps=locations:1:2:4c6f636174696f6e73
+@rai1	59	ok	id=locations; title=4c6f636174696f6e73; capability=records.local; filter=; filter_label=; fields=name~text~1~4e616d65~~,balance~number~1~42616c616e6365~30~,amount~number~1~416d6f756e74~30~,to~text~0~546f~~,double~calculated~1~446f75626c65~~2462616c616e63652a32; initial=; actions=; behaviors=; move=send~4d6f76652073746f636b~balance~amount~to~name; pages=446973747269627574696f6e~metric^546f74616c^62616c616e6365^^sum^all~bars^4c6f636174696f6e73^62616c616e6365^name^^all
+@rai1	60	ok	id=locations; version=1; count=2; rows=57617265686f757365,38,32,4469737061746368,3136|4469737061746368,39,31,57617265686f757365,3138; states=,
+@rai1	61	ok	state=form
+@rai1	62	ok	state=pages
+@rai1	63	ok	revision=4; apps=locations:1:2:4c6f636174696f6e73
+@rai1	64	ok	revision=4; apps=locations:1:2:4c6f636174696f6e73

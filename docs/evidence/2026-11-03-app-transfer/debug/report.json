@@ -1,0 +1,112 @@
+{
+  "verified": true,
+  "source": "offline",
+  "source_commit": "e4a93caab6f256e1af358f923762cf0501c477fe",
+  "source_worktree_dirty": true,
+  "provider_calls": 0,
+  "checks": [
+    "Reviewed dynamic rule; preview/cancel write nothing; pointer Apply changes both balances with one revision; sum conserved at 17; derived values recomputed",
+    "Insufficient transfer rejected without writes/revision; cancelled and outdated UI approval cannot execute",
+    "Missing/self destination and aliased field binding rejected by actual guest",
+    "Exact rule, pages and edited records restored on fresh QEMU boot without inference"
+  ],
+  "final_state": {
+    "version": 1,
+    "apps": [
+      {
+        "spec": {
+          "id": "locations",
+          "title": "Locations",
+          "capability": "records.local",
+          "fields": [
+            {
+              "key": "name",
+              "kind": "text",
+              "required": true,
+              "label": "Name",
+              "default": ""
+            },
+            {
+              "key": "balance",
+              "kind": "number",
+              "required": true,
+              "label": "Balance",
+              "default": "0"
+            },
+            {
+              "key": "amount",
+              "kind": "number",
+              "required": true,
+              "label": "Amount",
+              "default": "0"
+            },
+            {
+              "key": "to",
+              "kind": "text",
+              "required": false,
+              "label": "To",
+              "default": ""
+            },
+            {
+              "key": "double",
+              "kind": "calculated",
+              "required": true,
+              "label": "Double",
+              "default": "",
+              "formula": "$balance*2"
+            }
+          ],
+          "filter_key": "",
+          "filter_label": "",
+          "transfer": {
+            "id": "send",
+            "label": "Move stock",
+            "balance_field": "balance",
+            "amount_field": "amount",
+            "target_field": "to",
+            "key_field": "name"
+          },
+          "pages": [
+            {
+              "title": "Distribution",
+              "blocks": [
+                {
+                  "kind": "metric",
+                  "title": "Total",
+                  "value": "balance",
+                  "label_field": "",
+                  "aggregate": "sum",
+                  "scope": "all"
+                },
+                {
+                  "kind": "bars",
+                  "title": "Locations",
+                  "value": "balance",
+                  "label_field": "name",
+                  "aggregate": "",
+                  "scope": "all"
+                }
+              ]
+            }
+          ]
+        },
+        "rows": [
+          [
+            "Warehouse",
+            "8",
+            "2",
+            "Dispatch",
+            "16"
+          ],
+          [
+            "Dispatch",
+            "9",
+            "1",
+            "Warehouse",
+            "18"
+          ]
+        ]
+      }
+    ]
+  }
+}

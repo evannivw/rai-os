@@ -605,3 +605,15 @@ their prior wire encoding. This expands the declarative interpreter and renderer
 it does not add drivers, executable loading or process isolation. APP_TOOLBOX.md
 connects these primitives to future richer document tools without claiming format
 compatibility or arbitrary-app support.
+
+
+## November 3: checked same-app transfers
+
+Catalog v9 adds one optional transfer rule to records apps. A pure domain operation
+resolves one exact destination key, validates two candidate rows, recomputes derived
+fields and commits both with one revision. The controller reviews rule installation
+and requires an explicit current-revision preview before execution. Shared schema
+validation, UART, native renderer, checkpoints and Git preserve the definition.
+This is bounded two-row RAM atomicity, not a general database or durable transaction.
+No new unsafe, driver, process isolation or kernel hardware interface is introduced.
+See APP_TRANSFERS.md for contracts and DEMO_FINAL_RUNBOOK.md for truthful footage.

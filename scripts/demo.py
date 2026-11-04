@@ -18,15 +18,18 @@ FIXTURE = ROOT / 'fixtures/microapps/v1/demo-device.json'
 PROVENANCE = ROOT / 'fixtures/microapps/v1/demo-provenance.json'
 
 
-def prepare(output, binary, kernel, source='saved'):
+def prepare(output, binary, kernel, source='saved', showcase=None):
     """Create only a new directory; never reset an existing user's device."""
+    if showcase is not None and source != 'saved':
+        raise ValueError('A checkpoint can only seed a saved demo')
+    seed = Path(showcase).resolve() if showcase is not None else FIXTURE
     output.mkdir(parents=True, exist_ok=False)
     (output / 'exchange/inbox').mkdir(parents=True)
     (output / 'exchange/outbox').mkdir()
     checkpoint = Checkpoint(output / 'device.json', binary, kernel)
     try:
         if source == 'saved':
-            checkpoint.path.write_bytes(FIXTURE.read_bytes())
+            checkpoint.path.write_bytes(seed.read_bytes())
             checkpoint.load()  # Validate checksum, schema, formulas and states.
         elif source == 'meta':
             checkpoint.save(dict(version=1, apps=[]))
@@ -36,8 +39,8 @@ def prepare(output, binary, kernel, source='saved'):
         checkpoint.close()
     manifest = dict(format='rai-demo-1', source=source,
                     kernel_sha256=hashlib.sha256(kernel.read_bytes()).hexdigest(),
-                    seed_sha256=hashlib.sha256(FIXTURE.read_bytes()).hexdigest() if source == 'saved' else None,
-                    provenance=json.loads(PROVENANCE.read_text()) if source == 'saved' else None)
+                    seed_sha256=hashlib.sha256(seed.read_bytes()).hexdigest() if source == 'saved' else None,
+                    provenance=(dict(source='supplied_checkpoint', path=str(seed)) if showcase is not None else json.loads(PROVENANCE.read_text())) if source == 'saved' else None)
     (output / 'demo.json').write_text(json.dumps(manifest, indent=2) + '\n')
     (output / 'START.txt').write_text(
         'RAI-OS DEMO\n'
@@ -52,12 +55,23 @@ def prepare(output, binary, kernel, source='saved'):
         'Live Git: open an app, choose Create, and type git: save this definition or git: restore the previous saved version.\n'
         'Git keeps definitions in app-git; records stay in the device checkpoint. Restores require review.\n'
         'Limits: 3 apps, 6 fields, 8 records each; host checkpoint and HTTPS; shared EL1 runtime.\n')
+    if showcase is not None:
+        (output / 'START.txt').write_text(
+            'RAI-OS SAVED CHECKPOINT DEMO\n'
+            'Restores the supplied app definitions and records. This is not live generation.\n'
+            'Connect a VNC viewer to localhost:5900. Ctrl-C closes and saves.\n'
+            'Open an app > records > select a row. The move link previews both balances.\n'
+            'Apply both changes or Esc to cancel. Pages show current totals and distribution.\n'
+            'F12 opens transfer preview; F11 opens pages. No API is called in saved mode.\n'
+            'Use live mode with your own key to generate arbitrary supported apps.\n'
+            'Resume with scripts/demo.py resume --output THIS_DIRECTORY.\n'
+            'Limits: 3 apps, 6 fields, 8 records each; host checkpoint/HTTPS; shared EL1 runtime.\n')
     return output
 
 
-def open_demo(kernel, binary, output, source='saved', resume=False, port=5900, bind='127.0.0.1'):
+def open_demo(kernel, binary, output, source='saved', resume=False, port=5900, bind='127.0.0.1', showcase=None):
     if not resume:
-        prepare(output, binary, kernel, source)
+        prepare(output, binary, kernel, source, showcase)
     manifest = json.loads((output / 'demo.json').read_text())
     if manifest.get('format') != 'rai-demo-1' or manifest.get('source') not in ('saved', 'meta'):
         raise ValueError('Unsupported demo manifest')
@@ -156,8 +170,11 @@ def main():
     parser.add_argument('action', choices=['saved', 'live', 'resume', 'verify'])
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--debug', action='store_true')
+    parser.add_argument('--checkpoint', type=Path, help='Seed saved mode from a validated checkpoint; never modify its source')
     parser.add_argument('--port', default=5900, type=int)
     args = parser.parse_args()
+    if args.checkpoint is not None and args.action != 'saved':
+        parser.error('--checkpoint requires saved mode')
     kernel, binary = build(args.debug), host_build(args.debug)
     output = args.output.resolve()
     try:
@@ -165,7 +182,7 @@ def main():
             verify(kernel, binary, output)
         else:
             open_demo(kernel, binary, output, 'meta' if args.action == 'live' else 'saved',
-                      resume=args.action == 'resume', port=args.port)
+                      resume=args.action == 'resume', port=args.port, showcase=args.checkpoint)
     except KeyboardInterrupt:
         pass
 

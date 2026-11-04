@@ -7,6 +7,9 @@ mod formula;
 #[path = "microapp_pages.rs"]
 pub mod pages;
 pub use pages::{Block, Pages};
+#[path = "microapp_transfer.rs"]
+mod transfer;
+pub use transfer::Transfer;
 #[path = "microapp_workflow.rs"]
 mod workflow;
 pub use behavior::{BatchError, BehaviorError, Behaviors, Button, Step};
@@ -193,6 +196,7 @@ pub struct Spec {
     pub workflow: Workflow,
     pub behaviors: Behaviors,
     pub pages: Pages,
+    pub transfer: Option<Transfer>,
 }
 impl Spec {
     pub const EMPTY: Self = Self {
@@ -206,6 +210,7 @@ impl Spec {
         workflow: Workflow::EMPTY,
         behaviors: Behaviors::EMPTY,
         pages: Pages::EMPTY,
+        transfer: None,
     };
     pub fn new(id: &str, title: &str, capability: &str) -> Result<Self, &'static str> {
         let capability = Capability::parse(capability)?;
@@ -317,6 +322,9 @@ impl Spec {
         self.workflow.check(self)?;
         self.behaviors.check(self)?;
         self.pages.check(self)?;
+        if let Some(rule) = &self.transfer {
+            rule.check(self)?;
+        }
         if !self.filter_key.text().is_empty() && self.check_field().is_none() {
             return Err("app_bad_filter");
         }
@@ -410,6 +418,9 @@ impl fmt::Display for Spec {
             if button.all_rows {
                 f.write_str("~all")?;
             }
+        }
+        if let Some(rule) = &self.transfer {
+            write!(f, "; move={rule}")?;
         }
         if !self.pages.is_empty() {
             write!(f, "; pages={}", self.pages)?;

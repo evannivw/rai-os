@@ -109,6 +109,8 @@ fn number(s: &mut Display, value: i64, x: i32, y: i32) {
 pub fn render(s: &mut Display, u: &Controller) {
     let a = u.runtime.app(u.selected);
     let title = match u.mode {
+        Mode::MoveReview => "Review transfer.",
+        Mode::MovePreview => "Move together.",
         Mode::Pages => "Your pages.",
         Mode::PageReview => "Review the pages.",
         Mode::Home => "Your space.",
@@ -134,6 +136,68 @@ pub fn render(s: &mut Display, u: &Controller) {
     };
     header(s, u, title);
     match u.mode {
+        Mode::MoveReview => {
+            if let Some(r) = &u.pending.transfer {
+                text(s, r.label.text(), 32, 205, WHITE);
+                text(s, "Balance / quantity / destination / key", 32, 250, QUIET);
+                for (i, key) in [r.balance_field, r.amount_field, r.target_field, r.key_field]
+                    .iter()
+                    .enumerate()
+                {
+                    text(s, key.text(), 42, 290 + i as i32 * 40, 0x87bfff);
+                }
+                wrap(
+                    s,
+                    "Two records, one checked change. Positive quantity, unique destination, sufficient balance. Preview before Apply.",
+                    490,
+                    5,
+                );
+                action(s, "Approve transfer >");
+            }
+        }
+        Mode::MovePreview => {
+            if let Some(app) = a
+                && let Some(r) = &app.spec.transfer
+            {
+                text(s, r.label.text(), 32, 205, WHITE);
+                if u.message.text().is_empty() {
+                    if let Ok(p) = u.runtime.preview_transfer(
+                        u.selected,
+                        u.row,
+                        r.id.text(),
+                        u.move_base.unwrap_or(0),
+                    ) {
+                        text(s, "FROM", 32, 255, QUIET);
+                        text(s, p.source_key.text(), 32, 286, WHITE);
+                        number(s, p.source_before.into(), 32, 330);
+                        text(s, "->", 150, 330, QUIET);
+                        number(s, p.source_after.into(), 210, 330);
+                        text(s, "TO", 32, 405, QUIET);
+                        text(s, p.target_key.text(), 32, 436, WHITE);
+                        number(s, p.target_before.into(), 32, 480);
+                        text(s, "->", 150, 480, QUIET);
+                        number(s, p.target_after.into(), 210, 480);
+                        text(s, "Quantity", 32, 550, QUIET);
+                        number(s, p.amount.into(), 210, 550);
+                        wrap(
+                            s,
+                            "Both balances change together. Derived values update locally. Esc cancels.",
+                            600,
+                            3,
+                        );
+                        action(s, "Apply both changes");
+                    }
+                } else {
+                    wrap(s, u.message.text(), 290, 4);
+                    wrap(
+                        s,
+                        "Nothing changed. Return to records to correct the inputs, then preview again.",
+                        440,
+                        4,
+                    );
+                }
+            }
+        }
         Mode::Pages | Mode::PageReview => {
             super::app_pages::render(s, u);
             if u.mode == Mode::PageReview {
@@ -824,6 +888,7 @@ pub fn render(s: &mut Display, u: &Controller) {
             | Mode::Behaviors
             | Mode::BehaviorPreview
             | Mode::Pages
+            | Mode::MovePreview
     ) && a.is_some_and(|a| a.spec.capability() == Capability::Records)
     {
         t::rect(s, 24, 146, 432, 36, 0x060908);
@@ -877,5 +942,12 @@ pub fn render(s: &mut Display, u: &Controller) {
         center(s, u.storage.text(), 672, Size::Small, QUIET);
     }
     nav(s);
+    if matches!(
+        u.mode,
+        Mode::Form | Mode::Records | Mode::Table | Mode::Pages | Mode::MovePreview
+    ) && a.is_some_and(|a| a.spec.transfer.is_some())
+    {
+        text(s, "move >", 263, 120, 0x87bfff);
+    }
     s.present();
 }

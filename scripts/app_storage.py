@@ -80,6 +80,7 @@ def restore(g,state,deliver,schema,records):
         g.request('app.key','13')
         if app['spec'].get('workflow'):g.request('app.key','13')
         for _ in app['spec'].get('behaviors',[]):g.request('app.key','13')
+        if app['spec'].get('transfer'):g.request('app.key','13')
         for _ in app['spec'].get('pages',[]):g.request('app.key','13')
         for rowno,row in enumerate(app['rows']):
             if rowno:g.request('app.key','110')

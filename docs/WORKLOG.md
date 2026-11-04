@@ -3060,3 +3060,24 @@ a key and how to use one's own key for new prompts.
 Documentation/evidence follow-up only; no executable change or further model call.
 The approved Column shell redesign, creation lock and richer document editing are
 still future work, and kernel/device/EL1 isolation limitations remain explicit.
+
+
+## 2026-11-03 late session — checked two-record transfers and demo rehearsal
+
+Added catalog v9's optional same-app transfer rule: field-key bindings, positive
+quantity, unique destination, nonnegative/sufficient source and checked destination
+addition. Both candidate rows and derived values validate before a one-revision
+commit. Terminal records and stale requests cannot mutate. Native rule review and
+balance preview require explicit confirmation; no new unsafe or device authority.
+Host schema/Meta contract, checkpoints and Git carry the rule. demo.py accepts a
+validated supplied checkpoint without changing it; a three-minute runbook documents
+actual generation versus saved recovery and remaining product limits.
+
+111 Rust tests, Clippy, formatting and Python syntax passed. Real QEMU debug/release
+and Linux ARM64 Docker offline transfer/recovery passed; pages/batches/Git/demo-entry
+regressions passed. Console/protocol passed 37 checks in both profiles and host
+console system checks passed. Debug fixed-window margin is now only 4096 bytes;
+reorganize memory before further substantial growth. No enlarged mapping/stack.
+Evidence: evidence/2026-11-03-app-transfer (actual UTC timestamps are November 4;
+local work remains November 3). Next: freeze source and attempt one actual Meta
+app generation, retaining the result without retry or fixture replacement.

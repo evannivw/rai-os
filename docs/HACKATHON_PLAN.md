@@ -529,3 +529,14 @@ Verify offline QEMU debug/release and Linux first, then freeze source and perfor
 one real Meta generation call with no retry or replacement. Preserve failures if
 it does not pass. Return to the approved native design and final recording afterward;
 no unsupported Linux efficiency or Excel/PowerPoint compatibility claim.
+
+
+## November 3 late session: close one visible capability
+
+Prioritize one checked same-app transfer rule composed with existing forms, formulas,
+metrics and bars. Verify offline debug/release, recovery, Git compatibility and Linux,
+then freeze source before a single actual Meta generation attempt. Preserve every
+outcome and distinguish actual model output from scripted tests. Prepare a supplied
+checkpoint entry for repeatable rehearsal and a three-minute recording sequence.
+After verification, freeze scope for final polish, video and submission; advanced
+relations, broad document editors and physical hardware remain future work.

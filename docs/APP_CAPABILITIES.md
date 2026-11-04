@@ -24,6 +24,7 @@ spreadsheet/presentation tools.
 
 | Capability | What an app can do | Execution |
 | --- | --- | --- |
+| [Atomic transfers](APP_TRANSFERS.md) | Resolve a unique destination in the same app; preview and update both balances together | Guest Rust, checked i32 |
 | [Composed visual pages](APP_PAGES.md) | Text, live count/sum/min/max metrics, signed bars and two-column tables in reviewed pages | Guest Rust |
 | Software display brightness | Apply 20..100%; explicit permission, user action and reset | Guest Rust framebuffer |
 | [Composed behavior](APP_BEHAVIORS.md) | User buttons combine typed writes, arithmetic, conditions and forward branches; preview and atomic one-row commit | Guest Rust |

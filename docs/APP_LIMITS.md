@@ -10,10 +10,10 @@ kinds of control. A model proposal never grants itself additional authority.
 
 | Layer | Available | Missing / consequence |
 | --- | --- | --- |
-| App language | Typed forms, integer formulas, tables/totals, guarded workflows, composed conditional button programs, text/metric/bar/table pages | No unbounded algorithms, arbitrary layout, relations, timers, embedded AI or native code |
+| App language | Typed forms, integer formulas, tables/totals, guarded workflows, composed conditional button programs, text/metric/bar/table pages, one checked two-row transfer | No unbounded algorithms, arbitrary layout, general relations, timers, embedded AI or native code |
 | Data | 3 apps; 6 fields; 8 rows per app; 32 printable ASCII bytes per cell | No deletion, pagination, scalable database, Unicode input or decimal type |
 | Presentation | 2 pages with 2 blocks each; read-only own-app bindings and aggregates | No image assets, free positioning, slide editor or XLSX/PPTX support |
-| Process | Up to 4 workflow actions; 2 behavior buttons with 6 steps each; typed conditions, row or whole-table atomic writes | No cross-row references, action history, background execution or editable process graph |
+| Process | Up to 4 workflow actions; 2 behavior buttons with 6 steps each; typed conditions, row or whole-table atomic writes | Only the separate transfer rule supports cross-row lookup; no action history, background execution or editable process graph |
 | System effects | User-applied software framebuffer brightness | No generated-app camera, GPS, network, notifications, arbitrary file or physical backlight access |
 | Durability | Host checkpoint; reviewed CSV import/export | No guest disk driver/database; CSV omits process states |
 | Execution | Generic Rust interpreter and native QEMU framebuffer | App runtime/UI still share EL1; existing EL0 worker isolation is not wired into apps |
@@ -28,6 +28,9 @@ Increasing a constant is not a sufficient scaling implementation: arrays, copies
 wire sizes, snapshots, CSV staging, screen rows and tests all depend on the bounds.
 A prior debug stack failure already demonstrated why this matters; see
 [KERNEL_DECISION.md](KERNEL_DECISION.md).
+
+The implemented [transfer rule](APP_TRANSFERS.md) is a first bounded same-app lookup
+and two-row transaction; stable identities and general relationships remain future work.
 
 ## Engineering sequence after the submission slice
 

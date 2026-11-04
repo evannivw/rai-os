@@ -23,6 +23,8 @@ pub enum Mode {
     BehaviorPreview,
     Pages,
     PageReview,
+    MoveReview,
+    MovePreview,
 }
 pub struct Controller {
     pub active: bool,
@@ -48,6 +50,7 @@ pub struct Controller {
     pub behavior_error: Option<BehaviorError>,
     pub behavior_failed_row: usize,
     pub behavior_changed: usize,
+    pub move_base: Option<u32>,
     behavior_base: u32,
     behavior_id: Text<12>,
     importing: bool,
@@ -159,6 +162,7 @@ impl Controller {
             behavior_error: None,
             behavior_failed_row: 0,
             behavior_changed: 0,
+            move_base: None,
             behavior_base: 0,
             behavior_id: Text::EMPTY,
             importing: false,
@@ -197,6 +201,8 @@ impl Controller {
     }
     fn state(&self) -> &'static str {
         match self.mode {
+            Mode::MoveReview => "move_review",
+            Mode::MovePreview => "move_preview",
             Mode::Pages => "pages",
             Mode::PageReview => "page_review",
             Mode::Home => "home",
@@ -255,11 +261,17 @@ impl Controller {
         }
         if matches!(
             self.mode,
-            Mode::Form | Mode::Records | Mode::Table | Mode::Workflow | Mode::Behaviors
+            Mode::Form
+                | Mode::Records
+                | Mode::Table
+                | Mode::Workflow
+                | Mode::Behaviors
+                | Mode::Pages
+                | Mode::MovePreview
         ) && (112..142).contains(&y)
-            && x >= 320
+            && x >= 250
         {
-            return self.key(1015);
+            return self.key(if x < 350 { 1016 } else { 1015 });
         }
         if (696..745).contains(&y) {
             return self.key(13);
@@ -288,6 +300,7 @@ impl Controller {
                 | Mode::Behaviors
                 | Mode::BehaviorPreview
                 | Mode::Pages
+                | Mode::MovePreview
         ) && (146..183).contains(&y)
         {
             if self
@@ -497,6 +510,7 @@ impl Controller {
                     | Mode::WorkflowReview
                     | Mode::BehaviorReview
                     | Mode::PageReview
+                    | Mode::MoveReview
             )
         {
             let t = if matches!(
@@ -508,6 +522,7 @@ impl Controller {
                     | Mode::Behaviors
                     | Mode::BehaviorPreview
                     | Mode::Pages
+                    | Mode::MovePreview
             ) {
                 Some(self.selected)
             } else {
@@ -525,12 +540,20 @@ impl Controller {
                 | Mode::Behaviors
                 | Mode::BehaviorPreview
                 | Mode::Pages
+                | Mode::MovePreview
         ) && self
             .runtime
             .app(self.selected)
             .is_some_and(|a| a.spec.capability() == Capability::Records)
         {
             match key {
+                1016 => {
+                    if self.mode == Mode::Form {
+                        self.row = self.editing.ok_or("move_saved_row_required")?;
+                    }
+                    self.preview_move(self.runtime.revision())?;
+                    return Ok(Reply::State("move_preview"));
+                }
                 1015 => {
                     if self
                         .runtime
@@ -610,6 +633,10 @@ impl Controller {
             }
         }
         match self.mode {
+            Mode::MoveReview if key == 13 => self.review_pages_or_install()?,
+            Mode::MovePreview if key == 13 => {
+                self.run_move(self.move_base.ok_or("move_preview_required")?)?
+            }
             Mode::Pages => {
                 let len = self
                     .runtime
@@ -703,7 +730,7 @@ impl Controller {
             }
             Mode::Review | Mode::WorkflowReview if key == 13 => {
                 if self.pending.behaviors.is_empty() {
-                    self.review_pages_or_install()?;
+                    self.review_move_or_pages()?;
                 } else {
                     self.focus = 0;
                     self.mode = Mode::BehaviorReview;
@@ -713,7 +740,7 @@ impl Controller {
                 if self.focus + 1 < self.pending.behaviors.buttons().len() {
                     self.focus += 1;
                 } else {
-                    self.review_pages_or_install()?;
+                    self.review_move_or_pages()?;
                 }
             }
             Mode::Form => {
@@ -886,6 +913,64 @@ impl Controller {
     #[inline(never)]
     fn begin_spec(&mut self, app: &str, title: &str, capability: &str) -> Result<(), &'static str> {
         self.pending = Spec::new(app, decode::<28>(title)?.text(), capability)?;
+        Ok(())
+    }
+    fn review_move_or_pages(&mut self) -> Result<(), &'static str> {
+        if self.pending.transfer.is_some() {
+            self.mode = Mode::MoveReview;
+            Ok(())
+        } else {
+            self.review_pages_or_install()
+        }
+    }
+    fn preview_move(&mut self, base: u32) -> Result<(), &'static str> {
+        if !matches!(
+            self.mode,
+            Mode::Form | Mode::Records | Mode::Table | Mode::Pages | Mode::MovePreview
+        ) {
+            return Err("move_view_required");
+        }
+        if self.mode == Mode::Form {
+            self.row = self.editing.ok_or("move_saved_row_required")?;
+        }
+        self.move_base = None;
+        self.mode = Mode::MovePreview;
+        self.message = Text::EMPTY;
+        let result = self
+            .runtime
+            .app(self.selected)
+            .and_then(|a| a.spec.transfer.as_ref())
+            .ok_or("move_unknown_rule")
+            .and_then(|r| {
+                self.runtime
+                    .preview_transfer(self.selected, self.row, r.id.text(), base)
+            });
+        match result {
+            Ok(_) => {
+                self.move_base = Some(base);
+                Ok(())
+            }
+            Err(e) => {
+                self.message = Text::new(e)?;
+                Err(e)
+            }
+        }
+    }
+    fn run_move(&mut self, base: u32) -> Result<(), &'static str> {
+        if self.mode != Mode::MovePreview || self.move_base != Some(base) {
+            return Err("move_preview_required");
+        }
+        let id = self
+            .runtime
+            .app(self.selected)
+            .and_then(|a| a.spec.transfer.as_ref())
+            .ok_or("move_unknown_rule")?
+            .id;
+        self.runtime
+            .run_transfer(self.selected, self.row, id.text(), base)?;
+        self.move_base = None;
+        self.mode = Mode::Table;
+        self.message = Text::new("Both records updated. Total preserved.")?;
         Ok(())
     }
     fn review_pages_or_install(&mut self) -> Result<(), &'static str> {
@@ -1070,6 +1155,23 @@ impl Controller {
                 }
                 self.restoring = false;
             }
+            "app.move.rule" => {
+                let [request, id, label, balance, amount, target, key] = parts(arg)?;
+                self.check_request(request)?;
+                if self.pending.transfer.is_some() {
+                    return Err("move_duplicate_rule");
+                }
+                self.pending.transfer = Some(crate::microapp::Transfer::new(
+                    id,
+                    decode::<22>(label)?.text(),
+                    balance,
+                    amount,
+                    target,
+                    key,
+                )?);
+            }
+            "app.move.preview" => self.preview_move(arg.parse().map_err(|_| "bad_args")?)?,
+            "app.move.run" => self.run_move(arg.parse().map_err(|_| "bad_args")?)?,
             "app.page" => {
                 let [request, title] = parts(arg)?;
                 self.check_request(request)?;

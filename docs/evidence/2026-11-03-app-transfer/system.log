@@ -1,0 +1,59 @@
+
+=== RAI-OS | Host console ===
+Mac/Linux host interface; kernel runs inside QEMU.
+AI: not connected | Resource telemetry: not implemented
+Waiting for the actual kernel boot...
+Connection: kernel boot and UART console confirmed.
+Tasks: task.start <text> | task.status | task.cancel <id>
+Commands: help | info | uptime | mmu.info | context.check | timer.check | schedule.check | schedule.isolate | ipc.check | ipc.wait | record.count <key> | worker.start | worker.count <key> | worker.status | worker.stop | coord.start | coord.observe <key> | coord.propose <ticket>:<key> | coord.status | coord.stop | schedule.run | schedule.fault | user.run | user.spin | memory.info | memory.check | echo <ASCII text> | exit
+
+[kernel / OK] RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected
+rai-host> [kernel / OK] record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1
+rai-host> [kernel / OK] coordinator=EL0; worker=EL0; state=idle; event=started; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=1; a_slices=0; b_slices=0; trace=AO,BD,AH
+rai-host> [kernel / OK] coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=1; record=notes@1; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH
+rai-host> [kernel / OK] coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=1; record=notes@1; bytes=30; tokens=7; completed=1; a_calls=5; b_calls=3; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BD,AO,AH
+rai-host> [kernel / OK] coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=1; record=notes@1; bytes=30; tokens=7; completed=1; a_calls=5; b_calls=3; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BD,AO,AH
+rai-host> [kernel / REJECTED] coord_already_completed
+rai-host> [kernel / OK] coordinator=EL0; worker=EL0; state=stopped; event=none; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=0; b_slices=0; trace=
+rai-host> [kernel / OK] worker=EL0; state=waiting; completed=0; reason=none; calls=1; slices=0
+rai-host> [kernel / OK] record=notes@1; bytes=30; tokens=7; worker=EL0; state=waiting; completed=1; reason=none; calls=3; slices=0
+rai-host> [kernel / OK] worker=EL0; state=waiting; completed=1; reason=none; calls=3; slices=0
+rai-host> [kernel / REJECTED] user_memory_busy
+rai-host> [kernel / OK] record=notes@2; bytes=44; tokens=9; worker=EL0; state=waiting; completed=2; reason=none; calls=3; slices=0
+rai-host> [kernel / OK] worker=EL0; state=stopped; completed=0; reason=none; calls=0; slices=0
+rai-host> [kernel / OK] record=notes@1; bytes=30; tokens=7; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=8591900679; b_state=exited; b_slices=0; b_code=0; b_value=8591900679; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+rai-host> [kernel / OK] record=empty@1; bytes=0; tokens=0; worker=EL0; tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AD,BS,AW,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=21474836480; b_state=exited; b_slices=0; b_code=0; b_value=21474836480; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+rai-host> [kernel / REJECTED] record_denied
+rai-host> [input rejected; not sent] Record key requires 1-32 ASCII letters, digits, @ or -
+rai-host> [kernel / OK] tasks=2; slice_ms=20; max_slices=6; trace=AD,BS,AW,AS,BR,AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=41; b_state=exited; b_slices=0; b_code=0; b_value=42; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=0; a_calls=2; b_calls=2; blocked=1; woken=1; closed_wakes=0; deadlocked=0
+rai-host> [kernel / OK] tasks=2; slice_ms=20; max_slices=6; trace=AS,BR,AR,BS,AR,BE,AE; a_state=exited; a_slices=0; a_code=0; a_value=42; b_state=exited; b_slices=0; b_code=0; b_value=41; ipc_capacity=2; max_calls=16; sent=2; received=2; rejected=0; empty=1; a_calls=3; b_calls=2
+rai-host> [kernel / OK] rounds=2; reads_denied=4; writes_denied=4; own_accesses=12; memory_unchanged=true; base_restored=true; ar_esr=0x000000009200000f; ar_pc=0x00000000400e1018; ar_far=0x00000000400e6000; aw_esr=0x000000009200004f; aw_pc=0x00000000400e102c; aw_far=0x00000000400e6000; br_esr=0x000000009200000f; br_pc=0x00000000400e1018; br_far=0x00000000400e5000; bw_esr=0x000000009200004f; bw_pc=0x00000000400e102c; bw_far=0x00000000400e5000
+rai-host> [kernel / OK] tasks=2; slice_ms=20; max_slices=6; trace=AE,BE; a_state=exited; a_slices=0; a_code=0; a_value=14091860730339196423; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+rai-host> [kernel / OK] tasks=2; slice_ms=20; max_slices=6; trace=AF,BE; a_state=faulted; a_slices=0; a_reason=exception; a_esr=0x000000009200000f; a_pc=0x00000000400e1044; a_far_raw=0x0000000040080000; a_spsr=0x0000000000000340; a_sp=0x00000000400e6000; b_state=exited; b_slices=0; b_code=0; b_value=14607574309510313995
+rai-host> [kernel / OK] tasks=2; slice_ms=20; irqs=12; switches=11; trace=ABABABABABAB; a_turns=6; b_turns=6; a_ms=124; b_ms=153; progress=25683070,79493487,52470976,159974295,79280915,240522522,106083183,350636463,131388334,460938861,156875442,571390014; context=true; stacks=true
+rai-host> [kernel / OK] mode=EL0; state=timed_out; budget_ms=100; elapsed_ms=103; vector=9; pc=0x00000000400e1064; spsr=0x0000000000000340; sp=0x00000000400e7000; syscalls=0
+rai-host> [kernel / OK] irq=30; ticks=6; rounds=2; registers=31; flags=true; stack=true; irq_masked=true; timer_disabled=true; elapsed_ms=70
+rai-host> [kernel / OK] mode=EL0; state=exited; code=0; syscalls=2; rejected=0; output=Hello from EL0
+rai-host> [kernel / OK] round_trips=2; registers=31; flags=true; stack=true; resumed=true
+rai-host> [kernel / OK] RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected
+rai-host> [kernel / OK] uptime_ms=499; counter_hz=62500000
+rai-host> [kernel / OK] enabled=true; mode=identity; granule=4096; table_pages=12; root=0x00000000400e8000; tcr=0x0000000080993019; mair=0x0000000000004400; wxn=true; caches=false
+rai-host> [kernel / OK] page_size=4096; total_pages=256; free_pages=244; used_pages=12; pool_start=0x00000000400e8000; pool_end=0x00000000401e8000
+rai-host> [kernel / OK] checked_pages=244; exhausted=true; zeroed=true; reused=true; free_pages=244
+rai-host> [kernel / OK] task_id=1; state=completed; processed=0; total=0; words=0
+rai-host> [kernel / OK] task_id=1; state=completed; processed=0; total=0; words=0
+rai-host> [kernel / REJECTED] task_not_running
+rai-host> [kernel / OK] bridge alive
+rai-host> [input rejected; not sent] echo accepts printable ASCII, without TAB or line breaks
+rai-host> [kernel / OK] RAI-OS 0.1.0; aarch64; QEMU virt-9.2; EL1; single CPU; no process isolation; AI not connected
+rai-host> [kernel / OK] coordinator=EL0; worker=EL0; state=idle; event=started; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=1; a_slices=0; b_slices=0; trace=AO,BD,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0
+rai-host> [kernel / OK] coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=2; record=notes@1; bytes=0; tokens=0; completed=0; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=0; cache_hits=0; output_bytes=0
+rai-host> [kernel / OK] coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=2; record=notes@1; bytes=30; tokens=7; completed=1; a_calls=10; b_calls=8; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=33
+rai-host> [kernel / OK] coordinator=EL0; worker=EL0; state=awaiting_proposal; event=observed; ticket=3; record=notes@2; bytes=0; tokens=0; completed=1; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=1; cache_hits=0; output_bytes=0
+rai-host> [kernel / OK] coordinator=EL0; worker=EL0; state=completed; event=executed; ticket=3; record=notes@2; bytes=44; tokens=9; completed=2; a_calls=13; b_calls=11; a_slices=0; b_slices=0; trace=AS,BW,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BS,AR,BD,AO,AH; operation=record.index; cached_records=2; cache_hits=0; output_bytes=50
+rai-host> [kernel / OK] coordinator=EL0; worker=EL0; state=completed; event=reused; ticket=4; record=notes@1; bytes=30; tokens=7; completed=2; a_calls=2; b_calls=0; a_slices=0; b_slices=0; trace=AO,AH; operation=record.index; cached_records=2; cache_hits=1; output_bytes=33
+rai-host> [kernel / OK] record=notes@1; bytes=30; worker=EL0; state=completed; index=10:1,7:1,a:1,at:1,pump:2,review:1
+rai-host> [kernel / OK] coordinator=EL0; worker=EL0; state=stopped; event=none; ticket=0; record=none; bytes=0; tokens=0; completed=0; a_calls=0; b_calls=0; a_slices=0; b_slices=0; trace=
+rai-host> Session closed; QEMU stopped.
+
+PASS: real QEMU, info/uptime/echo/tasks/memory, rejected input, recovery, missing ELF and EOF

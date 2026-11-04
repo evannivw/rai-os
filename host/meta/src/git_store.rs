@@ -453,6 +453,44 @@ mod tests {
         assert!(store.show(&id2).unwrap().pages.is_empty());
     }
     #[test]
+    fn transfer_rules_survive_real_git_versions() {
+        let tmp = Temp::new();
+        let store = Store::new(&tmp.0, "counter").unwrap();
+        let mut a = spec();
+        for (key, kind) in [("name", "text"), ("target", "text"), ("balance", "number")] {
+            a.fields.push(crate::apps::Field {
+                key: key.into(),
+                label: key.into(),
+                kind: kind.into(),
+                required: true,
+                default: "".into(),
+                formula: "".into(),
+            });
+        }
+        a.transfer = Some(crate::apps::Transfer {
+            id: "move".into(),
+            label: "Move".into(),
+            balance_field: "balance".into(),
+            amount_field: "amount".into(),
+            target_field: "target".into(),
+            key_field: "name".into(),
+        });
+        let _lock = store.lock().unwrap();
+        let id = store
+            .save(&a, "Add transfer", &store.context(&a).unwrap())
+            .unwrap();
+        assert_eq!(
+            serde_json::to_value(store.show(&id).unwrap()).unwrap(),
+            serde_json::to_value(&a).unwrap()
+        );
+        a.transfer = None;
+        let id2 = store
+            .save(&a, "Remove transfer", &store.context(&a).unwrap())
+            .unwrap();
+        assert!(store.show(&id).unwrap().transfer.is_some());
+        assert!(store.show(&id2).unwrap().transfer.is_none());
+    }
+    #[test]
     fn real_git_versions_diff_and_compare_exchange_preserve_history() {
         let tmp = Temp::new();
         let store = Store::new(&tmp.0, "counter").unwrap();

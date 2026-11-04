@@ -72,6 +72,16 @@ pub struct Page {
 }
 #[derive(Deserialize, Serialize, Clone)]
 #[serde(deny_unknown_fields)]
+pub struct Transfer {
+    pub id: String,
+    pub label: String,
+    pub balance_field: String,
+    pub amount_field: String,
+    pub target_field: String,
+    pub key_field: String,
+}
+#[derive(Deserialize, Serialize, Clone)]
+#[serde(deny_unknown_fields)]
 pub struct Spec {
     pub id: String,
     pub title: String,
@@ -85,6 +95,8 @@ pub struct Spec {
     pub behaviors: Vec<Button>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub pages: Vec<Page>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub transfer: Option<Transfer>,
 }
 impl Spec {
     pub fn checked(&self) -> Result<microapp::Spec, &'static str> {
@@ -139,6 +151,16 @@ impl Spec {
                     )?,
                 )?;
             }
+        }
+        if let Some(r) = &self.transfer {
+            s.transfer = Some(microapp::Transfer::new(
+                &r.id,
+                &r.label,
+                &r.balance_field,
+                &r.amount_field,
+                &r.target_field,
+                &r.key_field,
+            )?);
         }
         s.check()?;
         Ok(s)

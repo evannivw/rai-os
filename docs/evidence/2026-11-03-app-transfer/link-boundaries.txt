@@ -1,0 +1,4 @@
+        400c4000         400c4000        0     1         __text_end = .
+        400e3000         400e3000        0     1         __rodata_end = .
+        400f3030         400f3030        0     1         __stack_top = .
+        401ff000         401ff000        0     1         __page_pool_end = .

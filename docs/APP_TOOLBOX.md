@@ -14,6 +14,7 @@ validators together. Adding an item to a model prompt does not implement it.
 | Inputs | Text, signed integers, checkboxes, required/default values | Costs, quantities, names and completion flags |
 | Calculations | Derived fields, checked + - * /, same-row dependencies | Integer-cent balances, subtotals, remaining units |
 | Behavior | Button programs, assignments, arithmetic, conditions, branches, row/all scope | Conditional updates across the saved table |
+| Cross-record operation | Checked lookup and atomic transfer with preview | Move quantities between user-defined locations or allocations |
 | Processes | States, guarded transitions, terminal edit locks | Intake/repair/delivery or other declared processes |
 | Presentation | Text, count/sum/min/max metrics, signed bars, two-column tables, two pages | Live reports and small data presentations |
 | Data continuity | Reviewed CSV import/export, compatible evolution, host checkpoints | Use a generated tool and keep its current records |
@@ -23,7 +24,8 @@ validators together. Adding an item to a model prompt does not implement it.
 Names such as workshop or expense tracker are examples, not production app IDs
 recognized by the interpreter. Use arbitrary supported identities/fields/programs.
 For a complete inventory see [APP_CAPABILITIES.md](APP_CAPABILITIES.md), for exact
-bounds see [APP_LIMITS.md](APP_LIMITS.md), and for pages see [APP_PAGES.md](APP_PAGES.md).
+bounds see [APP_LIMITS.md](APP_LIMITS.md), for pages see [APP_PAGES.md](APP_PAGES.md), and for two-record operations see
+[APP_TRANSFERS.md](APP_TRANSFERS.md).
 
 ## How to experiment
 

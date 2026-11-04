@@ -5,7 +5,8 @@ application, review Meta's proposal, and use its forms, calculations and process
 locally in our QEMU guest.
 
 **Start here:** [Runnable demo and three-minute presentation](docs/DEMO_READY.md) ·
-[App capabilities and remaining limits](docs/APP_LIMITS.md).
+[App capabilities and remaining limits](docs/APP_LIMITS.md) ·
+[Atomic app transfers](docs/APP_TRANSFERS.md) · [Final recording runbook](docs/DEMO_FINAL_RUNBOOK.md).
 
 ```sh
 # Two actual previously Meta-generated apps; no API key needed:

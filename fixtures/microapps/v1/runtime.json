@@ -1,5 +1,5 @@
 {
-  "runtime": "rai-declarative-8",
+  "runtime": "rai-declarative-9",
   "limits": {
     "apps": 3,
     "fields": 6,
@@ -130,5 +130,20 @@
       "cross_app_bindings",
       "background_actions"
     ]
+  },
+  "transfer": {
+    "limit": 1,
+    "capability": "records.local",
+    "properties": [
+      "id",
+      "label",
+      "balance_field",
+      "amount_field",
+      "target_field",
+      "key_field"
+    ],
+    "bindings": "Four distinct editable fields: required number balance, number amount, text target, required text key. Exact unique same-app target lookup.",
+    "execution": "Explicit preview and apply; positive quantity; nonnegative sufficient source; checked destination addition; both derived rows validate before both writes; terminal rows blocked; one revision increment.",
+    "limits": "No arbitrary relational queries, cross-app effects, external payments, background triggers or durable transactions."
   }
 }
