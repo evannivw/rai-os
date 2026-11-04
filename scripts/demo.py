@@ -54,7 +54,7 @@ def prepare(output, binary, kernel, source='saved', showcase=None):
         'No API is called in saved mode. The screen says saved; its Create button uses only disclosed offline examples.\n'
         'For arbitrary supported generation, start a separate live demo with your own key.\n'
         'Resume with scripts/demo.py resume --output THIS_DIRECTORY; it never resets your data.\n'
-        'Live Git: open an app, choose Create, and type git: save this definition or git: restore the previous saved version.\n'
+        'Live Git: open an app, choose edit app, and type git: save this definition or git: restore the previous saved version.\n'
         'Git keeps definitions in app-git; records stay in the device checkpoint. Restores require review.\n'
         'Limits: 3 apps, 6 fields, 8 records each; host checkpoint and HTTPS; shared EL1 runtime.\n')
     if showcase is not None:

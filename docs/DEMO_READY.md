@@ -191,7 +191,7 @@ recovery visibly distinct in the three-minute narration.
 
 
 Live demo sessions now enable [Git tools](APP_GIT.md) in their own app-git folder.
-Open an installed app, select Create, and request `git: save this definition`.
+Open an installed app, select edit app, and request `git: save this definition`.
 Save a second reviewed definition before requesting
 `git: restore the previous saved version, keeping current records`.
 The restored program requires the usual approvals. Show that the program changes

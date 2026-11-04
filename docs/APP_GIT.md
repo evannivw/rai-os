@@ -15,7 +15,7 @@ python3 -B scripts/apps.py --source meta --output target/git-session \
   --state target/git-device.json --git-store target/git-definitions
 ```
 
-Open an installed app, choose **Create** (F2), and enter a prompt beginning with
+Open an installed app, choose **edit app >** (F2), and enter a prompt beginning with
 `git:`. That prefix selects the Git tool contract; Meta chooses the operation and
 an observed revision, rather than the bridge matching application-specific phrases.
 Examples:
