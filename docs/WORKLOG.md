@@ -3143,3 +3143,17 @@ final-polish evidence. The author's key remains ignored/local; judges provide
 their own only for live mode. Saved demo and all offline checks require none.
 The native three-app rehearsal is reopened separately. Video/upload/platform
 submission remain pending; supplied-guide deadline is Nov 4 at 20:00 Guatemala.
+
+
+## 2026-11-04 — submission recording harness and individual entry
+
+Jarrol Villatoro confirmed an individual entry. Added an eleven-scene real-QEMU
+sampling harness and a 180-second narrated renderer, with explicit scripted-input,
+edited-timing and synthetic-reference-voice labels. No kernel/runtime change.
+Offline rehearsal passed creation/review, 12/5 -> 8/9 checked transfer, rejection
+without mutation, page evolution retaining data, and exact fresh-guest recovery.
+The first rehearsal exposed a verifier bug selecting provider files by directory
+order; selecting the highest request id fixed it. Both raw takes remain in target/.
+Fresh Meta recording and final rendered media are pending at this commit.
+Submission checklist distinguishes required guide artifacts from uninspected form
+fields; video upload and actual platform submission remain separate pending actions.

@@ -36,8 +36,8 @@ changing permissions/guards. Evidence retains actual responses and outcomes.
 - Repository: https://github.com/evannivw/rai-os
 - Reproduction: docs/TRY_RAI_OS.md in that repository.
 - Video URL: pending upload; use the final narrated three-minute recording.
-- Team members and representative: enter the actual participant details.
-- Track and selected problem statement: confirm in the official platform.
+- Participant and representative: Jarrol Villatoro (individual entry).
+- Recommended track: Indie Developer. Recommended problem statement: Push the Frontier. Confirm these selections in the official form.
 - Contribution period: preserve actual commits/worklog; distinguish any earlier work.
 - Supplied guide discrepancy: kickoff Oct 26; build period Oct 27–Nov 4. Organizer
   clarification of Oct 26 eligibility remains unresolved; do not claim it is settled.
