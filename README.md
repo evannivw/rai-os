@@ -13,6 +13,19 @@ executes its supported operations locally.
 This is the actual guest framebuffer in QEMU. A host VNC relay carries pixels and
 input; the Rust guest draws the interface. The saved examples use fictional records.
 
+## For students and curious builders
+
+RAI-OS is also a place for university students, self-taught developers and curious
+builders to explore software by making their own small tools. Describe an app,
+inspect its rules, predict a result, then change a formula and see what happens
+to the same records. Ordinary app operations run locally after creation.
+
+The open source connects that experiment to systems programming: follow a Meta
+proposal through Rust validation into execution and rendering in our own kernel.
+Start with the [learning exercise](docs/APP_TOOLBOX.md#learn-by-changing-a-working-tool).
+This is an intended use of the prototype; classroom use and learning outcomes
+have not been evaluated.
+
 ## Try the saved demo — no API key
 
 With Docker running in Linux-container mode:

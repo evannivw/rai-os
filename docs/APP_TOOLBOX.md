@@ -40,6 +40,38 @@ bounds see [APP_LIMITS.md](APP_LIMITS.md), for pages see [APP_PAGES.md](APP_PAGE
 5. Keep actual provider responses and test results when presenting a live example.
    Saved recovery is useful but must not be described as fresh generation.
 
+## Learn by changing a working tool
+
+University students, self-taught developers and curious builders can use the
+prototype to explore formulas, state transitions and the boundary between a model
+proposal and an executable operation. The exercise below uses existing features;
+it is not a new teaching mode or a measured classroom result.
+
+Start with the [saved demo](TRY_RAI_OS.md#1-start-without-a-key), which needs no
+Meta key. Open Quote App and create one fictional row with Quantity = 2,
+Unit cents = 100 and Cost cents = 50. Predict the values before saving:
+`totalc = qty * unitc` gives 200, and `profit = totalc - cost_cents` gives 150.
+Inspect the calculated fields and compare them with the prediction. Change
+Quantity to 3 and check the new total of 300 and profit of 250. These are expected
+arithmetic results, not a claim of a newly executed verification run.
+
+For an experiment with model-assisted evolution, use [live mode with your own
+key](TRY_RAI_OS.md#2-create-new-apps-with-your-own-meta-key) and first create a
+small cost calculator. Keep quantity, unit cost and estimated cost before any
+calculated field that refers to them. Ask for a compatible formula change, such
+as accounting for twice the estimated cost, while keeping field identities,
+types and existing inputs. Predict the output, inspect the actual proposed
+formula before approval, then compare the recalculated values after installation.
+The saved mode does not generate this change; model clarification or rejection
+is a valid outcome. Retain unsuccessful attempts alongside successful ones.
+
+The questions to investigate are concrete: Which rules did the model propose?
+What did Rust validate? Which inputs stayed the same? Why did a result change?
+Which operations still work without another model request? For systems study,
+follow [the architecture and source boundaries](ARCHITECTURE.md) from proposal
+to domain validation, guest execution and framebuffer rendering. Current app
+code shares EL1 privilege; this exercise does not demonstrate isolated apps.
+
 ## Toward spreadsheet and presentation tools
 
 Today's foundations include a bounded table, formulas, composed actions and live

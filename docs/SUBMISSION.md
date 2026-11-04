@@ -31,7 +31,14 @@ The recording uses scripted inputs, edited timing, fictional records and labelle
 synthetic English narration.
 
 The long-term goal is to let individuals and small teams create focused software
-for their own workflows. Today's implementation is a bounded declarative prototype:
+for their own workflows. University students, self-taught developers and curious
+builders are another intended audience: create a tool, inspect its formulas and
+rules, predict what a change will do, then test it against the same records. The
+open implementation also lets them trace how a model proposal becomes checked
+execution inside an operating system. This learning use has not been evaluated
+in a classroom; no educational outcome is claimed.
+
+Today's implementation is a bounded declarative prototype:
 apps and UI share kernel privilege, and a portable host bridge supplies HTTPS,
 checkpoints and Git history for app definitions. It does not yet compile arbitrary
 native applications or run on physical phones. The public saved demo works without

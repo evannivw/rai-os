@@ -3248,3 +3248,18 @@ Public GitHub metadata confirmed the repository is public. Its older About text
 remains an external follow-up because no authenticated GitHub tool/browser was
 available and computer access reported a locked Mac. Prepared replacement text in
 SUBMISSION_PACKAGE.md. Pushes do not alter the platform submission or uploaded video.
+
+
+## 2026-11-04 — learning purpose for students and curious builders
+
+The participant clarified an educational audience of university students,
+self-taught developers and curious builders. Added this intended use to the README and reviewed project description,
+with a concrete predict/inspect/change/check exercise in APP_TOOLBOX.md. Separated
+key-free saved-app arithmetic from optional live Meta evolution and preserved the
+existing capability, host/guest and privilege boundaries. Example arithmetic is
+an expected result, not a newly recorded run or evidence of learning outcomes.
+
+Documentation-only change. Checked relative paths/headings and diff formatting;
+no runtime modification, new model request or private-key access. Classroom
+adoption and educational benefit remain unvalidated. Repository text does not
+update the already-submitted platform entry or uploaded video automatically.
