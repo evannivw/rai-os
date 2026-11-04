@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Rustup, QEMU >= 9.2 with qemu-system-aarch64 and virt-9.2, Python 3, and a POSIX
+Rustup, QEMU >= 9.2 with qemu-system-aarch64 and virt-9.2, Python 3.9 or newer, and a POSIX
 shell. On macOS install QEMU with `brew install qemu`. Install Rustup using
 https://rust-lang.org/tools/install/ and load its environment:
 

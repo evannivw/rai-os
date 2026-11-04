@@ -90,4 +90,5 @@ python3 -B scripts/apps.py --source replay --state target/journey-device.json --
 
 This opens the prior result, not fresh generation. Use source meta and your own
 key to create/evolve tools. File templates must use the current exported header,
-including the new cost input. The video itself has not been recorded by this check.
+including the new cost input. This earlier check did not record a video; the final Ledger recording is linked
+from [DEMO_READY.md](DEMO_READY.md).

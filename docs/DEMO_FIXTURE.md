@@ -1,5 +1,11 @@
 # Review-pack correctness fixture v1
 
+**Historical experiment specification.** This document retains its original
+October 26 contract and later dated observations. It is not the final app demo's
+acceptance checklist. See [POLICY_PILOT_RESULTS.md](POLICY_PILOT_RESULTS.md) and
+[SEMANTIC_COMPARISON.md](SEMANTIC_COMPARISON.md) for measured comparison outcomes;
+[TRY_RAI_OS.md](TRY_RAI_OS.md) describes the delivered prompt-generated app demo.
+
 Created October 26, 2026. These are original synthetic English records under the
 repository license, with no personal data or credentials. This is a tiny public
 correctness fixture, not a performance benchmark or held-out evaluation set.

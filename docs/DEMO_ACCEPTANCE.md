@@ -1,5 +1,11 @@
 # Required result contract: project review pack v1
 
+**Historical experiment specification.** This document retains its original
+October 26 contract and later dated observations. It is not the final app demo's
+acceptance checklist. See [POLICY_PILOT_RESULTS.md](POLICY_PILOT_RESULTS.md) and
+[SEMANTIC_COMPARISON.md](SEMANTIC_COMPARISON.md) for measured comparison outcomes;
+[TRY_RAI_OS.md](TRY_RAI_OS.md) describes the delivered prompt-generated app demo.
+
 Status: design contract, October 26, 2026. This specifies what the forthcoming
 pilot must produce; none of the review-pack jobs, artifacts, permissions, or
 validators below are implemented by the current kernel. Its introductory

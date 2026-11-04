@@ -1,4 +1,17 @@
-# RAI-OS hackathon plan
+# RAI-OS hackathon planning history
+
+**Current status — November 4:** the app demo is implemented and recorded; Jarrol
+reported submitting the project as an individual participant. Current description,
+links and follow-up live in [SUBMISSION.md](SUBMISSION.md) and
+[SUBMISSION_PACKAGE.md](SUBMISSION_PACKAGE.md). The app direction and current
+boundaries are in [ARCHITECTURE.md](ARCHITECTURE.md) and [APP_LIMITS.md](APP_LIMITS.md).
+
+This document preserves evolving plans and dated checkpoints. Their old pending
+items, team-confirmation requests and proposed experiments are historical, not a
+current submission checklist. Original dates and unresolved eligibility questions
+remain intact. Use [WORKLOG.md](WORKLOG.md) for completed increments.
+
+## Earlier planning baseline
 
 Updated October 29, 2026. Local times: America/Guatemala. This is a proposed
 roadmap; completed foundations are identified below. One real Meta-to-guest operation is verified; a bounded revision-event coordinator is also verified. General autonomous OS coordination and a general guest service runtime remain pending.
@@ -23,7 +36,7 @@ declared Oct 13 repository and Oct 26 kernel, and showcase only the agent
 features built Oct 27-Nov 4? Is kickoff-day work eligible? Save the answer.
 Never backdate commits or recreate work to disguise its origin.
 
-## Current direction
+## October 29 direction
 
 Proposed theme: Push the Frontier. Proposed track: Indie Developer for a solo
 entrant; confirm the actual registration, acceptance, and team composition.
@@ -75,7 +88,7 @@ enforce limits; establish the baseline; integrate Meta; test and present results
 Storage, alternative-plan previews, and reversible operations were candidate
 examples, not additional promised features.
 
-## Architecture
+## October 29 architecture
 
 User goal/events -> host coordinator -> Meta proposal -> host validation -> UART
 -> guest validation/execution -> observed results -> coordinator/UI.
@@ -85,7 +98,7 @@ the host environment. The UI renders observations rather than owning policy.
 Both sides validate requests. Timeouts and API errors are errors, never successful
 execution. Real service isolation remains future work.
 
-## Submission checklist from the supplied guide
+## Original submission checklist from the supplied guide
 
 - Public repository and accessible demo video; all contributors listed.
 - One project per team, at most four participants, with a designated representative.
@@ -542,7 +555,7 @@ After verification, freeze scope for final polish, video and submission; advance
 relations, broad document editors and physical hardware remain future work.
 
 
-## Final polish and evaluator path
+## Pre-submission polish and evaluator plan
 
 Implement the approved Column / Tactile Terminal / Glacier Blue interface, verify
 real pointer targets and preserve existing app behavior. Provide a single evaluator

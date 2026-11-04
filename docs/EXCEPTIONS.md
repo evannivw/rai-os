@@ -108,11 +108,12 @@ and kernel Clippy passed for both the default and self-test configurations.
 
 The kernel is evolving infrastructure, not permanently fixed code. The host
 coordinator continues choosing jobs by priority; this increment changes the
-kernel's failure path only. To host isolated services inside RAI-OS, subsequent
-work still needs separate protected service mappings, scheduling, IPC, and broader recovery rules. Built-in user-mode entry and
-bounded system calls are already implemented. Exception entry is one prerequisite; the
-controlled EL1 return plus the later EL0 program are prerequisites, not a complete
-service runtime.
+kernel's failure path only. Later increments provide [task-private mappings](TASK_MEMORY.md),
+[bounded scheduling](SCHEDULING.md), [IPC](IPC.md) and an
+[EL0 coordinator](GUEST_COORDINATOR.md). Those fixed linked services do not establish
+a general app-service runtime: dynamic loading, broader recovery and connecting
+the declarative apps to isolation remain future work. Exception entry is one
+prerequisite, not the entire service boundary.
 
 Architectural references:
 

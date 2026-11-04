@@ -1,0 +1,8 @@
+    Finished `release` profile [optimized] target(s) in 0.00s
+    Finished `release` profile [optimized] target(s) in 0.01s
+RAI-OS device: saved. Using the existing saved state.
+Connect a VNC viewer to localhost:56579. Ctrl-C closes and saves.
+See docs/TRY_RAI_OS.md for controls and supported operations.
+
+CSV exchange folder: /Users/jv/Development/Rust/rai-os/target/deep-review-demo-entry-complete-20261104/saved/exchange
+RAI-OS workspace ready: VNC localhost:56579. Type an instruction; Enter previews, Enter confirms, Esc cancels.

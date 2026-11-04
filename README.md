@@ -1,311 +1,109 @@
 # RAI-OS
 
-An educational AArch64 operating-system prototype in Rust. Describe a small
-application, review Meta's proposal, and use its forms, calculations and processes
-locally in our QEMU guest.
+Create and evolve small tools by prompt inside an AArch64 operating-system prototype
+written in Rust. Meta proposes an application; you review it; RAI-OS validates and
+executes its supported operations locally.
 
-**[Watch the three-minute demo](https://drive.google.com/file/d/18e2NPFsIktJhBC-T7ZY4ANAfQhD9PvaO/view?usp=sharing)** — real QEMU interaction,
-actual Meta-generated apps, English captions and synthetic reference narration.
+**[Watch the three-minute demo](https://drive.google.com/file/d/18e2NPFsIktJhBC-T7ZY4ANAfQhD9PvaO/view?usp=sharing)** ·
+[Try it yourself](docs/TRY_RAI_OS.md) · [App toolbox](docs/APP_TOOLBOX.md) ·
+[Architecture](docs/ARCHITECTURE.md) · [Documentation index](docs/README.md)
 
-**Start here:** [Try without a key / connect your own Meta account](docs/TRY_RAI_OS.md) ·
-[Runnable demo and three-minute presentation](docs/DEMO_READY.md) ·
-[App capabilities and remaining limits](docs/APP_LIMITS.md) ·
-[Atomic app transfers](docs/APP_TRANSFERS.md) · [Final recording runbook](docs/DEMO_FINAL_RUNBOOK.md) ·
-[Submission package and verified recording](docs/SUBMISSION_PACKAGE.md).
+<img src="docs/evidence/2026-11-03-final-polish/demo-release/01-launcher.png" alt="RAI-OS guest launcher with three saved Meta-generated applications" width="280">
 
-```sh
-# Three actual previously Meta-generated apps; no API key needed:
-python3 -B scripts/demo.py saved --output target/demo-visit-1
-```
+This is the actual guest framebuffer in QEMU. A host VNC relay carries pixels and
+input; the Rust guest draws the interface. The saved examples use fictional records.
 
-Connect a VNC viewer to localhost:5900. The demo guide includes authentication,
-Docker for Windows/Linux/macOS, a fresh live mode and saved-session recovery.
-The current slice is a bounded declarative runtime, not arbitrary native code
-generation or a phone-ready OS. Earlier experiments and foundations follow.
+## Try the saved demo — no API key
 
-**Working today:** an optional [native guest display](docs/GUEST_DISPLAY.md), an [exact EL0 record index with independent checking](docs/RECORD_INDEX.md), bare-metal boot in QEMU, fatal EL1 exception diagnostics, a checked EL1 context return, controlled EL1 timer interrupts, one EL0 Rust program with bounded syscalls and a timer-enforced deadline, a two-context scheduling diagnostic, bounded task completion and fault handling, task-private stack mappings, bounded scalar messages between two tasks, blocking receive with wakeup, a bounded EL0 record-count service, a persistent EL0 worker with protected session memory, a [guest EL0 coordinator](docs/GUEST_COORDINATOR.md) with versioned proposal admission and a [Meta transport bridge](docs/GUEST_META_BRIDGE.md), PL011 UART input/output, help/info/uptime/echo,
-a bounded structured protocol, a physical-page pool with diagnostics, active EL1 memory permissions, a cooperative word-count task, a Rust host terminal
-console, a graphical host control panel, a bounded priority host coordinator, a
-[bounded event-driven Meta coordinator](docs/META_COORDINATOR.md), and a
-[Meta host bridge](docs/META_BRIDGE.md) that validates one real model proposal and executes a guest record operation.
-**Not implemented:** a general autonomous OS coordinator, guest-resident agents, a general window system/desktop, general multi-task
-scheduling, dynamically created process address spaces, guest-native persistent disk storage, or measured efficiency gains.
-
-A [retained index mode](docs/RETAINED_INDEX.md) now transfers exact EL0 results
-and reuses completed immutable revisions, with native created/reused views.
-The [Meta index bridge](docs/META_INDEX_BRIDGE.md) now drives this path with
-model proposals and independently auditable guest artifacts.
-[Complete index sets](docs/INDEX_SETS.md) now combine required revisions and
-source bytes, gate incomplete publication and reuse unchanged work.
-The [whole-set Meta bridge](docs/META_SET_BRIDGE.md) now chooses among missing
-revisions with guest-validated goal generations.
-A [policy comparison pilot](docs/POLICY_PILOT.md) now runs two fixed policies and
-Meta through the same guest, with measured deadlines and explicitly simulated quotas.
-[First measured results](docs/POLICY_PILOT_RESULTS.md): both fixed rules passed 6/6;
-the current per-action Meta configuration passed 1/6. No AI efficiency gain is claimed.
-
-**Next direction (design):** [persistent goals](docs/PERSISTENT_GOALS.md): maintain a
-verified review pack across changes, distinguish historical from current results,
-and use Meta for bounded interpretation/planning rather than each tiny job. The
-[publication lifecycle](docs/PUBLICATION.md) now retains the last verified output
-in guest memory during updates and failures, with fresh commit acknowledgments.
-The [native publication view](docs/PUBLICATION_DISPLAY.md) now shows current,
-updating, verifying and blocked states with previous-result availability.
-The bridge now records [redacted provider diagnostics](docs/META_DIAGNOSTICS.md),
-including available usage on rejected responses. [Bounded batch proposals](docs/META_BATCH.md)
-now cover up to four missing operations per request, with fresh per-job admission
-and independent checks before publication. [Content-based selection](docs/SEMANTIC_SELECTION.md)
-now interprets six small development goals, including old/current revisions,
-clarification and unavailable data, before executing independently accepted sets.
-A [scoped deterministic resolver and frozen comparison](docs/SEMANTIC_COMPARISON.md)
-now share the same execution/checking path. A recorded-decision replay shows a
-revision update with two reused records and one new job in a single guest session.
-[Measured development results](docs/SEMANTIC_COMPARISON.md#observed-results--november-1):
-both policies passed 24/24; fixed rules were faster in every paired trial.
-No AI efficiency advantage is established. A complex workload and continuous
-semantic replanning remain pending.
-
-The November 2 [offline presentation mission](docs/OFFLINE_MISSION.md) produces
-an actual portable host reading pack from a larger fictional corpus: released
-presentation, compatible support, approval evidence and open human actions.
-It uses the Rust host bridge and independent checks; these new files are not
-processed by QEMU. Automatic updates and general filesystem ingestion are pending.
-
-The November 2 [retained semantic session](docs/SEMANTIC_SESSION.md) brings newly
-interpreted request updates into one running QEMU guest. Both the fixed resolver
-and Meta share the same guest execution and independent checks. This is controlled
-sequential event delivery; a decision-quality advantage is not assumed.
-
-The [constant-goal context cycle](docs/CONTEXT_SESSION.md) keeps the same objective
-while simulated assignment reports change. Conflicting reports cause no guest
-work; a resolving report can update the result in the same running RAI-OS session.
-
-A [portable Linux container](docs/PORTABLE_RUN.md) packages compilation, QEMU and
-the bridge for use from Windows/Linux/macOS Docker environments. A new
-[guest RAM file store](docs/GUEST_FILES.md) accepts runtime bytes and supports
-checked read/copy/move with a native file-list view. It is limited to eight
-512-byte files, lost on reboot; persistent storage is pending; reviewed AI file plans are available below.
-
-A [prompt-driven native workspace](docs/PROMPT_WORKSPACE.md) now accepts keyboard
-input through a portable VNC relay, requests one whole-file plan from Meta,
-previews every copy/move, and applies the checked plan only after confirmation.
-Offline replay is clearly labeled. Guest RAM limits and host input/API adapters
-remain explicit; this is not a general desktop or an AI efficiency claim.
-
-A [prompt-generated microapp runtime](docs/MICROAPPS.md) now supports native forms,
-app-local records and compatible schema updates in a black, keyboard-first guest
-UI. Meta proposes a bounded schema; you approve it, then use the app without
-per-click inference. This runtime shares EL1 privilege; it is not hardware-isolated generated software.
-The [saved-session adapter](docs/APP_STORAGE.md) now checkpoints apps/records on
-the host and restores them across QEMU restarts without calling Meta.
+With Docker running in Linux-container mode:
 
 ```sh
-python3 -B scripts/apps.py --source meta --output target/apps-session-1
-# No key needed for the disclosed scripted examples:
-python3 -B scripts/apps.py --source replay --output target/apps-replay-1
+git clone https://github.com/evannivw/rai-os.git
+cd rai-os
+docker build -t rai-os-demo -f portable/Dockerfile .
+docker run --rm -it -p 127.0.0.1:5900:5900 -v rai-demo:/state rai-os-demo demo
 ```
 
-Connect a VNC viewer to localhost:5900; see the microapp guide for macOS viewer
-password setup, Docker, controls and current limits.
+Open a **VNC viewer** at `localhost:5900`; this is not a browser URL. The first build
+downloads tools and dependencies. Ordinary saved-app use needs no internet connection or Meta key.
+The named volume preserves your session. Ctrl-C stops it; repeat the run command to resume.
 
-The launcher now includes app icons, search and guest-owned pointer navigation.
-Apps have a [table view with exact numeric totals](docs/APP_CAPABILITIES.md) and
-[dynamic calculated fields](docs/APP_FORMULAS.md): formulas belong to each generated
-app, execute locally, and survive saved-session recovery.
-[Reviewed CSV import/export](docs/APP_EXCHANGE.md) connects these tools to user
-data. The [three-minute demo journey](docs/DEMO_JOURNEY.md) covers creation, data,
-app evolution and recovery, with a reproducible QEMU verifier.
-[Generated processes](docs/APP_WORKFLOWS.md) add per-record states, guarded actions
-and terminal edit locks; an eight-order workshop checks the full lifecycle.
-[Composable behavior](docs/APP_BEHAVIORS.md) lets Meta define button programs
-using typed assignments, calculations, conditions and forward branches. RAI-OS
-previews and validates all changes, then commits one row atomically after approval.
-These are reusable operations, not hardcoded applications.
-[Whole-table actions](docs/APP_BATCHES.md) compose the same operations across all
-saved rows, with per-row previews, one atomic commit and reviewed program updates.
-[Bounded correction](docs/APP_REPAIR.md) sends eligible formula errors back to Meta
-for up to two corrections, preserves app structure and permissions, and still
-requires guest validation and explicit approval before installation.
-[Git tools](docs/APP_GIT.md) let Meta save app definitions, inspect history/diffs
-and propose a compatible restore while retaining current records. Git runs in
-the host bridge and does not edit the kernel or arbitrary repositories.
-[Kernel decision](docs/KERNEL_DECISION.md) explains the learning/control tradeoff
-and why kernel ownership alone is not a performance or AI advantage.
-A [ready-to-open saved showcase](docs/APP_CAPABILITIES.md#live-generation-and-a-ready-to-open-session)
-contains two previously Meta-generated apps and fictional data; restoration runs
-offline. It demonstrates usable local tools, not an Excel implementation or
-arbitrary native-code generation.
+The kit contains three actual previously Meta-generated apps:
 
-A [display-control app](docs/DISPLAY_CONTROL.md) can now apply software brightness
-to the actual QEMU framebuffer, with explicit installed authority and a reset path.
-This is guest RGB attenuation, not physical backlight control. App creation and
-restore do not execute the action automatically.
+- **Transfer Balances:** move quantities between two records, preview both changes,
+  and reject insufficient balance. A local page preserves the total of 17.
+- **Repair Shop:** move orders through guarded workflow states and reject unpaid delivery.
+- **Quote App:** edit numbers and recompute integer formulas and totals locally.
 
-## Run
+The [step-by-step guide](docs/TRY_RAI_OS.md) covers controls, VNC password setup,
+local installation, recovery and troubleshooting. Native macOS and Linux containers
+have been tested. A physical Windows host and physical phones have not been tested.
 
-Install Rustup and QEMU (9.2 or newer with virt-9.2), then:
+## Create your own supported apps
+
+Use your own Meta Model API key; no author's credential is included. With the
+[local prerequisites](docs/GETTING_STARTED.md) installed:
 
 ```sh
-. "$HOME/.cargo/env"
-cargo run --locked             # Direct kernel UART console
-sh scripts/console.sh          # Rust host terminal controlling QEMU
-sh scripts/panel.sh            # Native graphical host panel
-sh scripts/desktop.sh          # RAI-OS draws its own screen inside QEMU
-sh scripts/bundle.sh --graphics # Three exact multi-record sets, independent checks
-sh scripts/publication.sh       # Native publication walkthrough; Enter advances each state
-sh scripts/index.sh notes@1 target/notes-v1.index  # New output path; real guest index + checker
-# After configuring a local key as described in docs/META_BRIDGE.md:
-sh scripts/meta.sh 'Count the words in the latest available revision of the notes.'
-sh scripts/meta.sh --coordinate fixtures/coordinator/v1/revisions.json
-sh scripts/meta.sh --guest fixtures/guest_bridge/v1/observations.json
-sh scripts/meta.sh --graphics --guest-index fixtures/guest_index/v1/observations.json
-sh scripts/meta.sh --graphics --guest-set fixtures/guest_set/v1/goals.json
+python3 -B scripts/demo.py configure
+python3 -B scripts/demo.py check-meta
+python3 -B scripts/demo.py live --output target/my-live-session
 ```
 
-Each person supplies their own API key in the checkout-root `.env.local`; see
-[exact credential setup](docs/META_BRIDGE.md#each-clone-needs-its-own-key). The
-[public template](config/meta.env.example) contains no key. Offline tests need none.
+`configure` accepts hidden input and creates an ignored private file. `check-meta`
+makes one small real request and may use API credit. The [Docker live instructions](docs/TRY_RAI_OS.md#docker-setup)
+supply your private key at runtime. Never put credentials in an app prompt or Git.
 
-The repository pins Rust 1.90.0 and aarch64-unknown-none-softfloat.
-See [portable verification status](docs/PORTABLE_RUN.md) for tested host environments.
-Native Windows execution is not claimed. The host console is not a kernel GUI.
+Home opens apps, Apps searches them, and Create starts a new application. Inside an
+app, **edit app > / F2** requests a compatible update. Meta receives the implemented
+capability catalog and returns a bounded declarative definition. User review precedes
+installation; ordinary execution makes no model calls. See the [capability catalog](docs/APP_CAPABILITIES.md).
 
-## Verify
+## What is implemented, and where
+
+| Component | Current role |
+| --- | --- |
+| Rust AArch64 kernel | Bare-metal boot, UART, memory permissions, timer and bounded EL0 task/service experiments on one QEMU CPU. |
+| Guest app runtime and UI | Forms, integer formulas, guarded workflows, conditional row/whole-table actions, pages, checked transfers and software display brightness. Apps/UI share EL1 today. |
+| Portable host bridge | Meta HTTPS, input relay, validated checkpoints, CSV exchange and Git history for app definitions. |
+| Meta Model API | muse-spark-1.3 creates/evolves supported app definitions. Guest validation and current-state checks govern execution. |
+
+The current app slice has **3 apps, 6 fields and 8 records per app**, 32 ASCII bytes
+per cell and 128 ASCII prompt characters. It is not an arbitrary native-code compiler,
+a completed microkernel, an Android replacement or a general spreadsheet editor.
+App isolation, guest-native persistent storage and physical-phone drivers are future
+work. [All current limits and next engineering steps](docs/APP_LIMITS.md).
+
+## Verification and evidence
 
 ```sh
-cargo fmt --check
-cargo clippy --bin rai-os --locked -- -D warnings
-python3 scripts/verify.py
-python3 scripts/verify.py --release
-python3 scripts/verify_exceptions.py
-python3 scripts/verify_exceptions.py --release
-python3 scripts/verify_context.py
-python3 scripts/verify_context.py --release
-python3 scripts/verify_timer.py
-python3 scripts/verify_timer.py --release
-python3 scripts/verify_schedule.py
-python3 scripts/verify_schedule.py --release
-python3 scripts/verify_lifecycle.py
-python3 scripts/verify_lifecycle.py --release
-python3 scripts/verify_isolation.py
-python3 scripts/verify_isolation.py --release
-python3 scripts/verify_ipc.py
-python3 scripts/verify_ipc.py --release
-python3 scripts/verify_wait.py
-python3 scripts/verify_wait.py --release
-python3 scripts/verify_display.py
-python3 scripts/verify_display.py --release
-python3 scripts/verify_pilot.py
-python3 scripts/verify_pilot.py --release
-python3 scripts/verify_set_bridge.py
-python3 scripts/verify_set_bridge.py --release
-python3 scripts/verify_publication_display.py
-python3 scripts/verify_publication_display.py --release
-python3 scripts/verify_publication.py
-python3 scripts/verify_publication.py --release
-python3 scripts/verify_bundle.py
-python3 scripts/verify_bundle.py --release
-python3 scripts/verify_coord_index.py
-python3 scripts/verify_coord_index.py --release
-python3 scripts/verify_record_index.py
-python3 scripts/verify_record_index.py --release
-python3 scripts/verify_index_export.py
-python3 scripts/verify_service.py
-python3 scripts/verify_service.py --release
-python3 scripts/verify_worker.py
-python3 scripts/verify_worker.py --release
-python3 scripts/verify_guest_coordinator.py
-python3 scripts/verify_guest_coordinator.py --release
-python3 scripts/verify_guest_index_bridge.py
-python3 scripts/verify_guest_index_bridge.py --release
-python3 scripts/verify_guest_bridge.py   # Offline proposals, real guest coordinator
-python3 scripts/verify_guest_bridge.py --release
-python3 scripts/verify_meta.py          # Offline; no provider calls
-python3 scripts/verify_meta.py --release
-python3 scripts/verify_coordinator.py   # Offline events/proposals, real QEMU
-python3 scripts/verify_coordinator.py --release
-python3 scripts/verify_user_timeout.py
-python3 scripts/verify_user_timeout.py --release
-python3 scripts/verify_user.py
-python3 scripts/verify_user.py --release
-python3 scripts/verify_memory.py
-python3 scripts/verify_memory.py --release
-python3 scripts/verify_mmu.py
-python3 scripts/verify_mmu.py --release
-python3 scripts/verify_console.py
-python3 scripts/verify_panel.py
-python3 scripts/verify_tasks.py
-python3 scripts/verify_tasks.py --release
+# Real QEMU use and recovery inside the built Linux image, without network:
+docker run --rm --network none rai-os-demo demo-verify
 ```
 
-Python 3 is required for integration checks. Each kernel run verifies real boot
-and 37 console/protocol cases, including the guest counter. See the guides for host unit tests.
+[Final code review](docs/evidence/2026-11-04-final-review/README.md) records 114 Rust
+tests, formatting/Clippy, debug/release QEMU transfer checks and rebuilt Linux demo
+verification. [Recording evidence](docs/evidence/2026-11-04-submission/README.md)
+retains both actual Meta requests, state assertions and the video's source revision.
+[Repository-wide audit](docs/evidence/2026-11-04-repository-audit/README.md) adds
+documentation consistency checks, a million-action controller stress run and
+Mac/Linux startup, recovery and VNC regressions.
+The video uses scripted input, edited timing and labelled synthetic narration.
+No efficiency advantage over existing operating systems is claimed; the earlier
+[policy comparison results](docs/SEMANTIC_COMPARISON.md) remain available.
 
-## Documentation
+## Project and contribution status
 
-- [Exact record index](docs/RECORD_INDEX.md)
-- [Native guest display](docs/GUEST_DISPLAY.md)
-- [Original native graphics scope](docs/GUEST_GRAPHICS_PLAN.md)
-- [Getting started](docs/GETTING_STARTED.md)
-- [Architecture and unsafe contracts](docs/ARCHITECTURE.md)
-- [UART protocol](docs/PROTOCOL.md)
-- [Kernel-to-service roadmap](docs/ROADMAP.md)
-- [MMU tables and permissions](docs/MMU.md)
-- [Physical pages and memory diagnostics](docs/MEMORY.md)
-- [Event-driven Meta coordinator](docs/META_COORDINATOR.md)
-- [Meta bridge, local credentials and live evidence](docs/META_BRIDGE.md)
-- [Current delivery plan through November 4](docs/DEMO_PLAN.md)
-- [Meta transport for the guest coordinator](docs/GUEST_META_BRIDGE.md)
-- [Guest coordinator and proposal boundary](docs/GUEST_COORDINATOR.md)
-- [Persistent guest worker and memory ownership](docs/PERSISTENT_WORKER.md)
-- [First bounded guest record service](docs/RECORD_SERVICE.md)
-- [Waiting, wakeup and closed-batch deadlock handling](docs/IPC_WAIT.md)
-- [Bounded task messages and syscall ABI](docs/IPC.md)
-- [Private task stacks and hardware access checks](docs/TASK_MEMORY.md)
-- [Task records, completion and fault lifecycle](docs/TASK_LIFECYCLE.md)
-- [Two resumable EL0 contexts](docs/SCHEDULING.md)
-- [EL0 timeout and non-cooperative program diagnostic](docs/USER_TIMEOUT.md)
-- [First EL0 Rust program and syscall ABI](docs/USER_PROGRAM.md)
-- [Controlled timer interrupts](docs/TIMER.md)
-- [Resumable EL1 context](docs/CONTEXT.md)
-- [Kernel exception diagnostics](docs/EXCEPTIONS.md)
-- [Kernel clock and uptime](docs/CLOCK.md)
-- [Cooperative task and cancellation](docs/TASKS.md)
-- [Small host coordinator](docs/COORDINATOR.md)
-- [Host console](docs/CONSOLE.md)
-- [Graphical Device Lab panel](docs/PANEL.md)
-- [Hackathon plan](docs/HACKATHON_PLAN.md)
-- [Proposed comparison experiment](docs/DEMO_EXPERIMENT.md)
-- [Required demo result contract](docs/DEMO_ACCEPTANCE.md)
-- [Correctness fixture and verifier implementation sequence](docs/DEMO_FIXTURE.md)
-- [Work log and evidence](docs/WORKLOG.md)
-- [Contribution rules](AGENTS.md)
+Jarrol Villatoro, individual participant, reported submitting RAI-OS to the Meta
+Global AI Developer Hackathon on November 4, 2026. See the [project description](docs/SUBMISSION.md)
+and [delivery record](docs/SUBMISSION_PACKAGE.md).
 
-## Historical first step
+The October 13 scaffold, October 26 kernel foundations and November 3–4 app work
+retain their actual dates. The supplied guide's kickoff/build-period discrepancy
+remains documented. [Work log](docs/WORKLOG.md) and [historical planning record](docs/HACKATHON_PLAN.md)
+preserve the sequence; the earlier [README snapshot](https://github.com/evannivw/rai-os/blob/1e88cdff509a22c5f071104f80ebef90fc887f64/README.md)
+retains the full incremental overview. New documentation and commits use English.
 
-The project began on October 13, 2026 as a normal macOS Rust program, without a
-kernel. The original README and source remain available in commit 3e6d9c9.
-At that time Xcode and GitHub SSH worked, but Rust downloads failed; build/check,
-formatting, and test commands could not run until Rust was installed on Oct 26.
-The original host example remains at examples/host_hello.rs; its output is now
-English. Run it on an ARM64 Mac with:
-
-```sh
-cargo run --example host_hello --target aarch64-apple-darwin
-```
-
-Cargo.toml describes the package; edition 2024 selects language rules, not a
-compiler version. Cargo.lock records dependencies (none external currently),
-.gitignore excludes generated target/ and credential files, and LICENSE is
-Apache-2.0. rustc compiles Rust; Cargo manages building and dependencies.
-
-## Event status
-
-Prepared for the Meta Global AI Developer Hackathon 2026. Keep Oct 13 and Oct 26
-work identifiable; eligibility needs clarification because the supplied guide
-separates the Oct 26 kickoff from the Oct 27-Nov 4 build period. No dates have
-been altered. New project text and commits are in English; historical evidence
-and already-published commit messages retain their original form.
-
-The [app toolbox](docs/APP_TOOLBOX.md) explains reusable capabilities, including
-[composed visual pages](docs/APP_PAGES.md), and their current limits.
+Code is licensed under [Apache-2.0](LICENSE); fonts retain their [upstream notices](assets/fonts/NOTICE.md).
+[Contribution rules](AGENTS.md) require explicit boundaries, documented unsafe
+conditions, relevant tests and honest results.

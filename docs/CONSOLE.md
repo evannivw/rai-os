@@ -60,10 +60,12 @@ reconnection. The adapter trusts the local QEMU executable and project kernel;
 it is not a sandbox for hostile host programs.
 
 The [graphical host panel](PANEL.md) now shares these model/transport modules.
-It renders actual boot, clock, and command results before constrained jobs or
-a Meta coordinator are introduced. Agent permissions,
-resource budgets, and AI are pending. QEMU configuration is not measured CPU,
-GPU, battery, or RAM usage. Future simulated budgets must be labeled explicitly.
+It renders actual boot, clock and command results. The earlier queue and later
+Meta integrations have their own [coordinator](COORDINATOR.md) and
+[Meta bridge](META_BRIDGE.md) entry points; this plain console is not the app
+creation interface. General agent permissions and resource budgets remain outside
+this adapter. QEMU configuration is not measured CPU, GPU, battery or RAM usage;
+simulated budgets must be labelled explicitly.
 
 ## Memory foundation
 

@@ -27,7 +27,7 @@ spreadsheet/presentation tools.
 | [Atomic transfers](APP_TRANSFERS.md) | Resolve a unique destination in the same app; preview and update both balances together | Guest Rust, checked i32 |
 | [Composed visual pages](APP_PAGES.md) | Text, live count/sum/min/max metrics, signed bars and two-column tables in reviewed pages | Guest Rust |
 | Software display brightness | Apply 20..100%; explicit permission, user action and reset | Guest Rust framebuffer |
-| [Composed behavior](APP_BEHAVIORS.md) | User buttons combine typed writes, arithmetic, conditions and forward branches; preview and atomic one-row commit | Guest Rust |
+| [Composed behavior](APP_BEHAVIORS.md) | User buttons combine typed writes, arithmetic, conditions and forward branches; preview and atomic row or whole-table commit | Guest Rust |
 | [Processes](APP_WORKFLOWS.md) | Per-record states, up to four guarded actions, final-state editing lock | Guest Rust |
 | Typed fields | Text, signed integer, checkbox; labels, required values and defaults | Guest Rust |
 | [Calculated fields](APP_FORMULAS.md) | Per-app integer expressions over earlier numeric fields | Guest Rust, checked i32 |
@@ -86,12 +86,14 @@ paid 750 yields 1050. Editing the first row to 1350 yields 1900 total / 1150 unp
 It verifies exact rows and totals after reboot. The domain test also sums eight
 maximum i32 values without overflow and checks optional blanks and filtering.
 
-## Next capabilities, in order
+## Further capability directions
 
 Calculated fields and [composed button programs](APP_BEHAVIORS.md) are implemented.
 The latter extends the language, not a list of built-in business apps. Two buttons
-with up to six steps each operate on one saved row; they do not grant cross-row,
-background or hardware capabilities.
+with up to six steps each can target one saved row or all saved rows through
+[explicit batch scope](APP_BATCHES.md). Each program reads only its current row;
+the separate transfer rule supplies bounded cross-row lookup and a two-row commit.
+Neither mechanism grants background execution or arbitrary hardware access.
 
 1. **Guest-private app files:** scoped file handles and quotas, building on the
    existing guest file store. User-mediated CSV exchange is already available;
@@ -105,6 +107,8 @@ background or hardware capabilities.
    address spaces and capability-bearing syscalls. Only then expose generated
    native code as an app type. Phone drivers are another separate project.
 
+These are capability directions; the current engineering sequence is maintained
+in [APP_LIMITS.md](APP_LIMITS.md#engineering-sequence-after-the-submission-slice).
 None of these future capabilities are available just because the model requests
 them. Unsupported intent must produce clarification/decline, not a partial app
 presented as complete. Protect Nov 4 demonstration/submission time; the current
@@ -136,7 +140,7 @@ python3 -B scripts/apps.py --source replay --state target/showcase-device.json -
 Then connect the VNC viewer as documented in MICROAPPS.md. `cp -n` preserves an
 existing saved device instead of resetting it. Use a new output folder on each
 launch. To create a new app with Meta, choose `--source meta` and supply your own
-key; restored apps need no key. Home shows both app icons, Find searches them,
+key; restored apps need no key. Home shows both app icons, Apps searches them,
 and clicking an icon opens the actual guest app. Table is available inside each.
 The fixture/checkpoint is deliberately public sample data; never replace it with
 private records in Git.

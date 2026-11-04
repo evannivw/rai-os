@@ -143,12 +143,16 @@ reports. It makes no model call. The preview uses these native captures plus the
 prior live creation/evolution evidence, produces a 180-second silent MP4 and a
 scene manifest with English narration. Its source labels remain visible.
 
-## Submission completion remains separate
+## Submission record and later updates
+
+Jarrol reported submitting the project on November 4. The repository does not
+independently verify the platform receipt; [SUBMISSION_PACKAGE.md](SUBMISSION_PACKAGE.md)
+tracks that distinction. The checks below apply to any later entry/video update.
 
 - Watch the uploaded three-minute video with audio; replace reference narration if desired.
 - Check public repository and video access from a logged-out session.
-- Fill the platform entry, contributor list and model/provider identification
-  using actual registration and the retained provider metadata.
+- Keep the platform entry, contributor list and model/provider identification
+  consistent with actual registration and the retained provider metadata.
 - Keep real commit dates; disclose October 26 kickoff versus October 27 build
   period and retain organizer clarification. Do not claim unresolved eligibility.
 - Internal target: November 4, 18:00 Guatemala; supplied-guide deadline: 20:00.

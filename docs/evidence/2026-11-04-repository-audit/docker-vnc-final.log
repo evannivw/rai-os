@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/rai/scripts/verify_vnc_bind.py", line 123, in <module>
+    verify(args.kernel.resolve(), args.output.resolve())
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/rai/scripts/verify_vnc_bind.py", line 96, in verify
+    listener = query_listener(kernel, None, output / 'qemu-default.log')
+  File "/rai/scripts/verify_vnc_bind.py", line 40, in query_listener
+    client.connect(str(qmp))
+    ~~~~~~~~~~~~~~^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused

@@ -1,5 +1,10 @@
 # RAI-OS native display — first screen
 
+**Scope of this document:** the October 30 index/status display and its original
+commands. Its static-screen input/design limits do not describe the current app
+launcher. For the interactive Column / Glacier Blue guest UI, use
+[TRY_RAI_OS.md](TRY_RAI_OS.md) and [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md).
+
 Implemented October 30, 2026. This is a real framebuffer drawn by RAI-OS inside
 QEMU. The earlier Mac Device Lab remains a separate host application.
 

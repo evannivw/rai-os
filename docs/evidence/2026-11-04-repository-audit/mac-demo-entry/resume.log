@@ -1,0 +1,18 @@
+    Finished `release` profile [optimized] target(s) in 0.00s
+    Finished `release` profile [optimized] target(s) in 0.01s
+RAI-OS DEMO
+Source: saved. Saved mode restores actual earlier Meta proposals; it does not generate them again.
+Connect a VNC viewer to localhost:56567. Ctrl-C closes and saves the session.
+Saved: open Repair Shop > records > Phone C > actions. Delivery is blocked while balance is 4000.
+Return to records, open Phone C, replace Paid cents with 5000, then Save and Deliver.
+Home > Quote App > table > right column page: totals and profit run locally.
+Transfer Balances > records > Warehouse > move: 12/5 becomes 8/9; pages total stays 17.
+No API is called in saved mode. The screen says saved; its Create button uses only disclosed offline examples.
+For arbitrary supported generation, start a separate live demo with your own key.
+Resume with scripts/demo.py resume --output THIS_DIRECTORY; it never resets your data.
+Live Git: open an app, choose edit app, and type git: save this definition or git: restore the previous saved version.
+Git keeps definitions in app-git; records stay in the device checkpoint. Restores require review.
+Limits: 3 apps, 6 fields, 8 records each; host checkpoint and HTTPS; shared EL1 runtime.
+
+CSV exchange folder: /Users/jv/Development/Rust/rai-os/target/deep-review-demo-entry-complete-20261104/saved/exchange
+RAI-OS workspace ready: VNC localhost:56567. Type an instruction; Enter previews, Enter confirms, Esc cancels.

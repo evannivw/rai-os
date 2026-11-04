@@ -1,0 +1,9 @@
+{
+  "checks": [
+    "Saved CLI serves actual VNC framebuffer; resume preserves checkpoint bytes and separate session logs, even when optional START.txt is missing",
+    "Missing/non-file supplied checkpoints leave no partial output; existing output, missing resume, invalid manifest JSON/shape and missing checkpoint fail clearly without modifying saved files",
+    "Live CLI starts with an empty device; no model request without explicit user submission; all sessions stop cleanly"
+  ],
+  "verified": true,
+  "live_calls": 0
+}

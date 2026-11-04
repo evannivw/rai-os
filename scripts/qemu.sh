@@ -11,7 +11,8 @@ case "${1:-}" in
     fi
     case "$backend" in
       cocoa|gtk|sdl) set -- -display "$backend" -device ramfb "$@" ;;
-      vnc) set -- -display none -vnc 0.0.0.0:0 -device ramfb "$@" ;;
+      # Direct host use stays local. Containers opt in to their internal listener.
+      vnc) set -- -display none -vnc "${RAI_VNC_LISTEN:-127.0.0.1:0}" -device ramfb "$@" ;;
       *) echo 'RAI_DISPLAY must be cocoa, gtk, sdl or vnc' >&2; exit 1 ;;
     esac ;;
   --capture) shift; set -- -display none -device ramfb "$@" ;;

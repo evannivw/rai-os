@@ -1,5 +1,12 @@
 # Small host coordinator
 
+**Scope:** the earlier host priority-queue coordinator. This service remains a
+separate development tool. Later [guest EL0 coordination](GUEST_COORDINATOR.md),
+[IPC](IPC.md) and [persistent workers](PERSISTENT_WORKER.md) are implemented;
+statements below about what was still needed describe the original queue increment,
+not the current kernel as a whole. The final app runtime is documented in
+[MICROAPPS.md](MICROAPPS.md).
+
 Implemented October 26, 2026. A deterministic priority queue sequences the existing
 [word-count task](TASKS.md) in the real QEMU kernel. Equal priorities use FIFO
 (first in, first out). This is a host service beside the panel, not a kernel scheduler, isolated
@@ -65,9 +72,9 @@ execution, and observation would remain explicit. Resource budgets,
 multiple job kinds, permissions, isolation, and actual Meta integration need their
 own increments; this queue does not implement those guarantees.
 
-## Why the coordinator is currently on the host
+## Why this original coordinator was placed on the host
 
-The Mac hosts this temporary development service because the guest currently has
+The Mac hosted this temporary development service when the guest had
 one cooperative operation and no isolated service runtime. The placement lets us
 exercise policy, real execution, and observation without making all coordination
 part of the kernel's privileged code. It is not a requirement that coordination

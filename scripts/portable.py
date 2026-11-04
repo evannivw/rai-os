@@ -106,7 +106,11 @@ def main():
             from verify_workspace import verify
             verify(kernel,binary,output/'workspace');return
         if a.action=='desktop':
-            os.environ.setdefault('RAI_DISPLAY','vnc');files(kernel,output/'files',graphics=True,hold=True);return
+            os.environ.setdefault('RAI_DISPLAY', 'vnc')
+            # QEMU listens inside the container; publish the host port on loopback.
+            os.environ.setdefault('RAI_VNC_LISTEN', '0.0.0.0:0')
+            files(kernel,output/'files',graphics=True,hold=True)
+            return
         if a.action=='verify':
             report=files(kernel,output/'files',verify=True)
             decisions,checked=context(binary,kernel,'rules',output/'context',fixture=FIXTURE,contextual=True)

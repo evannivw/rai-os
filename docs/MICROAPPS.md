@@ -1,10 +1,14 @@
 # Prompt-generated microapps
 
 RAI-OS interprets bounded app descriptions in its own kernel image. Meta proposes
-an app schema; the guest checks it, displays a review, and installs only after
-Enter. Forms, local record edits and filtered lists execute in QEMU without
+an app schema; the guest checks it, displays its review stages, and installs only
+after the final explicit approval. Forms, local record edits and filtered lists execute in QEMU without
 further inference. This is a useful, extensible interpreter slice, not arbitrary
 code generation, an app store, a complete microkernel or measured AI superiority.
+
+For the current saved demo and guided live setup, start with
+[TRY_RAI_OS.md](TRY_RAI_OS.md). This document also describes the lower-level Studio
+entry point and retained development examples.
 
 ## Start and use
 
@@ -59,9 +63,9 @@ cannot implement unavailable operations; inspect the proposed fields carefully.
 
 | Screen | Controls |
 | --- | --- |
-| Home | Type or F2: create. Tab/Down: select. Enter: open. |
+| Home | Type or F2: create. Tab/Down: select. Enter: open. Apps or `/`: search. |
 | Prompt | ASCII input (128 chars), Backspace, Enter: propose. |
-| Review | Enter or bottom button: install. Esc: discard. |
+| Review | Enter or bottom button: advance through fields, workflow, buttons, transfer and pages as present; the final approval installs. Esc: discard. |
 | Form | Tab/Down/Up: field. Type/Backspace: edit. Space: checkbox. Enter: save. F3: records. |
 | Records | Up/Down/Tab: select. Enter: edit. N: new. Space: toggle configured status. F4: pending/all. |
 | Form or records | F2: evolve this app, preserving records. |
@@ -70,9 +74,12 @@ cannot implement unavailable operations; inspect the proposed fields carefully.
 
 On keyboards that reserve function keys, use Fn with the key. Clipboard paste
 accepts bounded ASCII; newlines do not submit. This is a keyboard-first graphical
-UI, not a terminal emulator. Clicks are limited to the main action, footer/home
-form fields, launcher icons, table rows and the import/export toolbar. Tab also
-selects editable fields. F7 imports and F8 exports; see [APP_EXCHANGE.md](APP_EXCHANGE.md).
+UI, not a terminal emulator. Pointer targets include Home / Apps / Create,
+launcher rows, form fields, record/table rows, review actions and app toolbars.
+Global Create starts a new app; **edit app >** or F2 inside an app updates it.
+Tab also selects editable fields. F7 imports and F8 exports; F9 opens workflow
+actions, F10 composed buttons, F11 pages and F12 transfer preview when supported.
+See [APP_EXCHANGE.md](APP_EXCHANGE.md) for host-mediated CSV exchange.
 
 ## Contract and boundaries
 
@@ -152,12 +159,13 @@ then verifies real records survive an additional generated priority field. It is
 an integration smoke test, not an unseen benchmark. Record actual observations
 and source commit in WORKLOG; retain failed runs without post-hoc prompt tuning.
 
-Next extensions should each add one checked capability, executor and real guest
-check. Priorities: durable app/record snapshots, richer record views, then an EL0
-service boundary. Do not offer location upload until location, transport, explicit
-consent and enforceable capability boundaries exist. Preserve time for the Nov 4
-video/submission. The current demo story is prompt -> reviewed app -> usable
-records -> prompt update -> same records, not an unmeasured speed claim.
+Host-backed snapshots, tables, pages, formulas and composed operations are now
+implemented. The next service/storage work is listed in [APP_LIMITS.md](APP_LIMITS.md):
+guest-native durable storage, scalable records and an actual EL0 app boundary remain
+future work. Each extension needs a checked capability, executor and real guest
+test. Location upload additionally requires real location/transport services,
+explicit consent and enforceable permissions. The demonstrated story remains
+prompt -> reviewed app -> usable records -> prompt update -> same records.
 
 ## Observed live development result (November 3)
 
@@ -179,12 +187,14 @@ records images, source digests and versions. Physical Windows remains untested.
 The [saved-session adapter](APP_STORAGE.md) now restores installed apps and
 records across QEMU restarts without a model call.
 
-The native launcher now shows app icons and a separate create tile. The screen
+The initial November 3 launcher showed app icons and a separate create tile. That
+layout was superseded by the compact Column launcher described below. The screen
 uses broken horizontal strokes, diagonal corners and small text glyphs, all
 rendered in the guest. Icons are deterministic decorations derived from app IDs;
-they do not imply new capabilities. Search is case-insensitive across app name
-and ID: press `/` at Home or tap Find, type, then Enter or tap a matching icon.
-Home, Create and Find are persistent navigation targets. Field taps select a form
+they do not imply new capabilities. In the current layout, search is
+case-insensitive across app name and ID: press `/` at Home or tap Apps, type, then
+Enter or tap a matching row. Home / Apps / Create are persistent navigation
+targets. Field taps select a form
 field (checkbox taps toggle); record taps open it. The guest app.tap x:y command
 owns hit testing. The RFB relay transports pointer coordinates without owning
 layout or app behavior. Existing keyboard controls remain available.
@@ -200,8 +210,8 @@ Table; Right changes column pages; F4 applies the pending filter to rows/totals.
 See [APP_CAPABILITIES.md](APP_CAPABILITIES.md) for the real model-facing catalog,
 the expense example, arithmetic limits and the sequence toward more expressive
 apps. The third exact replay prompt creates the documented expense table; earlier
-inspection create/update prompts remain supported. Formula execution, embedded
-AI and native machine-code generation remain unimplemented.
+inspection create/update prompts remain supported. Bounded [formula execution](APP_FORMULAS.md)
+is implemented. Embedded AI and native machine-code generation remain future work.
 
 A fourth exact replay prompt creates the [brightness control app](DISPLAY_CONTROL.md).
 It has an Apply action and explicit display permission instead of record storage.

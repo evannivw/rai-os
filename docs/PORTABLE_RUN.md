@@ -1,12 +1,31 @@
 # Run RAI-OS from Windows, Linux or macOS
 
+**Current app demo:** start with [TRY_RAI_OS.md](TRY_RAI_OS.md), which covers the
+saved three-app kit, live creation with your own key and recovery. The files/context
+commands below remain available as earlier foundation demonstrations.
+
 The kernel targets AArch64 QEMU virt-9.2, not macOS. A host computer runs QEMU and
 an optional Rust API bridge. This increment provides a common Linux container
 with Rust 1.90.0, the cross target, Python, curl and QEMU. No host Rust/Python/QEMU
 installation is needed for this route. Windows uses Docker Desktop's Linux
 container backend; this is NOT a native Windows executable or phone installation.
 
-## Build and verify
+## Build and verify the current app demo
+
+```text
+git clone https://github.com/evannivw/rai-os.git
+cd rai-os
+docker build -t rai-os-demo -f portable/Dockerfile .
+docker run --rm --network none rai-os-demo demo-verify
+docker run --rm -it -p 127.0.0.1:5900:5900 -v rai-demo:/state rai-os-demo demo
+```
+
+Open a VNC viewer at localhost:5900. The named volume retains the saved device.
+See [TRY_RAI_OS.md](TRY_RAI_OS.md) for optional VNC authentication, native controls,
+private Meta setup and a two-minute hands-on check. The current demo draws and
+handles application controls inside the guest through the host input relay.
+
+## Earlier foundation build and verification
 
 Install Git and a Linux-container Docker runtime. For Windows, follow the
 [official Docker Desktop instructions](https://docs.docker.com/desktop/setup/install/windows-install/).
@@ -41,7 +60,7 @@ docker run --rm -it --network none rai-os-demo console
 Type `fs.list`, `help` or other guest commands. The console currently accepts
 commands, not clicks. End the container session with Ctrl-C.
 
-## See the actual guest display
+## Earlier static file-display demonstration
 
 ```text
 docker run --rm -it -p 127.0.0.1:5900:5900 rai-os-demo desktop
@@ -56,11 +75,18 @@ file browser. The UART terminal remains the control channel.
 Publish the VNC port to loopback as shown; the container listener has no password.
 This is not a web page or a macOS panel. The host qemu.sh adapter also chooses
 Cocoa on macOS and GTK on Linux; RAI_DISPLAY supports cocoa/gtk/sdl/vnc explicitly.
+For direct host use, `RAI_DISPLAY=vnc` listens on `127.0.0.1:5900` by default.
+The container desktop explicitly sets `RAI_VNC_LISTEN=0.0.0.0:0` so Docker can
+forward the loopback-published port above. This earlier route has no password;
+only override `RAI_VNC_LISTEN` for a trusted listener configuration. Its value uses
+QEMU's `address:display` syntax, where display 0 is port 5900. The current `demo`
+route uses a separate input relay and supports the optional display password
+explained in [TRY_RAI_OS.md](TRY_RAI_OS.md).
 The container desktop defaults to VNC and needs no host GUI toolkit or X server.
 Debian's [seabios package](https://packages.debian.org/trixie/all/seabios/filelist)
 provides the ramfb ROM that a minimal QEMU package alone does not install.
 
-## Optional real Meta calls
+## Earlier constant-goal Meta example
 
 Create your own checkout-root .env.local using the public format described in
 [META_BRIDGE.md](META_BRIDGE.md), then explicitly run:
@@ -70,7 +96,9 @@ docker run --rm --env-file .env.local rai-os-demo context-meta
 ```
 
 This calls Meta up to three times for the existing constant-goal context example.
-It does NOT connect Meta to the new file operations yet. `context-rules` performs
+This command does not use file-plan or app-generation capabilities. Those have
+separate [workspace](PROMPT_WORKSPACE.md) and [app](TRY_RAI_OS.md) entry points.
+`context-rules` performs
 that context example without inference. The key is supplied at runtime, never
 built into the image. Do not include shell `export` syntax in Docker's env file.
 The default verify action does not read .env.local; no key is needed to try RAI-OS.
@@ -97,10 +125,14 @@ docker run --rm --network none --mount type=bind,source=<absolute-evidence-outpu
 
 The development image includes compilers/tools and is much larger than the kernel.
 Its download size is not an OS memory measurement. The guest's RAM file store has
-8 files of at most 512 bytes each; persistence, an isolated file service and AI
-file planning are future work. See [GUEST_FILES.md](GUEST_FILES.md).
+8 files of at most 512 bytes each. Guest disk persistence and an isolated file
+service remain future work. Bounded AI file planning is implemented through the
+[separate prompt workspace](PROMPT_WORKSPACE.md); app checkpoints are host-backed
+and do not make this RAM file store durable. See [GUEST_FILES.md](GUEST_FILES.md).
 
-Verification status is recorded in evidence/2026-11-02-portable-files. Linux
+Foundation verification is recorded in [portable-file evidence](evidence/2026-11-02-portable-files).
+The [November 4 review](evidence/2026-11-04-final-review/README.md) records rebuilt
+Linux app-demo and transfer checks. Linux
 container checks on a Mac do not constitute testing Docker Desktop on a physical
 Windows machine. Native Windows/WSL GUI setup and physical-phone support must not
 be claimed from those results.

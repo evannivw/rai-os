@@ -3217,3 +3217,34 @@ October 26 foundations from the November 3–4 declarative app demo work using r
 Git history. Preserved the unresolved October 26 eligibility distinction and left
 actual submission status in the separate checklist. Documentation-only update;
 checked factual consistency, relative links and diff formatting, no new API calls.
+
+
+## 2026-11-04 — repository-wide post-submission audit
+
+Jarrol reported submitting the project and requested a whole-repository review.
+Reviewed app/domain/kernel contracts, host adapters, recovery, public entry points
+and maintained documentation. Corrected stale capability and navigation claims,
+scoped historical plans, matched the runbook to the actual recorded Ledger video,
+and added a complete documentation index. SUBMISSION.md is the current reviewed
+copy; the previous URL remains a compatibility pointer. Original dated evidence
+and negative performance results remain unchanged.
+
+Hardened demo startup errors and missing/non-file seed validation, preserved valid
+recovery without optional START.txt, and restricted direct legacy VNC to loopback.
+The container explicitly retains its internal listener with host-loopback publishing.
+Added reproducible relative-link/index checks, a deterministic controller stress
+runner and focused real-QEMU startup/listener regressions.
+
+The million-action host controller stress, all 90 Python syntax checks, shell
+syntax, macOS QEMU startup/recovery/rejection checks and rebuilt Linux saved/CLI/VNC
+checks passed. A separately launched legacy container desktop passed actual guest
+operations and a 480x800 VNC handshake. The first Linux VNC invocation used a wrong
+kernel path; retained its failure and reran successfully with the correct path.
+Production Rust was unchanged; the prior 114-test review was not repeated. No
+real Meta call or private-key read. See evidence/2026-11-04-repository-audit for
+raw outputs, final link count, source hashes and verification limits.
+
+Public GitHub metadata confirmed the repository is public. Its older About text
+remains an external follow-up because no authenticated GitHub tool/browser was
+available and computer access reported a locked Mac. Prepared replacement text in
+SUBMISSION_PACKAGE.md. Pushes do not alter the platform submission or uploaded video.

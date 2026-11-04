@@ -1,4 +1,33 @@
-# Milestone 1 architecture
+# RAI-OS architecture
+
+## Current app-demo architecture — November 4, 2026
+
+The demonstrated product path is prompt -> structured Meta proposal -> Rust validation
+-> user review -> guest execution -> host checkpoint. App creation and execution
+have separate boundaries; a model proposal does not grant permissions or directly
+write guest memory.
+
+| Layer | Responsibility | Source |
+| --- | --- | --- |
+| QEMU virtual machine | Emulates AArch64 virt hardware; no Linux guest kernel. | [QEMU launcher](../scripts/qemu.sh) |
+| Bare-metal kernel | Boot, UART, page ownership/mappings, exceptions, timers and bounded EL0 services. | [entry](../src/main.rs), [memory](../src/memory/mod.rs), [MMU](../src/mmu/mod.rs) |
+| Shared Rust app domain | Schema/type validation, formulas, workflows, atomic actions/transfers and revision checks. | [microapp.rs](../src/microapp.rs) and adjacent domain modules |
+| Guest presentation/controller | Renders app screens, receives keys/taps, stages proposals and requires review before installation/action. Runs at EL1 with the app domain today. | [app_ui.rs](../src/app_ui.rs), [display/apps.rs](../src/display/apps.rs) |
+| Host Meta adapter | Sends goal/capability catalog and schema metadata through HTTPS; parses and validates bounded responses. | [provider.rs](../host/meta/src/provider.rs), [apps.rs](../host/meta/src/apps.rs) |
+| Host orchestration/storage | Relays inputs, coordinates proposals, persists validated checkpoints, exchanges CSV and invokes scoped Git tools. | [apps.py](../scripts/apps.py), [app_storage.py](../scripts/app_storage.py), [app_git.py](../scripts/app_git.py) |
+
+Existing fixed EL0 coordinator/worker experiments have private writable mappings,
+but generated applications are not routed through that isolation boundary. App/UI
+modules share EL1 privilege. Credentials remain on the trusted host, and ordinary
+installed-app operations do not invoke a model. Record values are excluded from
+app-generation requests; prompts and app schemas are sent and retained in session logs.
+
+[App limits](APP_LIMITS.md) describes current capacities and missing facilities.
+[The documentation index](README.md) separates app contracts from the retained
+kernel/service experiments. The sections below preserve the implementation sequence;
+phrases such as "now", "next" and "not yet" in dated entries refer to that increment.
+
+## Kernel foundations and implementation history
 
 An educational AArch64 kernel for QEMU, with a long-term microkernel direction.
 Kernel modules share privilege and memory. One built-in Rust program now runs
@@ -129,7 +158,7 @@ See [PROTOCOL.md](PROTOCOL.md). The [host console](CONSOLE.md) already transport
 requests over UART. The [small host coordinator](COORDINATOR.md) sequences a bounded priority queue (FIFO ties) using
 observed completion. Its host placement is provisional; the target is a guest
 service above the kernel once service execution/isolation exists. See the
-[placement and migration rationale](COORDINATOR.md#why-the-coordinator-is-currently-on-the-host). A separate
+[placement and migration rationale](COORDINATOR.md#why-this-original-coordinator-was-placed-on-the-host). A separate
 [Meta bridge](META_BRIDGE.md) now makes one real structured proposal and validates
 it before guest execution. host/meta/src separates proposal policy (domain), local
 configuration, HTTPS provider transport and composition. It reuses the shared UART

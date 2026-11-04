@@ -1,0 +1,34 @@
+{
+  "verified": true,
+  "live_meta_calls": 0,
+  "image": "rai-os-repository-audit",
+  "host_bind": "127.0.0.1:56820",
+  "container": "rai-audit-desktop-bd62922a8f",
+  "checks": [
+    "Container desktop reaches its hold prompt after actual guest file operations",
+    "Host published port is loopback-only; real VNC handshake reports 480x800 framebuffer",
+    "QMP confirms the explicit internal 0.0.0.0:5900 listener",
+    "Enter closes the legacy desktop and its container cleanly"
+  ],
+  "published_ports": {
+    "5900/tcp": [
+      {
+        "HostIp": "127.0.0.1",
+        "HostPort": "56820"
+      }
+    ]
+  },
+  "framebuffer": {
+    "width": 480,
+    "height": 800,
+    "title": "QEMU"
+  },
+  "internal_listener": {
+    "enabled": true,
+    "auth": "none",
+    "family": "ipv4",
+    "clients": [],
+    "service": "5900",
+    "host": "0.0.0.0"
+  }
+}

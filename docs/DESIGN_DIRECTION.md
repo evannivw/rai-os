@@ -35,7 +35,7 @@ application list below it. This makes creation the opening visual, but provides
 less immediate emphasis on everyday application use. Avoid expanding it into a
 chat transcript that displaces the installed applications.
 
-## Polish sequence after choosing a direction
+## Original polish sequence before implementation
 
 1. Apply one visual system to home, prompt, review, app and restore. Keep text
    contrast, touch/keyboard focus, labels and navigation consistent.
@@ -50,9 +50,10 @@ chat transcript that displaces the installed applications.
 5. Record a three-minute video from real QEMU, label inference waits/time cuts,
    and finish clean-machine instructions, public links and submission checks.
 
-Do not add new kernel mechanisms for appearance alone. Native redesign is pending
-selection/implementation. No new model calls, OS behavior or performance claims
-are introduced by this design document.
+At this proposal stage, the native redesign was pending selection/implementation.
+The selected design has since been implemented; see **Implemented native polish**
+below. The proposal itself introduced no model calls, OS behavior or performance
+claims.
 
 ## Home-screen correction after user review
 
@@ -71,8 +72,9 @@ Three revised conversational concepts explore the same navigation:
 - Shelf: three compact icon/name launchers above one horizontal rule. Familiar,
   sparse and easy to scan, with less departure from existing launchers.
 
-These are unselected design proposals with illustrative app metadata. They do not
-increase the current runtime capacity or implement a new guest launcher. Keep
+At this stage these were unselected proposals with illustrative app metadata;
+Column was subsequently chosen and implemented. The concepts did not increase
+runtime capacity or themselves implement a guest launcher. Keep
 application identity dynamic when implementing the chosen layout. The preview
 script passed syntax validation; rendered browser verification was not performed.
 
@@ -95,8 +97,8 @@ Four color options share a near-black #090b0f background, #e7ebf1 primary text,
 - Lavender: #b8a6f4.
 
 Keep accents on launcher glyphs, focus and selected navigation. Do not fill every
-row with color. No palette is selected yet. Preview examples still contain three
-apps; denser layout does not increase runtime app capacity.
+row with color. Glacier Blue was subsequently selected and implemented. Preview
+examples still contain three apps; denser layout does not increase runtime capacity.
 
 ## Apps and Create refinement
 

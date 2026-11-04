@@ -68,10 +68,13 @@ commands nor host requests supply arbitrary PCs, saved status or raw contexts.
 - The later EL0 increment stores SP_EL0 in the former reserved frame slot.
   No SIMD/FPU, process address-space state or thread-local registers are saved. The target is `aarch64-unknown-none-softfloat`; the runtime and probe
   do not use SIMD/FPU. This frame is not yet a complete process context.
-- IRQ/FIQ/SError servicing, preemption, recovery from memory faults and arbitrary
-  exception returns remain unsupported. No isolation or performance gain is claimed.
-- The allowlist constrains this diagnostic, not malicious privileged kernel code.
-  All current modules still share EL1 authority.
+- This controlled EL1 return probe does not provide general fault recovery or
+  arbitrary exception returns. Later [timer](TIMER.md), [EL0 deadlines](USER_TIMEOUT.md)
+  and [scheduling](SCHEDULING.md) implement separate bounded IRQ/preemption paths;
+  FIQ/SError and general kernel-fault recovery remain outside that support.
+- The allowlist constrains this privileged diagnostic, not malicious kernel code.
+  Its modules share EL1 authority; the later linked EL0 programs use a different,
+  explicitly restricted boundary.
 
 ## Verification
 

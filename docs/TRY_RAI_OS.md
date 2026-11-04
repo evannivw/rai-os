@@ -26,7 +26,7 @@ RAI_VNC_PASSWORD environment variable (1–8 ASCII characters) and add
 `-e RAI_VNC_PASSWORD` to the Docker run command. This local display password is
 separate from the Meta key. Keep the published port bound to 127.0.0.1 as shown.
 
-Already have the pinned Rust toolchain, Python and QEMU? Use the local route:
+Already have the pinned Rust toolchain, Python 3.9+ and QEMU? Use the local route:
 
 ```sh
 python3 -B scripts/demo.py saved --output target/judge-saved-1

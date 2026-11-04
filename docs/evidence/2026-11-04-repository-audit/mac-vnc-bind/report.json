@@ -1,0 +1,25 @@
+{
+  "verified": true,
+  "live_meta_calls": 0,
+  "checks": [
+    "Wrapper defaults to loopback, preserves explicit listen override, rejects invalid display backend",
+    "Actual default QEMU VNC listener reports 127.0.0.1:5900 through QMP",
+    "Actual explicit loopback display selects its expected TCP port through QMP"
+  ],
+  "default_listener": {
+    "enabled": true,
+    "auth": "none",
+    "family": "ipv4",
+    "clients": [],
+    "service": "5900",
+    "host": "127.0.0.1"
+  },
+  "override_listener": {
+    "enabled": true,
+    "auth": "none",
+    "family": "ipv4",
+    "clients": [],
+    "service": "56459",
+    "host": "127.0.0.1"
+  }
+}

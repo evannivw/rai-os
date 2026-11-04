@@ -1,5 +1,12 @@
 # Delivery plan — October 30, 2026
 
+**Historical delivery plan.** The sequence and "current" statements below describe
+successive development stages, not today's submission checklist. The project
+moved from scheduling/semantic experiments to prompt-generated applications.
+Use [SUBMISSION_PACKAGE.md](SUBMISSION_PACKAGE.md) for submission status and
+[TRY_RAI_OS.md](TRY_RAI_OS.md) for the delivered demo; dated plans/results below
+remain unchanged.
+
 **Current next increment:** bounded batch proposals, followed by separately
 specified semantic planning. [Provider diagnostics](META_DIAGNOSTICS.md) now
 distinguish response failures and retain available usage. The implemented

@@ -24,6 +24,8 @@ def prepare(output, binary, kernel, source='saved', showcase=None):
     if showcase is not None and source != 'saved':
         raise ValueError('A checkpoint can only seed a saved demo')
     seed = Path(showcase).resolve() if showcase is not None else FIXTURE
+    if source == 'saved' and not seed.is_file():
+        raise ValueError('Saved checkpoint must be an existing regular file. Choose a valid checkpoint path.')
     output.mkdir(parents=True, exist_ok=False)
     (output / 'exchange/inbox').mkdir(parents=True)
     (output / 'exchange/outbox').mkdir()
@@ -77,10 +79,29 @@ def open_demo(kernel, binary, output, source='saved', resume=False, port=5900, b
         check(binary,cwd=ROOT)
         print('Key format checked locally; use check-meta to verify access with Meta.')
     if not resume:
-        prepare(output, binary, kernel, source, showcase)
-    manifest = json.loads((output / 'demo.json').read_text())
-    if manifest.get('format') != 'rai-demo-1' or manifest.get('source') not in ('saved', 'meta'):
-        raise ValueError('Unsupported demo manifest')
+        try:
+            prepare(output, binary, kernel, source, showcase)
+        except FileExistsError:
+            raise ValueError(
+                'The output directory already exists. Use resume --output PATH '
+                'for a saved device, or choose a new directory. Existing files were preserved.'
+            ) from None
+    try:
+        manifest = json.loads((output / 'demo.json').read_text())
+    except FileNotFoundError:
+        raise ValueError(
+            'No saved demo manifest found. Resume an existing demo directory, '
+            'or start saved/live with a new output directory.'
+        ) from None
+    except (OSError, ValueError):
+        raise ValueError(
+            'The saved demo manifest could not be read. Check demo.json; '
+            'existing files were preserved.'
+        ) from None
+    if (not isinstance(manifest, dict)
+            or manifest.get('format') != 'rai-demo-1'
+            or manifest.get('source') not in ('saved', 'meta')):
+        raise ValueError('Unsupported demo manifest; existing files were preserved')
     if not (output / 'device.json').is_file():
         raise ValueError('Saved device is missing; refusing to silently start empty')
     source = manifest['source']
@@ -88,7 +109,17 @@ def open_demo(kernel, binary, output, source='saved', resume=False, port=5900, b
         from meta_setup import check
         check(binary,cwd=ROOT)
     session = output / ('session-' + uuid.uuid4().hex[:12])
-    print((output / 'START.txt').read_text().replace('localhost:5900', f'localhost:{port}'), flush=True)
+    try:
+        instructions = (output / 'START.txt').read_text()
+    except (OSError, UnicodeError):
+        # Instructions are informational, not part of the validated checkpoint.
+        # Missing/corrupt help text must not prevent recovery of a valid device.
+        instructions = (
+            f'RAI-OS device: {source}. Using the existing saved state.\n'
+            'Connect a VNC viewer to localhost:5900. Ctrl-C closes and saves.\n'
+            'See docs/TRY_RAI_OS.md for controls and supported operations.\n'
+        )
+    print(instructions.replace('localhost:5900', f'localhost:{port}'), flush=True)
     run(kernel, binary, session, 'replay' if source == 'saved' else 'meta',
         port=port, bind=bind, state=output / 'device.json', exchange=output / 'exchange', git_store=output / 'app-git')
 

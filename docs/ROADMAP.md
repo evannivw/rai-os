@@ -1,4 +1,31 @@
-# From a booting kernel to guest services
+# Kernel-to-service roadmap and next app steps
+
+## Current direction — November 4
+
+The submitted app slice supports describe -> review -> install -> use -> evolve
+compatibly -> checkpoint/recover. It runs on the kernel foundations described below.
+The [current architecture](ARCHITECTURE.md) distinguishes guest app execution at EL1
+from the earlier EL0 coordinator/worker experiments. Meta integration, native app
+screens and host persistence are implemented within their documented limits.
+
+After the reviewed submission slice, the ordered design work is:
+
+1. Stable record identity, reviewed deletion and capacity-aware storage/pagination.
+2. Explicit relations and transactional data operations beyond one two-row transfer.
+3. Richer reusable layouts, Unicode and explicit numeric types.
+4. Isolated app services, scoped IPC, events and cancellable work budgets.
+5. Device-backed capabilities with driver support and user permission flows.
+6. A separate SDK/loader/isolation design if native-code generation is pursued.
+
+These are future engineering tasks, not available app capabilities or dated promises.
+See [APP_LIMITS.md](APP_LIMITS.md#engineering-sequence-after-the-submission-slice)
+for dependencies and acceptance conditions.
+
+## Historical kernel dependency roadmap
+
+The remainder preserves the October kernel/service sequence and its dated updates.
+Any earlier "current", "next" or GUI/Meta exclusion applies to that milestone, not
+to today's app demo. The recorded mechanisms and tests remain useful references.
 
 Status: October 30, 2026. Each step should produce a small, independently
 observable result before the next. The kernel supplies mechanisms and enforces
@@ -66,7 +93,7 @@ limits/evidence, then commit and push. The work log records what actually happen
 The hackathon plan and demo contract remain the delivery checkpoints; this roadmap
 must not become an excuse to postpone a useful workload or real Meta integration.
 
-## What runs where today
+## Placement at the original kernel checkpoint
 
 - QEMU emulates the machine. Our own kernel runs inside it; this is not a Linux
   kernel or an Android derivative. It currently targets this virtual board only.
@@ -77,7 +104,7 @@ must not become an excuse to postpone a useful workload or real Meta integration
 - A guest-native graphical shell, physical-phone drivers, Android app compatibility,
   storage, networking and measured performance gains remain outside this increment.
 
-## How this reaches the demo
+## Original comparison-demo route
 
 Keep the kernel route and demo route distinguishable. Once the needed execution
 operations exist, resume the [demo result contract](DEMO_ACCEPTANCE.md), implement

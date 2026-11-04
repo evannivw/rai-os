@@ -1,21 +1,26 @@
-# Submission package — November 4, 2026
+# Submission record — November 4, 2026
 
 Participant and representative: **Jarrol Villatoro**, individual entry.
-Recommended track: **Indie Developer**. Problem statement: **Push the Frontier**.
+Prepared track: **Indie Developer**. Problem statement: **Push the Frontier**.
 
-## What to submit
+**Status:** Jarrol reported that the project was submitted on November 4, 2026.
+This records the participant's confirmation; no platform receipt has been
+independently inspected. The video was uploaded and linked before submission.
+
+## Submitted project materials
 
 Based on the supplied Participant Guide:
 
 1. Public repository: https://github.com/evannivw/rai-os
 2. **[Three-minute demo video](https://drive.google.com/file/d/18e2NPFsIktJhBC-T7ZY4ANAfQhD9PvaO/view?usp=sharing)**, uploaded by the participant.
 3. One Cerebral Valley project entry, identifying the participant, original work,
-   project purpose and Meta integration. Use the [reviewed submission description](SUBMISSION_DRAFT.md).
+   project purpose and Meta integration. Use the [reviewed submission description](SUBMISSION.md).
 
-The public event page is https://cerebralvalley.ai/e/meta-ai-developer-hackathon.
-It is not the authenticated project submission form. Exact required form fields
-have not been inspected. No separate APK, slide deck or hosted website requirement
-appears in the supplied guide. Follow any additional fields in the actual form.
+The [project submission route](https://cerebralvalley.ai/e/meta-ai-developer-hackathon/hackathon/submit)
+is separate from the [public event page](https://cerebralvalley.ai/e/meta-ai-developer-hackathon).
+The authenticated form and receipt have not been independently inspected. The
+participant supplied the form questions about partner feedback and Meta use.
+No separate APK, slide deck or hosted website requirement appears in the supplied guide.
 Never upload an API key or private environment file. Evaluators can run the saved
 kit without a key, or use their own for generation: [try RAI-OS](TRY_RAI_OS.md).
 
@@ -65,15 +70,30 @@ Local deliverables (ignored by Git):
 The public repo contains a saved checkpoint for the exact generated app from the
 video, plus requests, responses and verification evidence. No API key is included.
 
-## Before pressing Submit
+## Submission follow-up
 
-- Watch the complete video with audio; replace reference narration if desired.
-- Open the uploaded video in a private/incognito window and verify playback with audio.
-- Check public repository access and paste the video URL into the project form.
-- Use the individual participant details above; review the description and limits.
-- Submit before the deadline and save the actual confirmation.
+- Retain the platform confirmation and check that its repository/video links are correct.
+- Keep video access enabled and verify playback with audio from a logged-out window.
+- Keep the submitted description and dated evidence available while fixing documented issues.
+- If changing form fields, use the platform's permitted editing flow; repository updates
+  alone do not update the submitted form or the already-recorded video.
 
 The participant supplied the uploaded Drive video link on November 4. An anonymous
 page request returned the video title without an access-request page. Full anonymous
 video playback and byte-for-byte identity with the local MP4 were not verified.
-The project submission itself remains pending; a video upload does not submit it.
+The participant has since confirmed project submission. Earlier pending statuses
+in dated work-log/evidence entries describe the state when those records were made.
+Local ZIP contents are a recording-time snapshot; use SUBMISSION.md for the latest
+reviewed description.
+
+## Repository About field
+
+The November 4 audit confirmed public access. The external GitHub About field
+still uses the earlier generic sentence; it is separate from this repository's
+reviewed description. Suggested replacement:
+
+> Rust AArch64 OS prototype with Meta-generated apps, checked local execution, and a native QEMU interface.
+
+[Audit evidence](evidence/2026-11-04-repository-audit/README.md) records why this
+external metadata change was not possible in that session. Repository pushes do
+not update either GitHub About or the submitted Cerebral Valley form.
