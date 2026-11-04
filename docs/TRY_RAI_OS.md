@@ -157,3 +157,9 @@ HTTPS, Git, checkpoints and input relay use a host bridge. No general native-cod
 compilation, XLSX/PPTX, phone drivers, unrestricted AI control or Linux efficiency
 win is claimed. See [APP_LIMITS.md](APP_LIMITS.md) and the
 [recording runbook](DEMO_FINAL_RUNBOOK.md).
+
+
+Recorded checks: [final-polish evidence](evidence/2026-11-03-final-polish/README.md)
+contains actual QEMU/Linux navigation and recovery, offline setup rejection tests,
+and one successful real connection check. That check does not supply credentials
+to other evaluators or guarantee their account access.

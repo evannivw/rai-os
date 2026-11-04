@@ -1,0 +1,15 @@
+{
+  "source_commit": "6ac184aebf5cfa9bafd4022c3295d1b9bbb752f0",
+  "worktree_dirty_before_probe": false,
+  "recorded_utc": "2026-11-04T05:05:07.823007+00:00",
+  "actual_requests": 1,
+  "app_data_sent": false,
+  "guest_started": false,
+  "result": "ready",
+  "http_status": 200,
+  "model": "muse-spark-1.3",
+  "model_matches": true,
+  "latency_ms": 1450,
+  "total_tokens": 48,
+  "raw_log_sha256": "80152b31a6cfa333dad4f170e5420bd1c9df200c2ce48cb46899d56c9a1eb3aa"
+}

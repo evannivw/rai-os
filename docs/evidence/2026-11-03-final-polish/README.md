@@ -29,3 +29,13 @@ The default three app schemas/data came from earlier recorded Meta runs. The
 polish checks do not count as new AI generation. Source mode live/saved is not an
 authentication indicator. The later explicit connection probe has separate evidence.
 Screen images are actual guest captures; the video/submission are still pending.
+
+
+## Explicit actual connection check
+
+After clean source 6ac184aebf5cfa9bafd4022c3295d1b9bbb752f0 was pushed,
+`demo.py check-meta` made one actual request. HTTP 200, matching muse-spark-1.3,
+stop completion, 1450 ms and 48 tokens (24 input / 24 output). Result: ready.
+No guest was started, no app was generated and no app/record data was sent.
+The configured key was loaded privately; no credential/header/body is in this
+report. This verifies access at that moment, not future availability or app speed.

@@ -3131,3 +3131,15 @@ Anonymous GitHub API check reported private=false for evannivw/rai-os. Linux off
 saved-demo checks passed; final-image CLI startup/shutdown/resume verification also passed offline in Linux.
 Next: freeze sources, one actual connection probe, then reopen the polished saved
 kit. No claim that the final narrated video or platform submission is complete.
+
+
+## 2026-11-03 — evaluator connection check exercised against Meta
+
+Clean pushed source 6ac184aebf5cfa9bafd4022c3295d1b9bbb752f0 ran the explicit
+check-meta command once. Actual result ready: HTTP 200, matching muse-spark-1.3,
+stop, 1450 ms, 48 tokens (24 input / 24 output). No guest boot, app generation,
+record transfer or key-file modification. Safe diagnostics are retained under
+final-polish evidence. The author's key remains ignored/local; judges provide
+their own only for live mode. Saved demo and all offline checks require none.
+The native three-app rehearsal is reopened separately. Video/upload/platform
+submission remain pending; supplied-guide deadline is Nov 4 at 20:00 Guatemala.
